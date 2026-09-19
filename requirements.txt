@@ -1,0 +1,13 @@
+boto3
+pandas
+pyarrow
+duckdb
+yfinance
+requests
+python-dotenv
+openai
+pygame
+statsmodels
+scipy
+flask
+pytest

@@ -1,0 +1,7 @@
+data/raw/
+data/cache/
+.env
+__pycache__/
+*.pyc
+missions/reports/*.png
+.pytest_cache
