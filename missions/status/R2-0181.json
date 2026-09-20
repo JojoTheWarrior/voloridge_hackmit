@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:23:19Z",
-  "updated_at": "2026-09-20T13:24:08Z",
+  "updated_at": "2026-09-20T13:24:35Z",
   "finished_at": "2026-09-20T13:24:08Z",
-  "elapsed_s": 49,
+  "elapsed_s": 76,
   "message": "Weakly supported: r=-0.18 at lag -1 (n=390) but short-UAE 1d rule hit_rate 49%, sharpe 0.54, validity 0; OOS war-period 18 trades 67% hit. Not actionable.",
   "run_folder": "missions/runs/20260920-268-gdelt-irn-fight-events_x_finance-uae-log-return",
   "scores": {
