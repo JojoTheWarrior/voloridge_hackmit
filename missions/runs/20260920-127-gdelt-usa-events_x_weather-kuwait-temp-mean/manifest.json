@@ -1,0 +1,45 @@
+{
+  "created_at": "2026-09-20T02:39:47.413684+00:00",
+  "git_commit": "76f78f1a3e0f6eaa7388f41ef08b41401efe4932",
+  "folder": "20260920-127-gdelt-usa-events_x_weather-kuwait-temp-mean",
+  "mission_id": "M20260920-724b33",
+  "hypothesis": "Sandstorm/visibility-reducing days in Iraq and Kuwait coincide with fewer reported airstrikes in GDELT.",
+  "status": "ok",
+  "n_obs": 564,
+  "r": -0.1531018619478953,
+  "perm_p": 0.0658682634730539,
+  "validity": 4.0,
+  "interestingness": 3.84,
+  "unexpectedness": 5.36,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/9dcc5f9c3b184ea0b6ae309c5588f72b"
+    },
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/6282e74742954949ab26599c46d39d07"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/fa373288b232412aa232c2a4e56d9e45"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/b0c41d9b7d11458c8a600e4f8f95b38d"
+    }
+  ],
+  "indicator_coverage": {
+    "gdelt.usa.events": "configured analysis window",
+    "weather.kuwait.temp_mean": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
