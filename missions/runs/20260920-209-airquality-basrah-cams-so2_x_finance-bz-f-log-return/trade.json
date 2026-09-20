@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 7,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 28,
+    "hit_rate": 0.5,
+    "avg_return": -0.007510670555128968,
+    "baseline_avg_return": -0.010853023394507548,
+    "excess_return": 0.0033423528393785804,
+    "sharpe_like": -0.6079555226692677,
+    "max_drawdown": -0.3455740683345988,
+    "total_return": -0.23852934006353188
+  },
+  "fit_pre_war": {
+    "n_trades": 18,
+    "hit_rate": 0.6111111111111112,
+    "avg_return": -0.00010566913124666745,
+    "baseline_avg_return": -0.007731256856712871,
+    "excess_return": 0.007625587725466204,
+    "sharpe_like": -0.007231198222339498,
+    "max_drawdown": -0.18985677438396642,
+    "total_return": -0.036599198032493674
+  },
+  "test_war": {
+    "n_trades": 10,
+    "hit_rate": 0.3,
+    "avg_return": -0.02083967311811711,
+    "baseline_avg_return": -0.01662711789298492,
+    "excess_return": -0.0042125552251321904,
+    "sharpe_like": -0.9541361625141883,
+    "max_drawdown": -0.1934231467858044,
+    "total_return": -0.20960138461442646
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "BZ=F",
+    "direction": "short",
+    "entry_rule": "airquality.basrah.cams_so2 rolling_zscore_20d > 1 at close -> short BZ=F next session",
+    "exit_rule": "close after 7 trading days (no overlapping entries)",
+    "holding_days": 7,
+    "hit_rate": 0.5,
+    "avg_return": -0.007510670555128968,
+    "excess_return": 0.0033423528393785804,
+    "n_trades": 28,
+    "sharpe_like": -0.6079555226692677,
+    "max_drawdown": -0.3455740683345988,
+    "oos_n_trades": 10,
+    "oos_avg_return": -0.02083967311811711,
+    "oos_hit_rate": 0.3,
+    "actionability": 2.14,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

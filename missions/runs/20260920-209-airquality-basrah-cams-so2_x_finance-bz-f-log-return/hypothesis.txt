@@ -1,0 +1,1 @@
+SHERLOCK | [#8 flaring] Basrah CAMS SO2 20d z-score > 1 (southern Iraq associated-gas flaring = crude output proxy) leads Brent returns by 3 days (-); trade short BZ=F 3d [airquality.basrah.cams_so2 -> finance.BZ=F.log_return]
