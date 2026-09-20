@@ -10,3 +10,4 @@
 | `20260920-006-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Strait of Hormuz" track the Brent-WTI spread. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.32 | 4.46 | 3.56 |
 | `20260920-007-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Hormuz" lead tanker-shipping ETF and Brent moves by one day during blockade phases. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.3 | 4.84 | 3.58 |
 | `20260920-008-weather-tehran-temp-mean_x_gdelt-irn-conflict-events` | Tehran daily mean temperature is unrelated to Iran conflict-event counts (null-hypothesis control mission). | ok | 564 | -0.18245504526481426 | 0.6966067864271457 | 0.08 | 2.4 | 3.96 |
+| `20260920-009-weather-tehran-wind-max_x_airquality-tehran-cams-pm25` | Higher Tehran wind speed days coincide with lower Tehran PM2.5 during the war period. | ok | 200 | -0.05604008556424099 | 0.7105788423153693 | 0.02 | 2.72 | 0.54 |

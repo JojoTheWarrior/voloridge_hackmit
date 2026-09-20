@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.tehran.wind_max",
+  "indicator_b": "airquality.tehran.cams_pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 0,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Tehran daily maximum wind speed in levels and PM2.5 as deviation from its 2025 same-week baseline during the war window to test whether windier days contemporaneously coincide with cleaner air in Tehran; CAMS PM2.5 is the closest available to ground PM2.5."
+}
