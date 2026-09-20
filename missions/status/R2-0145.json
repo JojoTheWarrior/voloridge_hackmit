@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/faeab1f1985e44e0bc8dfb3a43da7b47",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:02:29Z",
-  "updated_at": "2026-09-20T13:02:39Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:03:12Z",
+  "finished_at": "2026-09-20T13:03:12Z",
+  "elapsed_s": 43,
+  "message": "Supported: fertilizer attention z>1 vs CF abs return r=0.22 n=390 best lag -6d r=0.29; trade rule 45 trades hit 1.0 avg 2.2% (abs-return target inflates hit rate; caveat)",
   "run_folder": "missions/runs/20260920-244-gdelt-gkg-fertilizer-share_x_finance-cf-abs-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Null control: GDELT fertilizer attention share 20d z-score > 1 leads CF absolute returns by 5 days (+) using a placebo target; if the trade rule also fires on unrelated volatility the fertilizer signal is a war common-cause artifact [gdelt.gkg.fertilizer_share -> finance.CF.range_pct] (parent: R2-0145)"
 }
