@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:07:50Z",
-  "updated_at": "2026-09-20T13:08:20Z",
+  "updated_at": "2026-09-20T13:08:56Z",
   "finished_at": "2026-09-20T13:08:20Z",
-  "elapsed_s": 30,
+  "elapsed_s": 66,
   "message": "Not supported: r=0.08 (n=390); short-NTR-1d rule hit 80% but only 5 trades (1 OOS), actionability 7.39 is fragile",
   "run_folder": "missions/runs/20260920-250-gdelt-gkg-helium-share_x_finance-ntr-log-return",
   "scores": {
