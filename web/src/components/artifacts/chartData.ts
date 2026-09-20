@@ -29,6 +29,8 @@ export interface ChartModel {
   formatX: (x: number) => string
   /** `formatX`, cut short enough to sit under an axis. */
   formatTick: (x: number) => string
+  /** Two line series on scales too different to share an axis; the second gets its own on the right. */
+  dualAxis: boolean
   empty: boolean
 }
 
@@ -149,6 +151,23 @@ export function buildChartModel(artifact: ChartArtifact): ChartModel {
     xTicks: xMode === 'category' ? positions : xMode === 'date' ? dateTicks(...xDomain) : niceTicks(...xDomain),
     formatX,
     formatTick: (x) => truncate(formatX(x), MAX_TICK_LABEL),
+    dualAxis: kind === 'line' && series.length === 2 && scalesDiffer(series[0], series[1]),
     empty: series.length === 0,
   }
+}
+
+const SPAN_RATIO = 4
+
+/** On one axis the smaller-scaled series would flatten into a line along the bottom. */
+function scalesDiffer(a: ModelSeries, b: ModelSeries): boolean {
+  const ranges = [a, b].map((entry) => {
+    const ys = entry.points.map((point) => point.y).filter(Number.isFinite)
+    return ys.length < 2 ? null : { min: Math.min(...ys), max: Math.max(...ys) }
+  })
+  const [first, second] = ranges
+  if (!first || !second) return false
+  if (first.max < second.min || second.max < first.min) return true
+  const spans = [first.max - first.min, second.max - second.min]
+  const [small, large] = [Math.min(...spans), Math.max(...spans)]
+  return small > 0 && large / small > SPAN_RATIO
 }

@@ -73,31 +73,55 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py ui [--port 8000]` | Start the Flask hypothesis interface |
 | `python main.py graph [--port 8010] [--charts-port 8011]` | NL prompt → pygame chart web UI + launcher |
 | `python main.py selftest` | Check keys, judge availability, and indicator loading |
+| `python main.py serve [--port 8030] [--db PATH]` | API server for the web UI; creates and polls Devin sessions (see [Web](#web)) |
 | `python main.py kingdom [--scale N] [--scene S] [--screenshot out.png]` | Pixel-art mission dashboard (see [Kingdom](#kingdom)) |
 
 ## Web
 
-`web/` is the product frontend: a minimal React app (Vite, TypeScript,
-Tailwind) where you link datasets, start missions that look for connections
-between them, and read each mission as a thread ending in a chart, the key
-stats, and a written verdict.
+Kingdom's product UI: link datasets, start a mission, and watch Devin research
+it live — its thinking as prose, its steps, and visual artifacts (charts, image
+samples, join diagrams, tables, stats) as they are produced. Reply to steer it
+like a chat, and mark the mission done when you are satisfied.
 
-Needs Node 20.19+ or 22.12+ (`node -v`); nothing else — no Python, keys, or
-backend required.
+Two processes. Needs Node 20.19+ or 22.12+ (`node -v`) and the repo's Python
+environment:
 
 ```bash
-cd web
-npm install
-npm run dev      # http://localhost:5173
-npm test         # vitest
-npm run build    # type-check + production build
+python main.py serve                 # API + Devin poller on http://127.0.0.1:8030
+cd web && npm install && npm run dev # UI on http://localhost:5173 (proxies /api to 8030)
 ```
 
-It currently runs on mock data: `web/src/api/mock.ts` is an in-memory
-implementation of the `Api` interface in `web/src/api/index.ts`, seeded from
-`fixtures.ts`, that walks running missions through their steps on a timer.
-Components only see that interface, so wiring a real backend means adding an
-HTTP implementation and passing it to `ApiProvider` in `web/src/main.tsx`.
+**Demo mode (no key needed).** With no `DEVIN_API_KEY`, or with
+`KINGDOM_FAKE_DEVIN=1`, the server runs a scripted fake Devin that plays a full
+research run with one artifact of every type, so everything works out of the
+box and nothing is spent. The sidebar shows "Demo mode".
+
+**Live mode.** Put a Devin **v3 service-user key** (`cog_…`) in `.env` as
+`DEVIN_API_KEY` (the file is gitignored; never commit it). Each mission creates
+one Devin session. Spend is capped per mission:
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `KINGDOM_MAX_ACU` | `5` | `max_acu_limit` for each session |
+| `KINGDOM_DEVIN_MODE` | `fast` | Devin mode: `lite`, `fast`, `normal`, … |
+| `KINGDOM_FAKE_DEVIN` | unset | `1` forces demo mode even with a key |
+
+Missions and their threads persist in `.kingdom/kingdom.db` (SQLite,
+gitignored), so a restart resumes polling live missions.
+
+How it fits together: `server/brief.py` writes Devin's instructions and the
+structured-output schema; `server/devin.py` is the v3 client (and the fake);
+`server/sync.py` is a pure function that turns each Devin snapshot into ordered
+thread events; `server/poller.py` runs it for every live mission;
+`server/app.py` serves the JSON the UI reads. The UI only knows the `Api`
+interface in `web/src/api/index.ts`; `http.ts` implements it, and `mock.ts` is
+an in-memory twin used by the tests.
+
+```bash
+python -m pytest tests/server -q          # server tests, fully offline
+python -m pytest tests/server -m live -s  # one real Devin session, ≤ 1 ACU
+cd web && npm test && npm run build       # UI tests, type-check, build
+```
 
 ## Iran Round 2 (tradeable rules)
 

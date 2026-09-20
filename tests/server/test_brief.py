@@ -38,7 +38,7 @@ def test_prompt_without_datasets_tells_devin_to_find_data():
 def test_prompt_carries_the_standing_instructions():
     prompt = build_prompt(HYPOTHESIS, DATASETS).lower()
     for phrase in ("think out loud", "structured_output", "artifact", "p-value", "falsify",
-                   "null result", "do not end the session", "first person", "no markdown headers"):
+                   "null result", "do not end the session", "first person", "no markdown"):
         assert phrase in prompt, phrase
 
 
@@ -108,3 +108,15 @@ def test_session_title():
 def test_schema_and_guide_ask_for_a_short_title():
     assert OUTPUT_SCHEMA["properties"]["title"] == {"type": "string"}
     assert "`title`" in build_prompt("Does A lead B?", [], None)
+
+
+@pytest.mark.parametrize("phrase", [
+    "before you start each step",          # narrate as you go, not in one batch at the end
+    "as soon as each step finishes",       # incremental structured output
+    "never go more than a couple of minutes",
+    "plain text",                          # no markdown emphasis in messages
+    "different units",                     # mixed-unit series guidance
+    "at most 16 characters",               # short stat values and headlines
+])
+def test_prompt_demands_a_live_legible_thread(phrase):
+    assert phrase in build_prompt("Does A lead B?", [], None)

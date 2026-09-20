@@ -212,13 +212,20 @@ notes, event categories); `VIZ_SYSTEM` in `warsignal/ai/prompts.py` is the
 standard prompt and `warsignal/viz/agent.py` validates/falls back so the
 output is always in this format. Do not add per-mission styling.
 
-## Mission monitor
+## Web app and mission server
 
-`warsignal/mission/monitor.py` merges `missions/status/*.json`, run folders,
-`queue.txt`, `results.csv`, and `failed.txt` into one JSON-safe state, and
-can `git pull --rebase --autostash` on an interval (GitHub main is the source
-of truth). It has no UI of its own; the web app in `web/` currently runs on
-mock data and will read this state once the backend exists.
+`web/` is the product UI and `server/` is its API (`python main.py serve`).
+A mission there is a free-form Devin v3 session, not a `warsignal` pipeline
+run: `server/brief.py` holds the instructions and the structured-output schema
+(steps, typed artifacts, conclusion, `needs_user`), `server/sync.py` turns
+Devin snapshots into thread events, and the UI renders them. Without a
+`DEVIN_API_KEY` the server runs a scripted fake, so tests and demos spend
+nothing. The v1 client in `warsignal/ai/devin_client.py` still serves the CLI
+and only accepts legacy `apk_` keys; v3 `cog_` keys work with `server/` only.
+
+`warsignal/mission/monitor.py` still merges `missions/status/*.json`, run
+folders, `queue.txt`, `results.csv`, and `failed.txt` into one JSON-safe state
+for the pipeline missions; the web app does not read it yet.
 
 ## Statistical hygiene
 

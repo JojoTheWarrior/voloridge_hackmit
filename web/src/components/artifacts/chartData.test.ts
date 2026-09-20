@@ -259,3 +259,47 @@ describe('dateTicks', () => {
     expect(dateTicks(noon, noon + 3_600_000)).toEqual([noon])
   })
 })
+
+describe('dual axis', () => {
+  const line = (series: [string, number[]][], kind: 'line' | 'bar' | 'scatter' = 'line') =>
+    buildChartModel({
+      id: 'c',
+      type: 'chart',
+      kind,
+      title: 't',
+      series: series.map(([name, ys]) => ({ name, points: ys.map((y, i) => [i, y] as [number, number]) })),
+    })
+
+  it('splits two line series whose scales differ, such as degrees and dollars', () => {
+    expect(line([['Temp (F)', [60, 85, 95, 70]], ['Spot ($)', [2.1, 3.4, 2.8, 3.9]]]).dualAxis).toBe(true)
+  })
+
+  it('splits series that sit in disjoint ranges even with similar spans', () => {
+    expect(line([['A', [100, 110, 105]], ['B', [1, 11, 6]]]).dualAxis).toBe(true)
+  })
+
+  it('keeps series on one axis when they share a scale', () => {
+    expect(line([['A', [-1.2, 0.4, 1.1]], ['B', [-0.8, 0.1, 1.4]]]).dualAxis).toBe(false)
+    expect(line([['A', [10, 20, 30]], ['B', [15, 22, 41]]]).dualAxis).toBe(false)
+  })
+
+  it.each([
+    ['one series', [['A', [1, 2, 3]]]],
+    ['three series', [['A', [1, 2]], ['B', [100, 200]], ['C', [5, 6]]]],
+    ['an empty second series', [['A', [1, 2, 3]], ['B', []]]],
+    ['a single-point second series', [['A', [1, 2, 3]], ['B', [500]]]],
+    ['non-finite values only', [['A', [1, 2, 3]], ['B', [NaN, Infinity]]]],
+  ] as [string, [string, number[]][]][])('never splits with %s', (_, series) => {
+    expect(line(series).dualAxis).toBe(false)
+  })
+
+  it('never splits bars or scatters, where one axis is the point', () => {
+    const series: [string, number[]][] = [['A', [60, 85, 95]], ['B', [2, 3, 4]]]
+    expect(line(series, 'bar').dualAxis).toBe(false)
+    expect(line(series, 'scatter').dualAxis).toBe(false)
+  })
+
+  it('splits a flat series from a varying one on a different level', () => {
+    expect(line([['A', [50, 50, 50]], ['B', [1, 2, 3]]]).dualAxis).toBe(true)
+  })
+})

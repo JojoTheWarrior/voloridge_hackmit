@@ -394,3 +394,38 @@ def test_title_comes_from_the_structured_output(mission, raw, expected):
 def test_no_title_without_structured_output(mission):
     assert sync(mission, [], _snapshot(None), [], [], now=NOW).title is None
     assert sync(mission, [], _snapshot("not a dict"), [], [], now=NOW).title is None
+
+
+# ---------- the conclusion closes Devin's turn ----------
+
+def test_a_thought_that_arrives_after_the_conclusion_goes_above_it(store, mission):
+    output = _output([_step("s1")], [], CONCLUSION)
+    _run(store, mission.id, _snapshot(output, "waiting"), [_devin("m1", "Working")])
+    result = _run(store, mission.id, _snapshot(output, "waiting"), [_devin("m1", "Working"), _devin("m2", "I have an answer")])
+    assert _thread(store, mission.id) == ["user:first", "msg:m1", "step:s1", "msg:m2", "conclusion"]
+    assert [(u.event["id"], u.move_to_end) for u in result.updated_events] == [("conclusion", True)]
+    # The conclusion itself did not change, so it keeps its original time.
+    assert _event(store, mission.id, "conclusion")["at"] == NOW
+
+
+def test_late_steps_and_artifacts_also_stay_above_the_conclusion(store, mission):
+    _run(store, mission.id, _snapshot(_output([_step("s1")], [], CONCLUSION), "waiting"))
+    late = _output([_step("s1"), _step("s2")], [_stats("a1", "s2")], CONCLUSION)
+    _run(store, mission.id, _snapshot(late, "waiting"))
+    assert _thread(store, mission.id) == ["user:first", "step:s1", "step:s2", "artifact:a1", "conclusion"]
+
+
+def test_a_settled_conclusion_is_not_moved_again(store, mission):
+    output = _output([_step("s1")], [], CONCLUSION)
+    messages = [_devin("m1", "Working"), _devin("m2", "I have an answer")]
+    _run(store, mission.id, _snapshot(output, "waiting"), messages)
+    assert _run(store, mission.id, _snapshot(output, "waiting"), messages).updated_events == []
+
+
+def test_the_conclusion_stays_put_once_the_user_has_replied_below_it(store, mission):
+    output = _output([_step("s1")], [], CONCLUSION)
+    _run(store, mission.id, _snapshot(output, "waiting"))
+    store.append_event(mission.id, "user_message", {"text": "And in winter only?"})
+    _run(store, mission.id, _snapshot(output), [_devin("m9", "Checking winter")])
+    kinds = [event["kind"] for event in store.list_events(mission.id)]
+    assert kinds == ["user_message", "step", "conclusion", "user_message", "thought"]

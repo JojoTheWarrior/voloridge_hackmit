@@ -130,3 +130,27 @@ describe('ChartArtifact', () => {
     await marks('.recharts-line-curve', 1)
   })
 })
+
+describe('ChartArtifact axes', () => {
+  const twoLines = (second: number[]) =>
+    chart({
+      series: [
+        { name: 'Temp (F)', points: [[1, 60], [2, 85], [3, 95]] },
+        { name: 'Spot ($)', points: second.map((y, i) => [i + 1, y] as [number, number]) },
+      ],
+    })
+
+  it('gives the second line its own right-hand axis when the scales differ', async () => {
+    render(<ChartArtifact artifact={twoLines([2.1, 3.4, 2.8])} />)
+    const root = await plot()
+    await waitFor(() => expect(root.querySelectorAll('.recharts-yAxis')).toHaveLength(2))
+    expect(root.querySelectorAll('.recharts-line')).toHaveLength(2)
+  })
+
+  it('keeps one axis when the scales match', async () => {
+    render(<ChartArtifact artifact={twoLines([62, 80, 99])} />)
+    const root = await plot()
+    await waitFor(() => expect(root.querySelectorAll('.recharts-line')).toHaveLength(2))
+    expect(root.querySelectorAll('.recharts-yAxis')).toHaveLength(1)
+  })
+})

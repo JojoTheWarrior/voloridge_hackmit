@@ -3,6 +3,8 @@ import { formatNumber, PLOT_HEIGHT, type ChartModel } from './chartData'
 import { ChartTooltip } from './ChartTooltip'
 
 const MUTED = '#8c8c8c'
+// The right-hand axis is lettered in its series' own gray, so it reads as belonging to that line.
+const FAINT = '#bdbdbd'
 const LINE_SOFT = '#efefef'
 const FILL = '#f4f4f4'
 const DENSE = 150
@@ -31,7 +33,7 @@ export function ChartPlot({ model, xLabel, yLabel }: { model: ChartModel; xLabel
   return (
     <div data-testid="chart-plot">
       <ResponsiveContainer width="100%" height={PLOT_HEIGHT}>
-        <ComposedChart data={model.rows} margin={{ top: 8, right: 20, bottom: 0, left: 0 }} barCategoryGap="30%" barGap={2}>
+        <ComposedChart data={model.rows} margin={{ top: 8, right: model.dualAxis ? 0 : 20, bottom: 0, left: 0 }} barCategoryGap="30%" barGap={2}>
           <XAxis
             dataKey="x"
             type={kind === 'bar' ? 'category' : 'number'}
@@ -45,6 +47,7 @@ export function ChartPlot({ model, xLabel, yLabel }: { model: ChartModel; xLabel
             tickMargin={8}
           />
           <YAxis
+            yAxisId="left"
             dataKey={kind === 'scatter' ? 'y' : undefined}
             width="auto"
             domain={kind === 'bar' ? undefined : ['auto', 'auto']}
@@ -55,21 +58,36 @@ export function ChartPlot({ model, xLabel, yLabel }: { model: ChartModel; xLabel
             tick={tick}
             tickMargin={8}
           />
+          {model.dualAxis && (
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              width="auto"
+              domain={['auto', 'auto']}
+              tickCount={4}
+              tickFormatter={formatNumber}
+              tickLine={false}
+              axisLine={false}
+              tick={{ ...tick, fill: FAINT }}
+              tickMargin={8}
+            />
+          )}
           <Tooltip
             cursor={kind === 'line' ? { stroke: LINE_SOFT } : kind === 'bar' ? { fill: FILL } : false}
             content={({ active, payload }) => <ChartTooltip active={active} point={payload?.[0]?.payload} model={model} xLabel={xLabel} yLabel={yLabel} />}
             isAnimationActive={false}
           />
-          {dipsBelowZero && <ReferenceLine y={0} stroke={LINE_SOFT} />}
+          {dipsBelowZero && <ReferenceLine yAxisId="left" y={0} stroke={LINE_SOFT} />}
           {drawOrder.map((entry) => {
             const index = series.indexOf(entry)
             if (kind === 'bar') {
-              return <Bar key={entry.key} dataKey={entry.key} fill={entry.color} radius={[2, 2, 0, 0]} maxBarSize={44} isAnimationActive={false} />
+              return <Bar key={entry.key} yAxisId="left" dataKey={entry.key} fill={entry.color} radius={[2, 2, 0, 0]} maxBarSize={44} isAnimationActive={false} />
             }
             if (kind === 'scatter') {
               return (
                 <Scatter
                   key={entry.key}
+                  yAxisId="left"
                   data={entry.points.map((point) => ({ ...point, series: entry.name }))}
                   fill={entry.color}
                   fillOpacity={total > DENSE ? 0.55 : 1}
@@ -81,6 +99,7 @@ export function ChartPlot({ model, xLabel, yLabel }: { model: ChartModel; xLabel
             return (
               <Line
                 key={entry.key}
+                yAxisId={model.dualAxis && index === 1 ? 'right' : 'left'}
                 dataKey={entry.key}
                 stroke={entry.color}
                 strokeWidth={1.5}

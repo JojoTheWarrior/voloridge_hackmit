@@ -14,12 +14,12 @@ describe('StatsArtifact', () => {
     expect(screen.getByText('412')).toBeInTheDocument()
   })
 
-  it('keeps duplicate labels and truncates absurd values with the full text on hover', () => {
+  it('keeps duplicate labels and clamps absurd values with the full text on hover', () => {
     const long = '9'.repeat(300)
     render(<StatsArtifact artifact={stats([{ label: 'Same', value: '1' }, { label: 'Same', value: long }])} />)
     expect(screen.getAllByText('Same')).toHaveLength(2)
     const value = screen.getByText(long)
-    expect(value).toHaveClass('truncate')
+    expect(value).toHaveClass('line-clamp-3')
     expect(value).toHaveAttribute('title', long)
   })
 
@@ -34,5 +34,22 @@ describe('StatsArtifact', () => {
   it.each([[[]], [undefined], ['junk']])('shows a quiet empty state for %j', (items) => {
     render(<StatsArtifact artifact={stats(items)} />)
     expect(screen.getByText('Nothing to show')).toBeInTheDocument()
+  })
+
+  it('sets a short value large and a sentence-length value small enough to read in full', () => {
+    render(
+      <StatsArtifact
+        artifact={stats([
+          { label: 'r', value: '0.58' },
+          { label: 'Granger', value: 'p = 0.52 / 0.85 / 0.63 / 0.38 / 0.13 (all null)' },
+          { label: 'Edge', value: '1234567890123456' },
+        ])}
+      />,
+    )
+    expect(screen.getByText('0.58')).toHaveClass('text-lg', 'truncate')
+    expect(screen.getByText('1234567890123456')).toHaveClass('text-lg')
+    const long = screen.getByText('p = 0.52 / 0.85 / 0.63 / 0.38 / 0.13 (all null)')
+    expect(long).toHaveClass('text-[13px]', 'break-words')
+    expect(long).not.toHaveClass('truncate')
   })
 })

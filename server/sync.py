@@ -77,6 +77,7 @@ def sync(
 
     if output is not None and (conclusion := _conclusion(output.get("conclusion"))):
         thread.upsert(CONCLUSION_ID, "conclusion", conclusion, replace_at_end=True)
+    thread.keep_last(CONCLUSION_ID)
 
     if snapshot.status == "error":
         if mission.status != "failed":
@@ -122,6 +123,16 @@ class _Thread:
         elif {key: value for key, value in stored.items() if key not in ("id", "at", "kind")} != payload:
             at = self._now if replace_at_end else stored["at"]
             self.updated.append(UpdatedEvent({"id": event_id, "at": at, "kind": kind, **payload}, replace_at_end))
+
+    def keep_last(self, event_id: str) -> None:
+        """A conclusion closes Devin's turn, so anything Devin adds after it slides in above.
+        Once the user has replied below it, that turn is over and it stays where it is."""
+        stored = self._stored.get(event_id)
+        if stored is None or any(update.event["id"] == event_id for update in self.updated):
+            return
+        following = self._order[self._order.index(event_id) + 1:]
+        if following and "user_message" not in (self._kinds[later] for later in following):
+            self.updated.append(UpdatedEvent(stored, move_to_end=True))
 
     def _anchor(self, after_step: str | None) -> str | None:
         """Where an artifact goes: after its step and that step's earlier artifacts, but never above
