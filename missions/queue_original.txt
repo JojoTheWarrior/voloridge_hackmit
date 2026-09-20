@@ -1,0 +1,100 @@
+Daily GDELT news volume mentioning Iran leads Brent crude daily returns by 1-3 days around the start of the war.
+Average GDELT tone of Iran-related news is more negative in the two weeks before the Feb 28 strikes than in the 2025 baseline.
+GDELT Goldstein conflict scale for Iran-involved events correlates with the VIX at a 0-2 day lag.
+The share of GDELT events with Israel and Iran as actors spikes before oil-price jumps rather than after them.
+Days with more GDELT "protest" events in Iran (Dec 2025-Jan 2026) coincide with higher gold prices.
+GDELT mentions of "Strait of Hormuz" track the Brent-WTI spread.
+GDELT mentions of "Hormuz" lead tanker-shipping ETF and Brent moves by one day during blockade phases.
+Tehran daily mean temperature is unrelated to Iran conflict-event counts (null-hypothesis control mission).
+Higher Tehran wind speed days coincide with lower Tehran PM2.5 during the war period.
+Persian Gulf city daily maximum temperature correlates with Gulf (Dubai/Doha) air-quality readings more strongly after Hormuz closed than before.
+Dubai PM2.5 fell after Gulf airspace closures on March 1 2026 compared with the same weeks in 2025.
+Doha air quality changed measurably after Qatar halted LNG production on March 2 2026.
+Air-quality levels in Gulf cities move opposite to Brent crude in the war window because production shutdowns reduce emissions.
+Kuwait PM2.5 dropped when Gulf oil output fell 6.7 mb/d in mid-March 2026.
+Tel Aviv air-quality readings deteriorate on days with Iranian missile strikes on Israel.
+US Gulf Coast (Houston) air quality worsened as US refineries ran harder to replace lost Gulf supply.
+Houston daily temperature anomalies correlate with Henry Hub natural gas prices more strongly during the war than before.
+Cold snaps in the US Northeast (JFK station) amplify the natural gas price response to Hormuz news.
+Extreme heat days in Riyadh coincide with higher Saudi equity ETF (KSA) volatility during the war.
+Rainfall in the Gulf region is unrelated to defense-stock returns (null control).
+Wind speed at Bandar Abbas (Hormuz coast) correlates with tanker attack news volume, since calm seas favour small-boat operations.
+Wind speed at Bandar Abbas correlates with Brent intraday range during the blockade phase.
+Sandstorm/visibility-reducing days in Iraq and Kuwait coincide with fewer reported airstrikes in GDELT.
+Cloud cover or low visibility over Tehran reduces the number of strike events reported the next day.
+Tehran precipitation days show lower Iran-related GDELT event counts.
+Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control).
+US hourly electricity demand (EIA-930) anomalies correlate with natural gas price moves during the war.
+US electricity demand growth in 2026 accelerated relative to 2025 during the oil shock months.
+The coal share of US monthly generation rose when natural gas prices spiked after March 2026.
+US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war.
+Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz.
+Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices.
+US utility ETF (XLU) returns are more correlated with natural gas prices during the war than before.
+Hourly US demand volatility increased in the weeks after the cyberattacks on US water systems were reported (Aug 2026).
+Texas (ERCOT) demand anomalies correlate with Houston temperature more tightly than the national aggregate does.
+Regional US demand deviations from seasonal norms correlate with regional PM2.5 during 2026.
+EIA-860m generator retirements/additions in 2026 shifted toward gas and storage relative to 2025.
+Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month.
+OpenAlex publication counts on "helium" rose after Qatar's Ras Laffan LNG complex was struck.
+OpenAlex publications on "tungsten" increased after China export restrictions and the March 2026 price surge.
+OpenAlex "sulfur" and "sulfuric acid" publication counts respond to the Hormuz sulfur supply shock.
+OpenAlex "desalination" research output rose after Iranian strikes threatened Gulf desalination plants.
+OpenAlex "energy security" publications correlate with Brent crude at a one-month lag.
+OpenAlex "drone" publications track GDELT drone-attack event counts.
+OpenAlex "missile defense" publication counts increased during the war relative to the 2025 baseline.
+OpenAlex "Strait of Hormuz" publications spike in the months after the closure.
+OpenAlex "fertilizer" research volume correlates with fertilizer equity returns (MOS, CF, NTR).
+OpenAlex "liquefied natural gas" publication counts track TTF gas prices.
+OpenAlex "photovoltaic" publication share rose as oil prices rose (energy substitution research response).
+OpenAlex "lithium battery" publication counts correlate with copper futures.
+OpenAlex "sanctions" publication counts correlate with GDELT sanctions-related event counts.
+OpenAlex "cyberattack" research increased after Iranian cyberattacks on US water systems were reported.
+OpenAlex "air pollution" publications correlate with observed PM2.5 in Gulf cities.
+Iran-affiliated OpenAlex publication output fell during the war (internet shutdown) relative to 2025.
+Materials Project database growth (documents by last_updated date) correlates with materials-science publication volume in 2025.
+Materials Project entries containing tungsten were updated more often in 2025 than entries containing aluminum (control for supply-shock hypotheses).
+Materials Project thermo-stability updates cluster in months with high OpenAlex materials-science output.
+Materials Project documents containing helium or noble gases are rare and unchanged; use as a null baseline.
+Materials Project build activity in 2025 leads OpenAlex battery-materials publications by 1-2 months.
+Materials Project aluminum-containing entries updated in 2025 predict nothing about 2026 aluminum futures (null control).
+Brent crude daily returns and the S&P 500 became negatively correlated after Feb 28 2026 whereas they were positively correlated in 2025.
+Gold and Brent decoupled during the war: gold fell while oil rose.
+The VIX and Brent implied co-movement peaked in the week of the Hormuz closure.
+Defense stocks (LMT, RTX, NOC, GD) outperformed the S&P 500 on days with high GDELT Iran conflict counts.
+Airline stocks (JETS, UAL, DAL) moved inversely to Brent more strongly during the war than before.
+Fertilizer stocks (MOS, CF, NTR) rose with Hormuz-related news volume.
+Copper and aluminum futures responded to the March 28 strike on Emirates Global Aluminium.
+The 10-year Treasury yield rose with Brent during the war, breaking the usual flight-to-safety pattern.
+The dollar index rose on days of Iranian retaliation events.
+Emerging-market ETF (EEM) returns were more sensitive to Brent during the war than in 2025.
+Turkey ETF (TUR) and Israel ETF (EIS) returns diverged around ceasefire announcements.
+Saudi ETF (KSA) and UAE ETF returns correlate negatively with GDELT Gulf-attack event counts.
+Wheat and corn futures moved with fertilizer stocks after March 20 2026.
+TTF gas and Henry Hub correlation increased after Qatar LNG shutdown.
+High-yield credit (HYG) drawdowns coincide with oil-price spikes during the war.
+Brent-WTI spread widened when Hormuz news volume rose.
+Oil futures fell sharply on days with suspicious pre-announcement trading (Mar 23, Apr 7, Apr 17); test whether GDELT news volume rises abnormally after those days.
+Brent daily returns show larger absolute moves on days with diplomatic events than on days with military events.
+Ceasefire announcements produce larger oil moves than the strikes themselves (event-study comparison).
+Oil-price reaction to Hormuz events decayed over successive closures (market desensitization).
+GDELT news volume about Iran decays faster after diplomatic events than after military events.
+GDELT average tone about Iran predicts next-day S&P 500 returns during the war.
+Global GDELT event counts (all countries) dropped when Iran shut down its internet.
+GDELT protest event counts worldwide rose with fuel-price increases (gasoline shock).
+News volume about "food prices" in GDELT rose after the fertilizer shock and correlates with wheat futures.
+GDELT mentions of "helium" or "semiconductor" rose after the Ras Laffan strike.
+GDELT mentions of Qatar spike on the same days as TTF gas price jumps.
+Middle East city temperature and news-event volume are jointly unrelated to US utility demand (multi-source null control).
+Weather-driven US electricity demand spikes coincide with larger natural-gas price sensitivity to Hormuz news.
+Hot days in Gulf cities during the war coincide with more Iran-related GDELT events (heat-and-conflict hypothesis).
+Days with high PM2.5 in Tehran coincide with more negative GDELT tone about Iran.
+Gulf air quality improvements after airspace closures were larger in Dubai than in Riyadh.
+Air-quality readings in Gulf cities correlate with tanker attack news volume (smoke from struck vessels).
+OpenAlex Iran-related publication counts correlate with GDELT Iran news volume with a one-month lag.
+Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT.
+US electricity demand hourly peaks are unrelated to Brent crude (null control).
+Materials-science publication output correlates with copper prices at zero lag (control mission).
+US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness).
+The number of GDELT events with Oman as an actor rose before the Iran-Oman Hormuz agreement and correlates with Brent declines.
+Iranian internet shutdown days (GDELT source-country Iran article counts near zero) coincide with lower OpenAlex Iran-affiliated publication activity.

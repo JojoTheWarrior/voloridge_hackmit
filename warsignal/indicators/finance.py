@@ -1,0 +1,61 @@
+from __future__ import annotations
+
+import pandas as pd
+
+from warsignal.config import DATA_RAW
+from .base import IndicatorSpec, IndicatorUnavailable, register
+
+
+def _prices():
+    path = DATA_RAW / "finance" / "prices.parquet"
+    if not path.exists():
+        raise IndicatorUnavailable("finance", "prices.parquet is missing")
+    frame = pd.read_parquet(path)
+    frame["date"] = pd.to_datetime(frame["date"])
+    return frame
+
+
+def _load(ticker, column):
+    frame = _prices()
+    rows = frame[frame.ticker == ticker].set_index("date").sort_index()
+    if rows.empty:
+        raise FileNotFoundError(f"ticker {ticker} unavailable")
+    if column == "log_return":
+        return rows["close"].where(rows.close > 0).pipe(lambda s: __import__("numpy").log(s).diff())
+    if column == "abs_return":
+        return rows.close.pct_change().abs()
+    if column == "range_pct":
+        return (rows.high - rows.low) / rows.close
+    return rows[column]
+
+
+def _register():
+    try:
+        tickers = _prices().ticker.dropna().unique()
+    except Exception:
+        tickers = []
+    for ticker in tickers:
+        for column, unit in (("close", "price"), ("log_return", "return"), ("abs_return", "return"), ("range_pct", "ratio")):
+            name = f"finance.{ticker}.{column}"
+            register(IndicatorSpec(name, "finance", f"{ticker} {column}", unit, "D"), lambda ticker=ticker, column=column: _load(ticker, column))
+    for name, ticker_a, ticker_b, operation in [
+        ("finance.spread.brent_wti", "BZ=F", "CL=F", "spread"),
+        ("finance.ratio.gold_oil", "GC=F", "BZ=F", "ratio"),
+    ]:
+        register(IndicatorSpec(name, "finance", name, "price", "D"),
+                 lambda a=ticker_a, b=ticker_b, op=operation: _load(a, "close").subtract(_load(b, "close")) if op == "spread" else _load(a, "close").divide(_load(b, "close")))
+    for fred in ("DCOILBRENTEU", "DCOILWTICO", "DHHNGSP", "DGS10"):
+        register(IndicatorSpec(f"finance.fred.{fred}", "finance", f"FRED {fred}", "value", "D"),
+                 lambda fred=fred: _fred(fred))
+
+
+def _fred(series):
+    path = DATA_RAW / "finance" / f"fred_{series}.csv"
+    if not path.exists():
+        raise FileNotFoundError(path)
+    frame = pd.read_csv(path)
+    value = next(column for column in frame.columns if column != "DATE")
+    return pd.Series(pd.to_numeric(frame[value], errors="coerce").to_numpy(), index=pd.to_datetime(frame["DATE"]))
+
+
+_register()

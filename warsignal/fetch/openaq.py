@@ -35,6 +35,8 @@ def build_index(max_ids: int = 4000, start: date = date(2025, 3, 1), end: date =
     if index.exists():
         with index.open(newline="", encoding="utf-8") as handle:
             existing = {row["id"] for row in csv.DictReader(handle)}
+    no_2026_path = out / "_no_2026_ids.txt"
+    no_2026 = set(no_2026_path.read_text(encoding="utf-8").split()) if no_2026_path.exists() else set()
     client = _s3()
     ids = []
     for page in client.get_paginator("list_objects_v2").paginate(Bucket=BUCKET, Prefix=ROOT, Delimiter="/"):
@@ -43,7 +45,7 @@ def build_index(max_ids: int = 4000, start: date = date(2025, 3, 1), end: date =
             if marker not in prefix["Prefix"]:
                 continue
             value = prefix["Prefix"].split(marker, 1)[1].strip("/")
-            if value.isdigit() and value not in existing:
+            if value.isdigit() and value not in existing and value not in no_2026:
                 ids.append(value)
                 if len(ids) >= max_ids:
                     break
@@ -52,21 +54,26 @@ def build_index(max_ids: int = 4000, start: date = date(2025, 3, 1), end: date =
     def inspect(location_id):
         obj = _first_2026(client, location_id)
         if not obj:
-            return None
+            return ("missing", location_id)
         try:
             raw = client.get_object(Bucket=BUCKET, Key=obj["Key"])["Body"].read()
             row = next(csv.DictReader(io.StringIO(gzip.decompress(raw).decode("utf-8", "replace"))))
-            return {"id": location_id, "name": row.get("location", ""), "lat": row.get("lat", ""), "lon": row.get("lon", ""), "first_file": obj["Key"]}
+            return ("row", {"id": location_id, "name": row.get("location", ""), "lat": row.get("lat", ""), "lon": row.get("lon", ""), "first_file": obj["Key"]})
         except Exception:
-            return None
+            return ("missing", location_id)
     with ThreadPoolExecutor(max_workers=32) as pool:
-        rows = [row for row in pool.map(inspect, ids) if row]
+        results = list(pool.map(inspect, ids))
+    rows = [value for kind, value in results if kind == "row"]
+    missing = [value for kind, value in results if kind == "missing"]
     write_header = not index.exists() or index.stat().st_size == 0
     with index.open("a", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=["id", "name", "lat", "lon", "first_file"])
         if write_header:
             writer.writeheader()
         writer.writerows(rows)
+    if missing:
+        with no_2026_path.open("a", encoding="utf-8") as handle:
+            handle.write("\n".join(missing) + "\n")
     print(f"openaq: indexed {len(rows)} locations")
     return index
 
