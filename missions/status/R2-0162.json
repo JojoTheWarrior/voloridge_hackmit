@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/7bfd57bdb50f43ed814d56cbc6dcf027",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:11:55Z",
-  "updated_at": "2026-09-20T13:12:14Z",
+  "updated_at": "2026-09-20T13:12:40Z",
   "finished_at": null,
-  "elapsed_s": 19,
+  "elapsed_s": 45,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-256-gdelt-irn-conflict-events_x_finance-jets-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.66,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Spread check: if Iran conflict-event 20d z-score > 1.5 hits Gulf-route carriers but not the broad airline ETF, the same signal should widen JETS realised range (volatility) without directional drift (+); trade long JETS range 3d at 1d lag [gdelt.irn.conflict_events -> finance.JETS.range_pct] (parent: R2-0162)"
 }
