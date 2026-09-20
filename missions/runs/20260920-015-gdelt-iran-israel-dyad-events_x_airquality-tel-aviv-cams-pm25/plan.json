@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.iran_israel_dyad_events",
+  "indicator_b": "airquality.tel_aviv.cams_pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 0,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT iran_israel_dyad_events as a daily proxy for Iranian missile strikes on Israel and compare same-day deviations of Tel Aviv CAMS PM2.5 from its 2025 same-week baseline to test whether conflict days coincide with worsened modeled air quality, controlling partly for seasonality."
+}

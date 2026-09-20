@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:49:33.171124+00:00",
+  "git_commit": "c0c253c0a4aecf85132ecde4ce202a6cdb819079",
+  "folder": "20260920-015-gdelt-iran-israel-dyad-events_x_airquality-tel-aviv-cams-pm25",
+  "mission_id": "M20260920-3de108",
+  "hypothesis": "Tel Aviv air-quality readings deteriorate on days with Iranian missile strikes on Israel.",
+  "status": "ok",
+  "n_obs": 202,
+  "r": -0.14212203469991447,
+  "perm_p": 0.5029940119760479,
+  "validity": 0.88,
+  "interestingness": 3.64,
+  "unexpectedness": 6.04,
+  "indicator_coverage": {
+    "gdelt.iran_israel_dyad_events": "configured analysis window",
+    "airquality.tel_aviv.cams_pm25": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
