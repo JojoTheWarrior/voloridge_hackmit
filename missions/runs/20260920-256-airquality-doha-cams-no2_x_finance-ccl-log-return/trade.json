@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 56,
+    "hit_rate": 0.5,
+    "avg_return": -0.0026676616847853113,
+    "baseline_avg_return": -0.0008213175008576929,
+    "excess_return": -0.0018463441839276186,
+    "sharpe_like": -0.6935527913179305,
+    "max_drawdown": -0.35426608501734347,
+    "total_return": -0.1589699229668996
+  },
+  "fit_pre_war": {
+    "n_trades": 36,
+    "hit_rate": 0.3888888888888889,
+    "avg_return": -0.011469813681197486,
+    "baseline_avg_return": -0.0022025992366664637,
+    "excess_return": -0.009267214444531022,
+    "sharpe_like": -2.3893834040313298,
+    "max_drawdown": -0.35426608501734347,
+    "total_return": -0.3499546427031164
+  },
+  "test_war": {
+    "n_trades": 20,
+    "hit_rate": 0.7,
+    "avg_return": 0.013176211908756601,
+    "baseline_avg_return": 0.0016133157744887014,
+    "excess_return": 0.0115628961342679,
+    "sharpe_like": 2.8216873860354474,
+    "max_drawdown": -0.02318063358443967,
+    "total_return": 0.293802144100217
+  },
+  "n_signal_days": 384,
+  "trade_idea": {
+    "instrument": "CCL",
+    "direction": "short",
+    "entry_rule": "airquality.doha.cams_no2 rolling_zscore_20d > 1 at close -> short CCL next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5,
+    "avg_return": -0.0026676616847853113,
+    "excess_return": -0.0018463441839276186,
+    "n_trades": 56,
+    "sharpe_like": -0.6935527913179305,
+    "max_drawdown": -0.35426608501734347,
+    "oos_n_trades": 20,
+    "oos_avg_return": 0.013176211908756601,
+    "oos_hit_rate": 0.7,
+    "actionability": 3.5,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
