@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/714dc80ca90b42468c47a2c1b5fc9d91",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:46:28Z",
-  "updated_at": "2026-09-20T12:46:42Z",
+  "updated_at": "2026-09-20T12:47:24Z",
   "finished_at": null,
-  "elapsed_s": 14,
+  "elapsed_s": 56,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-224-finance-bz-f-close_x_finance-bz-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.15,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Mean-reversion side of R2-0116: Brent over-extension (20d z-score of BZ=F close > 1) fades, so Brent log return is lower over the next 5 days (-); trade short BZ=F 5d [finance.BZ=F.close -> finance.BZ=F.log_return] (parent: R2-0116)"
 }
