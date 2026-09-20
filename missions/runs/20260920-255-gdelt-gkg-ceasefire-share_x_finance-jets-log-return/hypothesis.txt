@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT ceasefire GKG share 20d z-score > 1 leads JETS log returns by 3 days (+) as ceasefire news lifts the whole airline basket, not just UAL; long JETS 3d [gdelt.gkg.ceasefire_share -> finance.JETS.log_return] (parent: R2-0059)
