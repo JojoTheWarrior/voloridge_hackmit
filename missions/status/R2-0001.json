@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/5c907d0ff56e42318fbf7e16f4cbc65c",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:16:42Z",
-  "updated_at": "2026-09-20T03:16:51Z",
+  "updated_at": "2026-09-20T03:17:13Z",
   "finished_at": "2026-09-20T03:15:53Z",
-  "elapsed_s": 9,
+  "elapsed_s": 31,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-135-gdelt-gkg-hormuz-share_x_finance-fro-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 4.58,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Hormuz event count 20d z-score > 1.5 leads FRO absolute returns (volatility) by 1 day (+); trade long FRO straddle proxy 2d [events.hormuz.count -> finance.FRO.abs_return] (parent: R2-0001)"
 }
