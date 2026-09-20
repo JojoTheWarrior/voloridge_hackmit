@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.houston.temp_anomaly",
+  "indicator_b": "finance.fred.DHHNGSP",
+  "transform_a": "anomaly",
+  "transform_b": "log_return",
+  "max_lag_days": 7,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Houston daily temperature anomalies against Henry Hub spot prices (DHHNGSP) with anomaly and log-return transforms to compare pre-war vs war-period correlations, allowing for up to a one-week lead from weather-driven power demand to gas prices."
+}
