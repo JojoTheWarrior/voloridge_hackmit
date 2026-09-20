@@ -1,0 +1,13 @@
+{
+  "indicator_a": "airquality.dubai.cams_aod",
+  "indicator_b": "utility.generation.solar_mwh",
+  "transform_a": "anomaly",
+  "transform_b": "pct_change",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "The catalogue as received is truncated before the weather section, so no Open-Meteo shortwave_radiation series name is visible; Dubai CAMS aerosol optical depth (which attenuates surface shortwave radiation) is the closest available Gulf irradiance proxy, paired with monthly PUDL US solar generation (pct_change) as the null control expected to show no relationship beyond shared seasonality.",
+  "mode": "pair"
+}

@@ -1,0 +1,1 @@
+Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control).
