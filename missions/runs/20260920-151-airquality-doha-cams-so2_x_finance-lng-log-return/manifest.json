@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:36:28.240648+00:00",
+  "git_commit": "4444a179030465955c0b4b5fa41f947db4a027bf",
+  "folder": "20260920-151-airquality-doha-cams-so2_x_finance-lng-log-return",
   "mission_id": "R2-0029",
-  "title": "Doha SO2 drop -> LNG returns",
   "hypothesis": "R2 | [gas-lng] Doha CAMS SO2 day-over-day drop below -30 pct signals LNG train outage and leads Cheniere returns by 2 days (+); trade long LNG 5d [airquality.doha.cams_so2 -> finance.LNG.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/256b7f19559a4a9abcccc7d6c9004fe2",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:36:11Z",
-  "updated_at": "2026-09-20T03:36:29Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-151-airquality-doha-cams-so2_x_finance-lng-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 4.61
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.06516519826114103,
+  "perm_p": 0.626746506986028,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 4.61,
   "trade_idea": {
     "instrument": "LNG",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 4.61,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.doha.cams_so2": "2025-03..2026-09 archive window",
+    "finance.LNG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

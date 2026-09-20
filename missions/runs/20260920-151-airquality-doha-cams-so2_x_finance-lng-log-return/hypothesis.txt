@@ -1,0 +1,1 @@
+R2 | [gas-lng] Doha CAMS SO2 day-over-day drop below -30 pct signals LNG train outage and leads Cheniere returns by 2 days (+); trade long LNG 5d [airquality.doha.cams_so2 -> finance.LNG.log_return]
