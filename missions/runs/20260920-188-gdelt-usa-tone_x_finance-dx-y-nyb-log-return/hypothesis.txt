@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] US GDELT tone 20d z-score < -1 leads dollar index strength by 1-3 days (+) as risk-off bids USD; trade long DX-Y.NYB 3d [gdelt.usa.tone -> finance.DX-Y.NYB.log_return]
