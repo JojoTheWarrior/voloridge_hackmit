@@ -1,0 +1,1 @@
+R2 | [gas-lng] Henry Hub natural gas close 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [finance.NG=F.close -> finance.XLU.log_return]

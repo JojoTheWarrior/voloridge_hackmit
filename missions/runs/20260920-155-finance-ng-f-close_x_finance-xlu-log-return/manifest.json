@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:38:50.225031+00:00",
+  "git_commit": "654a2bcaa6f2ad70f9f66e1e259d8720844784ee",
+  "folder": "20260920-155-finance-ng-f-close_x_finance-xlu-log-return",
   "mission_id": "R2-0032",
-  "title": "US peak demand z>1 vs XLU returns (short 4d)",
   "hypothesis": "R2 | [gas-lng] Henry Hub natural gas close 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [finance.NG=F.close -> finance.XLU.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/7e5e4897b5e342c5ad60216d9aacb858",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:37:15Z",
-  "updated_at": "2026-09-20T03:38:52Z",
-  "finished_at": "2026-09-20T03:37:38Z",
-  "elapsed_s": 97,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-155-finance-ng-f-close_x_finance-xlu-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 3.1
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.037738214374293644,
+  "perm_p": 0.8203592814371258,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 3.1,
   "trade_idea": {
     "instrument": "XLU",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 3.1,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.NG=F.close": "configured analysis window",
+    "finance.XLU.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
