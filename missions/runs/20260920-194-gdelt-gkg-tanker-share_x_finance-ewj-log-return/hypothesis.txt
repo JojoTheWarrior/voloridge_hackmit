@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT tanker GKG share 20d z-score > 1 leads Japan ETF returns lower by 1-2 days (-) on Gulf shipping exposure; trade short EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return]
