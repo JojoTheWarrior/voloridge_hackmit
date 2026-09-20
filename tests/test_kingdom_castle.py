@@ -316,9 +316,10 @@ def test_format_note_keeps_list_items_separate():
     from kingdom.note import format_note
     text = ("## Trade idea (Round 2 rubric)\n\n- **long BZ=F**, hold 3d\n- Entry: z>1\n- Exit: close after 3d\n"
             "- n_trades=12 hit_rate=0.583333333 avg_return=0.0123456789\n- Actionability: 8.76\n")
-    lines = [ln for ln in format_note(text) if not ln.blank]
+    lines = format_note(text)
     assert [(ln.bold, ln.text) for ln in lines] == [
         ("Trade idea (Round 2 rubric)", ""),
+        ("", ""),
         ("long BZ=F", ", hold 3d"),
         ("Entry:", "z>1"),
         ("Exit:", "close after 3d"),

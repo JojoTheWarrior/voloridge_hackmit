@@ -117,8 +117,11 @@ def format_note(text: str, title: str = "", subtitle: str = "") -> list[NoteLine
         blocks.append([NoteLine(title.strip())])
 
     paragraph: list[str] = []
+    in_list = False
 
     def flush():
+        nonlocal in_list
+        in_list = False
         if paragraph:
             blocks.append(prose_lines(" ".join(paragraph)))
             paragraph.clear()
@@ -146,9 +149,14 @@ def format_note(text: str, title: str = "", subtitle: str = "") -> list[NoteLine
             continue
         item = _LIST_ITEM.match(line)
         if item:
-            flush()
-            blocks.append(list_item_lines(item.group(1)))
+            if in_list:
+                blocks[-1].extend(list_item_lines(item.group(1)))
+            else:
+                flush()
+                blocks.append(list_item_lines(item.group(1)))
+                in_list = True
             continue
+        in_list = False
         paragraph.append(line)
     flush()
 
