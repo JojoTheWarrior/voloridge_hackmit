@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:06:50.899292+00:00",
+  "git_commit": "318b7b18365401daaf734d6c70938b19547bb1f6",
+  "folder": "20260920-249-finance-ratio-ttf-henryhub_x_finance-cf-log-return",
   "mission_id": "R2-0153",
-  "title": "TTF/HH ratio z>1 -> CF returns +2d",
   "hypothesis": "R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1 leads CF Industries returns by 2 days (+) as a wide EU-US gas spread hands US ammonia producers a cost advantage (mirror of null YAR.OL short result); trade long CF 3d [finance.ratio.ttf_henryhub -> finance.CF.log_return] (parent: R2-0055)",
-  "parent_mission_id": "R2-0055",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/68f82b4db1bd475080a5fbddcc4f1637",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:06:42Z",
-  "updated_at": "2026-09-20T13:06:52Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-249-finance-ratio-ttf-henryhub_x_finance-cf-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.71
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.13259754167655427,
+  "perm_p": 0.16766467065868262,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.71,
   "trade_idea": {
     "instrument": "CF",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.71,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.ratio.ttf_henryhub": "configured analysis window",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
