@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0016",
+  "title": "[oil-shipping] Crossref weekly strait_of_hormuz counts 8-week z-score > 1.5 mark",
+  "hypothesis": "R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 8-week z-score > 1.5 mark peak attention and fade: Brent falls over the following 10 days (-); trade short BZ=F 10d [research.hormuz.crossref_pubs -> finance.BZ=F.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:26:16Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
