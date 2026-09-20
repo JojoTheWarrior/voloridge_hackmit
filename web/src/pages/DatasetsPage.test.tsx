@@ -103,7 +103,7 @@ describe('DatasetsPage', () => {
   })
 
   it('shows a dash for a dataset with no range yet', async () => {
-    renderPage([{ id: 'x', name: 'Fresh', url: 'https://fresh.dev', seriesCount: 0, dateRange: '', syncedAt: new Date().toISOString() }])
+    renderPage([{ id: 'x', name: 'Fresh', url: 'https://fresh.dev', kind: 'other', seriesCount: 0, dateRange: '', syncedAt: new Date().toISOString() }])
     await screen.findByRole('table')
     expect(within(rows()[0]).getByText('—')).toBeInTheDocument()
   })

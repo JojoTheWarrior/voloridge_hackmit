@@ -21,12 +21,19 @@ function renderPage(datasets = seedDatasets()) {
     </Routes>,
     { api },
   )
-  return { api, createMission, user: userEvent.setup() }
+  return { api, createMission, user: userEvent.setup({ advanceTimers: vi.advanceTimersByTime }) }
 }
 
 const prompt = () => screen.getByRole('textbox', { name: 'Mission prompt' })
 
 describe('NewMissionPage', () => {
+  // A created mission starts ticking; fake timers keep that from outliving the test.
+  beforeEach(() => vi.useFakeTimers({ shouldAdvanceTime: true }))
+  afterEach(() => {
+    vi.clearAllTimers()
+    vi.useRealTimers()
+  })
+
   it('asks the question and focuses the prompt', () => {
     renderPage()
     expect(screen.getByRole('heading', { name: 'What should we look into?' })).toBeInTheDocument()

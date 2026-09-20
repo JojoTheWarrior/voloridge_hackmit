@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ResultCard } from '../components/ResultCard'
-import { StepList } from '../components/StepList'
+import { MissionThread } from '../components/thread/MissionThread'
 import { useMission } from '../hooks/useApiData'
 
 function NotFound() {
@@ -17,28 +16,12 @@ function NotFound() {
 
 export function MissionPage() {
   const { id = '' } = useParams()
-  const { mission, loading } = useMission(id)
+  const { mission, loading, reconnecting } = useMission(id)
 
   // Rendering nothing while loading avoids flashing "not found" before the mission arrives.
   if (loading) return null
   if (!mission) return <NotFound />
 
-  return (
-    <article className="mx-auto flex w-full max-w-[720px] flex-col gap-7 px-6 pt-12 pb-24">
-      <div className="flex justify-end">
-        <p className="max-w-[80%] rounded-[18px] bg-fill px-4 py-2.5 text-[15px] leading-relaxed">{mission.hypothesis}</p>
-      </div>
-
-      <StepList steps={mission.steps} status={mission.status} elapsedSeconds={mission.elapsedSeconds} />
-
-      {mission.result && <ResultCard result={mission.result} />}
-
-      {mission.status === 'failed' && (
-        <div role="alert" className="rounded-xl border border-line p-5">
-          <p className="text-[15px] font-medium">This mission failed</p>
-          <p className="mt-1 text-[15px] leading-relaxed text-muted">{mission.error}</p>
-        </div>
-      )}
-    </article>
-  )
+  // Keyed so the fold, the draft reply and the scroll position never carry over to another mission.
+  return <MissionThread key={mission.id} mission={mission} reconnecting={reconnecting} />
 }

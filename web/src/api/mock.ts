@@ -1,16 +1,13 @@
-import { STEP_KEYS, stepsAt } from '../steps'
-import type { Dataset, Mission } from '../types'
-import { buildResult, seedDatasets, seedMissions } from './fixtures'
+import type { Dataset, Mission, MissionSummary } from '../types'
+import { seedDatasets, seedMissions } from './fixtures'
 import { ValidationError, type Api } from './index'
+import { applyBeat, REPLY_BEAT, SCRIPT, type Beat } from './script'
 
 const TITLE_MAX = 48
-// Mock time: each step pretends to have taken this long, whatever stepMs is.
-const SECONDS_PER_STEP = 53
-// Seeded missions tick slower than new ones so a demo keeps something in Running for a while.
-export const SEED_SLOWDOWN = 8
 
 interface MockOptions {
   stepMs?: number
+  demo?: boolean
   seed?: { missions: Mission[]; datasets: Dataset[] }
 }
 
@@ -29,35 +26,61 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
-/** In-memory Api that walks running missions through their steps on a timer. */
-export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
+function summaryOf({ id, title, hypothesis, status, createdAt, updatedAt }: Mission): MissionSummary {
+  return { id, title, hypothesis, status, createdAt, updatedAt }
+}
+
+/** In-memory Api that plays a scripted research run into each working mission on a timer. */
+export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions = {}): Api {
   const missions = structuredClone(seed?.missions ?? seedMissions())
   const datasets = structuredClone(seed?.datasets ?? seedDatasets())
   const listeners = new Set<() => void>()
+  // Beats still to play per mission. A mission works while its queue drains and waits once it is empty.
+  const queues = new Map<string, Beat[]>()
+  const timers = new Map<string, ReturnType<typeof setTimeout>>()
   let nextId = 1
 
   const notify = () => listeners.forEach((listener) => listener())
 
-  function advance(mission: Mission, delay: number) {
-    const active = mission.steps.findIndex((s) => s.state === 'active')
-    const next = STEP_KEYS[active + 1]
-    mission.elapsedSeconds += SECONDS_PER_STEP
-    mission.steps = stepsAt(next)
-    if (next) {
-      setTimeout(() => advance(mission, delay), delay)
-    } else {
-      mission.status = 'done'
-      mission.result = buildResult(mission.hypothesis)
-    }
-    notify()
+  function find(id: string): Mission {
+    const mission = missions.find((m) => m.id === id)
+    if (!mission) throw new Error('Mission not found')
+    return mission
   }
 
-  const seedDelay = stepMs * SEED_SLOWDOWN
-  missions.filter((m) => m.status === 'running').forEach((m) => setTimeout(() => advance(m, seedDelay), seedDelay))
+  function play(mission: Mission) {
+    if (timers.has(mission.id) || !queues.get(mission.id)?.length) return
+    timers.set(
+      mission.id,
+      setTimeout(() => {
+        timers.delete(mission.id)
+        const queue = queues.get(mission.id)!
+        applyBeat(mission, queue.shift()!, new Date().toISOString())
+        if (queue.length === 0) mission.status = 'waiting'
+        play(mission)
+        notify()
+      }, stepMs),
+    )
+  }
+
+  function enqueue(mission: Mission, beats: Beat[]) {
+    queues.set(mission.id, [...(queues.get(mission.id) ?? []), ...beats])
+    play(mission)
+  }
+
+  for (const mission of missions.filter((m) => m.status === 'working')) {
+    // Every beat adds one event, so the thread length says how far a seeded run has got.
+    const played = mission.events.filter((e) => e.kind !== 'user_message' && e.kind !== 'error').length
+    enqueue(mission, SCRIPT.slice(played))
+  }
 
   return {
+    async getMeta() {
+      return { demo }
+    },
+
     async listMissions() {
-      return structuredClone(missions).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+      return missions.map(summaryOf).sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
     },
 
     async getMission(id) {
@@ -67,20 +90,44 @@ export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
     async createMission({ hypothesis, datasetIds }) {
       const trimmed = hypothesis.trim()
       if (!trimmed) throw new ValidationError('hypothesis', 'Describe a connection to test')
+      const now = new Date().toISOString()
       const mission: Mission = {
         id: `m-${nextId++}`,
         title: deriveTitle(trimmed),
         hypothesis: trimmed,
-        status: 'running',
+        status: 'working',
+        createdAt: now,
+        updatedAt: now,
         datasetIds: [...datasetIds],
-        createdAt: new Date().toISOString(),
-        elapsedSeconds: 0,
-        steps: stepsAt('plan'),
+        events: [{ id: 'e1', at: now, kind: 'user_message', text: trimmed }],
       }
       missions.unshift(mission)
-      setTimeout(() => advance(mission, stepMs), stepMs)
+      enqueue(mission, SCRIPT)
       notify()
       return structuredClone(mission)
+    },
+
+    async sendMessage(id, text) {
+      const mission = find(id)
+      const trimmed = text.trim()
+      if (!trimmed) throw new ValidationError('text', 'Write a reply')
+      const now = new Date().toISOString()
+      mission.events.push({ id: `e${mission.events.length + 1}`, at: now, kind: 'user_message', text: trimmed })
+      mission.updatedAt = now
+      mission.status = 'working'
+      delete mission.needsUser
+      enqueue(mission, [REPLY_BEAT])
+      notify()
+    },
+
+    async markDone(id) {
+      const mission = find(id)
+      clearTimeout(timers.get(id))
+      timers.delete(id)
+      queues.delete(id)
+      mission.status = 'done'
+      delete mission.needsUser
+      notify()
     },
 
     async listDatasets() {
@@ -96,6 +143,7 @@ export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
         id: `d-${nextId++}`,
         name,
         url,
+        kind: 'other',
         seriesCount: 0,
         dateRange: '',
         syncedAt: new Date().toISOString(),

@@ -1,44 +1,7 @@
-import { buildResult, seedDatasets, seedMissions } from './fixtures'
+import type { Mission } from '../types'
+import { seedDatasets, seedMissions } from './fixtures'
 
-describe('buildResult', () => {
-  it('is deterministic per hypothesis', () => {
-    expect(buildResult('A leads B')).toEqual(buildResult('A leads B'))
-    expect(buildResult('A leads B').points).not.toEqual(buildResult('C leads D').points)
-  })
-
-  it('produces a consistent daily series', () => {
-    const { points, n, correlation, pValue, bestLagDays } = buildResult('A leads B')
-    expect(points).toHaveLength(n)
-    expect(points.at(-1)?.date).toBe('2026-09-15')
-    expect(new Set(points.map((p) => p.date)).size).toBe(n)
-    expect(Math.abs(correlation)).toBeLessThanOrEqual(1)
-    expect(pValue).toBeGreaterThanOrEqual(0)
-    expect(pValue).toBeLessThanOrEqual(1)
-    expect(bestLagDays).toBeGreaterThanOrEqual(0)
-  })
-
-  it('reports a strong planted link as significant, with the right sign', () => {
-    const positive = buildResult('x', { strength: 0.7, lagDays: 2 })
-    expect(positive.correlation).toBeGreaterThan(0.4)
-    expect(positive.pValue).toBeLessThan(0.05)
-    expect(positive.verdict).not.toBe('No reliable link.')
-    expect(buildResult('x', { strength: -0.7 }).correlation).toBeLessThan(-0.4)
-  })
-
-  it('opens the note with the leading series rather than naming it mid-sentence', () => {
-    expect(buildResult('x', { seriesA: 'Wind', seriesB: 'Dust', strength: 0.7, lagDays: 2 }).note).toMatch(
-      /^Wind leads Dust by 2 days, and the two move together\./,
-    )
-    expect(buildResult('x', { seriesA: 'Wind', seriesB: 'Dust', strength: -0.7, lagDays: 0 }).note).toMatch(
-      /^Wind and Dust move in opposite directions on the same day\./,
-    )
-  })
-
-  it('names series from the hypothesis, falling back to generic names', () => {
-    expect(buildResult('Do protest events move gold futures?')).toMatchObject({ seriesA: 'Protest events', seriesB: 'Gold futures' })
-    expect(buildResult('something vague')).toMatchObject({ seriesA: 'Signal', seriesB: 'Target' })
-  })
-})
+const conclusionOf = (mission: Mission) => mission.events.find((e) => e.kind === 'conclusion')
 
 describe('seeds', () => {
   const missions = seedMissions()
@@ -49,16 +12,45 @@ describe('seeds', () => {
     missions.flatMap((m) => m.datasetIds).forEach((id) => expect(known).toContain(id))
   })
 
+  it('cover every status', () => {
+    expect(new Set(missions.map((m) => m.status))).toEqual(new Set(['working', 'waiting', 'done', 'failed']))
+  })
+
+  it('open every thread with the hypothesis and keep event ids unique', () => {
+    for (const m of missions) {
+      expect(m.events[0]).toMatchObject({ kind: 'user_message', text: m.hypothesis, at: m.createdAt })
+      expect(new Set(m.events.map((e) => e.id)).size).toBe(m.events.length)
+      expect(m.updatedAt).toBe(m.events.at(-1)?.at)
+    }
+  })
+
   it('include an honest null result alongside real links', () => {
-    const verdicts = missions.filter((m) => m.status === 'done').map((m) => m.result?.verdict)
+    const verdicts = missions
+      .filter((m) => m.status === 'done')
+      .map(conclusionOf)
+      .map((c) => c?.kind === 'conclusion' && c.verdict)
     expect(verdicts).toContain('No reliable link.')
     expect(verdicts.filter((v) => v !== 'No reliable link.').length).toBeGreaterThanOrEqual(3)
   })
 
-  it('give done missions a result, failed missions an error, running missions neither', () => {
+  it('give settled missions a conclusion, failed missions an error, working missions neither', () => {
     for (const m of missions) {
-      expect(Boolean(m.result)).toBe(m.status === 'done')
-      expect(Boolean(m.error)).toBe(m.status === 'failed')
+      expect(Boolean(conclusionOf(m))).toBe(m.status === 'done' || m.status === 'waiting')
+      expect(m.events.some((e) => e.kind === 'error')).toBe(m.status === 'failed')
+      expect(m.events.some((e) => e.kind === 'step' && e.state === 'active')).toBe(m.status === 'working' || m.status === 'failed')
     }
+  })
+
+  it('has the waiting mission ask the user something', () => {
+    expect(missions.filter((m) => m.needsUser).map((m) => m.status)).toEqual(['waiting'])
+  })
+
+  it('tags each seed dataset with its kind', () => {
+    expect(Object.fromEntries(seedDatasets().map((d) => [d.id, d.kind]))).toEqual({
+      gdelt: 'events',
+      yahoo: 'markets',
+      'open-meteo': 'weather',
+      cams: 'air',
+    })
   })
 })

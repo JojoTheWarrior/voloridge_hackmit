@@ -1,8 +1,8 @@
 import { Database, Plus } from 'lucide-react'
 import { useId } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useMissions } from '../hooks/useApiData'
-import type { Mission } from '../types'
+import { useMeta, useMissions } from '../hooks/useApiData'
+import type { MissionSummary } from '../types'
 import { CastleLogo } from './CastleLogo'
 import { StatusDot } from './StatusDot'
 
@@ -11,7 +11,7 @@ const rowClass = ({ isActive }: { isActive: boolean }) =>
     isActive ? 'bg-[#f0f0f0] text-ink' : 'hover:bg-fill'
   }`
 
-function MissionGroup({ label, missions, onNavigate }: { label: string; missions: Mission[]; onNavigate?: () => void }) {
+function MissionGroup({ label, missions, onNavigate }: { label: string; missions: MissionSummary[]; onNavigate?: () => void }) {
   const labelId = useId()
   if (missions.length === 0) return null
   return (
@@ -24,7 +24,7 @@ function MissionGroup({ label, missions, onNavigate }: { label: string; missions
           key={mission.id}
           to={`/missions/${mission.id}`}
           onClick={onNavigate}
-          className={(state) => `${rowClass(state)} ${mission.status === 'running' || state.isActive ? 'text-ink' : 'text-muted'}`}
+          className={(state) => `${rowClass(state)} ${mission.status !== 'done' || state.isActive ? 'text-ink' : 'text-muted'}`}
         >
           <StatusDot status={mission.status} />
           <span className="truncate">{mission.title}</span>
@@ -36,6 +36,7 @@ function MissionGroup({ label, missions, onNavigate }: { label: string; missions
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const missions = useMissions() ?? []
+  const meta = useMeta()
 
   return (
     <nav aria-label="Main" className="flex h-full w-60 flex-col border-r border-line-soft bg-side p-3">
@@ -59,8 +60,8 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       </Link>
 
       <div className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-        <MissionGroup label="Running" missions={missions.filter((m) => m.status === 'running')} onNavigate={onNavigate} />
-        <MissionGroup label="Done" missions={missions.filter((m) => m.status !== 'running')} onNavigate={onNavigate} />
+        <MissionGroup label="Active" missions={missions.filter((m) => m.status !== 'done')} onNavigate={onNavigate} />
+        <MissionGroup label="Done" missions={missions.filter((m) => m.status === 'done')} onNavigate={onNavigate} />
       </div>
 
       <div className="border-t border-line-soft pt-2">
@@ -68,6 +69,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           <Database size={14} strokeWidth={1.75} aria-hidden="true" />
           Datasets
         </NavLink>
+        {meta?.demo && <p className="px-2.5 pt-2 pb-0.5 text-xs text-muted">Demo mode</p>}
       </div>
     </nav>
   )

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useApi } from '../api/context'
 import type { Api } from '../api/index'
-import type { Dataset, Mission } from '../types'
+import type { Dataset, Meta, Mission, MissionSummary } from '../types'
 
-/** Loads on mount and again after every api change. `undefined` until the first load resolves. */
+/** Loads on mount and again after every api change. `undefined` until the first load resolves; a failed reload keeps the last value. */
 function useApiData<T>(load: (api: Api) => Promise<T>): T | undefined {
   const api = useApi()
   const [data, setData] = useState<T>()
@@ -11,9 +11,12 @@ function useApiData<T>(load: (api: Api) => Promise<T>): T | undefined {
   useEffect(() => {
     let cancelled = false
     const run = () => {
-      load(api).then((value) => {
-        if (!cancelled) setData(value)
-      })
+      load(api).then(
+        (value) => {
+          if (!cancelled) setData(value)
+        },
+        () => {},
+      )
     }
     run()
     const unsubscribe = api.subscribe(run)
@@ -29,7 +32,7 @@ function useApiData<T>(load: (api: Api) => Promise<T>): T | undefined {
 const loadMissions = (api: Api) => api.listMissions()
 const loadDatasets = (api: Api) => api.listDatasets()
 
-export function useMissions(): Mission[] | undefined {
+export function useMissions(): MissionSummary[] | undefined {
   return useApiData(loadMissions)
 }
 
@@ -37,16 +40,50 @@ export function useDatasets(): Dataset[] | undefined {
   return useApiData(loadDatasets)
 }
 
-export function useMission(id: string): { mission?: Mission; loading: boolean } {
+/** Whether the server is in demo mode cannot change while the page is open, so this loads once. */
+export function useMeta(): Meta | undefined {
   const api = useApi()
-  const [state, setState] = useState<{ id: string; mission?: Mission }>()
+  const [meta, setMeta] = useState<Meta>()
+
+  useEffect(() => {
+    let cancelled = false
+    api.getMeta().then(
+      (value) => {
+        if (!cancelled) setMeta(value)
+      },
+      () => {},
+    )
+    return () => {
+      cancelled = true
+    }
+  }, [api])
+
+  return meta
+}
+
+interface MissionState {
+  id: string
+  loaded: boolean
+  mission?: Mission
+  reconnecting: boolean
+}
+
+/** `reconnecting` is set while reads fail; the last thread that did load stays in place meanwhile. */
+export function useMission(id: string): { mission?: Mission; loading: boolean; reconnecting: boolean } {
+  const api = useApi()
+  const [state, setState] = useState<MissionState>()
 
   useEffect(() => {
     let cancelled = false
     const run = () => {
-      api.getMission(id).then((mission) => {
-        if (!cancelled) setState({ id, mission })
-      })
+      api.getMission(id).then(
+        (mission) => {
+          if (!cancelled) setState({ id, loaded: true, mission, reconnecting: false })
+        },
+        () => {
+          if (!cancelled) setState((last) => ({ ...(last?.id === id ? last : { id, loaded: false }), reconnecting: true }))
+        },
+      )
     }
     run()
     const unsubscribe = api.subscribe(run)
@@ -58,5 +95,5 @@ export function useMission(id: string): { mission?: Mission; loading: boolean } 
 
   // A result for a previous id is stale, not an answer for this one.
   const current = state?.id === id ? state : undefined
-  return { mission: current?.mission, loading: !current }
+  return { mission: current?.mission, loading: !current?.loaded, reconnecting: current?.reconnecting ?? false }
 }

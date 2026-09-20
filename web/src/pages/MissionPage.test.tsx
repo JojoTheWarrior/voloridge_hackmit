@@ -1,17 +1,23 @@
 import { act, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Route, Routes } from 'react-router-dom'
-import { buildResult } from '../api/fixtures'
-import { createMockApi, SEED_SLOWDOWN } from '../api/mock'
+import { Link, Route, Routes } from 'react-router-dom'
+import type { Api } from '../api/index'
+import { createMockApi } from '../api/mock'
+import { REPLY_TEXT, SCRIPT } from '../api/script'
 import { makeMission } from '../test/missions'
 import { renderWithApp } from '../test/render'
-import type { Mission } from '../types'
+import type { Artifact, Mission } from '../types'
 import { MissionPage } from './MissionPage'
 
-const STEP_MS = 100
+vi.mock('../components/artifacts/ArtifactView', () => ({
+  ArtifactView: ({ artifact }: { artifact: Artifact }) => <div data-testid="artifact">{artifact.title}</div>,
+}))
 
-function renderMission(missions: Mission[], id: string) {
-  const api = createMockApi({ stepMs: STEP_MS, seed: { missions, datasets: [] } })
+const STEP_MS = 100
+const FIRST_STEP = 'Read the linked datasets'
+
+function renderMission(missions: Mission[], id: string, wrap: (api: Api) => Api = (api) => api) {
+  const api = wrap(createMockApi({ stepMs: STEP_MS, seed: { missions, datasets: [] } }))
   return renderWithApp(
     <Routes>
       <Route path="missions/:id" element={<MissionPage />} />
@@ -21,103 +27,230 @@ function renderMission(missions: Mission[], id: string) {
   )
 }
 
+const replyBox = () => screen.getByRole('textbox', { name: 'Reply to Devin' })
+
 describe('MissionPage', () => {
   beforeEach(() => vi.useFakeTimers({ shouldAdvanceTime: true }))
-  afterEach(() => vi.useRealTimers())
-
-  it('shows a running mission with its steps expanded and no result', async () => {
-    const mission = makeMission('running', { hypothesis: 'Does A lead B?' })
-    renderMission([mission], mission.id)
-
-    expect(await screen.findByText('Does A lead B?')).toBeInTheDocument()
-    const steps = within(screen.getByRole('list', { name: 'Progress' })).getAllByRole('listitem')
-    expect(steps.map((s) => s.textContent)).toEqual(['Planned the test', 'Pulled the data', 'Running the permutation test'])
-    expect(steps[2]).toHaveAttribute('aria-current', 'step')
-    expect(screen.queryByRole('button', { name: /Worked for/ })).not.toBeInTheDocument()
-    expect(screen.queryByText('Correlation')).not.toBeInTheDocument()
+  afterEach(() => {
+    vi.clearAllTimers()
+    vi.useRealTimers()
   })
 
-  it('collapses the steps of a done mission and expands them on click', async () => {
+  it('shows a working mission as a live thread with no conclusion yet', async () => {
+    const mission = makeMission('working', { title: 'A vs B', hypothesis: 'Does A lead B?' })
+    renderMission([mission], mission.id)
+
+    expect(await screen.findByText('Does A lead B?')).toHaveClass('bg-fill')
+    expect(screen.getByRole('heading', { name: 'A vs B' })).toBeInTheDocument()
+    expect(screen.getByText('Devin is working')).toBeInTheDocument()
+    expect(screen.getByText(FIRST_STEP)).not.toHaveAttribute('aria-current')
+    expect(screen.getByText('Test the relationship at each lag')).toHaveAttribute('aria-current', 'step')
+    expect(screen.queryByRole('region', { name: 'Conclusion' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Show the work' })).not.toBeInTheDocument()
+    expect(replyBox()).toBeInTheDocument()
+  })
+
+  it('updates live from working to waiting, with the artifact and the conclusion', async () => {
+    const mission = makeMission('working')
+    renderMission([mission], mission.id)
+    await screen.findByText('Devin is working')
+
+    await act(() => vi.advanceTimersByTimeAsync(STEP_MS * SCRIPT.length))
+    expect(screen.getByText('Waiting for you')).toBeInTheDocument()
+    expect(screen.getByTestId('artifact')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Conclusion' })).toBeInTheDocument()
+    expect(screen.getByText(FIRST_STEP)).toBeVisible()
+  })
+
+  it('shows what Devin is asking above the reply box', async () => {
+    const mission = makeMission('waiting', { needsUser: 'Should I drop the outlier county?' })
+    renderMission([mission], mission.id)
+    const question = await screen.findByText('Should I drop the outlier county?')
+    expect(question.compareDocumentPosition(replyBox()) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('has no callout when Devin is not asking anything', async () => {
+    const mission = makeMission('waiting')
+    renderMission([mission], mission.id)
+    await screen.findByText('Waiting for you')
+    expect(screen.queryByText('Devin asks')).not.toBeInTheDocument()
+  })
+
+  it('sends a reply into the thread, then shows the answer', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-    const mission = makeMission('done', { elapsedSeconds: 252, result: buildResult('x', { strength: 0.6 }) })
+    const mission = makeMission('waiting', { needsUser: 'Should I drop the outlier county?' })
+    const { api } = renderMission([mission], mission.id)
+    const sendMessage = vi.spyOn(api, 'sendMessage')
+    await screen.findByText('Waiting for you')
+
+    await user.type(replyBox(), 'Yes, drop it{Enter}')
+    expect(sendMessage).toHaveBeenCalledExactlyOnceWith(mission.id, 'Yes, drop it')
+    expect(await screen.findByText('Yes, drop it')).toHaveClass('bg-fill')
+    expect(replyBox()).toHaveValue('')
+    expect(screen.getByText('Devin is working')).toBeInTheDocument()
+    expect(screen.queryByText('Should I drop the outlier county?')).not.toBeInTheDocument()
+
+    await act(() => vi.advanceTimersByTimeAsync(STEP_MS))
+    expect(screen.getByText(REPLY_TEXT)).toBeInTheDocument()
+    expect(screen.getByText('Waiting for you')).toBeInTheDocument()
+  })
+
+  it('marks a mission done, folding the work behind one line', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    const mission = makeMission('waiting', { hypothesis: 'Does A lead B?' })
     renderMission([mission], mission.id)
 
-    const toggle = await screen.findByRole('button', { name: 'Worked for 4m 12s' })
+    await user.click(await screen.findByRole('button', { name: 'Mark done' }))
+    const toggle = await screen.findByRole('button', { name: 'Show the work' })
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    expect(screen.queryByRole('list', { name: 'Progress' })).not.toBeInTheDocument()
+    expect(screen.getByText('Done')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Mark done' })).not.toBeInTheDocument()
+    expect(screen.getByText('Does A lead B?')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Conclusion' })).toBeInTheDocument()
+    expect(screen.queryByText(FIRST_STEP)).not.toBeInTheDocument()
+    expect(screen.queryByTestId('artifact')).not.toBeInTheDocument()
 
     await user.click(toggle)
-    expect(toggle).toHaveAttribute('aria-expanded', 'true')
-    expect(within(screen.getByRole('list', { name: 'Progress' })).getAllByRole('listitem')).toHaveLength(5)
-
-    await user.click(toggle)
-    expect(screen.queryByRole('list', { name: 'Progress' })).not.toBeInTheDocument()
+    expect(screen.getByText(FIRST_STEP)).toBeInTheDocument()
+    expect(screen.getByTestId('artifact')).toBeInTheDocument()
+    expect(screen.getAllByText('Does A lead B?')).toHaveLength(1)
   })
 
-  it('shows the result of a done mission', async () => {
-    const result = {
-      ...buildResult('x'),
-      seriesA: 'Wind speed',
-      seriesB: 'PM2.5',
-      correlation: -0.41,
-      bestLagDays: 1,
-      pValue: 0.0004,
-      n: 120,
-      note: 'First paragraph.\n\nSecond paragraph.',
-      verdict: 'A real but modest link.',
-    }
-    const mission = makeMission('done', { result })
+  it('reopens a done mission when you reply to it', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    const mission = makeMission('done')
     renderMission([mission], mission.id)
+    await screen.findByRole('button', { name: 'Show the work' })
 
-    const card = await screen.findByRole('region', { name: 'Result' })
-    expect(within(card).getByText('Wind speed')).toBeInTheDocument()
-    expect(within(card).getByText('PM2.5')).toBeInTheDocument()
-    expect(within(card).getByText('−0.41')).toBeInTheDocument()
-    expect(within(card).getByText('1 day')).toBeInTheDocument()
-    expect(within(card).getByText('<0.001')).toBeInTheDocument()
-    expect(within(card).getByText('120 days')).toBeInTheDocument()
-    expect(within(card).getByText('First paragraph.').tagName).toBe('P')
-    expect(within(card).getByText('Second paragraph.').tagName).toBe('P')
-    expect(within(card).getByText('A real but modest link.')).toBeInTheDocument()
+    await user.type(replyBox(), 'One more thing{Enter}')
+    expect(await screen.findByText('Devin is working')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Mark done' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Show the work' })).not.toBeInTheDocument()
+    expect(screen.getByText(FIRST_STEP)).toBeInTheDocument()
   })
 
-  it.each([
-    [0, 'Same day'],
-    [3, '3 days'],
-  ])('describes a best lag of %i as %s', async (bestLagDays, text) => {
-    const mission = makeMission('done', { result: { ...buildResult('x'), bestLagDays } })
+  it('shows every event of a done mission that never reached a conclusion', async () => {
+    const mission = makeMission('done', { events: makeMission('working').events })
     renderMission([mission], mission.id)
-    expect(await screen.findByText(text)).toBeInTheDocument()
+    expect(await screen.findByText(FIRST_STEP)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Show the work' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Conclusion' })).not.toBeInTheDocument()
   })
 
-  it('shows the error of a failed mission instead of a result', async () => {
-    const mission = makeMission('failed', { error: 'No series found.' })
+  it('stops the spinner on a step left active by a mission that is no longer working', async () => {
+    const mission = makeMission('failed')
+    renderMission([mission], mission.id)
+    expect(await screen.findByText(FIRST_STEP)).not.toHaveAttribute('aria-current')
+  })
+
+  it('shows the error of a failed mission, which can still be marked done', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    const mission = makeMission('failed')
     renderMission([mission], mission.id)
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('This mission failed')
-    expect(screen.getByRole('alert')).toHaveTextContent('No series found.')
-    expect(screen.queryByRole('region', { name: 'Result' })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Worked for/ })).toBeInTheDocument()
+    expect(await screen.findByRole('alert')).toHaveTextContent('It broke.')
+    expect(screen.getByText('Failed')).toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Conclusion' })).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Mark done' }))
+    expect(await screen.findByText('Done')).toBeInTheDocument()
+    expect(screen.getByRole('alert')).toBeInTheDocument()
+  })
+
+  it('links to the Devin session when there is one', async () => {
+    const mission = makeMission('working', { sessionUrl: 'https://app.devin.ai/sessions/devin-abc' })
+    renderMission([mission], mission.id)
+    expect(await screen.findByRole('link', { name: 'Open in Devin' })).toHaveAttribute('href', 'https://app.devin.ai/sessions/devin-abc')
   })
 
   it('shows not found for an unknown id, with a way home', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     renderMission([], 'nope')
     expect(await screen.findByRole('heading', { name: 'Mission not found' })).toBeInTheDocument()
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Start a new mission' }))
     expect(screen.getByText('home page')).toBeInTheDocument()
   })
 
-  it('updates live from running to done', async () => {
-    const mission = makeMission('running')
-    renderMission([mission], mission.id)
-    await screen.findByRole('list', { name: 'Progress' })
+  it('keeps the thread and says it is reconnecting when the server drops away', async () => {
+    const mission = makeMission('working', { hypothesis: 'Does A lead B?' })
+    let down = false
+    renderMission([mission], mission.id, (api) => ({
+      ...api,
+      getMission: (id) => (down ? Promise.reject(new TypeError('Failed to fetch')) : api.getMission(id)),
+    }))
+    await screen.findByText('Devin is working')
 
-    await act(() => vi.advanceTimersByTimeAsync(STEP_MS * SEED_SLOWDOWN))
-    expect(screen.getByText('Drawing the chart')).toHaveAttribute('aria-current', 'step')
+    down = true
+    await act(() => vi.advanceTimersByTimeAsync(STEP_MS))
+    expect(screen.getByText('Reconnecting')).toBeInTheDocument()
+    expect(screen.getByText('Does A lead B?')).toBeInTheDocument()
 
-    await act(() => vi.advanceTimersByTimeAsync(STEP_MS * SEED_SLOWDOWN * 2))
-    expect(await screen.findByRole('region', { name: 'Result' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Worked for/ })).toHaveAttribute('aria-expanded', 'false')
+    down = false
+    await act(() => vi.advanceTimersByTimeAsync(STEP_MS))
+    expect(screen.queryByText('Reconnecting')).not.toBeInTheDocument()
+  })
+
+  describe('auto-scroll', () => {
+    /** jsdom lays nothing out, so the thread's scroll geometry is faked. */
+    function fakeScroll(log: HTMLElement, geometry: { scrollHeight: number; clientHeight: number; scrollTop: number }) {
+      const state = { ...geometry }
+      for (const key of Object.keys(state) as (keyof typeof state)[]) {
+        Object.defineProperty(log, key, { configurable: true, get: () => state[key], set: (value) => (state[key] = value) })
+      }
+      return state
+    }
+
+    async function renderScrolled(distanceFromBottom: number) {
+      const mission = makeMission('working')
+      renderMission([mission], mission.id)
+      const log = await screen.findByRole('log', { name: 'Mission thread' })
+      const state = fakeScroll(log, { scrollHeight: 2000, clientHeight: 500, scrollTop: 1500 - distanceFromBottom })
+      act(() => void log.dispatchEvent(new Event('scroll')))
+      state.scrollHeight = 2400
+      await act(() => vi.advanceTimersByTimeAsync(STEP_MS))
+      return state
+    }
+
+    it.each([0, 80])('follows new events when the reader is %ipx from the bottom', async (distance) => {
+      expect((await renderScrolled(distance)).scrollTop).toBe(2400)
+    })
+
+    it.each([81, 1500])('leaves the reader alone when they are %ipx up the thread', async (distance) => {
+      expect((await renderScrolled(distance)).scrollTop).toBe(1500 - distance)
+    })
+
+    it('jumps to your own reply even from further up', async () => {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+      const mission = makeMission('waiting')
+      renderMission([mission], mission.id)
+      const log = await screen.findByRole('log', { name: 'Mission thread' })
+      const state = fakeScroll(log, { scrollHeight: 2000, clientHeight: 500, scrollTop: 0 })
+      act(() => void log.dispatchEvent(new Event('scroll')))
+
+      await user.type(replyBox(), 'Look here{Enter}')
+      await screen.findByText('Look here')
+      expect(state.scrollTop).toBe(2000)
+    })
+  })
+
+  it('starts each mission afresh when moving between them', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    const first = makeMission('done', { title: 'First' })
+    const second = makeMission('done', { title: 'Second' })
+    const api = createMockApi({ stepMs: STEP_MS, seed: { missions: [first, second], datasets: [] } })
+    renderWithApp(
+      <Routes>
+        <Route path="missions/:id" element={<><Link to={`/missions/${second.id}`}>next</Link><MissionPage /></>} />
+      </Routes>,
+      { api, route: `/missions/${first.id}` },
+    )
+    await user.click(await screen.findByRole('button', { name: 'Show the work' }))
+    await user.type(replyBox(), 'half a thought')
+
+    await user.click(screen.getByRole('link', { name: 'next' }))
+    expect(await screen.findByRole('heading', { name: 'Second' })).toBeInTheDocument()
+    expect(within(screen.getByRole('log')).queryByText(FIRST_STEP)).not.toBeInTheDocument()
+    expect(replyBox()).toHaveValue('')
   })
 })

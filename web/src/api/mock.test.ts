@@ -1,41 +1,49 @@
-import { STEP_KEYS } from '../steps'
+import { makeMission } from '../test/missions'
+import type { Mission } from '../types'
 import { ValidationError } from './index'
-import { createMockApi, SEED_SLOWDOWN } from './mock'
+import { createMockApi } from './mock'
+import { REPLY_BEAT, SCRIPT } from './script'
 
 const STEP_MS = 1000
 
-function activeKey(steps: { key: string; state: string }[]) {
-  return steps.find((s) => s.state === 'active')?.key
-}
+const kinds = (mission?: Mission) => mission?.events.map((e) => e.kind)
 
 describe('mock api', () => {
   beforeEach(() => vi.useFakeTimers())
   afterEach(() => vi.useRealTimers())
 
   const empty = { missions: [], datasets: [] }
+  const seeded = (...missions: Mission[]) => createMockApi({ stepMs: STEP_MS, seed: { missions, datasets: [] } })
 
-  it('lists seeded missions newest first', async () => {
+  it('lists seeded missions newest first, as summaries', async () => {
     const api = createMockApi()
     const missions = await api.listMissions()
     expect(missions.length).toBeGreaterThan(0)
     const times = missions.map((m) => Date.parse(m.createdAt))
     expect(times).toEqual([...times].sort((a, b) => b - a))
+    expect(Object.keys(missions[0]).sort()).toEqual(['createdAt', 'hypothesis', 'id', 'status', 'title', 'updatedAt'])
   })
 
-  it('seeds running, done and failed missions', async () => {
+  it('seeds every status', async () => {
     const statuses = new Set((await createMockApi().listMissions()).map((m) => m.status))
-    expect(statuses).toEqual(new Set(['running', 'done', 'failed']))
+    expect(statuses).toEqual(new Set(['working', 'waiting', 'done', 'failed']))
   })
 
-  it('creates a running mission with the plan step active', async () => {
+  it('is not in demo mode unless asked', async () => {
+    expect(await createMockApi().getMeta()).toEqual({ demo: false })
+    expect(await createMockApi({ demo: true }).getMeta()).toEqual({ demo: true })
+  })
+
+  it('creates a working mission whose thread opens with the hypothesis', async () => {
     const api = createMockApi({ stepMs: STEP_MS, seed: empty })
-    const mission = await api.createMission({ hypothesis: '  Does wind move PM2.5?  ', datasetIds: ['d1'] })
-    expect(mission.status).toBe('running')
+    const mission = await api.createMission({ hypothesis: '  Does wind move PM2.5?  ', datasetIds: ['d1'], reference: 'private notes' })
+    expect(mission.status).toBe('working')
     expect(mission.hypothesis).toBe('Does wind move PM2.5?')
     expect(mission.title).toBe('Does wind move PM2.5')
     expect(mission.datasetIds).toEqual(['d1'])
-    expect(activeKey(mission.steps)).toBe('plan')
-    expect(mission.steps.filter((s) => s.state === 'pending')).toHaveLength(4)
+    expect(mission.updatedAt).toBe(mission.createdAt)
+    expect(mission.events).toEqual([{ id: 'e1', at: mission.createdAt, kind: 'user_message', text: 'Does wind move PM2.5?' }])
+    expect(JSON.stringify(mission)).not.toContain('private notes')
     expect((await api.listMissions())[0].id).toBe(mission.id)
   })
 
@@ -48,43 +56,53 @@ describe('mock api', () => {
     expect(hypothesis[title.length]).toBe(' ')
   })
 
-  it('walks through every step then finishes with a result', async () => {
+  it('plays the script one beat at a time, then waits with a conclusion', async () => {
     const api = createMockApi({ stepMs: STEP_MS, seed: empty })
     const { id } = await api.createMission({ hypothesis: 'A leads B', datasetIds: [] })
-    for (const key of STEP_KEYS.slice(1)) {
+    for (let beat = 1; beat < SCRIPT.length; beat++) {
       vi.advanceTimersByTime(STEP_MS)
       const m = await api.getMission(id)
-      expect(m?.status).toBe('running')
-      expect(activeKey(m!.steps)).toBe(key)
+      expect(m?.status).toBe('working')
+      expect(m?.events).toHaveLength(beat + 1)
     }
     vi.advanceTimersByTime(STEP_MS)
-    const done = await api.getMission(id)
-    expect(done?.status).toBe('done')
-    expect(done?.steps.every((s) => s.state === 'done')).toBe(true)
-    expect(done?.result?.points.length).toBeGreaterThan(10)
-    expect(done?.elapsedSeconds).toBeGreaterThan(0)
+    const settled = await api.getMission(id)
+    expect(settled?.status).toBe('waiting')
+    expect(kinds(settled)).toEqual(['user_message', ...SCRIPT.map((b) => b.kind)])
+    expect(settled?.events.some((e) => e.kind === 'step' && e.state === 'active')).toBe(false)
+    expect(Date.parse(settled!.updatedAt)).toBeGreaterThan(Date.parse(settled!.createdAt))
 
     vi.advanceTimersByTime(STEP_MS * 3)
-    expect((await api.getMission(id))?.elapsedSeconds).toBe(done?.elapsedSeconds)
+    expect(await api.getMission(id)).toEqual(settled)
+    expect(vi.getTimerCount()).toBe(0)
   })
 
-  it('gives the same result for the same hypothesis', async () => {
+  it('gives the same findings for the same hypothesis', async () => {
     const api = createMockApi({ stepMs: STEP_MS, seed: empty })
     const a = await api.createMission({ hypothesis: 'A leads B', datasetIds: [] })
     const b = await api.createMission({ hypothesis: 'A leads B', datasetIds: [] })
-    vi.advanceTimersByTime(STEP_MS * 5)
-    expect((await api.getMission(a.id))?.result).toEqual((await api.getMission(b.id))?.result)
+    vi.advanceTimersByTime(STEP_MS * SCRIPT.length)
+    const strip = (m?: Mission) => m?.events.map(({ at: _at, ...rest }) => rest)
+    expect(strip(await api.getMission(a.id))).toEqual(strip(await api.getMission(b.id)))
     expect(a.id).not.toBe(b.id)
   })
 
-  it('advances seeded running missions', async () => {
-    const api = createMockApi({ stepMs: STEP_MS })
-    const running = (await api.listMissions()).filter((m) => m.status === 'running')
-    expect(running.length).toBeGreaterThan(0)
-    vi.advanceTimersByTime(STEP_MS * 5)
-    expect((await api.listMissions()).filter((m) => m.status === 'running')).toHaveLength(running.length)
-    vi.advanceTimersByTime(STEP_MS * 5 * SEED_SLOWDOWN)
-    expect((await api.listMissions()).filter((m) => m.status === 'running')).toHaveLength(0)
+  it('carries seeded working missions on from where their thread stops', async () => {
+    const mission = makeMission('working')
+    const api = seeded(mission, makeMission('waiting'), makeMission('done'), makeMission('failed'))
+    expect(vi.getTimerCount()).toBe(1)
+    vi.advanceTimersByTime(STEP_MS)
+    expect((await api.getMission(mission.id))?.events).toHaveLength(mission.events.length + 1)
+    vi.advanceTimersByTime(STEP_MS * SCRIPT.length)
+    expect(kinds(await api.getMission(mission.id))).toEqual(['user_message', ...SCRIPT.map((b) => b.kind)])
+    expect((await api.listMissions()).map((m) => m.status).sort()).toEqual(['done', 'failed', 'waiting', 'waiting'])
+  })
+
+  it('leaves a working mission alone once its script has been played out', async () => {
+    const mission = makeMission('working', { events: makeMission('done').events })
+    const api = seeded(mission)
+    vi.advanceTimersByTime(STEP_MS * 3)
+    expect(await api.getMission(mission.id)).toEqual(mission)
   })
 
   it('notifies subscribers until they unsubscribe', async () => {
@@ -100,11 +118,120 @@ describe('mock api', () => {
     expect(listener).toHaveBeenCalledTimes(2)
   })
 
+  describe('sendMessage', () => {
+    it('appends the trimmed reply, goes back to work, then answers and waits', async () => {
+      const mission = makeMission('waiting', { needsUser: 'Drop the outlier?' })
+      const api = seeded(mission)
+      const listener = vi.fn()
+      api.subscribe(listener)
+
+      await api.sendMessage(mission.id, '  Yes, drop it.  ')
+      const working = await api.getMission(mission.id)
+      expect(working?.status).toBe('working')
+      expect(working?.needsUser).toBeUndefined()
+      expect(working?.events.at(-1)).toMatchObject({ kind: 'user_message', text: 'Yes, drop it.' })
+      expect(listener).toHaveBeenCalledTimes(1)
+
+      vi.advanceTimersByTime(STEP_MS)
+      const answered = await api.getMission(mission.id)
+      expect(answered?.status).toBe('waiting')
+      expect(answered?.events.at(-1)).toMatchObject(REPLY_BEAT)
+      expect(answered?.events).toHaveLength(mission.events.length + 2)
+      expect(new Set(answered?.events.map((e) => e.id)).size).toBe(answered?.events.length)
+      expect(listener).toHaveBeenCalledTimes(2)
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('reopens a done mission', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.sendMessage(mission.id, 'One more thing')
+      expect((await api.getMission(mission.id))?.status).toBe('working')
+      vi.advanceTimersByTime(STEP_MS)
+      expect((await api.getMission(mission.id))?.status).toBe('waiting')
+    })
+
+    it('answers after the script when sent mid-run', async () => {
+      const mission = makeMission('working')
+      const api = seeded(mission)
+      await api.sendMessage(mission.id, 'Also check weekends')
+      const beatsLeft = SCRIPT.length - (mission.events.length - 1)
+      vi.advanceTimersByTime(STEP_MS * beatsLeft)
+      const concluded = await api.getMission(mission.id)
+      expect(concluded?.status).toBe('working')
+      expect(concluded?.events.at(-1)?.kind).toBe('conclusion')
+      vi.advanceTimersByTime(STEP_MS)
+      const settled = await api.getMission(mission.id)
+      expect(settled?.status).toBe('waiting')
+      expect(settled?.events.at(-1)).toMatchObject(REPLY_BEAT)
+      expect(settled?.events.filter((e) => e.kind === 'conclusion')).toHaveLength(1)
+    })
+
+    it.each(['', '   ', '\n'])('rejects blank text %j', async (text) => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      const error = await api.sendMessage(mission.id, text).catch((e) => e)
+      expect(error).toBeInstanceOf(ValidationError)
+      expect(error.field).toBe('text')
+      expect(error.message).toBe('Write a reply')
+      expect(await api.getMission(mission.id)).toEqual(mission)
+    })
+
+    it('rejects an unknown mission', async () => {
+      await expect(seeded().sendMessage('nope', 'hello')).rejects.toThrow('Mission not found')
+    })
+  })
+
+  describe('markDone', () => {
+    it('marks a waiting mission done and notifies', async () => {
+      const mission = makeMission('waiting', { needsUser: 'Drop the outlier?' })
+      const api = seeded(mission)
+      const listener = vi.fn()
+      api.subscribe(listener)
+      await api.markDone(mission.id)
+      const done = await api.getMission(mission.id)
+      expect(done?.status).toBe('done')
+      expect(done?.needsUser).toBeUndefined()
+      expect(done?.events).toEqual(mission.events)
+      expect(listener).toHaveBeenCalledTimes(1)
+    })
+
+    it('stops a mission that is still working', async () => {
+      const mission = makeMission('working')
+      const api = seeded(mission)
+      await api.markDone(mission.id)
+      expect(vi.getTimerCount()).toBe(0)
+      vi.advanceTimersByTime(STEP_MS * SCRIPT.length)
+      const done = await api.getMission(mission.id)
+      expect(done?.status).toBe('done')
+      expect(done?.events).toEqual(mission.events)
+    })
+
+    it('clears a failed mission from the active list', async () => {
+      const mission = makeMission('failed')
+      const api = seeded(mission)
+      await api.markDone(mission.id)
+      expect((await api.getMission(mission.id))?.status).toBe('done')
+    })
+
+    it('is harmless on a mission that is already done', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.markDone(mission.id)
+      expect((await api.getMission(mission.id))?.status).toBe('done')
+    })
+
+    it('rejects an unknown mission', async () => {
+      await expect(seeded().markDone('nope')).rejects.toThrow('Mission not found')
+    })
+  })
+
   it.each(['', '   ', '\n\t'])('rejects blank hypothesis %j', async (hypothesis) => {
     const api = createMockApi({ seed: empty })
     const error = await api.createMission({ hypothesis, datasetIds: [] }).catch((e) => e)
     expect(error).toBeInstanceOf(ValidationError)
     expect(error.field).toBe('hypothesis')
+    expect(error.message).toBe('Describe a connection to test')
     expect(await api.listMissions()).toHaveLength(0)
   })
 
@@ -116,10 +243,11 @@ describe('mock api', () => {
     const api = createMockApi()
     const [first] = await api.listMissions()
     first.title = 'mutated'
-    first.steps[0].state = 'pending'
+    const mission = await api.getMission(first.id)
+    mission!.events.length = 0
     const again = await api.getMission(first.id)
     expect(again?.title).not.toBe('mutated')
-    expect(again?.steps[0].state).not.toBe('pending')
+    expect(again?.events.length).toBeGreaterThan(0)
   })
 
   describe('linkDataset', () => {
@@ -131,6 +259,7 @@ describe('mock api', () => {
       const dataset = await api.linkDataset({ name: '  FRED  ', url: ' https://fred.stlouisfed.org ' })
       expect(dataset.name).toBe('FRED')
       expect(dataset.url).toBe('https://fred.stlouisfed.org')
+      expect(dataset.kind).toBe('other')
       const after = await api.listDatasets()
       expect(after).toHaveLength(before + 1)
       expect(after[0].id).toBe(dataset.id)

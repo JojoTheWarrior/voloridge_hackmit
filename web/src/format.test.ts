@@ -1,22 +1,4 @@
-import { formatCorrelation, formatElapsed, formatLag, formatP, formatSynced } from './format'
-
-describe('formatElapsed', () => {
-  it.each([
-    [0, '0s'],
-    [59, '59s'],
-    [60, '1m 0s'],
-    [252, '4m 12s'],
-    [3599, '59m 59s'],
-    [3600, '1h 0m'],
-    [7384, '2h 3m'],
-  ])('%i seconds -> %s', (seconds, expected) => {
-    expect(formatElapsed(seconds)).toBe(expected)
-  })
-
-  it('rounds fractional seconds', () => {
-    expect(formatElapsed(12.6)).toBe('13s')
-  })
-})
+import { formatCorrelation, formatLag, formatP, formatSynced } from './format'
 
 describe('formatP', () => {
   it.each([
