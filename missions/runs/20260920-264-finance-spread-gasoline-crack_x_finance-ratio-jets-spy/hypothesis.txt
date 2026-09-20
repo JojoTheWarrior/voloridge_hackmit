@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 weighs on the airline basket relative to the market rather than single names; trade short JETS/SPY ratio 3d at 1d lag [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0073)

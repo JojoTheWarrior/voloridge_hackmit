@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.spread.gasoline_crack",
+  "indicator_b": "finance.ratio.jets_spy",
+  "transform_a": "diff",
+  "transform_b": "log_return",
+  "max_lag_days": 10,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}
