@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0152",
+  "title": "[fertilizer-ag] Null control: Doha CAMS SO2 20d z-score < -1.5 leads NTR log ret",
+  "hypothesis": "R2 | [fertilizer-ag] Null control: Doha CAMS SO2 20d z-score < -1.5 leads NTR log returns by 4 days (+); if SO2 matches the weak NO2 result the Qatari industrial-activity channel is not specific; long NTR 6d [airquality.doha.cams_so2 -> finance.NTR.log_return] (parent: R2-0053)",
+  "parent_mission_id": "R2-0053",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:05:47Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
