@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 29,
+    "hit_rate": 0.4827586206896552,
+    "avg_return": 0.002386381948344009,
+    "baseline_avg_return": 0.0014600990545430707,
+    "excess_return": 0.0009262828938009385,
+    "sharpe_like": 0.49610941662215324,
+    "max_drawdown": -0.08542612466978783,
+    "total_return": 0.061259861164562945
+  },
+  "fit_pre_war": {
+    "n_trades": 15,
+    "hit_rate": 0.6,
+    "avg_return": 0.007034734783099313,
+    "baseline_avg_return": 0.0018070109391999775,
+    "excess_return": 0.005227723843899335,
+    "sharpe_like": 0.9699848642772554,
+    "max_drawdown": -0.0819746751028223,
+    "total_return": 0.10439058986537897
+  },
+  "test_war": {
+    "n_trades": 14,
+    "hit_rate": 0.35714285714285715,
+    "avg_return": -0.0025939960888938162,
+    "baseline_avg_return": 0.0008486356607233426,
+    "excess_return": -0.003442631749617159,
+    "sharpe_like": -0.4355167395946819,
+    "max_drawdown": -0.08542612466978794,
+    "total_return": -0.039053871969403464
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "UAL",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.ceasefire_share rolling_zscore_20d > 1 at close -> long UAL next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4827586206896552,
+    "avg_return": 0.002386381948344009,
+    "excess_return": 0.0009262828938009385,
+    "n_trades": 29,
+    "sharpe_like": 0.49610941662215324,
+    "max_drawdown": -0.08542612466978783,
+    "oos_n_trades": 14,
+    "oos_avg_return": -0.0025939960888938162,
+    "oos_hit_rate": 0.35714285714285715,
+    "actionability": 3.32,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

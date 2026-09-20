@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT ceasefire GKG share day-over-day pct change > 100 pct triggers an airline relief rally (+); trade long UAL 5d after 1d lag [gdelt.gkg.ceasefire_share -> finance.UAL.log_return]
