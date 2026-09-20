@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:46:15Z",
-  "updated_at": "2026-09-20T13:12:09Z",
+  "updated_at": "2026-09-20T13:15:04Z",
   "finished_at": "2026-09-20T12:47:01Z",
-  "elapsed_s": 1554,
+  "elapsed_s": 1729,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-224-finance-spread-brent-wti_x_finance-fro-log-return",
   "scores": {
