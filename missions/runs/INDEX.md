@@ -101,3 +101,4 @@
 | `20260920-097-gdelt-gkg-qatar-share_x_gdelt-gkg-helium-share` | GDELT mentions of "helium" or "semiconductor" rose after the Ras Laffan strike. | ok | 204 | -0.007831038747885327 | 0.19560878243512975 | 3.28 | 2.48 | 3.3 |
 | `20260920-098-gdelt-gkg-qatar-share_x_finance-ttf-f-log-return` | GDELT mentions of Qatar spike on the same days as TTF gas price jumps. | ok | 391 | 0.2979943994424811 | 0.007984031936127744 | 6.14 | 4.22 | 2.74 |
 | `20260920-099-weather-dubai-temp-mean_x_utility-us-demand-mwh` | Middle East city temperature and news-event volume are jointly unrelated to US utility demand (multi-source null control). | ok | 555 | 0.48568094883380897 | 0.013972055888223553 | 6.42 | 3.8 | 8.68 |
+| `20260920-100-FAILED-weather-driven-us-electricity-demand` | Weather-driven US electricity demand spikes coincide with larger natural-gas price sensitivity to Hormuz news. | failed | 0 | None | None | None | None | None |
