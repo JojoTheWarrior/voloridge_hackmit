@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/be757c8f5d50477d9e712c62d4bf6231",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:13:18Z",
-  "updated_at": "2026-09-20T13:13:31Z",
-  "finished_at": null,
-  "elapsed_s": 13,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:14:02Z",
+  "finished_at": "2026-09-20T13:14:02Z",
+  "elapsed_s": 44,
+  "message": "Not supported: crossref hormuz z>1 short RCL lost in-sample (7 trades, hit 43%, excess -0.76%/trade, sharpe -1.0), OOS 2 trades flat; validity 0, actionability 1.05",
   "run_folder": "missions/runs/20260920-257-research-hormuz-crossref-pubs_x_finance-rcl-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 1.05,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Faster news proxy: GDELT Hormuz share z-score > 1 (weekly crossref counts were too slow and lost -0.8%/trade) marks strait-escalation regimes that compress cruise demand (-); trade short RCL 5d at 1d lag [gdelt.gkg.hormuz_share -> finance.RCL.log_return] (parent: R2-0165)"
 }
