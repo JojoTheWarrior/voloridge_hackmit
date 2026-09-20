@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:13:13.535010+00:00",
+  "git_commit": "72f5900f725e7ba90b5a4ae7a19010745c2ff24d",
+  "folder": "20260920-196-finance-ratio-gold-oil_x_finance-eem-log-return",
   "mission_id": "R2-0094",
-  "title": "Gold-oil ratio z-score leads EEM lower",
   "hypothesis": "R2 | [risk-macro-em] Gold-oil ratio 20d z-score > 1 leads EM equity returns lower by 2-3 days (-) as oil-driven risk aversion builds; trade short EEM 3d [finance.ratio.gold_oil -> finance.EEM.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/f173395429b1465ab4aa0eabd84713b5",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:12:57Z",
-  "updated_at": "2026-09-20T04:13:15Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-196-finance-ratio-gold-oil_x_finance-eem-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 6.22
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.3186312169871301,
+  "perm_p": 0.029940119760479042,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 6.22,
   "trade_idea": {
     "instrument": "EEM",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 6.22,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.ratio.gold_oil": "configured analysis window",
+    "finance.EEM.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

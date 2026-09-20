@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Gold-oil ratio 20d z-score > 1 leads EM equity returns lower by 2-3 days (-) as oil-driven risk aversion builds; trade short EEM 3d [finance.ratio.gold_oil -> finance.EEM.log_return]
