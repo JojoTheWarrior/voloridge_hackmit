@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT Hormuz GKG share 20d z-score > 1 leads JETS log returns lower by 2 days (-); trade short JETS 3d [gdelt.gkg.hormuz_share -> finance.JETS.log_return]

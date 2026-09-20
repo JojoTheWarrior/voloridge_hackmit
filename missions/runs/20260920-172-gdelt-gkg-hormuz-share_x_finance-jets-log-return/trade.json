@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 7,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 3,
+    "hit_rate": 0.6666666666666666,
+    "avg_return": 0.009104630401223335,
+    "baseline_avg_return": -0.016554939157231014,
+    "excess_return": 0.02565956955845435,
+    "sharpe_like": 0.8465237259011169,
+    "max_drawdown": 0.0,
+    "total_return": 0.027038118979444414
+  },
+  "fit_pre_war": {
+    "n_trades": 0,
+    "hit_rate": null,
+    "avg_return": null,
+    "baseline_avg_return": null,
+    "excess_return": null,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "total_return": null
+  },
+  "test_war": {
+    "n_trades": 3,
+    "hit_rate": 0.6666666666666666,
+    "avg_return": 0.009104630401223335,
+    "baseline_avg_return": -0.016554939157231014,
+    "excess_return": 0.02565956955845435,
+    "sharpe_like": 0.8465237259011169,
+    "max_drawdown": 0.0,
+    "total_return": 0.027038118979444414
+  },
+  "n_signal_days": 72,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.hormuz_share rolling_zscore_20d > 1 at close -> short JETS next session",
+    "exit_rule": "close after 7 trading days (no overlapping entries)",
+    "holding_days": 7,
+    "hit_rate": 0.6666666666666666,
+    "avg_return": 0.009104630401223335,
+    "excess_return": 0.02565956955845435,
+    "n_trades": 3,
+    "sharpe_like": 0.8465237259011169,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 3,
+    "oos_avg_return": 0.009104630401223335,
+    "oos_hit_rate": 0.6666666666666666,
+    "actionability": 1.2,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
