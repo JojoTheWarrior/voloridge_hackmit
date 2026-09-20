@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:52:41.272185+00:00",
+  "git_commit": "d70417a5e45c8a7b711833a72c7cfecaa669eae7",
+  "folder": "20260920-038-FAILED-petroleum-fired-generation-in-the",
+  "mission_id": "M20260920-00111f",
+  "hypothesis": "Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "utility.generation.wind_mwh": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

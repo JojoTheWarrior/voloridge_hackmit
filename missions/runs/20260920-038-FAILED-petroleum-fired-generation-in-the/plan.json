@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.generation.wind_mwh",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "Heuristic keyword overlap with source-diverse catalogue entries."
+}

@@ -39,3 +39,4 @@
 | `20260920-035-FAILED-delivered-coal-cost-to-us` | Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz. | failed | 0 | None | None | None | None | None |
 | `20260920-036-FAILED-delivered-coal-cost-to-us` | Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz. | failed | 0 | None | None | None | None | None |
 | `20260920-037-FAILED-petroleum-fired-generation-in-the` | Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices. | failed | 0 | None | None | None | None | None |
+| `20260920-038-FAILED-petroleum-fired-generation-in-the` | Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices. | failed | 0 | None | None | None | None | None |
