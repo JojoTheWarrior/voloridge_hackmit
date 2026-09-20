@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:47:23.948649+00:00",
+  "git_commit": "017108ee3b460249a86431f6d99f2fd1c3caf721",
+  "folder": "20260920-225-research-hormuz-crossref-pubs_x_finance-ratio-xop-spy",
   "mission_id": "R2-0117",
-  "title": "Hormuz crossref z>2 leads XOP/SPY lower 5d",
   "hypothesis": "R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 12-week z-score > 2 lead the XOP/SPY ratio lower by 5 days (-) as oil-equity relative attention peaks and fades; trade short XOP vs SPY 5d [research.hormuz.crossref_pubs -> finance.ratio.xop_spy] (parent: R2-0017)",
-  "parent_mission_id": "R2-0017",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/aadc8db8982c48d2b3dbef0bb2803859",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:47:13Z",
-  "updated_at": "2026-09-20T12:47:25Z",
-  "finished_at": null,
-  "elapsed_s": 12,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-225-research-hormuz-crossref-pubs_x_finance-ratio-xop-spy",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.0648247574462034,
+  "perm_p": 0.5828343313373253,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "ratio:xop_spy",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_pubs": "2025-03..current week",
+    "finance.ratio.xop_spy": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
