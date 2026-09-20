@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 43,
+    "hit_rate": 0.3953488372093023,
+    "avg_return": -0.002324770555662696,
+    "baseline_avg_return": -0.0010792368985883386,
+    "excess_return": -0.0012455336570743572,
+    "sharpe_like": -0.8701610344484615,
+    "max_drawdown": -0.148429651827913,
+    "total_return": -0.10120241052593493
+  },
+  "fit_pre_war": {
+    "n_trades": 28,
+    "hit_rate": 0.4642857142857143,
+    "avg_return": 0.00043348898848556493,
+    "baseline_avg_return": -0.0017373789762617515,
+    "excess_return": 0.0021708679647473163,
+    "sharpe_like": 0.17855733950930228,
+    "max_drawdown": -0.10475360017015356,
+    "total_return": 0.009892073628725795
+  },
+  "test_war": {
+    "n_trades": 15,
+    "hit_rate": 0.26666666666666666,
+    "avg_return": -0.007473521704739449,
+    "baseline_avg_return": 7.374884650869276e-05,
+    "excess_return": -0.007547270551248142,
+    "sharpe_like": -1.2560019881991784,
+    "max_drawdown": -0.14335787392800092,
+    "total_return": -0.11000629379679938
+  },
+  "n_signal_days": 368,
+  "trade_idea": {
+    "instrument": "YAR",
+    "direction": "short",
+    "entry_rule": "finance.ratio.ttf_henryhub rolling_zscore_20d > 1 at close -> short YAR next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.3953488372093023,
+    "avg_return": -0.002324770555662696,
+    "excess_return": -0.0012455336570743572,
+    "n_trades": 43,
+    "sharpe_like": -0.8701610344484615,
+    "max_drawdown": -0.148429651827913,
+    "oos_n_trades": 15,
+    "oos_avg_return": -0.007473521704739449,
+    "oos_hit_rate": 0.26666666666666666,
+    "actionability": 0.42,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

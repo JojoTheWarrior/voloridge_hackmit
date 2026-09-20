@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1.5 leads YAR.OL returns by 2 days (-) as European gas input cost crushes ammonia margins; trade short YAR.OL 5d [finance.ratio.ttf_henryhub -> finance.YAR.OL.log_return]
