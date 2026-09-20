@@ -267,3 +267,7 @@
 ||||||| parent of 42ce32e (mission R2-0111: airquality-kuwait-cams-no2_x_finance-spread-gasoline-crack)
 ||||||| parent of 02d8d39 (mission R2-0111: airquality-kuwait-cams-no2_x_finance-spread-gasoline-crack)
 | `20260920-220-airquality-kuwait-cams-no2_x_finance-spread-gasoline-crack` | R2 \| [oil-shipping] Kuwait CAMS NO2 10d z-score > 1 (refinery combustion ramp) leads gasoline crack narrower by 4 days (-); trade short RB=F 4d [airquality.kuwait.cams_no2 -> finance.spread.gasoline_crack] (parent: R2-0014) | ok | 389 | 0.009726130775985553 | 0.08982035928143713 | 0 | 2.0 | 2.0 | 6.04 |  |
+||||||| parent of a444bd1 (mission R2-0108: weather-muscat-wind-max_x_finance-bz-f-range-pct)
+||||||| parent of f04d8e2 (mission R2-0108: weather-muscat-wind-max_x_finance-bz-f-range-pct)
+||||||| parent of 108bf59 (mission R2-0108: weather-muscat-wind-max_x_finance-bz-f-range-pct)
+| `20260920-219-weather-muscat-wind-max_x_finance-bz-f-range-pct` | R2 \| [oil-shipping] Muscat max wind 20d z-score above 1 (rough Gulf of Oman seas) leads Brent intraday range higher by 2 days (+); trade long BZ=F volatility 3d [weather.muscat.wind_max -> finance.BZ=F.range_pct] (parent: R2-0011) | ok | 388 | 0.0903703777964566 | 0.11776447105788423 | 0 | 2.0 | 2.0 | 10.0 |  |

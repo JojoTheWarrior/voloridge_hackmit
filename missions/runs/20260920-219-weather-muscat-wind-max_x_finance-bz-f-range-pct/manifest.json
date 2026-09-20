@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:42:01.374144+00:00",
+  "git_commit": "31dde447cec02e16ff7a4a09887f775d176ca93e",
+  "folder": "20260920-219-weather-muscat-wind-max_x_finance-bz-f-range-pct",
   "mission_id": "R2-0108",
-  "title": "Muscat wind leads Brent intraday range",
   "hypothesis": "R2 | [oil-shipping] Muscat max wind 20d z-score above 1 (rough Gulf of Oman seas) leads Brent intraday range higher by 2 days (+); trade long BZ=F volatility 3d [weather.muscat.wind_max -> finance.BZ=F.range_pct] (parent: R2-0011)",
-  "parent_mission_id": "R2-0011",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/47419ef6233845be9213d5a9e6e4b30f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:41:46Z",
-  "updated_at": "2026-09-20T12:42:03Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-219-weather-muscat-wind-max_x_finance-bz-f-range-pct",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 10.0
-  },
+  "status": "ok",
+  "n_obs": 388,
+  "r": 0.0903703777964566,
+  "perm_p": 0.11776447105788423,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 10.0,
   "trade_idea": {
     "instrument": "BZ=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.muscat.wind_max": "configured analysis window",
+    "finance.BZ=F.range_pct": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
