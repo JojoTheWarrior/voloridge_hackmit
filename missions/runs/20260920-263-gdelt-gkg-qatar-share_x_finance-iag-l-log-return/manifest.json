@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:17:59.202101+00:00",
+  "git_commit": "57430c08c699d37000c95e93a55f88637aa81a9a",
+  "folder": "20260920-263-gdelt-gkg-qatar-share_x_finance-iag-l-log-return",
   "mission_id": "R2-0171",
-  "title": "Qatar GKG share z>1 -> short IAG.L 3d",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT qatar GKG share 20d z-score > 1 flags Gulf hub disruption that penalizes IAG Gulf/Middle East routes (-); trade short IAG.L 3d at 1d lag; cross-check of the weak LHA.DE result [gdelt.gkg.qatar_share -> finance.IAG.L.log_return] (parent: R2-0069)",
-  "parent_mission_id": "R2-0069",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/d77ff20903fc4d2893beec135885e8fc",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:17:44Z",
-  "updated_at": "2026-09-20T13:18:00Z",
-  "finished_at": null,
-  "elapsed_s": 16,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-263-gdelt-gkg-qatar-share_x_finance-iag-l-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.05582498750036028,
+  "perm_p": 0.4810379241516966,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "IAG",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.qatar_share": "configured analysis window",
+    "finance.IAG.L.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT qatar GKG share 20d z-score > 1 flags Gulf hub disruption that penalizes IAG Gulf/Middle East routes (-); trade short IAG.L 3d at 1d lag; cross-check of the weak LHA.DE result [gdelt.gkg.qatar_share -> finance.IAG.L.log_return] (parent: R2-0069)
