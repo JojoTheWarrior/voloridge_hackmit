@@ -77,7 +77,30 @@ export type MissionEvent = EventBase &
     | { kind: 'artifact'; artifact: Artifact }
     | { kind: 'conclusion'; verdict: string; summary: string; stats: Stat[] }
     | { kind: 'error'; text: string }
+    /** Marks where in the thread a final report was delivered; the report itself is `Mission.report`. */
+    | { kind: 'report' }
   )
+
+export interface ReportStep {
+  label: string
+  /** One line: what this step established. */
+  takeaway: string
+}
+
+/** Devin's look back over a whole mission: the thing a mission is shared as. */
+export interface Report {
+  /** The finding itself, not the question. */
+  headline: string
+  /** One paragraph. */
+  summary: string
+  stats: Stat[]
+  /** Ids of artifacts already in the thread, in the order to feature them. */
+  keyArtifactIds: string[]
+  steps: ReportStep[]
+  caveats: string[]
+  nextQuestions: string[]
+  generatedAt: string
+}
 
 export interface MissionSummary {
   id: string
@@ -94,6 +117,9 @@ export interface Mission extends MissionSummary {
   sessionUrl?: string
   /** Set while Devin is waiting on a decision from the user. */
   needsUser?: string
+  report?: Report
+  /** True from the moment a report is requested until it arrives or the request fails. */
+  reportPending: boolean
   events: MissionEvent[]
 }
 

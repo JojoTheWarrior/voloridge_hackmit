@@ -130,3 +130,23 @@ Verification to report: `npx vitest run src/components/artifacts`, `npx oxlint s
 - [ ] Run the live smoke test once (`pytest -m live`, ≤ 1 ACU); correct the v3 status/message mapping from what it prints; then run one real mission end to end from the UI.
 - [ ] Update `README.md` (Web section: two processes, demo mode, `.env` key, ACU cap and mode env vars) and `AGENT.md`.
 - [ ] Commit in logical pieces. Do not push or merge.
+
+---
+
+## Addendum: final report and dark mode
+
+Approved mockup: a report is its own page, typeset like a short paper — eyebrow ("Mission report · date"), a large headline that states the finding, a one-paragraph summary, a row of key numbers, the featured artifacts re-rendered with the normal artifact components, "How we got there" as a numbered list (label in ink, takeaway muted), caveats and "Ask next" side by side, and a quiet footer with the castle mark. Header actions: "Back to mission", "Copy link", "Regenerate" (outline), "Export PDF" (the one ink button; uses `window.print()` with a print stylesheet).
+
+### Contract (frozen; `web/src/types.ts` and `web/src/api/index.ts` are already updated)
+
+```
+POST /api/missions/:id/report   -> 202 {}
+```
+
+- Requesting a report sends Devin one message (`REPORT_REQUEST` in `server/brief.py`) in the mission's existing session, sets `reportPending: true`, and sets status `working` so the poller follows it. It adds **no** `user_message` event. A request while one is pending is a no-op 202. A mission with no session gets an `error` event and stays as it is (202, same pattern as replies). Devin unreachable: `error` event, `reportPending` stays false.
+- If the mission was `done` when the report was requested it returns to `done` when the report arrives (or the request fails); otherwise it goes to `waiting` as usual.
+- Devin answers by filling `report` in `structured_output` (snake_case): `{headline, summary, stats: [{label, value}] (≤ 4), key_artifact_ids: [..] (≤ 3, must be ids of artifacts it already emitted), steps: [{label, takeaway}] (≤ 8), caveats: [..] (≤ 4), next_questions: [..] (≤ 3)}`. The server validates and normalises to the camelCase `Report` in `types.ts`, drops unknown artifact ids, truncates over-limit lists, and requires non-empty `headline` and `summary` (otherwise it keeps waiting).
+- A report counts as delivered when one is pending and the normalised content differs from the stored report (or none is stored). If a request has been pending for more than 5 minutes: accept an unchanged valid report if present, else add an `error` event ("The report did not arrive") and clear pending.
+- On delivery: store the report with `generatedAt = now`, clear pending, and upsert the single `{kind: "report"}` event (id `report`) at the end of the thread, after the conclusion. While a report is not pending, a `report` in Devin's output is ignored.
+- `GET /api/missions/:id` always includes `reportPending` (bool) and includes `report` only when one exists. Summaries are unchanged.
+- The brief's standing text must tell Devin about the `report` field but also that it must leave it null until asked.
