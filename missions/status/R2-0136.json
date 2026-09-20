@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:57:55Z",
-  "updated_at": "2026-09-20T12:58:43Z",
+  "updated_at": "2026-09-20T12:59:07Z",
   "finished_at": "2026-09-20T12:58:43Z",
-  "elapsed_s": 48,
+  "elapsed_s": 72,
   "message": "Supported in-sample (r=0.23, n=391) but trade edge is war-regime only: 1d long after TTF abs-return z>1 gives hit 0.53, avg +0.59%, sharpe 0.91 (n=49); pre-war excess negative, war OOS +2.1%/trade (n=15). Heuristic judge scores 0; actionability 6.41.",
   "run_folder": "missions/runs/20260920-238-finance-ttf-f-abs-return_x_finance-ttf-f-log-return",
   "scores": {
