@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.dubai.temp_mean",
+  "indicator_b": "utility.us.demand_mwh",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Use a representative Middle East city\u2019s daily mean temperature (Dubai) and total US electricity demand levels over the full window to test that geographically distant weather is not systematically related to US load, serving as a multi-day-lagged null control."
+}
