@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 has no predictive link to airline returns (null control, 0 sign); trade long DAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.DAL.log_return]

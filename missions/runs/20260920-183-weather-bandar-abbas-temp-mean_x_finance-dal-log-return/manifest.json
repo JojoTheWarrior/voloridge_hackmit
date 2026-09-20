@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:01:32.266678+00:00",
+  "git_commit": "670195fb78a35393f311e99edf1e9fd2b46cf295",
+  "folder": "20260920-183-weather-bandar-abbas-temp-mean_x_finance-dal-log-return",
   "mission_id": "R2-0072",
-  "title": "Null control: Bandar Abbas temp -> DAL",
   "hypothesis": "R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 has no predictive link to airline returns (null control, 0 sign); trade long DAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.DAL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/c9cac2d8af784d45ba94db59af730f76",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:01:24Z",
-  "updated_at": "2026-09-20T04:01:33Z",
-  "finished_at": null,
-  "elapsed_s": 9,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-183-weather-bandar-abbas-temp-mean_x_finance-dal-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.87
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.029100513418808774,
+  "perm_p": 0.8682634730538922,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.87,
   "trade_idea": {
     "instrument": "DAL",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 1.87,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.bandar_abbas.temp_mean": "configured analysis window",
+    "finance.DAL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
