@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Brent-WTI spread 20d z-score > 1 leads FRO log returns lower over 3 days (-) as spread spikes fade and tanker rally reverses; trade short FRO 3d [finance.spread.brent_wti -> finance.FRO.log_return] (parent: R2-0019)
