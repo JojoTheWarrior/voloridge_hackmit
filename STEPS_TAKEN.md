@@ -37,6 +37,15 @@ shape of each source:
    downloaded-row registration, utility warnings, and Materials CSV loading.
 7. Added shared JSON serialization, UI mission persistence and result browsing,
    documentation, and the current UI polish.
+8. Corrected fixed-width NOAA ISD parsing (date, wind, visibility, signed
+   temperature, and missing-value fields), added coverage-aware catalogue
+   entries, and verified Tehran records against Open-Meteo.
+9. Added the no-key Open-Meteo Air Quality/CAMS fetcher with 90-day chunks and
+   eight daily indicators per city. A full refresh produced 13,584 hourly
+   values / 566 daily means per city through archive latency.
+10. Made OpenAQ registration parameter-aware, restricted event markers from the
+    planner catalogue, tightened multi-city validation and heuristic fallback,
+    and added one heuristic retry for insufficient-overlap queue missions.
 
 ## Download snapshot
 
@@ -48,8 +57,9 @@ gdelt_live         14G
 materials_project 138M
 noaa_isd           7.3M
 open_meteo         564K
+open_meteo_aq      17M
 openalex           88M
-openaq             53M
+openaq             61M
 pudl               373M
 ```
 
@@ -85,6 +95,9 @@ The source-specific fetch commands and credentials are documented in
 - Indicator caches need safe existence checks and stale GDELT clipping.
 - Queue missions exposed sparse overlap and city substitution errors; runners
   now report coverage and planner validation errors clearly.
+- NOAA ISD is a short historical station source (`2025-03..2025-08`), while
+  CAMS model data extends the air-quality window but must not be described as
+  ground-sensor observations.
 
 ## Timeline and known failures
 

@@ -33,6 +33,16 @@ class PlanValidationError(ValueError):
 
 def _requested_cities(hypothesis):
     text = hypothesis.lower()
+    aliases = {
+        "tel aviv": "tel_aviv", "new york": "nyc_jfk", "nyc": "nyc_jfk",
+        "abu dhabi": "abu_dhabi", "bandar abbas": "bandar_abbas",
+        "kuwait city": "kuwait",
+    }
+    for alias, slug in aliases.items():
+        if re.search(rf"\b{re.escape(alias)}\b", text):
+            text += f" {slug.replace('_', ' ')}"
+    if re.search(r"\b(?:persian gulf|gulf)\b", text):
+        text += " dubai doha abu dhabi kuwait bahrain bandar abbas muscat basrah"
     found = []
     for slug in CITIES:
         names = {slug.replace("_", " ")}
@@ -49,11 +59,15 @@ def _validate_plan(hypothesis, plan):
     missing = [name for name in (plan.indicator_a, plan.indicator_b) if name not in REGISTRY]
     if missing:
         raise PlanValidationError(f"invalid indicator names: {missing}")
-    for city in _requested_cities(hypothesis):
-        for name in (plan.indicator_a, plan.indicator_b):
-            spec = REGISTRY[name]
-            if spec.source in {"weather", "airquality"} and spec.region != city:
-                raise PlanValidationError(f"requested city {city} has no data for {spec.source}")
+    requested = _requested_cities(hypothesis)
+    for name in (plan.indicator_a, plan.indicator_b):
+        spec = REGISTRY[name]
+        if (
+            requested
+            and spec.source in {"weather", "airquality"}
+            and spec.region not in requested
+        ):
+            raise PlanValidationError(f"requested city {requested[0]} has no data for {spec.source}")
     return plan
 
 
@@ -64,6 +78,9 @@ def _keyword_scores(text):
         "doha": "doha", "riyadh": "riyadh", "kuwait": "kuwait",
     }
     for name, spec in REGISTRY.items():
+        if spec.source == "events":
+            scores[name] = 0.0
+            continue
         lower_name = name.lower()
         score = 0.0
         for source, terms, prefixes in _DOMAIN_RULES:
@@ -116,7 +133,13 @@ def heuristic_plan(hypothesis):
 def plan_mission(hypothesis, use_ai=True):
     if not use_ai or not env("OPENAI_API_KEY"):
         return _validate_plan(hypothesis, _semantic_adjust(hypothesis, heuristic_plan(hypothesis))), "heuristic"
-    prompt = f"MISSION:\n{hypothesis}\n\nCATALOGUE:\n{catalogue_text()}"
+    prompt = (
+        f"MISSION:\n{hypothesis}\n\n"
+        "COVERAGE GUIDANCE: Prefer indicators whose coverage spans 2025-03..2026-09. "
+        "ISD-only series stop in 2025-08. Event-count indicators are sparse 0/1 "
+        "timeline markers for event studies, not correlation inputs.\n\n"
+        f"CATALOGUE:\n{catalogue_text()}"
+    )
     last_error = None
     for attempt in range(2):
         try:
@@ -128,10 +151,8 @@ def plan_mission(hypothesis, use_ai=True):
         except Exception as exc:
             last_error = exc
             prompt += f"\nPlanner error: {exc}. Use exact registered indicator names."
-    if isinstance(last_error, PlanValidationError):
-        raise last_error
-    fallback = _validate_plan(hypothesis, _semantic_adjust(hypothesis, heuristic_plan(hypothesis)))
-    return fallback, "heuristic"
+    fallback = heuristic_plan(hypothesis)
+    return _validate_plan(hypothesis, _semantic_adjust(hypothesis, fallback)), "heuristic"
 
 
 def _semantic_adjust(hypothesis, plan):

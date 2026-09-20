@@ -62,8 +62,9 @@ mission engine
 | --- | --- | --- |
 | GDELT v1/v2 and GKG | Daily window from 2025-03 through current data | News volume and tone are proxies; source coverage changes |
 | Open-Meteo | 19 cities, daily weather through archive latency | Forecast/archive revisions and seasonal confounding |
-| NOAA ISD | Mostly 2025 station observations | Bucket inventory has no dependable 2026 coverage |
+| NOAA ISD | 2025-03 through 2025-08 station observations | ISD-only series stop in 2025-08; station and field coverage vary |
 | OpenAQ | Cities with indexed locations and downloaded rows | API requires a key; S3 archive coverage is uneven |
+| Open-Meteo CAMS | 19 cities, 2025-03 through archive latency | Model reanalysis, not ground sensors; spatial smoothing and revisions |
 | OpenAlex | Sampled recent parquet works | S3 sample is not the complete scholarly corpus |
 | Materials Project | Document metadata snapshots through 2025 | Snapshots are not a daily scientific measurement series |
 | PUDL/EIA | Demand, generation, fuel, and generator tables | Publication and revision delays; regional aggregation choices |

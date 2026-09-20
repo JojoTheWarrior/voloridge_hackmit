@@ -18,6 +18,7 @@ class IndicatorSpec:
     unit: str
     freq: str
     region: str | None = None
+    coverage: str = "configured analysis window"
 
 
 class IndicatorUnavailable(RuntimeError):
@@ -93,4 +94,19 @@ def get_series(name: str, start=None, end=None) -> pd.Series:
 
 
 def catalogue_text() -> str:
-    return "\n".join(f"{s.name} | {s.freq} | {s.description}" for s in list_indicators())
+    lines = []
+    for spec in list_indicators():
+        if spec.source == "events":
+            continue
+        coverage = spec.coverage
+        path = _cache_path(spec.name)
+        if path.exists():
+            try:
+                cached = pd.read_parquet(path)
+                dates = pd.to_datetime(cached["date"], errors="coerce").dropna()
+                if not dates.empty:
+                    coverage = f"{dates.min().date()}..{dates.max().date()}"
+            except Exception:
+                pass
+        lines.append(f"{spec.name} | {spec.freq} | {spec.description} | coverage: {coverage}")
+    return "\n".join(lines)

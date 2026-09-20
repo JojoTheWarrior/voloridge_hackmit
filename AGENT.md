@@ -30,6 +30,7 @@ Useful direct commands:
 
 ```bash
 python -m warsignal.fetch.open_meteo --start 2025-03-01 --end 2026-09-15
+python -m warsignal.fetch.open_meteo_aq --start 2025-03-01 --end 2026-09-17
 python3 -m warsignal.fetch.openaq --max-ids 4000
 python3 -m warsignal.fetch.openaq --max-ids 60000
 python -m warsignal.fetch.gdelt --start 2025-03-01 --end 2026-09-19
@@ -37,14 +38,19 @@ python -m warsignal.fetch.finance --start 2025-01-01 --end 2026-09-19
 ```
 
 The working raw-data sizes have been approximately finance 1.2M, GDELT 14G,
-Materials 138M, NOAA 7.3M, Open-Meteo 564K, OpenAlex 88M, OpenAQ 53M, and
-PUDL 373M. Recompute with `du -sh data/raw/*`; sizes change as scans run.
+Materials 138M, NOAA 7.3M, Open-Meteo 564K, CAMS 17M, OpenAlex 88M,
+OpenAQ 61M, and PUDL 373M. Recompute with `du -sh data/raw/*`; sizes change
+as scans run.
 
 OpenAQ scans are long-running and should be chained rather than duplicated.
 Open-Meteo archive data has roughly five days of latency. NOAA ISD currently
 ends before the configured current window. OpenAlex's API can reject
 unauthenticated requests because its budget is paid; use the S3 parquet sample.
 Materials snapshots are document metadata, not a daily observation stream.
+Open-Meteo Air Quality supplies keyless CAMS model reanalysis for all
+configured cities; it is separate from OpenAQ ground sensors. NOAA ISD
+indicators are explicitly limited to `2025-03..2025-08`, and catalogue entries
+expose static or cache-derived coverage.
 
 ## Adding an indicator
 
@@ -66,6 +72,12 @@ register(
     lambda: load_example_series(),
 )
 ```
+
+The CAMS registrations are `airquality.<city>.cams_pm25`,
+`cams_pm10`, `cams_no2`, `cams_so2`, `cams_o3`, `cams_co`, `cams_dust`, and
+`cams_aod`. OpenAQ ground indicators are registered only for parameters found
+in downloaded rows for the matched city; inspect
+`data/cache/openaq_city_params.json` when diagnosing availability.
 
 Loaders should return a float `pandas.Series` with a sorted, unique,
 timezone-naive `DatetimeIndex`. `get_series()` handles the 24-hour indicator
