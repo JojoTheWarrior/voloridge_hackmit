@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:19:50.792323+00:00",
+  "git_commit": "284fd7f9a0f20d66d6d53741bf400fe09740b6df",
+  "folder": "20260920-138-gdelt-gkg-sanctions-share_x_finance-spread-gasoline-crack",
   "mission_id": "R2-0008",
-  "title": "Sanctions GKG share leads gasoline crack",
   "hypothesis": "R2 | [oil-shipping] GDELT sanctions GKG share 20d z-score > 1.5 leads gasoline crack spread wider by 4 days (+); trade long RB=F 5d [gdelt.gkg.sanctions_share -> finance.spread.gasoline_crack]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/7c932c2822964554a8ff8eead28fc3e3",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:19:33Z",
-  "updated_at": "2026-09-20T03:19:52Z",
-  "finished_at": "2026-09-20T03:18:52Z",
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-138-gdelt-gkg-sanctions-share_x_finance-spread-gasoline-crack",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 6.96
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.06194677781276006,
+  "perm_p": 0.48902195608782434,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.96,
   "trade_idea": {
     "instrument": "spread:gasoline_crack",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 6.96,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.spread.gasoline_crack": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT sanctions GKG share 20d z-score > 1.5 leads gasoline crack spread wider by 4 days (+); trade long RB=F 5d [gdelt.gkg.sanctions_share -> finance.spread.gasoline_crack]
