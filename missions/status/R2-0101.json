@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/7e85a5bd09b54731a8a192aee29ecb11",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "done",
+  "stage": "done",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:16:25Z",
-  "updated_at": "2026-09-20T04:17:28Z",
+  "updated_at": "2026-09-20T04:17:50Z",
   "finished_at": "2026-09-20T04:16:32Z",
-  "elapsed_s": 63,
-  "message": "committing run folder",
+  "elapsed_s": 85,
+  "message": "Indicator swapped once (events.hormuz.count n=11 -> gdelt.gkg.hormuz_share). r=-0.017 n=390 perm_p=0.52: no lead-lag signal. Trade rule: 5 trades, hit 1.0 but excess vs baseline only +0.05pp; actionability 9.1 is inflated because the target abs_return is non-negative (long vol proxy always wins). Verdict: noise, not a rule.",
   "run_folder": "missions/runs/20260920-200-gdelt-gkg-hormuz-share_x_finance-fro-abs-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 9.1,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] CONTROL: Hormuz GKG news share 20d z-score > 1.5 leads FRO signed log returns by 1-3 days (+) - tests whether the abs_return vol result is directional or an artifact of a non-negative target; trade long FRO 3d [gdelt.gkg.hormuz_share -> finance.FRO.log_return] (parent: R2-0101)"
 }
