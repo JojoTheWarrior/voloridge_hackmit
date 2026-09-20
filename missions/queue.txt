@@ -95,3 +95,6 @@ R2 | [oil-shipping] Daily GDELT Hormuz mention share 20d z-score > 2 leads the X
 R2 | [oil-shipping] Second null control: Tokyo max wind 20d z-score > 1 has no relation to FRO log returns at 0-5 day lags (0); a spurious in-sample edge like the precip run would show the backtester rewards noise; no trade [weather.tokyo.wind_max -> finance.FRO.log_return] (parent: R2-0118)
 R2 | [gas-lng] Volatility follow-through: GDELT LNG GKG share 20d z-score > 1.5 leads TTF intraday range_pct by 1 day (+) - news attention spikes precede continued realized vol, not direction; trade long TTF straddle-proxy 1d [gdelt.gkg.lng_share -> finance.TTF=F.range_pct] (parent: R2-0119)
 R2 | [gas-lng] GDELT Qatar GKG share 20d z-score > 1.5 marks attention that follows LNG strength rather than fading it: LNG log return continues positive over the next 3 days (+); trade long LNG 3d [gdelt.gkg.qatar_share -> finance.LNG.log_return] (parent: R2-0120)
+||||||| parent of 484c108 (status R2-0121: running)
+||||||| parent of cc7c748 (status R2-0121: running)
+R2 | [gas-lng] Reversal of null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) leads TTF=F log returns by 2 days (+); trade long TTF=F 2d since the short rule lost in both pre-war fit and war test [gdelt.qat.tone -> finance.TTF=F.log_return] (parent: R2-0121)

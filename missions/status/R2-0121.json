@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/382cd993146b4c6f957c86a4dbf44914",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:48:36Z",
-  "updated_at": "2026-09-20T12:48:54Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:49:27Z",
+  "finished_at": "2026-09-20T12:49:27Z",
+  "elapsed_s": 51,
+  "message": "Null control confirmed: Qatar tone z>1 short TTF=F loses (hit 33%, excess -0.47%/trade, OOS hit 28%, Sharpe-like -1.5, actionability 0); R2-0024 rule looks like noise or sign-flipped",
   "run_folder": "missions/runs/20260920-226-gdelt-qat-tone_x_finance-ttf-f-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Reversal of null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) leads TTF=F log returns by 2 days (+); trade long TTF=F 2d since the short rule lost in both pre-war fit and war test [gdelt.qat.tone -> finance.TTF=F.log_return] (parent: R2-0121)"
 }
