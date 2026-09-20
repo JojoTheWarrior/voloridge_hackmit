@@ -242,7 +242,11 @@ def _draw_lagcorr(surface, pygame, font, rect, panel, result):
         label = font.render(str(lag), True, PALETTE["muted"])
         surface.blit(label, (x, rect.bottom - label.get_height() - 2))
     surface.blit(font.render("Lag correlation", True, PALETTE["text"]), (rect.left, rect.top - font.get_height() - 4))
-    surface.blit(font.render("positive lag = A leads B", True, PALETTE["muted"]), (rect.right - 180, rect.bottom + 5))
+    lag_unit = result.get("stats", {}).get("lag_unit") or "days"
+    surface.blit(
+        font.render(f"lag (aligned steps: {lag_unit}) · positive lag = A leads B", True, PALETTE["muted"]),
+        (rect.left, rect.bottom + 5),
+    )
 
 
 def _draw_eventstudy(surface, pygame, font, rect, panel, result):

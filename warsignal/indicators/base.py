@@ -98,6 +98,10 @@ def catalogue_text() -> str:
     for spec in list_indicators():
         if spec.source == "events":
             continue
+        if spec.source == "research" and ".crossref_" not in spec.name:
+            continue
+        if spec.source == "materials":
+            continue
         coverage = spec.coverage
         path = _cache_path(spec.name)
         if path.exists():
@@ -109,4 +113,8 @@ def catalogue_text() -> str:
             except Exception:
                 pass
         lines.append(f"{spec.name} | {spec.freq} | {spec.description} | coverage: {coverage}")
+    lines.append(
+        "Materials Project data is a snapshot; use research.*.crossref_* "
+        "for materials-science publication timing."
+    )
     return "\n".join(lines)

@@ -20,6 +20,15 @@ python main.py ui
 python main.py queue --n 5
 ```
 
+### Mission protocol
+
+Every mission writes a self-contained, reproducible folder under
+`missions/runs/` containing its hypothesis, plan, statistics, judge response,
+aligned/raw data, narrative, manifest, and (when requested) `viz.png`.
+`missions/runs/INDEX.md` is regenerated after each mission. Use
+`--publish` with `mission` or `queue` to commit the run folder and index and
+push them to the current branch; publishing is off by default.
+
 Network fetches are optional after raw data and indicator caches exist. Never
 commit `.env`, downloaded data, reports, or mission result CSVs.
 
@@ -65,8 +74,9 @@ mission engine
 | NOAA ISD | 2025-03 through 2025-08 station observations | ISD-only series stop in 2025-08; station and field coverage vary |
 | OpenAQ | Cities with indexed locations and downloaded rows | API requires a key; S3 archive coverage is uneven |
 | Open-Meteo CAMS | 19 cities, 2025-03 through archive latency | Model reanalysis, not ground sensors; spatial smoothing and revisions |
-| OpenAlex | Sampled recent parquet works | S3 sample is not the complete scholarly corpus |
-| Materials Project | Document metadata snapshots through 2025 | Snapshots are not a daily scientific measurement series |
+| Crossref | Weekly publication counts/shares from 2025-03 through current week | Query totals are bibliographic matches, not full-text prevalence or causal output |
+| OpenAlex | Sparse S3 sample (about 8 weekly observations) | Not suitable for dense time-series missions; prefer Crossref |
+| Materials Project | Static document/materials snapshot | Not a daily research-timing series; use Crossref for publication timing |
 | PUDL/EIA | Demand, generation, fuel, and generator tables | Publication and revision delays; regional aggregation choices |
 | Yahoo Finance/FRED | Daily market prices and selected macro series | Trading calendars, symbol semantics, and vendor revisions |
 | Iran timeline | Curated dates in `data/reference/iran_timeline.csv` | Event selection is curated and not exhaustive |

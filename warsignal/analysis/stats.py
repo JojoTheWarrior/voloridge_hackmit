@@ -31,12 +31,22 @@ def transform(s, kind, baseline_year=2025):
     raise ValueError(f"unknown transform {kind}")
 
 
+def _step(s):
+    s = pd.Series(s)
+    return s.index.to_series().diff().median() if len(s.index) > 1 else pd.Timedelta(days=1)
+
+
+def _coarsest_step(a, b):
+    return max(_step(a), _step(b))
+
+
 def align(a, b):
     a, b = pd.Series(a), pd.Series(b)
-    if getattr(a, "freq", None) == "M" or (len(a.index) and a.index.to_series().diff().median() > pd.Timedelta(days=20)):
-        a = a.resample("MS").mean()
-    if getattr(b, "freq", None) == "M" or (len(b.index) and b.index.to_series().diff().median() > pd.Timedelta(days=20)):
-        b = b.resample("MS").mean()
+    coarsest = _coarsest_step(a, b)
+    if coarsest > pd.Timedelta(days=20):
+        a, b = a.resample("MS").mean(), b.resample("MS").mean()
+    elif coarsest > pd.Timedelta(days=3):
+        a, b = a.resample("W-MON", label="left", closed="left").mean(), b.resample("W-MON", label="left", closed="left").mean()
     return pd.concat([a.rename("a"), b.rename("b")], axis=1, join="inner").dropna()
 
 
@@ -155,7 +165,14 @@ def run_all(plan, a, b, timeline):
     result["event_study"] = event_study(ta, event_dates) if event_dates else None
     result["event_study_b"] = event_study(tb, event_dates) if event_dates else None
     result["window"] = plan.window
-    result["lag_unit"] = "aligned observations (trading days for market series)"
+    coarsest = _coarsest_step(ta, tb)
+    if coarsest > pd.Timedelta(days=20):
+        lag_unit = "months"
+    elif coarsest > pd.Timedelta(days=3):
+        lag_unit = "weeks"
+    else:
+        lag_unit = "days"
+    result["lag_unit"] = lag_unit
     expected = plan.expected_sign
     result["sign_matches_expectation"] = expected == 0 or (
         lag["best_r"] is not None and np.isfinite(lag["best_r"]) and np.sign(lag["best_r"]) == expected

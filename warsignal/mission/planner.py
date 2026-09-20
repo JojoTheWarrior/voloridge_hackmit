@@ -21,8 +21,7 @@ _DOMAIN_RULES = (
     ("finance", ("ttf",), ("finance.ttf=f",)),
     ("weather", ("temperature", "wind", "rain", "precip"), ("weather.",)),
     ("airquality", ("pm2.5", "air quality"), ("airquality.",)),
-    ("research", ("publication", "publications", "research", "openalex"), ("research.",)),
-    ("materials", ("materials project",), ("materials.",)),
+    ("research", ("paper", "papers", "publication", "publications", "research", "openalex", "materials science"), ("research.",)),
     ("utility", ("electricity", "demand", "generation", "fuel cost", "pudl", "eia"), ("utility.",)),
 )
 
@@ -81,6 +80,11 @@ def _keyword_scores(text):
         if spec.source == "events":
             scores[name] = 0.0
             continue
+        if spec.source == "materials" or (
+            spec.source == "research" and ".crossref_" not in name
+        ):
+            scores[name] = 0.0
+            continue
         lower_name = name.lower()
         score = 0.0
         for source, terms, prefixes in _DOMAIN_RULES:
@@ -92,6 +96,10 @@ def _keyword_scores(text):
         for alias, slug in aliases.items():
             if alias in text and (f".{slug}." in lower_name or lower_name.startswith(f"weather.{slug}.")):
                 score += 5
+        normalized_name = lower_name.replace("_", " ")
+        for token in re.findall(r"[a-z0-9]+", text):
+            if len(token) > 3 and token in normalized_name:
+                score += 2
         if "return" in text or "price" in text:
             score += 2 if lower_name.endswith("log_return") else 0
         else:

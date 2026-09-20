@@ -31,6 +31,7 @@ Useful direct commands:
 ```bash
 python -m warsignal.fetch.open_meteo --start 2025-03-01 --end 2026-09-15
 python -m warsignal.fetch.open_meteo_aq --start 2025-03-01 --end 2026-09-17
+python -m warsignal.fetch.crossref --start 2025-03-03
 python3 -m warsignal.fetch.openaq --max-ids 4000
 python3 -m warsignal.fetch.openaq --max-ids 60000
 python -m warsignal.fetch.gdelt --start 2025-03-01 --end 2026-09-19
@@ -51,6 +52,10 @@ Open-Meteo Air Quality supplies keyless CAMS model reanalysis for all
 configured cities; it is separate from OpenAQ ground sensors. NOAA ISD
 indicators are explicitly limited to `2025-03..2025-08`, and catalogue entries
 expose static or cache-derived coverage.
+Crossref fetches weekly query totals and a no-query control series; it is
+resumable per topic under `data/raw/crossref/` and requires no key. OpenAlex
+is retained for callable sparse context only, while Materials Project remains
+static context rather than a publication-time series.
 
 ## Adding an indicator
 
@@ -90,9 +95,20 @@ python main.py mission "Iran news volume leads Brent returns" --viz
 python main.py mission "..." --dry-run
 python main.py queue --n 5
 python main.py queue --n 5 --viz
+python main.py queue --n 5 --max-retries 1
 python main.py queue --reset
 python main.py queue --requeue-failed
 ```
+
+## Mission protocol
+
+`python main.py mission "..."` writes a numbered, self-contained run under
+`missions/runs/` and updates `missions/runs/INDEX.md`; queue missions do the
+same. Each run contains `hypothesis.txt`, `plan.json`, `stats.json`,
+`judge.json`, `note.md`, raw and aligned CSV data, and a manifest. Add
+`--publish` to `mission` or `queue` to commit only that run and the index, then
+push. Publishing is disabled by default; failed publish pushes are logged and
+do not fail the mission.
 
 The queue atomically moves a line into `missions/in_progress.txt`, appends a
 result under a file lock, then marks it done or failed. Do not edit

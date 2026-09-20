@@ -24,3 +24,12 @@ def test_event_study_step():
     series = pd.Series([0] * 10 + [1] * 10, index=idx)
     result = event_study(series, [idx[10]], window=3)
     assert result["mean_change"] == 1
+
+
+def test_daily_and_weekly_alignment_uses_weekly_steps():
+    daily_idx = pd.date_range("2025-03-01", periods=560, freq="D")
+    weekly_idx = pd.date_range("2025-03-03", periods=80, freq="W-MON")
+    daily = pd.Series(np.arange(len(daily_idx)), index=daily_idx)
+    weekly = pd.Series(np.arange(len(weekly_idx)), index=weekly_idx)
+    frame = align(daily, weekly)
+    assert 75 <= len(frame) <= 81

@@ -6,8 +6,8 @@ import argparse
 def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
-    mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true"); mission.add_argument("--dry-run", action="store_true")
-    queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true"); queue.add_argument("--max-retries", type=int, default=1)
+    mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true"); mission.add_argument("--dry-run", action="store_true"); mission.add_argument("--publish", action="store_true")
+    queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true"); queue.add_argument("--max-retries", type=int, default=1); queue.add_argument("--publish", action="store_true")
     queue.add_argument("--reset", action="store_true"); queue.add_argument("--requeue-failed", action="store_true")
     indicators = sub.add_parser("indicators"); indicators.add_argument("--source")
     fetch = sub.add_parser("fetch"); fetch.add_argument("--quick", action="store_true"); fetch.add_argument("--all", action="store_true")
@@ -25,7 +25,13 @@ def main():
             print(json.dumps(plan.__dict__, indent=2))
         else:
             from warsignal.mission.runner import run_mission
-            print(run_mission(args.hypothesis, use_ai=not args.no_ai, viz=args.viz, show=args.show).narrative_md)
+            from warsignal.mission.results import append_result
+            result = run_mission(
+                args.hypothesis, use_ai=not args.no_ai, viz=args.viz,
+                show=args.show, publish=args.publish,
+            )
+            append_result(result)
+            print(result.narrative_md)
     elif args.command == "queue":
         from warsignal.mission.harness import requeue_failed_missions, reset_queue, run_queue
         if args.reset:
@@ -34,7 +40,7 @@ def main():
         if args.requeue_failed:
             print(f"requeued {requeue_failed_missions()} failed missions")
         if not args.reset and not args.requeue_failed:
-            run_queue(args.n, use_ai=not args.no_ai, viz=args.viz, max_retries=args.max_retries)
+            run_queue(args.n, use_ai=not args.no_ai, viz=args.viz, max_retries=args.max_retries, publish=args.publish)
     elif args.command == "indicators":
         from warsignal.indicators import list_indicators
         for spec in list_indicators(args.source):

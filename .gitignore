@@ -10,4 +10,5 @@ missions/in_progress.txt
 missions/failed.txt
 missions/summary.md
 missions/viz_generated/
+missions/runs/.lock
 .pytest_cache

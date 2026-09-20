@@ -46,6 +46,12 @@ shape of each source:
 10. Made OpenAQ registration parameter-aware, restricted event markers from the
     planner catalogue, tightened multi-city validation and heuristic fallback,
     and added one heuristic retry for insufficient-overlap queue missions.
+11. Added a resumable no-key Crossref REST fetcher for 20 topics plus an
+    all-works control, with weekly publication counts and per-10k shares.
+    Sparse OpenAlex and static Materials Project series are retained for
+    callable context but removed from planner catalogue selection.
+12. Preserved weekly alignment and made lag units explicit (`days`, `weeks`,
+    or `months`) in reports and visualizations.
 
 ## Download snapshot
 
@@ -58,6 +64,7 @@ materials_project 138M
 noaa_isd           7.3M
 open_meteo         564K
 open_meteo_aq      17M
+crossref           weekly topic JSON and manifest
 openalex           88M
 openaq             61M
 pudl               373M
@@ -70,6 +77,7 @@ reports are intentionally ignored by Git.
 
 ```bash
 python -m warsignal.fetch.open_meteo --start 2025-03-01 --end 2026-09-15
+python -m warsignal.fetch.crossref --start 2025-03-03
 python main.py fetch --quick
 python main.py selftest
 python -m pytest -q tests
@@ -98,6 +106,9 @@ The source-specific fetch commands and credentials are documented in
 - NOAA ISD is a short historical station source (`2025-03..2025-08`), while
   CAMS model data extends the air-quality window but must not be described as
   ground-sensor observations.
+- OpenAlex's sampled parquet and Materials Project snapshots are too sparse or
+  static for dense research timing; Crossref weekly totals are the preferred
+  no-key publication source.
 
 ## Timeline and known failures
 
