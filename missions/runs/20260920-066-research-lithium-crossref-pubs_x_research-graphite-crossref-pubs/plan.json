@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.lithium.crossref_pubs",
+  "indicator_b": "research.graphite.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "pre_war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use lithium- and graphite-related weekly publication counts as proxies for materials-science output in 2025 and test whether growth in one subfield co-moves with the other over the pre-war 2025 window, standing in for Materials Project database growth which lacks a time series."
+}
