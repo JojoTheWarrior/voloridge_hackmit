@@ -170,6 +170,29 @@ shows reports and PNGs, and can launch the interactive viewer. The viewer
 supports hover values, wheel zoom, drag pan, `N` normalization, `E` event
 markers, `S` screenshot, numeric series toggles, and `Q`/Escape to quit.
 
+### Standard viz.png format
+
+Every mission `viz.png` (and every generated graph window) uses the shared
+style in `warsignal/viz/style.py`: bundled Inter + JetBrains Mono fonts under
+`warsignal/viz/fonts/` (OFL licensed; never rely on system fonts), one dark
+palette, and fixed spacing constants. The layout is fixed by the renderer:
+
+1. Verdict banner at the top: a boxed NOISE / WEAK / MODERATE / SIGNAL /
+   STRONG SIGNAL tier (FAILED for errored runs) computed by
+   `verdict_tier()` from judge validity, supported probability, and the
+   permutation p, next to the headline title.
+2. Panels (graphs are the highlight): panel 1 is always the time series of the
+   mission indicators over the mission's coverage window; panels 2-3 explain
+   the number (`lagcorr` with the axis scaled to the observed peak |r|,
+   `scatter`, or `eventstudy`). Each panel has a bold header and an italic
+   note.
+3. Sidebar: hypothesis, bold score bars, monospaced statistics, series legend.
+
+Research agents only choose the content via a `VizSpec` (title, panels,
+notes, event categories); `VIZ_SYSTEM` in `warsignal/ai/prompts.py` is the
+standard prompt and `warsignal/viz/agent.py` validates/falls back so the
+output is always in this format. Do not add per-mission styling.
+
 ## Statistical hygiene
 
 Correlation is not causation. Report `n`, date coverage, missingness, lag
