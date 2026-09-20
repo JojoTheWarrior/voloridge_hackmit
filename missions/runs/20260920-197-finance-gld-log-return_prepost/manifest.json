@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-09-20T04:14:08.048906+00:00",
+  "git_commit": "396ecb27df8119ed38bc8f031701055eb3b92e59",
+  "folder": "20260920-197-finance-gld-log-return_prepost",
+  "mission_id": "R2-0095",
+  "hypothesis": "R2 | [risk-macro-em] REVERSAL: GLD 3-day cumulative return > 3 pct mean-reverts over the next 5 days (-); fade the gold spike short GLD 5d [finance.GLD.log_return -> finance.GLD.log_return]",
+  "status": "ok",
+  "n_obs": 390,
+  "r": null,
+  "perm_p": 0.00998003992015968,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.0,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.GLD.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

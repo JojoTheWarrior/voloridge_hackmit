@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] REVERSAL: GLD 3-day cumulative return > 3 pct mean-reverts over the next 5 days (-); fade the gold spike short GLD 5d [finance.GLD.log_return -> finance.GLD.log_return]
