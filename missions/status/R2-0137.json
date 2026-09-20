@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/fb8faf5865e746059f8eff489fb4d595",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:57:40Z",
-  "updated_at": "2026-09-20T12:57:50Z",
+  "updated_at": "2026-09-20T12:58:20Z",
   "finished_at": null,
-  "elapsed_s": 10,
+  "elapsed_s": 40,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-237-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.31,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] TTF-F gas 20d z-score > 1 leads CF log returns by 3 days (+); tests whether European gas itself, rather than LNG news, carries the fertilizer signal that R2-0041/R2-0137 could not find [finance.TTF=F.log_return -> finance.CF.log_return] (parent: R2-0137)"
 }
