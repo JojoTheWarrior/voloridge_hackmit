@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/283644f594544cfda79dbe46bd39e1bf",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:52:59Z",
-  "updated_at": "2026-09-20T12:53:13Z",
+  "updated_at": "2026-09-20T12:53:42Z",
   "finished_at": null,
-  "elapsed_s": 14,
+  "elapsed_s": 43,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-232-gdelt-gkg-sanctions-share_x_finance-ttf-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 2.42,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] GDELT sanctions GKG share 20d z-score > 1 leads TTF absolute returns (volatility) by 6 days (+), since the directional TTF long was weak (r=0.04 lag3, perm p=0.15, OOS excess -0.4%) but the lag-6 peak suggests sanctions news moves gas volatility rather than direction; trade long TTF=F straddle-proxy 6d [gdelt.gkg.sanctions_share -> finance.TTF=F.abs_return] (parent: R2-0129)"
 }
