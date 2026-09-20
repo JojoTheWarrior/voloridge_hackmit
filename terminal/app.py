@@ -15,12 +15,28 @@ _STATE_MARKER = "window.__STATE__ = null;"
 
 
 def index_html(state: dict | None = None) -> str:
-    """Render ``index.html``; embed ``state`` for snapshot mode when given."""
+    """Render ``index.html``.
+
+    With ``state`` given (snapshot mode) the state is embedded as
+    ``window.__STATE__`` and the CSS/JS are inlined so the file renders
+    fully self-contained when opened from disk.
+    """
+    static = Path(__file__).parent / "static"
     template = (Path(__file__).parent / "templates" / "index.html").read_text(encoding="utf-8")
     if state is None:
         return template
+    css = (static / "terminal.css").read_text(encoding="utf-8")
+    js = (static / "terminal.js").read_text(encoding="utf-8").replace("</", "<\\/")
     blob = json.dumps(state).replace("</", "<\\/")
-    return template.replace(_STATE_MARKER, f"window.__STATE__ = {blob};", 1)
+    html = template.replace(
+        '<link rel="stylesheet" href="/static/terminal.css">',
+        "<style>\n" + css + "\n</style>",
+    )
+    html = html.replace(_STATE_MARKER, f"window.__STATE__ = {blob};", 1)
+    return html.replace(
+        '<script src="/static/terminal.js"></script>',
+        "<script>\n" + js + "\n</script>",
+    )
 
 
 def _run_dir(monitor: Monitor, folder: str) -> Path | None:

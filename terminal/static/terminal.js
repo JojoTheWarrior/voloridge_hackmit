@@ -70,10 +70,16 @@
       "QUEUE " + (c.queued || 0),
       "DONE " + (c.done || 0),
       "FAIL " + (c.failed || 0),
-      "HEAD " + (g.head || "?") + " " + (g.branch || ""),
-      "PULL " + hhmmssz(g.last_pull_at) + " " + (g.last_pull_ok === false ? "FAIL" : "OK")
+      "HEAD " + (g.head || "?") + " " + (g.branch || "")
     ];
-    if (!SNAPSHOT && S.pull_enabled) {
+    if (SNAPSHOT) {
+      // static export: nothing pulls
+    } else if (!S.pull_enabled) {
+      parts.push("PULL OFF");
+    } else {
+      parts.push("PULL " + (g.last_pull_at
+        ? hhmmssz(g.last_pull_at) + " " + (g.last_pull_ok === false ? "FAIL" : "OK")
+        : "pending"));
       var since = g.last_pull_at ? (Date.now() - Date.parse(g.last_pull_at)) / 1000 : 1e9;
       var next = Math.max(0, Math.round((S.pull_interval || 60) - since));
       parts.push("NEXT " + next + "s");
@@ -144,7 +150,7 @@
       return {
         folder: r.folder,
         text: [r.folder, r.status, r.hypothesis].join(" "),
-        html: "<td>" + esc(trunc(r.folder, 16)) + "</td><td>" + st + "</td><td>" + num(r.n, 0) +
+        html: '<td title="' + esc(r.folder) + '">' + esc(String(r.folder || "").slice(0, 12)) + "</td><td>" + st + "</td><td>" + num(r.n, 0) +
           "</td><td>" + num(r.r) + "</td><td>" + pnum(r.perm_p) + "</td><td>" +
           (r.bonferroni_ok ? '<span class="good">✓</span>' : '<span class="dim">·</span>') +
           "</td><td>" + num(r.validity, 2) + "</td><td>" + num(r.interestingness, 2) +

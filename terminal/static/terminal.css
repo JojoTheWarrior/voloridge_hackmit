@@ -58,12 +58,14 @@ tr:hover td { background: #151b28; }
 #detail {
   position: fixed; top: 0; right: 0; bottom: 0; width: 58%; min-width: 480px;
   background: #0e121b; border-left: 1px solid #ffb000; overflow: auto;
+  overflow-x: hidden;
   padding: 14px 18px; z-index: 10;
 }
 #detail.hidden { display: none; }
 #detail h2 { color: #ffb000; font-size: 14px; margin-bottom: 4px; }
 #detail .meta { color: #7d8695; margin-bottom: 10px; }
-#detail img { max-width: 100%; border: 1px solid #2a2f3a; margin: 10px 0; }
+#detail img { max-width: 100%; height: auto; border: 1px solid #2a2f3a; margin: 10px 0; }
+#detail table { width: 100%; table-layout: auto; word-break: break-word; }
 #detail h3 { color: #ffb000; font-size: 12px; margin: 14px 0 4px; text-transform: uppercase; }
 #detail table { margin: 6px 0; }
 #detail .note h1, #detail .note h2, #detail .note h3 { color: #ffb000; margin: 10px 0 4px; font-size: 13px; text-transform: none; }

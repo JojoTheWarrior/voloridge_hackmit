@@ -466,6 +466,7 @@ class Monitor:
         self.pull_interval = float(pull_interval)
         self.pull = pull
         self._lock = threading.RLock()
+        self._pull_lock = threading.Lock()
         self._state: Optional[dict] = None
         self._statuses: list[dict] = []
         self._cache: dict = {}
@@ -474,12 +475,18 @@ class Monitor:
         self._pull: dict = {"ok": None, "output": "", "at": None}
 
     def refresh(self) -> dict:
+        """Pull (if due) then rebuild state. The git pull runs under
+        ``_pull_lock`` only, so ``state()``/``_lock`` readers never block
+        on a slow pull."""
+        if self.pull:
+            with self._pull_lock:
+                if time.time() - self._last_pull_at >= self.pull_interval:
+                    pull = git_pull(self.root)
+                    with self._lock:
+                        self._pull = pull
+                        self._last_pull_at = time.time()
         with self._lock:
-            now = time.time()
-            if self.pull and now - self._last_pull_at >= self.pull_interval:
-                self._pull = git_pull(self.root)
-                self._last_pull_at = now
-            self._state = self._build(now)
+            self._state = self._build(time.time())
             return self._state
 
     def _build(self, now: float) -> dict:

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import threading
 import time
 from pathlib import Path
 
@@ -279,6 +280,25 @@ def test_monitor_state_json(tmp_path):
         assert key in state
 
 
+def test_state_nonblocking_during_pull(tmp_path, monkeypatch):
+    """``state()`` must return while a git pull is still in flight."""
+    import warsignal.mission.monitor as mon_mod
+
+    _missions(tmp_path)
+    monkeypatch.setattr(mon_mod, "git_pull",
+                        lambda root, timeout=30: (time.sleep(0.5), {"ok": True, "output": "", "at": "x"})[1])
+    mon = Monitor(tmp_path, pull_interval=0, pull=True)
+    mon.refresh()  # first build: state exists
+    mon._last_pull_at = 0.0  # make the next refresh pull again
+    worker = threading.Thread(target=mon.refresh)
+    worker.start()
+    time.sleep(0.05)  # pull is now sleeping inside refresh
+    t0 = time.time()
+    mon.state()
+    assert time.time() - t0 < 0.2
+    worker.join()
+
+
 # ---------- Flask app ----------
 
 def _app(tmp_path):
@@ -315,11 +335,26 @@ def test_index_and_snapshot_routes(tmp_path):
     assert "WARSIGNAL TERMINAL" in client.get("/").get_data(as_text=True)
     snap = client.get("/snapshot").get_data(as_text=True)
     assert "window.__STATE__" in snap and "20260921-001-a_x_b" in snap
+    # snapshot is self-contained: CSS/JS inlined, no /static/ references
+    assert "/static/" not in snap
+    assert "<style>" in snap
 
 
 def test_index_html_embeds_state(tmp_path):
     html = index_html({"runs": [{"folder": "x"}], "counts": {}})
     assert "window.__STATE__ = {" in html
+    assert "/static/" not in html and "<style>" in html
+
+
+def test_write_snapshot(tmp_path):
+    from terminal.snapshot import write_snapshot
+    _missions(tmp_path)
+    _fixture_run(tmp_path / "missions")
+    out = write_snapshot(Monitor(tmp_path, pull=False), tmp_path / "snap.html")
+    html = out.read_text()
+    assert "window.__STATE__" in html
+    assert "/static/" not in html and "<style>" in html
+    assert "20260921-001-a_x_b" in html
 
 
 # ---------- real repo ----------
