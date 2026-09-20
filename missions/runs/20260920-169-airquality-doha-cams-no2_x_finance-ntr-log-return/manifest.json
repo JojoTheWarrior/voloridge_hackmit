@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:50:41.064993+00:00",
+  "git_commit": "62c9fd2ba778db1b57d703d8f50c4a86ddea8bb7",
+  "folder": "20260920-169-airquality-doha-cams-no2_x_finance-ntr-log-return",
   "mission_id": "R2-0053",
-  "title": "Doha NO2 drop -> NTR returns (lag 4)",
   "hypothesis": "R2 | [fertilizer-ag] Doha CAMS NO2 20d z-score < -1.5 leads NTR log returns by 4 days (+) since falling Qatari industrial activity proxies urea export loss; long NTR 6d [airquality.doha.cams_no2 -> finance.NTR.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/fdcbd79d6c594bce8c7f9916c7aeafde",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:50:33Z",
-  "updated_at": "2026-09-20T03:50:42Z",
-  "finished_at": null,
-  "elapsed_s": 9,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-169-airquality-doha-cams-no2_x_finance-ntr-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.78
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.07241226328408565,
+  "perm_p": 0.6487025948103793,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.78,
   "trade_idea": {
     "instrument": "NTR",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 2.78,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.doha.cams_no2": "2025-03..2026-09 archive window",
+    "finance.NTR.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

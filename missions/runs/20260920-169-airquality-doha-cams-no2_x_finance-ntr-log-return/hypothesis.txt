@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Doha CAMS NO2 20d z-score < -1.5 leads NTR log returns by 4 days (+) since falling Qatari industrial activity proxies urea export loss; long NTR 6d [airquality.doha.cams_no2 -> finance.NTR.log_return]

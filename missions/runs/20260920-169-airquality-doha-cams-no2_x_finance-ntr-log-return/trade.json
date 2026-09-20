@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 10,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 23,
+    "hit_rate": 0.4782608695652174,
+    "avg_return": -0.0005333799706536184,
+    "baseline_avg_return": 0.012842106872594811,
+    "excess_return": -0.01337548684324843,
+    "sharpe_like": -0.05239120691484196,
+    "max_drawdown": -0.2427139513712615,
+    "total_return": -0.03893022278818725
+  },
+  "fit_pre_war": {
+    "n_trades": 16,
+    "hit_rate": 0.5,
+    "avg_return": -0.006142362902392,
+    "baseline_avg_return": 0.017940832741894182,
+    "excess_return": -0.02408319564428618,
+    "sharpe_like": -0.5283085473188874,
+    "max_drawdown": -0.2427139513712615,
+    "total_return": -0.10963859526052522
+  },
+  "test_war": {
+    "n_trades": 7,
+    "hit_rate": 0.42857142857142855,
+    "avg_return": 0.012287152444748397,
+    "baseline_avg_return": 0.003232969657376766,
+    "excess_return": 0.00905418278737163,
+    "sharpe_like": 0.6311559530565112,
+    "max_drawdown": -0.10122227390996597,
+    "total_return": 0.07941536110612035
+  },
+  "n_signal_days": 384,
+  "trade_idea": {
+    "instrument": "NTR",
+    "direction": "long",
+    "entry_rule": "airquality.doha.cams_no2 rolling_zscore_20d > 1 at close -> long NTR next session",
+    "exit_rule": "close after 10 trading days (no overlapping entries)",
+    "holding_days": 10,
+    "hit_rate": 0.4782608695652174,
+    "avg_return": -0.0005333799706536184,
+    "excess_return": -0.01337548684324843,
+    "n_trades": 23,
+    "sharpe_like": -0.05239120691484196,
+    "max_drawdown": -0.2427139513712615,
+    "oos_n_trades": 7,
+    "oos_avg_return": 0.012287152444748397,
+    "oos_hit_rate": 0.42857142857142855,
+    "actionability": 2.78,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
