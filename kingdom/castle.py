@@ -137,6 +137,7 @@ class CastleScene(Scene):
             self.selected = self._detail_index
             self.scroll.scroll_to(self._detail_scroll)
         elif self.menu in (NOTE, ZOOM):
+            self._drag = None
             self.open_menu(DETAIL, -1)
         else:
             self.open_menu(MAIN, -1)
@@ -173,8 +174,8 @@ class CastleScene(Scene):
         except ValueError:
             rel = target
         command = f'code "{rel.as_posix()}"'
-        copy_to_clipboard(command)
-        self.copied_until = self.t + COPIED_SECONDS
+        if copy_to_clipboard(command):
+            self.copied_until = self.t + COPIED_SECONDS
         return command
 
     # -- events ------------------------------------------------------------
