@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.events",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT Iran mentions as a proxy for global news volume about Iran and Brent futures log returns during the active war window to test whether spikes in Iran coverage systematically precede positive Brent moves by 1\u20133 days, standardizing mentions with a z-score to focus on abnormal news intensity."
+}
