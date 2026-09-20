@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:54:06.162838+00:00",
+  "git_commit": "6305291f564bbde7e103fbdeb18e26301c49a03c",
+  "folder": "20260920-050-finance-hg-f-close_x_research-tungsten-crossref-pubs",
+  "mission_id": "M20260920-df43c2",
+  "hypothesis": "OpenAlex publications on \"tungsten\" increased after China export restrictions and the March 2026 price surge.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.01220389286475487,
+  "perm_p": 0.7145708582834331,
+  "validity": 0.12,
+  "interestingness": 3.64,
+  "unexpectedness": 4.6,
+  "indicator_coverage": {
+    "finance.HG=F.close": "configured analysis window",
+    "research.tungsten.crossref_pubs": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

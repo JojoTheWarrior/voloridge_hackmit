@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.HG=F.close",
+  "indicator_b": "research.tungsten.crossref_pubs",
+  "transform_a": "pct_change",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "market",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily copper futures price changes (HG=F) as a liquid proxy for broader industrial metals price shocks, testing whether the March 2026 metals price surge coincides with and possibly leads an increase in weekly tungsten-related publications, comparing the relationship before and after the war and China\u2019s export restrictions."
+}
