@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Null control: Doha CAMS SO2 20d z-score < -1.5 leads NTR log returns by 4 days (+); if SO2 matches the weak NO2 result the Qatari industrial-activity channel is not specific; long NTR 6d [airquality.doha.cams_so2 -> finance.NTR.log_return] (parent: R2-0053)
