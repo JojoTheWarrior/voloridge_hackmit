@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:58Z",
-  "updated_at": "2026-09-20T03:25:33Z",
+  "updated_at": "2026-09-20T03:25:46Z",
   "finished_at": "2026-09-20T03:25:33Z",
-  "elapsed_s": 35,
+  "elapsed_s": 48,
   "message": "Not supported: Bandar Abbas temp anomaly vs XOP/SPY ratio r=-0.005 (n=386), best lag 10d r=-0.085 (wrong sign); z>1 long rule 21 trades, hit 57%, excess +0.7%/trade, OOS 6 trades hit 50% - indistinguishable from noise",
   "run_folder": "missions/runs/20260920-140-weather-bandar-abbas-temp-anomaly_x_finance-ratio-xop-spy",
   "scores": {
