@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/a99d1e757e76402c8ef1cb617abe3961",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:31:25Z",
-  "updated_at": "2026-09-20T03:31:45Z",
-  "finished_at": null,
-  "elapsed_s": 20,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:32:07Z",
+  "finished_at": "2026-09-20T03:32:07Z",
+  "elapsed_s": 42,
+  "message": "Not supported: Qatar tone vs TTF/HH ratio r=-0.10 (n=390, best lag -1d); z>1 long rule 51 trades hit 63% excess +0.25%/trade actionability 7.4 but contradicts negative correlation - treat as fragile",
   "run_folder": "missions/runs/20260920-148-gdelt-qat-tone_x_finance-ratio-ttf-henryhub",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 7.42,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) leads TTF=F log returns by 2 days (-); trade short TTF=F 2d, expect no edge if R2-0024 rule was noise [gdelt.qat.tone -> finance.TTF=F.log_return] (parent: R2-0024)"
 }
