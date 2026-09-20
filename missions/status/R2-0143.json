@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/7616097f63bf4d68ad783a2c6975ca22",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:00:59Z",
-  "updated_at": "2026-09-20T13:01:19Z",
+  "updated_at": "2026-09-20T13:01:46Z",
   "finished_at": null,
-  "elapsed_s": 20,
+  "elapsed_s": 47,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-242-gdelt-irn-conflict-events_x_finance-mos-abs-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Iran conflict event count 20d z-score > 2 leads MOS signed log returns by 7 days (+) as the abs_return result is trivially long-biased; directional control to test whether the volatility signal has any sign [gdelt.irn.conflict_events -> finance.MOS.log_return] (parent: R2-0143)"
 }
