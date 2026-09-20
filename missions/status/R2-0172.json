@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/ce732e96a07d4074ad438b858fac6132",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:18:43Z",
-  "updated_at": "2026-09-20T13:19:00Z",
+  "updated_at": "2026-09-20T13:19:15Z",
   "finished_at": null,
-  "elapsed_s": 17,
+  "elapsed_s": 32,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-264-weather-bandar-abbas-temp-mean_x_finance-ual-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 4.91,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 is also a null for DAL returns (null control, 0 sign); trade long DAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.DAL.log_return] (parent: R2-0172)"
 }
