@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:22:19.354112+00:00",
+  "git_commit": "94587ce566e53510e6ff5bbd1d383457d4ed70a6",
+  "folder": "20260920-267-gdelt-irn-goldstein_x_finance-ita-log-return",
   "mission_id": "R2-0179",
-  "title": "Iran Goldstein de-escalation vs ITA (short)",
   "hypothesis": "R2 | [risk-macro-em] Reversal control: Iran GDELT Goldstein 20d z-score > 1 (de-escalation) leads defense ETF returns by 1-3 days (-); trade short ITA 1d [gdelt.irn.goldstein -> finance.ITA.log_return] (parent: R2-0080)",
-  "parent_mission_id": "R2-0080",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/92377f77a2914938a4df52f3d10b4030",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:22:02Z",
-  "updated_at": "2026-09-20T13:22:20Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-267-gdelt-irn-goldstein_x_finance-ita-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.1102507015965809,
+  "perm_p": 0.4171656686626746,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "ITA",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.goldstein": "configured analysis window",
+    "finance.ITA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
