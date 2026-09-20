@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:52:02.409027+00:00",
+  "git_commit": "d5a140f2e5b80c9c881b9ab2e741ad1e530a6f15",
+  "folder": "20260920-170-weather-tokyo-temp-mean_x_finance-zc-f-log-return",
   "mission_id": "R2-0057",
-  "title": "Null control: Tokyo temp vs corn returns",
   "hypothesis": "R2 | [fertilizer-ag] Tokyo mean temperature 20d z-score is unrelated to ZC=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.temp_mean -> finance.ZC=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/683b6c599e7848199d4af26b0363636f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:51:44Z",
-  "updated_at": "2026-09-20T03:52:03Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-170-weather-tokyo-temp-mean_x_finance-zc-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.25
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.01905589219354483,
+  "perm_p": 1.0,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.25,
   "trade_idea": {
     "instrument": "ZC=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 1.25,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.tokyo.temp_mean": "configured analysis window",
+    "finance.ZC=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

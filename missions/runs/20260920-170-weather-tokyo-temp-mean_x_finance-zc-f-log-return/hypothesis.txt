@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Tokyo mean temperature 20d z-score is unrelated to ZC=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.temp_mean -> finance.ZC=F.log_return]

@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 59,
+    "hit_rate": 0.4745762711864407,
+    "avg_return": -0.0005114573543096122,
+    "baseline_avg_return": 0.0004851031812821898,
+    "excess_return": -0.000996560535591802,
+    "sharpe_like": -0.3274207301927105,
+    "max_drawdown": -0.09707583345186366,
+    "total_return": -0.033850281043912855
+  },
+  "fit_pre_war": {
+    "n_trades": 31,
+    "hit_rate": 0.41935483870967744,
+    "avg_return": -0.0017633093574266668,
+    "baseline_avg_return": -0.0001586863530135911,
+    "excess_return": -0.0016046230044130757,
+    "sharpe_like": -1.0038556152168348,
+    "max_drawdown": -0.09304238187720237,
+    "total_return": -0.05464828743708361
+  },
+  "test_war": {
+    "n_trades": 28,
+    "hit_rate": 0.5357142857142857,
+    "avg_return": 0.0008745216491414123,
+    "baseline_avg_return": 0.0016364056331250095,
+    "excess_return": -0.0007618839839835972,
+    "sharpe_like": 0.33240560930585095,
+    "max_drawdown": -0.06696188934345926,
+    "total_return": 0.022000284250594637
+  },
+  "n_signal_days": 382,
+  "trade_idea": {
+    "instrument": "ZC=F",
+    "direction": "long",
+    "entry_rule": "weather.tokyo.temp_mean rolling_zscore_20d > 1 at close -> long ZC=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4745762711864407,
+    "avg_return": -0.0005114573543096122,
+    "excess_return": -0.000996560535591802,
+    "n_trades": 59,
+    "sharpe_like": -0.3274207301927105,
+    "max_drawdown": -0.09707583345186366,
+    "oos_n_trades": 28,
+    "oos_avg_return": 0.0008745216491414123,
+    "oos_hit_rate": 0.5357142857142857,
+    "actionability": 1.25,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
