@@ -79,3 +79,4 @@
 | `20260920-075-gdelt-irn-conflict-events_x_finance-lmt-log-return` | Defense stocks (LMT, RTX, NOC, GD) outperformed the S&P 500 on days with high GDELT Iran conflict counts. | ok | 140 | 0.003804909293895504 | 0.8922155688622755 | 0.02 | 1.96 | 4.12 |
 | `20260920-076-finance-fred-dcoilbrenteu_x_finance-jets-log-return` | Airline stocks (JETS, UAL, DAL) moved inversely to Brent more strongly during the war than before. | ok | 386 | -0.3477563129722114 | 0.01996007984031936 | 6.4 | 4.84 | 1.38 |
 | `20260920-077-gdelt-gkg-hormuz-share_x_finance-mos-log-return` | Fertilizer stocks (MOS, CF, NTR) rose with Hormuz-related news volume. | ok | 140 | 0.01252988629854001 | 0.001996007984031936 | 5.88 | 3.62 | 7.2 |
+| `20260920-078-gdelt-are-conflict-events_x_finance-hg-f-log-return` | Copper and aluminum futures responded to the March 28 strike on Emirates Global Aluminium. | ok | 140 | -0.11215927692535835 | 0.2435129740518962 | 2.0 | 3.34 | 5.14 |
