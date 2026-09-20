@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:48:50.266690+00:00",
+  "git_commit": "a44549bf8dbbb1cc9c01b8f8cc0ca9458464979a",
+  "folder": "20260920-010-weather-dubai-temp-max_x_airquality-dubai-cams-pm25",
+  "mission_id": "M20260920-3578d6",
+  "hypothesis": "Persian Gulf city daily maximum temperature correlates with Gulf (Dubai/Doha) air-quality readings more strongly after Hormuz closed than before.",
+  "status": "ok",
+  "n_obs": 564,
+  "r": 0.28459184471163534,
+  "perm_p": 0.23552894211576847,
+  "validity": 2.62,
+  "interestingness": 7.26,
+  "unexpectedness": 6.28,
+  "indicator_coverage": {
+    "weather.dubai.temp_max": "configured analysis window",
+    "airquality.dubai.cams_pm25": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

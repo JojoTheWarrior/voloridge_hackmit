@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.dubai.temp_max",
+  "indicator_b": "airquality.dubai.cams_pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 3,
+  "window": "compare_pre_post",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Dubai daily max temperature and modeled PM2.5 as a representative Persian Gulf city pair, comparing the strength of their same-day to short-lag correlation before vs. after the 2026-03-04 Hormuz closure, with PM2.5 de-seasonalized via 2025-based anomalies to control for strong annual cycles."
+}
