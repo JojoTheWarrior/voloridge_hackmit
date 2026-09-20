@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:29:49.345278+00:00",
+  "git_commit": "da5f4473f4c0c5dd216101f6c9c4b9e79a1c6c9b",
+  "folder": "20260920-218-airquality-tehran-cams-so2_x_finance-fcx-log-return",
+  "mission_id": "S-0014",
+  "hypothesis": "SHERLOCK | [#6 industrial heat] Tehran CAMS SO2 20d z-score > 1 (Iranian industrial/steel-belt combustion proxy) leads Freeport-McMoRan returns by 3 days (+); trade long FCX 3d [airquality.tehran.cams_so2 -> finance.FCX.log_return]",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.07811540015726048,
+  "perm_p": 0.017964071856287425,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.82,
+  "trade_idea": {
+    "instrument": "FCX",
+    "direction": "long",
+    "entry_rule": "airquality.tehran.cams_so2 rolling_zscore_20d > 1 at close -> long FCX next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5172413793103449,
+    "avg_return": 0.0009136901175955535,
+    "excess_return": -0.001510329128523245,
+    "n_trades": 58,
+    "sharpe_like": 0.22758979536907092,
+    "max_drawdown": -0.1439787809248625,
+    "oos_n_trades": 24,
+    "oos_avg_return": -0.0027760303464999477,
+    "oos_hit_rate": 0.4166666666666667,
+    "actionability": 1.82,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.tehran.cams_so2": "2025-03..2026-09 archive window",
+    "finance.FCX.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

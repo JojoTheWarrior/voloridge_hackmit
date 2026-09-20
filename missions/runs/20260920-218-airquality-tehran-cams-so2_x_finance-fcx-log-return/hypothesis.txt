@@ -1,0 +1,1 @@
+SHERLOCK | [#6 industrial heat] Tehran CAMS SO2 20d z-score > 1 (Iranian industrial/steel-belt combustion proxy) leads Freeport-McMoRan returns by 3 days (+); trade long FCX 3d [airquality.tehran.cams_so2 -> finance.FCX.log_return]
