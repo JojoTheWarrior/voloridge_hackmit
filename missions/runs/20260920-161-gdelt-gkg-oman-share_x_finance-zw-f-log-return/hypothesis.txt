@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT Oman GKG share 20d z-score > 1 leads ZW=F log returns by 5 days (+) as Gulf shipping risk lifts grain and fertilizer freight; trade long ZW=F 5d [gdelt.gkg.oman_share -> finance.ZW=F.log_return]
