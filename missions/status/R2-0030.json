@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:35:59Z",
-  "updated_at": "2026-09-20T03:41:49Z",
+  "updated_at": "2026-09-20T03:42:00Z",
   "finished_at": "2026-09-20T03:36:28Z",
-  "elapsed_s": 350,
+  "elapsed_s": 361,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-152-research-hormuz-crossref-pubs_x_finance-bas-de-log-return",
   "scores": {
