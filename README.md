@@ -95,7 +95,7 @@ needed. This uses a separate database volume and does not touch existing live
 missions:
 
 ```bash
-docker compose up --build -d
+docker compose -f compose.yaml -f compose.demo.yaml up --build -d
 # Open http://localhost:5173; API is http://localhost:8030
 docker compose exec api python -m pytest tests -q
 docker compose exec web npm test
@@ -104,7 +104,7 @@ docker compose exec web npm run build
 docker compose stop
 ```
 
-Compose forces demo mode even if a local key exists. Keep the volume to retain
+The demo override forces scripted responses even if a local key exists. Keep the volume to retain
 demo missions. `KINGDOM_API_TARGET` selects the Vite proxy target (defaults to
 `http://127.0.0.1:8030` outside Compose). Forwarded host headers are required for
 the explorer's content security policy.
@@ -137,6 +137,14 @@ does not show a mode label. The light/dark toggle is in the top-right header.
 **Live mode.** Put a Devin **v3 service-user key** (`cog_…`) in `.env` as
 `DEVIN_API_KEY` (the file is gitignored; never commit it). Each mission creates
 one Devin session. Spend is capped per mission:
+
+```bash
+docker compose up --build -d
+```
+
+This switches the existing stack to real Devin and the local `.kingdom`
+database, with a 5-ACU cap per mission. It does not start another server or
+create a mission. Use the demo override above to return to the separate demo database.
 
 | Variable | Default | Meaning |
 | --- | --- | --- |

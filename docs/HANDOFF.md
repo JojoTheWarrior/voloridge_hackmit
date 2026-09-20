@@ -32,12 +32,17 @@ same palette turned over. Rules live in
 Run it:
 
 ```bash
-docker compose up --build -d          # isolated demo database; no Devin spend
+docker compose up --build -d          # real Devin, 5-ACU cap per mission
 # UI: http://localhost:5173, API: http://localhost:8030
 ```
 
 The original Python/Vite commands still work at ports 8030/5173. See README
-and AGENTS.md for container checks. Compose never polls the local live DB.
+and AGENTS.md for container checks. Base Compose uses the local live DB.
+
+**Current running configuration:** Tom requested live Devin with a 5-ACU cap.
+`docker compose up -d` uses the same two containers and the existing `.kingdom`
+live database. The `compose.demo.yaml` override provides the isolated scripted
+demo when explicitly wanted. No test mission was launched for this switch.
 
 **Demo mode** (no key, or `KINGDOM_FAKE_DEVIN=1`): a scripted fake Devin plays
 a full mission, a report, and an explorer. Free. **Live mode**: a v3

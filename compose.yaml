@@ -2,13 +2,14 @@ services:
   api:
     build: .
     environment:
-      KINGDOM_FAKE_DEVIN: "1"
+      KINGDOM_FAKE_DEVIN: "0"
+      KINGDOM_MAX_ACU: "5"
       PYTEST_ADDOPTS: "-o cache_dir=/tmp/pytest-cache"
     ports:
       - "127.0.0.1:8030:8030"
     volumes:
       - .:/app:ro
-      - demo-state:/state
+      - ./.kingdom:/state
   web:
     image: node:22-bookworm-slim
     working_dir: /app/web

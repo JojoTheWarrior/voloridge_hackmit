@@ -1,0 +1,6 @@
+services:
+  api:
+    environment:
+      KINGDOM_FAKE_DEVIN: "1"
+    volumes:
+      - demo-state:/state
