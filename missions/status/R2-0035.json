@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/a6506eadbe0b47b98f95fdbd46dcae57",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:39:16Z",
-  "updated_at": "2026-09-20T03:39:26Z",
+  "updated_at": "2026-09-20T03:39:47Z",
   "finished_at": null,
-  "elapsed_s": 10,
+  "elapsed_s": 31,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-156-weather-houston-temp-anomaly_x_finance-ng-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.17,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Houston temperature anomaly 20d z-score > 1.5 leads Henry Hub absolute returns (volatility, not direction) by 3 days (+); trade long NG=F straddle proxy 3d [weather.houston.temp_anomaly -> finance.NG=F.abs_return] (parent: R2-0035)"
 }
