@@ -108,3 +108,4 @@
 | `20260920-104-airquality-dubai-cams-pm25_x_gdelt-gkg-tanker-share` | Air-quality readings in Gulf cities correlate with tanker attack news volume (smoke from struck vessels). | ok | 202 | -0.0765231299369489 | 0.17564870259481039 | 3.5 | 3.5 | 5.22 |
 | `20260920-105-gdelt-irn-mentions_x_research-iran-crossref-pubs` | OpenAlex Iran-related publication counts correlate with GDELT Iran news volume with a one-month lag. | ok | 81 | -0.011377409664389715 | 1.0 | 0.02 | 2.46 | 2.4 |
 | `20260920-106-weather-tehran-temp-anomaly_x_gdelt-irn-mentions` | Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT. | ok | 564 | -0.06815122828033127 | 0.6387225548902196 | 0.24 | 3.26 | 6.32 |
+| `20260920-107-finance-fred-dcoilbrenteu_x_utility-us-demand-peak-mwh` | US electricity demand hourly peaks are unrelated to Brent crude (null control). | ok | 394 | -0.01585716549223919 | 0.716566866267465 | 0.06 | 2.1 | 0.18 |

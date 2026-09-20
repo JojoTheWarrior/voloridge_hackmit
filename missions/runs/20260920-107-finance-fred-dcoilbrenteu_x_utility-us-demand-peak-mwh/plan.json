@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "utility.us.demand_peak_mwh",
+  "transform_a": "pct_change",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Use daily Brent crude price changes versus daily US peak electricity demand levels over the full window to test the null that short-run oil price movements do not systematically lead US demand peaks."
+}
