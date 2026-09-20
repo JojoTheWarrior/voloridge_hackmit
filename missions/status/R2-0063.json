@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/60a78114575349b396001d1a2fc62af5",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:55:48Z",
-  "updated_at": "2026-09-20T03:55:52Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:56:17Z",
+  "finished_at": "2026-09-20T03:56:17Z",
+  "elapsed_s": 29,
+  "message": "NOISE: drone GKG share z>1 vs DAL 2d: r=-0.03 n=390, supported_prob 0, 30 trades hit 50% Sharpe -0.15, OOS mean +0.6% (wrong side); not tradeable",
   "run_folder": "missions/runs/20260920-175-gdelt-gkg-drone-share_x_finance-dal-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Null control: research.drone.crossref_share 20d z-score > 1 should NOT predict DAL selloffs; if short DAL 2d at 2d lag also scores, drone-share is a war proxy not an airspace signal (-) [research.drone.crossref_share -> finance.DAL.log_return] (parent: R2-0063)"
 }
