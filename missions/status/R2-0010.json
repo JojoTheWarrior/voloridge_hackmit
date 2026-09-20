@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:48Z",
-  "updated_at": "2026-09-20T03:25:45Z",
+  "updated_at": "2026-09-20T03:26:08Z",
   "finished_at": "2026-09-20T03:25:45Z",
-  "elapsed_s": 57,
+  "elapsed_s": 80,
   "message": "Not supported: Bandar Abbas wind_max vs STNG log returns r=0.006 (n=387), best lag -1d r=-0.05; rule 53 trades hit 58% but excess -0.10%/trade, OOS 19 trades avg +0.02%; actionability 2.68 (story, not rule)",
   "run_folder": "missions/runs/20260920-139-weather-bandar-abbas-wind-max_x_finance-stng-log-return",
   "scores": {
