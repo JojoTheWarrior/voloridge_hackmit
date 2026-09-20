@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:46:01Z",
-  "updated_at": "2026-09-20T03:52:03Z",
+  "updated_at": "2026-09-20T03:54:43Z",
   "finished_at": "2026-09-20T03:46:22Z",
-  "elapsed_s": 362,
+  "elapsed_s": 522,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-164-gdelt-gkg-fertilizer-share_x_finance-mos-log-return",
   "scores": {
