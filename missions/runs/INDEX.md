@@ -8,3 +8,4 @@
 | `20260920-004-gdelt-iran-israel-dyad-events_x_finance-fred-dcoilbrenteu` | The share of GDELT events with Israel and Iran as actors spikes before oil-price jumps rather than after them. | ok | 378 | 0.15004092468134797 | 0.021956087824351298 | 6.02 | 4.22 | 5.16 |
 | `20260920-005-gdelt-irn-protest-events_x_finance-gc-f-log-return` | Days with more GDELT "protest" events in Iran (Dec 2025-Jan 2026) coincide with higher gold prices. | ok | 251 | 0.07566633103896542 | 0.25149700598802394 | 1.98 | 3.68 | 2.16 |
 | `20260920-006-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Strait of Hormuz" track the Brent-WTI spread. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.32 | 4.46 | 3.56 |
+| `20260920-007-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Hormuz" lead tanker-shipping ETF and Brent moves by one day during blockade phases. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.3 | 4.84 | 3.58 |

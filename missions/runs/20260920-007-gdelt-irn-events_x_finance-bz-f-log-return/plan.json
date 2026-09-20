@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.events",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use global GDELT GKG Hormuz-mention share as the closest proxy to daily news mentions of 'Hormuz', and Brent futures log returns as the main oil-price response, standardizing news intensity (zscore) and leaving daily price moves in return space to test whether spikes in Hormuz coverage during blockade phases lead next\u2011day Brent moves, allowing a 1\u20132 day lead/lag."
+}

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:48:23.097803+00:00",
+  "git_commit": "c419a0bd6025cf0552d148a361fe79863cf477e2",
+  "folder": "20260920-007-gdelt-irn-events_x_finance-bz-f-log-return",
+  "mission_id": "M20260920-da5cbb",
+  "hypothesis": "GDELT mentions of \"Hormuz\" lead tanker-shipping ETF and Brent moves by one day during blockade phases.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.10346597355585145,
+  "perm_p": 0.5489021956087824,
+  "validity": 0.3,
+  "interestingness": 4.84,
+  "unexpectedness": 3.58,
+  "indicator_coverage": {
+    "gdelt.irn.events": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
