@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT tanker GKG share 10d z-score > 1.5 leads ZC=F log returns by 4 days (+) via freight cost pass-through into corn; trade long ZC=F 4d [gdelt.gkg.tanker_share -> finance.ZC=F.log_return]
