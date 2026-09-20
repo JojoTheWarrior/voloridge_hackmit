@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:29:38.655654+00:00",
+  "git_commit": "d0e71b0914ce907c591ffcac5b3fb7f55baba7a4",
+  "folder": "20260920-146-research-hormuz-crossref-pubs_x_finance-xop-log-return",
   "mission_id": "R2-0017",
-  "title": "Oil-price pubs z-score vs XOP returns",
   "hypothesis": "R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 12-week z-score > 2 precede XOP underperformance by 5 days (-) as the oil-supply shock is already priced; trade short XOP 7d [research.hormuz.crossref_pubs -> finance.XOP.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/602a7f8af1be4023bbe8c627d03c4d16",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:28:11Z",
-  "updated_at": "2026-09-20T03:29:39Z",
-  "finished_at": "2026-09-20T03:28:30Z",
-  "elapsed_s": 88,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-146-research-hormuz-crossref-pubs_x_finance-xop-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.053176529884105546,
+  "perm_p": 0.4151696606786427,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "XOP",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_pubs": "2025-03..current week",
+    "finance.XOP.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

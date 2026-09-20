@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 12-week z-score > 2 precede XOP underperformance by 5 days (-) as the oil-supply shock is already priced; trade short XOP 7d [research.hormuz.crossref_pubs -> finance.XOP.log_return]
