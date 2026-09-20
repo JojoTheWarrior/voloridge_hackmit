@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.graphite.crossref_share",
+  "indicator_b": "finance.ALI=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Using graphite-related materials-science publication share (as a proxy for materials project activity; no aluminum-specific series exist) against aluminum futures log returns over 2025\u20132026 should show no systematic relationship, serving as a null control for spurious links between materials databases and aluminum prices."
+}
