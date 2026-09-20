@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/e12275917aa94ad491fe9672249b1637",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:18:19Z",
-  "updated_at": "2026-09-20T04:18:33Z",
+  "updated_at": "2026-09-20T04:18:55Z",
   "finished_at": null,
-  "elapsed_s": 14,
+  "elapsed_s": 36,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-202-gdelt-gkg-helium-share_x_finance-vg-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 7.6,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Null control: GDELT helium GKG share 20d z-score > 1 leads Venture Global absolute returns (volatility, not direction) by 4 days; if the R2-0098 long-VG edge is real it should show up as direction not just vol [gdelt.gkg.helium_share -> finance.VG.abs_return] (parent: R2-0098)"
 }
