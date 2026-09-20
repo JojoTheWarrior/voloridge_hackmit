@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.dubai.radiation",
+  "indicator_b": "utility.generation.solar_mwh",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Use Dubai shortwave radiation anomalies as a Gulf proxy versus total US monthly solar generation as an indirect solar proxy; any correlation over the full sample should be near zero because these are geographically and grid-wise unrelated, making this a control for spurious weather\u2013power links."
+}
