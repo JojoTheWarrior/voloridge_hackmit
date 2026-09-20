@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/a765338ff4d3463ba9d06e2d90c13980",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:54:46Z",
-  "updated_at": "2026-09-20T03:55:06Z",
-  "finished_at": null,
-  "elapsed_s": 20,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:55:53Z",
+  "finished_at": "2026-09-20T03:55:53Z",
+  "elapsed_s": 67,
+  "message": "Weak: r=-0.09 (n=390), heuristic validity 0; short-AAL rule 62 trades sharpe 0.06 in-sample, OOS 21 trades 71% hit / +0.73% avg; actionability 6.0",
   "run_folder": "missions/runs/20260920-174-gdelt-irn-conflict-events_x_finance-aal-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.02,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Null control: Iran conflict-event 20d z-score > 1.5 should NOT move the broad airline ETF JETS if the AAL effect is Gulf-route specific (-); trade short JETS 3d at 1d lag [gdelt.irn.conflict_events -> finance.JETS.log_return] (parent: R2-0062)"
 }
