@@ -1,0 +1,110 @@
+{
+  "n_obs": 389,
+  "coverage_start": "2025-03-03",
+  "coverage_end": "2026-09-17",
+  "correlation": {
+    "n": 389,
+    "pearson_r": -0.06324170293170595,
+    "pearson_p": 0.21329594632034876,
+    "spearman_r": -0.05160730948789962,
+    "spearman_p": 0.3099836637249998
+  },
+  "lagged": {
+    "lags": [
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "r": [
+      -0.006018727331319898,
+      -0.016722016857039584,
+      -0.05780712083799854,
+      -0.0035644810281359254,
+      -0.02422532130492107,
+      -0.06324170293170589,
+      -0.03136254217329993,
+      -0.025254937847834495,
+      -0.03537535261272491,
+      0.010136485921583413,
+      0.0807589239601519
+    ],
+    "best_lag": 5,
+    "best_r": 0.0807589239601519
+  },
+  "perm_p": 0.41317365269461076,
+  "n_lags_tested": 11,
+  "bonferroni_p": 1.0,
+  "pre_post": null,
+  "event_study": null,
+  "event_study_b": null,
+  "window": "full",
+  "lag_unit": "days",
+  "max_lag_steps": 5,
+  "sign_matches_expectation": true,
+  "trade": {
+    "rule": {
+      "signal_transform": "rolling_zscore_20d",
+      "threshold": 1.0,
+      "direction": "long",
+      "holding_days": 5,
+      "target_kind": "log_return"
+    },
+    "all": {
+      "n_trades": 34,
+      "hit_rate": 0.5588235294117647,
+      "avg_return": 0.006839788388170738,
+      "baseline_avg_return": 0.011630265166342286,
+      "excess_return": -0.004790476778171548,
+      "sharpe_like": 1.0805709601549471,
+      "max_drawdown": -0.1236055196686704,
+      "total_return": 0.23263274494807007
+    },
+    "fit_pre_war": {
+      "n_trades": 22,
+      "hit_rate": 0.5454545454545454,
+      "avg_return": 0.009170618392422902,
+      "baseline_avg_return": 0.013423282517531188,
+      "excess_return": -0.004252664125108286,
+      "sharpe_like": 1.1444519083034679,
+      "max_drawdown": -0.09209970932347855,
+      "total_return": 0.2042640790699457
+    },
+    "test_war": {
+      "n_trades": 12,
+      "hit_rate": 0.5833333333333334,
+      "avg_return": 0.0025666000470417707,
+      "baseline_avg_return": 0.008376270714184649,
+      "excess_return": -0.0058096706671428786,
+      "sharpe_like": 0.25231395996470973,
+      "max_drawdown": -0.12360551966867028,
+      "total_return": 0.023556848012965093
+    },
+    "n_signal_days": 384,
+    "trade_idea": {
+      "instrument": "DHT",
+      "direction": "long",
+      "entry_rule": "airquality.bandar_abbas.cams_aod rolling_zscore_20d > 1 at close -> long DHT next session",
+      "exit_rule": "close after 5 trading days (no overlapping entries)",
+      "holding_days": 5,
+      "hit_rate": 0.5588235294117647,
+      "avg_return": 0.006839788388170738,
+      "excess_return": -0.004790476778171548,
+      "n_trades": 34,
+      "sharpe_like": 1.0805709601549471,
+      "max_drawdown": -0.1236055196686704,
+      "oos_n_trades": 12,
+      "oos_avg_return": 0.0025666000470417707,
+      "oos_hit_rate": 0.5833333333333334,
+      "actionability": 2.59,
+      "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+    }
+  }
+}
