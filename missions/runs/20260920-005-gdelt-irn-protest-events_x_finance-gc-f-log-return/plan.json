@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.protest_events",
+  "indicator_b": "finance.GC=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "pre_war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use the daily count of GDELT Iran protest events as the driver and COMEX gold futures daily log returns as the response, restricting to the pre-war window so that December 2025\u2013January 2026 protests line up with gold price moves, with protest levels contemporaneously or slightly leading positive gold returns as a geopolitical risk hedge."
+}
