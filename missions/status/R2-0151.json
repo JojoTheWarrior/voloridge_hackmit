@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/cd1456a75efb4e9ba1fc7badadcb89e4",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:05:50Z",
-  "updated_at": "2026-09-20T13:06:06Z",
+  "updated_at": "2026-09-20T13:06:35Z",
   "finished_at": null,
-  "elapsed_s": 16,
+  "elapsed_s": 45,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-248-weather-houston-wind-max_x_finance-cf-abs-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 7.28,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Null control: Houston daily max wind 20d z-score > 1 leads CF intraday range pct by 2 days (+) only if Gulf ammonia weather disruption is real; expect no excess over baseline volatility; trade long CF straddle-proxy 3d [weather.houston.wind_max -> finance.CF.range_pct] (parent: R2-0151)"
 }
