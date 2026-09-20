@@ -77,3 +77,4 @@
 | `20260920-073-finance-gc-f-log-return_x_finance-bz-f-log-return` | Gold and Brent decoupled during the war: gold fell while oil rose. | ok | 391 | -0.1111940992511177 | 0.21956087824351297 | 2.3 | 4.46 | 5.1 |
 | `20260920-074-finance-vix-close_x_finance-bz-f-close` | The VIX and Brent implied co-movement peaked in the week of the Hormuz closure. | ok | 140 | 0.3700956087977466 | 0.029940119760479042 | 6.02 | 1.76 | 3.44 |
 | `20260920-075-gdelt-irn-conflict-events_x_finance-lmt-log-return` | Defense stocks (LMT, RTX, NOC, GD) outperformed the S&P 500 on days with high GDELT Iran conflict counts. | ok | 140 | 0.003804909293895504 | 0.8922155688622755 | 0.02 | 1.96 | 4.12 |
+| `20260920-076-finance-fred-dcoilbrenteu_x_finance-jets-log-return` | Airline stocks (JETS, UAL, DAL) moved inversely to Brent more strongly during the war than before. | ok | 386 | -0.3477563129722114 | 0.01996007984031936 | 6.4 | 4.84 | 1.38 |
