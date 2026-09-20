@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "airquality.kuwait.cams_pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Brent spot price level as a high-frequency proxy for the mid\u2011March 2026 ~6.7 mb/d Gulf oil output drop and compare it to Kuwait\u2019s CAMS PM2.5 anomaly vs the 2025 baseline during the active war window, expecting lower output (proxied by stressed oil prices) to coincide with below-normal local PM2.5 after controlling for seasonality."
+}
