@@ -1,0 +1,1 @@
+R2 | [gas-lng] TTF/HH ratio 20d z-score > 1.0 leads LNG returns negatively (-) as the arb spike mean-reverts over 5 days; trade short LNG 5d [finance.ratio.ttf_henryhub -> finance.LNG.log_return] (parent: R2-0036)
