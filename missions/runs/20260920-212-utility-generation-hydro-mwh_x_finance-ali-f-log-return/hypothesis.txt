@@ -1,0 +1,1 @@
+SHERLOCK | [#5 hydro] US monthly hydro generation (EIA-923 via PUDL, snowpack/reservoir proxy) is negatively related to aluminum futures returns in the same month (-); trade short ALI=F 3d [utility.generation.hydro_mwh -> finance.ALI=F.log_return]

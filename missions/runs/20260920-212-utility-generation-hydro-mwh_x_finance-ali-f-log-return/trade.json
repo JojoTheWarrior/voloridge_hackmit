@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 0,
+    "hit_rate": null,
+    "avg_return": null,
+    "baseline_avg_return": null,
+    "excess_return": null,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "total_return": null
+  },
+  "fit_pre_war": {
+    "n_trades": 0,
+    "hit_rate": null,
+    "avg_return": null,
+    "baseline_avg_return": null,
+    "excess_return": null,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "total_return": null
+  },
+  "test_war": {
+    "n_trades": 0,
+    "hit_rate": null,
+    "avg_return": null,
+    "baseline_avg_return": null,
+    "excess_return": null,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "total_return": null
+  },
+  "n_signal_days": 3,
+  "trade_idea": {
+    "instrument": "ALI=F",
+    "direction": "short",
+    "entry_rule": "utility.generation.hydro_mwh rolling_zscore_20d > 1 at close -> short ALI=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": null,
+    "avg_return": null,
+    "excess_return": null,
+    "n_trades": 0,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "oos_n_trades": 0,
+    "oos_avg_return": null,
+    "oos_hit_rate": null,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

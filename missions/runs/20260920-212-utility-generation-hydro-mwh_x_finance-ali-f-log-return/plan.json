@@ -1,0 +1,13 @@
+{
+  "indicator_a": "utility.generation.hydro_mwh",
+  "indicator_b": "finance.ALI=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}
