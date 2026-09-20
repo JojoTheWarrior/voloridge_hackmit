@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:55:51.337926+00:00",
+  "git_commit": "6459ae5d29ed14f26b4f9f90bfb01537ada0aaf9",
+  "folder": "20260920-175-gdelt-gkg-drone-share_x_finance-dal-log-return",
   "mission_id": "R2-0063",
-  "title": "Drone GKG share vs DAL selloffs",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT drone GKG share 20d z-score > 1 raises airspace-risk premia before airline selloffs (-); trade short DAL 2d at 2d lag [gdelt.gkg.drone_share -> finance.DAL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/60a78114575349b396001d1a2fc62af5",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:55:48Z",
-  "updated_at": "2026-09-20T03:55:52Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-175-gdelt-gkg-drone-share_x_finance-dal-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 6.19
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.02530374111271539,
+  "perm_p": 0.7305389221556886,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.19,
   "trade_idea": {
     "instrument": "DAL",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 6.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.drone_share": "configured analysis window",
+    "finance.DAL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

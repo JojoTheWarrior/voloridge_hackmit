@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT drone GKG share 20d z-score > 1 raises airspace-risk premia before airline selloffs (-); trade short DAL 2d at 2d lag [gdelt.gkg.drone_share -> finance.DAL.log_return]
