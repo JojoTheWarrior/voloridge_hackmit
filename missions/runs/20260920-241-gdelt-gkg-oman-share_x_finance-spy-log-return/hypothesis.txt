@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Null control: GDELT Oman GKG share 20d z-score > 1 leads SPY log returns by 5 days (+); if SPY shows a similar edge the ZW=F result is a generic risk-on effect, not a grain-freight channel; trade long SPY 5d [gdelt.gkg.oman_share -> finance.SPY.log_return] (parent: R2-0042)

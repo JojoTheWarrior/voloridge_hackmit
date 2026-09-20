@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 8,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 22,
+    "hit_rate": 0.7727272727272727,
+    "avg_return": 0.01226704059171308,
+    "baseline_avg_return": 0.006804919683146618,
+    "excess_return": 0.005462120908566462,
+    "sharpe_like": 2.81462920119196,
+    "max_drawdown": -0.03412873268391825,
+    "total_return": 0.30180976515227464
+  },
+  "fit_pre_war": {
+    "n_trades": 16,
+    "hit_rate": 0.75,
+    "avg_return": 0.00977766093158533,
+    "baseline_avg_return": 0.00662470381546215,
+    "excess_return": 0.00315295711612318,
+    "sharpe_like": 2.3161823880934005,
+    "max_drawdown": -0.03412873268391825,
+    "total_return": 0.16582906769195804
+  },
+  "test_war": {
+    "n_trades": 6,
+    "hit_rate": 0.8333333333333334,
+    "avg_return": 0.018905386352053744,
+    "baseline_avg_return": 0.007139411255742788,
+    "excess_return": 0.011765975096310955,
+    "sharpe_like": 1.7363232756266533,
+    "max_drawdown": -0.02325733946564401,
+    "total_return": 0.11663862330137587
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "SPY",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.oman_share rolling_zscore_20d > 1 at close -> long SPY next session",
+    "exit_rule": "close after 8 trading days (no overlapping entries)",
+    "holding_days": 8,
+    "hit_rate": 0.7727272727272727,
+    "avg_return": 0.01226704059171308,
+    "excess_return": 0.005462120908566462,
+    "n_trades": 22,
+    "sharpe_like": 2.81462920119196,
+    "max_drawdown": -0.03412873268391825,
+    "oos_n_trades": 6,
+    "oos_avg_return": 0.018905386352053744,
+    "oos_hit_rate": 0.8333333333333334,
+    "actionability": 9.84,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
