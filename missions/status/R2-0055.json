@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/89023f79a1674ca683b8e5d09bb6fce5",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:50:27Z",
-  "updated_at": "2026-09-20T03:50:45Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:51:27Z",
+  "finished_at": "2026-09-20T03:51:27Z",
+  "elapsed_s": 60,
+  "message": "Not supported: TTF/HH ratio z>1 -> short YAR.OL gives r=+0.13 (wrong sign), perm p=0.48, hit rate 0.40 over 43 trades, negative Sharpe-like; no tradeable edge.",
   "run_folder": "missions/runs/20260920-169-finance-ratio-ttf-henryhub_x_finance-yar-ol-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.42,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1 leads CF Industries returns by 2 days (+) as a wide EU-US gas spread hands US ammonia producers a cost advantage (mirror of null YAR.OL short result); trade long CF 3d [finance.ratio.ttf_henryhub -> finance.CF.log_return] (parent: R2-0055)"
 }
