@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:52:16Z",
-  "updated_at": "2026-09-20T12:53:48Z",
+  "updated_at": "2026-09-20T12:54:07Z",
   "finished_at": "2026-09-20T12:53:48Z",
-  "elapsed_s": 92,
+  "elapsed_s": 111,
   "message": "Null control confirms channel dead: hormuz crossref_share z>1 -> short BAS.DE fails (r=0.06 n=81, hit 22%, 9 trades, excess -0.36%, OOS 0/2; validity 0, actionability 0). Crossref->BASF gas-fear channel not supported.",
   "run_folder": "missions/runs/20260920-231-research-hormuz-crossref-share_x_finance-bas-de-log-return",
   "scores": {
