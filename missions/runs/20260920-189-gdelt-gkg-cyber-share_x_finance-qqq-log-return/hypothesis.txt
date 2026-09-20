@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT cyber GKG share 20d z-score > 2 leads Nasdaq ETF returns lower by 1-2 days (-); trade short QQQ 2d [gdelt.gkg.cyber_share -> finance.QQQ.log_return]

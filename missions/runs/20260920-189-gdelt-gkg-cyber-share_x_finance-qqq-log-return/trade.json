@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 10,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 24,
+    "hit_rate": 0.375,
+    "avg_return": -0.013614102332744562,
+    "baseline_avg_return": -0.01149984048574782,
+    "excess_return": -0.002114261846996743,
+    "sharpe_like": -2.202661589051941,
+    "max_drawdown": -0.3051747310711692,
+    "total_return": -0.28854625444825
+  },
+  "fit_pre_war": {
+    "n_trades": 16,
+    "hit_rate": 0.25,
+    "avg_return": -0.016178006134704062,
+    "baseline_avg_return": -0.010307301097204149,
+    "excess_return": -0.005870705037499913,
+    "sharpe_like": -2.299909220008229,
+    "max_drawdown": -0.2268650269789323,
+    "total_return": -0.23472491991941236
+  },
+  "test_war": {
+    "n_trades": 8,
+    "hit_rate": 0.625,
+    "avg_return": -0.00848629472882556,
+    "baseline_avg_return": -0.013747318564157054,
+    "excess_return": 0.005261023835331493,
+    "sharpe_like": -0.7147626046987028,
+    "max_drawdown": -0.12414461930996634,
+    "total_return": -0.07032939648729963
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "QQQ",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.cyber_share rolling_zscore_20d > 1 at close -> short QQQ next session",
+    "exit_rule": "close after 10 trading days (no overlapping entries)",
+    "holding_days": 10,
+    "hit_rate": 0.375,
+    "avg_return": -0.013614102332744562,
+    "excess_return": -0.002114261846996743,
+    "n_trades": 24,
+    "sharpe_like": -2.202661589051941,
+    "max_drawdown": -0.3051747310711692,
+    "oos_n_trades": 8,
+    "oos_avg_return": -0.00848629472882556,
+    "oos_hit_rate": 0.625,
+    "actionability": 1.78,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
