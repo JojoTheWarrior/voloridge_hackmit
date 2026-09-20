@@ -148,8 +148,15 @@ def run_all(plan, a, b, timeline):
     ta, tb = transform(a, plan.transform_a), transform(b, plan.transform_b)
     ta, tb = apply_window(ta, plan.window), apply_window(tb, plan.window)
     frame = align(ta, tb)
-    lag = lagged_correlation(ta, tb, plan.max_lag_days)
-    perm = permutation_pvalue(ta, tb, max_lag=plan.max_lag_days)
+    coarsest = _coarsest_step(ta, tb)
+    if coarsest > pd.Timedelta(days=20):
+        lag_unit, max_lag = "months", plan.max_lag_days // 30
+    elif coarsest > pd.Timedelta(days=3):
+        lag_unit, max_lag = "weeks", plan.max_lag_days // 7
+    else:
+        lag_unit, max_lag = "days", plan.max_lag_days
+    lag = lagged_correlation(ta, tb, max_lag)
+    perm = permutation_pvalue(ta, tb, max_lag=max_lag)
     result = {"n_obs": int(len(frame)), "coverage_start": frame.index.min().date().isoformat() if len(frame) else None,
               "coverage_end": frame.index.max().date().isoformat() if len(frame) else None,
               "correlation": correlation_summary(ta, tb), "lagged": lag,
@@ -165,14 +172,8 @@ def run_all(plan, a, b, timeline):
     result["event_study"] = event_study(ta, event_dates) if event_dates else None
     result["event_study_b"] = event_study(tb, event_dates) if event_dates else None
     result["window"] = plan.window
-    coarsest = _coarsest_step(ta, tb)
-    if coarsest > pd.Timedelta(days=20):
-        lag_unit = "months"
-    elif coarsest > pd.Timedelta(days=3):
-        lag_unit = "weeks"
-    else:
-        lag_unit = "days"
     result["lag_unit"] = lag_unit
+    result["max_lag_steps"] = max_lag
     expected = plan.expected_sign
     result["sign_matches_expectation"] = expected == 0 or (
         lag["best_r"] is not None and np.isfinite(lag["best_r"]) and np.sign(lag["best_r"]) == expected
