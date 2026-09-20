@@ -5,7 +5,7 @@ services:
       KINGDOM_FAKE_DEVIN: "1"
       PYTEST_ADDOPTS: "-o cache_dir=/tmp/pytest-cache"
     ports:
-      - "127.0.0.1:8031:8030"
+      - "127.0.0.1:8030:8030"
     volumes:
       - .:/app:ro
       - demo-state:/state
@@ -16,7 +16,7 @@ services:
     environment:
       KINGDOM_API_TARGET: http://api:8030
     ports:
-      - "127.0.0.1:5174:5173"
+      - "127.0.0.1:5173:5173"
     volumes:
       - .:/app
       - web-deps:/app/web/node_modules

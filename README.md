@@ -96,7 +96,7 @@ missions:
 
 ```bash
 docker compose up --build -d
-# Open http://localhost:5174; API is http://localhost:8031
+# Open http://localhost:5173; API is http://localhost:8030
 docker compose exec api python -m pytest tests -q
 docker compose exec web npm test
 docker compose exec web npm run lint

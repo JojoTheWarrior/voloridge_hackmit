@@ -33,7 +33,7 @@ Run it:
 
 ```bash
 docker compose up --build -d          # isolated demo database; no Devin spend
-# UI: http://localhost:5174, API: http://localhost:8031
+# UI: http://localhost:5173, API: http://localhost:8030
 ```
 
 The original Python/Vite commands still work at ports 8030/5173. See README

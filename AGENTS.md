@@ -1,7 +1,7 @@
 # Development
 
 - Use `docker compose up --build -d` for the isolated demo: UI at
-  http://localhost:5174, API at http://localhost:8031. Demo state is in a
+  http://localhost:5173, API at http://localhost:8030. Demo state is in a
   separate Docker volume; this does not open or poll the local live database.
 - Python checks: `docker compose exec api python -m pytest tests -q`.
 - Web checks: `docker compose exec web npm test`, `docker compose exec web npm run lint`,
