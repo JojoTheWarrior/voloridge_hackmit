@@ -6,7 +6,7 @@ yfinance
 requests
 python-dotenv
 openai
-pygame
+pygame-ce  # drop-in pygame with wheels for Python 3.13+; import name stays "pygame"
 statsmodels
 scipy
 flask
