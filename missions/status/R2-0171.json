@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:17:44Z",
-  "updated_at": "2026-09-20T13:40:50Z",
+  "updated_at": "2026-09-20T13:43:42Z",
   "finished_at": "2026-09-20T13:18:38Z",
-  "elapsed_s": 1386,
+  "elapsed_s": 1558,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-263-gdelt-gkg-qatar-share_x_finance-iag-l-log-return",
   "scores": {
