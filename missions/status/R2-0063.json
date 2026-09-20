@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:55:48Z",
-  "updated_at": "2026-09-20T03:56:17Z",
+  "updated_at": "2026-09-20T03:56:46Z",
   "finished_at": "2026-09-20T03:56:17Z",
-  "elapsed_s": 29,
+  "elapsed_s": 58,
   "message": "NOISE: drone GKG share z>1 vs DAL 2d: r=-0.03 n=390, supported_prob 0, 30 trades hit 50% Sharpe -0.15, OOS mean +0.6% (wrong side); not tradeable",
   "run_folder": "missions/runs/20260920-175-gdelt-gkg-drone-share_x_finance-dal-log-return",
   "scores": {
