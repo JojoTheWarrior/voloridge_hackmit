@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Null control: Bandar Abbas temp anomaly 20d z-score > 1.5 leads SPY log returns by 5 days (+); trade long SPY 5d - if this also "works", the XOP/SPY result is market beta not heat stress [weather.bandar_abbas.temp_anomaly -> finance.SPY.log_return] (parent: R2-0012)
