@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0173",
+  "title": "[fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 weighs on the airli",
+  "hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 weighs on the airline basket relative to the market rather than single names; trade short JETS/SPY ratio 3d at 1d lag [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0073)",
+  "parent_mission_id": "R2-0073",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:17:55Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
