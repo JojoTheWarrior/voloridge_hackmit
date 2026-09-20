@@ -41,5 +41,5 @@
     "actionability": 7.39,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": "R2 | [fertilizer-ag] null control: GDELT helium GKG share 20d z-score > 1 short-NTR-1d rule had hit 80% on only 5 trades (r=0.08, not supported), so test whether the same short 1d rule transfers to MOS log returns; if it does not, the NTR result is likely noise [gdelt.gkg.helium_share -> finance.MOS.log_return] (parent: R2-0154)"
+  "followup_hypothesis": "R2 | [fertilizer-ag] null control: GDELT helium GKG share 20d z-score > 1 short-NTR-1d rule had hit 80% on only 5 trades (r=0.08, not supported), so test whether the same short 1d rule transfers to CF log returns; if it does not, the NTR result is likely noise [gdelt.gkg.helium_share -> finance.CF.log_return] (parent: R2-0154)"
 }
