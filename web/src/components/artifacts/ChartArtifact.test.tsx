@@ -5,9 +5,11 @@ import { ChartArtifact } from './ChartArtifact'
 const chart = (over: Partial<ChartSpec>): ChartSpec => ({ id: 'c', type: 'chart', kind: 'line', title: 'Chart', series: [], ...over })
 
 // jsdom lays nothing out, and Recharts draws nothing into a container that measures zero wide.
-beforeAll(() => {
+beforeAll(async () => {
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(new DOMRect(0, 0, 640, 220))
-})
+  // Warm the lazy Recharts chunk: under a parallel run its first import can outlast findBy's timeout.
+  await import('./ChartPlot')
+}, 30_000)
 afterAll(() => vi.restoreAllMocks())
 
 /** Recharts draws a tick after mounting, so wait for the marks rather than the container. */
