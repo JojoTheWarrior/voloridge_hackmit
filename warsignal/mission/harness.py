@@ -1,13 +1,24 @@
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 
-from .queue import mark_done, mark_failed, pop_next
+from .queue import mark_done, mark_failed, pop_next, requeue_failed
 from .results import append_result
 from .runner import run_mission
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def reset_queue():
+    missions = ROOT / "missions"
+    shutil.copyfile(missions / "queue_original.txt", missions / "queue.txt")
+    (missions / "in_progress.txt").write_text("", encoding="utf-8")
+
+
+def requeue_failed_missions():
+    return requeue_failed()
 
 
 def run_queue(n=None, use_ai=True, stop_on_error=False):

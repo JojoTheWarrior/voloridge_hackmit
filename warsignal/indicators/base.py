@@ -65,7 +65,9 @@ def get_series(name: str, start=None, end=None) -> pd.Series:
         raise IndicatorUnavailable(name, "indicator is not registered")
     path = _cache_path(name)
     series = None
-    if path.exists() and time.time() - path.stat().st_mtime < 86400:
+    gdelt_cache = ROOT / "data" / "cache" / "gdelt_daily.parquet"
+    source_changed = name.startswith("gdelt.") and gdelt_cache.exists() and gdelt_cache.stat().st_mtime > path.stat().st_mtime
+    if path.exists() and not source_changed and time.time() - path.stat().st_mtime < 86400:
         try:
             cached = pd.read_parquet(path)
             series = pd.Series(cached["value"].to_numpy(), index=pd.to_datetime(cached["date"]), name=name)

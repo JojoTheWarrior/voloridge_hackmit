@@ -6,6 +6,7 @@ import os
 import re
 import zipfile
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -32,10 +33,68 @@ def _iter_zip(path):
                 yield line.rstrip("\n").split("\t")
 
 
-def _daily():
+def _float(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _day(value):
+    value = str(value)[:8]
+    if len(value) != 8 or not value.isdigit():
+        raise ValueError(f"invalid GDELT date: {value!r}")
+    return f"{value[:4]}-{value[4:6]}-{value[6:8]}"
+
+
+def _process_zip(path):
+    events = defaultdict(lambda: defaultdict(float))
+    gkg = defaultdict(lambda: defaultdict(float))
+    is_gkg = ".gkg." in path.name
+    for row in _iter_zip(path):
+        try:
+            if is_gkg:
+                day = _day(row[1])
+                gkg[day]["docs"] += 1
+                themes = row[7] if len(row) > 7 else ""
+                locations = row[9] if len(row) > 9 else ""
+                haystack = f"{themes} {locations}".upper()
+                for key, terms in GKG_TERMS.items():
+                    if any(term in haystack for term in terms):
+                        gkg[day][key] += 1
+                if len(row) > 3 and row[3].lower().endswith(".ir"):
+                    gkg[day]["iran_source_docs"] += 1
+                continue
+            if len(row) < 55:
+                continue
+            v2 = len(row) >= 61
+            day = _day(row[1])
+            item = events[day]
+            item["total_events"] += 1
+            countries = [row[7], row[17], row[53 if v2 else 51]]
+            for country in COUNTRIES.intersection(countries):
+                item[f"{country}.events"] += 1
+                item[f"{country}.tone_sum"] += _float(row[34])
+                item[f"{country}.goldstein_sum"] += _float(row[30])
+                item[f"{country}.mentions"] += _float(row[31])
+                item[f"{country}.conflict_events"] += row[29] == "4"
+                item[f"{country}.coop_events"] += row[29] == "1"
+                for code, name in (("14", "protest_events"), ("18", "assault_events"), ("19", "fight_events"),
+                                   ("17", "coerce_events"), ("04", "negotiate_events")):
+                    item[f"{country}.{name}"] += row[28] == code
+            if (row[7] == "IRN" and row[17] == "ISR") or (row[7] == "ISR" and row[17] == "IRN"):
+                item["iran_israel_dyad_events"] += 1
+            if (row[7] == "IRN" and row[17] == "USA") or (row[7] == "USA" and row[17] == "IRN"):
+                item["iran_usa_dyad_events"] += 1
+        except (ValueError, IndexError, TypeError):
+            continue
+    return {day: dict(values) for day, values in events.items()}, {day: dict(values) for day, values in gkg.items()}
+
+
+def _daily(rebuild=False):
     cache = DATA_RAW.parent / "cache" / "gdelt_daily.parquet"
     manifest = DATA_RAW / "gdelt_live" / "_manifest.jsonl"
-    if cache.exists() and (not manifest.exists() or cache.stat().st_mtime >= manifest.stat().st_mtime):
+    if not rebuild and cache.exists() and (not manifest.exists() or manifest.stat().st_mtime <= cache.stat().st_mtime):
         return pd.read_parquet(cache)
     result = defaultdict(lambda: defaultdict(float))
     gkg = defaultdict(lambda: defaultdict(float))
@@ -46,44 +105,14 @@ def _daily():
         gkg_paths = [path for path in paths if ".gkg." in path.name]
         half = max_files // 2
         paths = exports[-half:] + gkg_paths[-(max_files - half):]
-    for path in paths:
-        is_gkg = ".gkg." in path.name
-        for row in _iter_zip(path):
-            try:
-                if is_gkg:
-                    timestamp = row[1][:8]
-                    day = pd.to_datetime(timestamp, format="%Y%m%d")
-                    gkg[day]["docs"] += 1
-                    themes, locations = row[7] if len(row) > 7 else "", row[9] if len(row) > 9 else ""
-                    haystack = f"{themes} {locations}".upper()
-                    for key, terms in GKG_TERMS.items():
-                        if any(term in haystack for term in terms):
-                            gkg[day][key] += 1
-                    if len(row) > 3 and row[3].lower().endswith(".ir"):
-                        gkg[day]["iran_source_docs"] += 1
-                    continue
-                if len(row) < 35:
-                    continue
-                v2 = len(row) >= 61
-                day = pd.to_datetime(row[1 if v2 else 0], format="%Y%m%d")
-                item = result[day]
-                item["total_events"] += 1
-                countries = [row[7], row[17], row[53 if v2 else 51]]
-                for country in COUNTRIES.intersection(countries):
-                    item[f"{country}.events"] += 1
-                    item[f"{country}.tone_sum"] += float(row[34] or 0)
-                    item[f"{country}.goldstein_sum"] += float(row[30] or 0)
-                    item[f"{country}.mentions"] += float(row[31] or 0)
-                    item[f"{country}.conflict_events"] += row[29] == "4"
-                    item[f"{country}.coop_events"] += row[29] == "1"
-                    for code, name in (("14", "protest_events"), ("18", "assault_events"), ("19", "fight_events"), ("17", "coerce_events"), ("04", "negotiate_events")):
-                        item[f"{country}.{name}"] += row[28] == code
-                if (row[7] == "IRN" and row[17] == "ISR") or (row[7] == "ISR" and row[17] == "IRN"):
-                    item["iran_israel_dyad_events"] += 1
-                if (row[7] == "IRN" and row[17] == "USA") or (row[7] == "USA" and row[17] == "IRN"):
-                    item["iran_usa_dyad_events"] += 1
-            except (ValueError, IndexError, TypeError):
-                continue
+    with ProcessPoolExecutor(max_workers=os.cpu_count() or 1) as executor:
+        for event_values, gkg_values in executor.map(_process_zip, paths):
+            for day, values in event_values.items():
+                for key, value in values.items():
+                    result[day][key] += value
+            for day, values in gkg_values.items():
+                for key, value in values.items():
+                    gkg[day][key] += value
     rows = []
     days = sorted(set(result) | set(gkg))
     for day in days:
@@ -98,6 +127,10 @@ def _daily():
     cache.parent.mkdir(parents=True, exist_ok=True)
     frame.to_parquet(cache, index=False)
     return frame
+
+
+def rebuild_cache():
+    return _daily(rebuild=True)
 
 
 def _series(column):

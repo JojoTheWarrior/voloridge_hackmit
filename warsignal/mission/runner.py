@@ -40,6 +40,20 @@ def _narrative(hypothesis, plan, stats, use_ai):
             "This association is descriptive, not causal; seasonality, common shocks, and multiple testing remain possible confounders.")
 
 
+def _judge_state(hypothesis, plan, stats):
+    compact_stats = dict(stats)
+    event_study = compact_stats.get("event_study")
+    if isinstance(event_study, dict):
+        compact_stats["event_study"] = {
+            key: value for key, value in event_study.items() if key != "per_event"
+        }
+    state = {"hypothesis": hypothesis, "plan": plan.__dict__, "stats": compact_stats}
+    encoded = json.dumps(state, default=_json_default)
+    if len(encoded) > 6000:
+        state["stats"].pop("event_study", None)
+    return state
+
+
 def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False):
     mission_id = mission_id or f"M{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(3)}"
     created = datetime.now(timezone.utc).isoformat()
@@ -47,23 +61,49 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False):
         plan, planner_model = plan_mission(hypothesis)
         a = get_series(plan.indicator_a, START, END)
         b = get_series(plan.indicator_b, START, END)
+        overlap = __import__("pandas").concat([a.rename("a"), b.rename("b")], axis=1).dropna()
+        if len(overlap) < 20:
+            def coverage(series):
+                valid = series.dropna()
+                if valid.empty:
+                    return "no dates (n=0)"
+                return f"{valid.index.min().date()}..{valid.index.max().date()} (n={len(valid)})"
+            raise ValueError(
+                f"insufficient overlap: {plan.indicator_a} covers {coverage(a)}, "
+                f"{plan.indicator_b} covers {coverage(b)}"
+            )
         from warsignal.indicators.events import load_timeline
         stats = run_all(plan, a, b, load_timeline())
-        judge = JevClient().judge({**stats, "hypothesis": hypothesis, "plan": plan.__dict__}, JEV_QUESTIONS) if use_ai else JevClient().judge(stats, JEV_QUESTIONS)
+        judge = JevClient().judge(_judge_state(hypothesis, plan, stats), JEV_QUESTIONS) if use_ai else JevClient().judge(stats, JEV_QUESTIONS)
         result = MissionResult(mission_id, created, hypothesis, plan, stats, judge.get("scores", {}),
                                _narrative(hypothesis, plan, stats, use_ai), judge=judge.get("judge", ""),
                                planner_model=planner_model, data_sources=[plan.indicator_a, plan.indicator_b],
                                date_start=stats.get("coverage_start"), date_end=stats.get("coverage_end"), n_obs=stats.get("n_obs", 0))
         result.scores["supported_prob"] = judge.get("supported_prob")
+        result.scores["judge_model"] = judge.get("model", "")
     except Exception as exc:
-        result = MissionResult(mission_id, created, hypothesis, locals().get("plan", None) or plan_mission(hypothesis)[0],
-                               status="failed", error=str(exc))
+        failed_plan = locals().get("plan", None)
+        if failed_plan is None:
+            failed_plan, failed_model = plan_mission(hypothesis)
+        else:
+            failed_model = locals().get("planner_model", "")
+        result = MissionResult(
+            mission_id, created, hypothesis, failed_plan, status="failed", error=str(exc),
+            planner_model=failed_model, data_sources=[failed_plan.indicator_a, failed_plan.indicator_b],
+        )
     reports = ROOT / "missions" / "reports"
     reports.mkdir(parents=True, exist_ok=True)
     report_path = reports / f"{mission_id}.md"
     json_path = reports / f"{mission_id}.json"
     result.artifacts["report_path"] = str(report_path)
-    report_path.write_text(f"# {mission_id}\n\n## Hypothesis\n{hypothesis}\n\n## Plan\n```json\n{json.dumps(result.plan.__dict__, indent=2)}\n```\n\n## Statistics\n```json\n{json.dumps(result.stats, indent=2, default=str)}\n```\n\n## Scores\n```json\n{json.dumps(result.scores, indent=2)}\n```\n\n{result.narrative_md}\n", encoding="utf-8")
+    report_path.write_text(
+        f"# {mission_id}\n\n## Hypothesis\n{hypothesis}\n\n## Plan\n```json\n{json.dumps(result.plan.__dict__, indent=2)}\n```\n\n"
+        f"Planner model: `{result.planner_model}`\n\nJudge: `{result.judge}`\n"
+        f"Judge model: `{result.scores.get('judge_model', '')}`\n\n## Statistics\n```json\n"
+        f"{json.dumps(result.stats, indent=2, default=str)}\n```\n\n## Scores\n```json"
+        f"\n{json.dumps(result.scores, indent=2)}\n```\n\n{result.narrative_md}\n",
+        encoding="utf-8",
+    )
     payload = result.__dict__.copy()
     payload["plan"] = result.plan.__dict__
     json_path.write_text(json.dumps(payload, default=_json_default, indent=2), encoding="utf-8")
