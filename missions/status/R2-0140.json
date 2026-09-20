@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:58:43Z",
-  "updated_at": "2026-09-20T12:59:49Z",
+  "updated_at": "2026-09-20T13:00:36Z",
   "finished_at": "2026-09-20T12:59:49Z",
-  "elapsed_s": 66,
+  "elapsed_s": 113,
   "message": "Short-MOS reversal not supported as a trade: r=-0.064 (n=390), best lag 9d r=-0.145, but backtest hit 0.38 avg -1.2% excess -1.0% sharpe -0.80 actionability 0; sign favors long MOS instead",
   "run_folder": "missions/runs/20260920-239-gdelt-gkg-qatar-share_x_finance-mos-log-return",
   "scores": {
