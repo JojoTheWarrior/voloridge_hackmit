@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T03:56:51.358451+00:00",
+  "git_commit": "49d203ad675824a79186b3ab05ef6f5b372a9f1e",
+  "folder": "20260920-177-FAILED-r2-fuel-airspace-losers-crossref",
+  "mission_id": "R2-0064",
+  "hypothesis": "R2 | [fuel-airspace-losers] Crossref weekly Iran-conflict publication counts z-score > 1 precede sustained airline underperformance vs SPY (-); trade short JETS vs SPY 10d at 7d lag [research.iran.crossref_pubs -> finance.ratio.jets_spy]",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.iran.crossref_pubs": "2025-03..current week",
+    "finance.ratio.jets_spy": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
