@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.usa.events",
+  "indicator_b": "weather.kuwait.temp_mean",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "Heuristic keyword overlap with source-diverse catalogue entries."
+}
