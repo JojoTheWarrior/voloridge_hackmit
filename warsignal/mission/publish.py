@@ -209,7 +209,7 @@ def publish_run(folder):
     push = subprocess.run(["git", "push", "origin", "HEAD"], cwd=ROOT)
     if push.returncode:
         print("mission publish push failed; retrying after git pull --rebase", flush=True)
-        pull = subprocess.run(["git", "pull", "--rebase"], cwd=ROOT)
+        pull = subprocess.run(["git", "pull", "--rebase", "--autostash"], cwd=ROOT)
         if pull.returncode == 0:
             subprocess.run(["git", "push", "origin", "HEAD"], cwd=ROOT)
         else:
