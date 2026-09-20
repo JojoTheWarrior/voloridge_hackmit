@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0028",
+  "title": "[gas-lng] Doha CAMS NO2 20d z-score > 1 signals Ras Laffan restart and leads TTF",
+  "hypothesis": "R2 | [gas-lng] Doha CAMS NO2 20d z-score > 1 signals Ras Laffan restart and leads TTF log returns by 3 days (-); trade short TTF=F 5d [airquality.doha.cams_no2 -> finance.TTF=F.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:32:55Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
