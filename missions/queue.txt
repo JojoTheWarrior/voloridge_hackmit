@@ -93,5 +93,4 @@ R2 | [oil-shipping] Reversal of R2-0016: Crossref weekly Hormuz publication spik
 R2 | [oil-shipping] Brent-WTI spread 20d z-score > 1 leads FRO log returns lower over 3 days (-) as spread spikes fade and tanker rally reverses; trade short FRO 3d [finance.spread.brent_wti -> finance.FRO.log_return] (parent: R2-0019)
 R2 | [oil-shipping] Reversal control: Brent price over-extension (20d z-score of BZ=F close > 1) is momentum not mean-reversion: Brent log return continues higher over the next 3 days (+); trade long BZ=F 3d [finance.BZ=F.close -> finance.BZ=F.log_return] (parent: R2-0018)
 R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 12-week z-score > 2 lead the XOP/SPY ratio lower by 5 days (-) as oil-equity relative attention peaks and fades; trade short XOP vs SPY 5d [research.hormuz.crossref_pubs -> finance.ratio.xop_spy] (parent: R2-0017)
-||||||| parent of 9859263 (status R2-0020: running)
 R2 | [oil-shipping] Null control: Tokyo daily precipitation 20d z-score > 1 has no relation to tanker equity returns at 0-5 day lags (0); no trade [weather.tokyo.precip -> finance.FRO.log_return] (parent: R2-0020)
