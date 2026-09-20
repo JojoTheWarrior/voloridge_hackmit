@@ -8,9 +8,15 @@ import pytest
 
 from server.app import create_app, explorer_csp
 from server.brief import EXPLORER_OPENING, REPORT_REQUEST, build_explorer_request
-from server.devin import Attachment, AttachmentRejected, DevinUnavailable, FakeDevin, SessionRef
-from server.poller import Poller
+from server.devin import (
+    Attachment,
+    AttachmentRejected,
+    DevinUnavailable,
+    FakeDevin,
+    SessionRef,
+)
 from server.explorer import unpack
+from server.poller import Poller
 from server.store import Store
 from server.sync import SyncResult
 
@@ -251,23 +257,23 @@ def test_reply_clears_the_question_it_answers(client, store):
     assert fetched["status"] == "working" and "needsUser" not in fetched
 
 
-def test_reply_when_devin_is_down_is_shown_in_the_thread_and_does_not_reopen(client, devin):
+def test_reply_when_devin_is_down_returns_failure_so_the_composer_retains_the_draft(client, devin):
     mission = _create(client).get_json()
     client.post(f"/api/missions/{mission['id']}/done")
     devin.send_error = DevinUnavailable("Devin message failed (503)")
     response = client.post(f"/api/missions/{mission['id']}/messages", json={"text": "Hello?"})
-    assert response.status_code == 202
+    assert response.status_code == 503
     fetched = client.get(f"/api/missions/{mission['id']}").get_json()
     assert fetched["status"] == "done"
-    assert [e["kind"] for e in fetched["events"]][-2:] == ["user_message", "error"]
-    assert "did not reach Devin" in fetched["events"][-1]["text"]
+    assert "Could not confirm delivery" in response.get_json()["message"]
+    assert not any(e.get("text") == "Hello?" for e in fetched["events"])
 
 
 def test_reply_to_a_mission_without_a_session_explains_itself(client, devin):
     devin.create_error = DevinUnavailable("down")
     mission = _create(client).get_json()
     response = client.post(f"/api/missions/{mission['id']}/messages", json={"text": "Try again"})
-    assert response.status_code == 202
+    assert response.status_code == 409
     fetched = client.get(f"/api/missions/{mission['id']}").get_json()
     assert fetched["status"] == "failed"
     assert fetched["events"][-1]["kind"] == "error"
@@ -903,24 +909,26 @@ def test_end_to_end_with_the_fake_and_the_poller(store):
 
     mission = _create(client).get_json()
     assert "sessionUrl" not in mission
+    assert client.post(f"/api/missions/{mission['id']}/messages", json={"text": "Keep the scope narrow"}).status_code == 202
     for _ in range(12):
         poller.tick()
         clock[0] += 5
     waiting = client.get(f"/api/missions/{mission['id']}").get_json()
-    assert waiting["status"] == "waiting"
+    assert waiting["status"] == "done"
+    assert waiting["report"]["headline"]
     assert {e["artifact"]["type"] for e in waiting["events"] if e["kind"] == "artifact"} == {
         "chart", "images", "relation", "table", "stats", "image"}
 
     client.post(f"/api/missions/{mission['id']}/messages", json={"text": "What about the outlier?"})
     assert client.get(f"/api/missions/{mission['id']}").get_json()["status"] == "working"
-    for _ in range(4):
+    for _ in range(6):
         poller.tick()
         clock[0] += 5
     replied = client.get(f"/api/missions/{mission['id']}").get_json()
-    assert replied["status"] == "waiting"
-    assert len(replied["events"]) == len(waiting["events"]) + 4
+    assert replied["status"] == "done"
+    assert replied["report"]["summary"] != waiting["report"]["summary"]
     assert [e["text"] for e in replied["events"] if e["kind"] == "user_message"] == [
-        HYPOTHESIS, "What about the outlier?"]
+        HYPOTHESIS, "Keep the scope narrow", "What about the outlier?"]
 
     client.post(f"/api/missions/{mission['id']}/done")
     assert client.get("/api/missions").get_json()[0]["status"] == "done"
@@ -938,6 +946,7 @@ def test_report_end_to_end_with_the_fake_and_the_poller(store):
     client = create_app(store, fake, demo=True).test_client()
     poller = Poller(store, fake)
     mission_id = _create(client).get_json()["id"]
+    store.set_autonomy(mission_id, auto_phase="")  # Legacy manual-report flow remains supported.
     _tick(poller, clock, 12)
     before = client.get(f"/api/missions/{mission_id}").get_json()
     assert (before["status"], before["reportPending"]) == ("waiting", False)
@@ -979,6 +988,7 @@ def test_explorer_end_to_end_with_the_fake_and_the_poller(store, kit):
     client = create_app(store, fake, demo=True, kit_dir=kit).test_client()
     poller = Poller(store, fake)
     mission_id = _create(client).get_json()["id"]
+    store.set_autonomy(mission_id, auto_phase="")  # Legacy manual-explorer flow remains supported.
     _tick(poller, clock, 12)
     before = client.get(f"/api/missions/{mission_id}").get_json()
     assert (before["status"], before["explorerPending"], "explorer" in before) == ("waiting", False, False)

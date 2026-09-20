@@ -12,12 +12,12 @@ describe('StatusDot', () => {
     expect(screen.getByRole('img', { name: label })).toBeInTheDocument()
   })
 
-  it('fills and pulses the working dot', () => {
+  it('shows a spinning ring while working', () => {
     render(<StatusDot status="working" />)
     const circle = screen.getByRole('img').querySelector('circle')
-    expect(circle).toHaveAttribute('fill', 'currentColor')
-    expect(circle).toHaveClass('animate-pulse')
-    expect(screen.getByRole('img').querySelector('path')).toBeNull()
+    expect(circle).toHaveAttribute('fill', 'none')
+    expect(screen.getByRole('img').querySelector('g')).toHaveClass('animate-spin')
+    expect(screen.getByRole('img').querySelector('path')).toBeInTheDocument()
   })
 
   it.each(['waiting', 'done', 'failed'] as const)('draws %s as a still, hollow ring', (status) => {

@@ -16,11 +16,16 @@ from urllib.parse import quote, unquote, urljoin, urlsplit
 
 import requests
 
-from server.brief import KIT_GUIDE, REPORT_REQUEST, is_explorer_request, read_explorer_request
+from server.brief import (
+    KIT_GUIDE,
+    REPORT_REQUEST,
+    is_explorer_request,
+    read_explorer_request,
+)
 from server.explorer import DEFAULT_ENTRY, KIT_DIR, kit_paths
 from warsignal.config import env
 
-DEFAULT_MAX_ACU = 5
+DEFAULT_MAX_ACU = None
 DEFAULT_MODE = "fast"
 DEVIN_MODES = ("normal", "fast", "lite", "ultra", "fusion")
 MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
@@ -112,7 +117,7 @@ class AttachmentUnavailable(AttachmentRejected):
 
 
 class DevinClient(Protocol):
-    def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int) -> SessionRef: ...
+    def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int | None) -> SessionRef: ...
     def get_session(self, session_id: str) -> SessionSnapshot: ...
     def list_messages(self, session_id: str) -> list[DevinMessage]: ...
     def send_message(self, session_id: str, text: str) -> None: ...
@@ -134,9 +139,9 @@ def devin_mode() -> str:
     return mode if mode in DEVIN_MODES else DEFAULT_MODE
 
 
-def max_acu() -> int:
+def max_acu() -> int | None:
     try:
-        value = int(env("KINGDOM_MAX_ACU", str(DEFAULT_MAX_ACU)))
+        value = int(env("KINGDOM_MAX_ACU", "0"))
     except ValueError:
         return DEFAULT_MAX_ACU
     return value if value > 0 else DEFAULT_MAX_ACU
@@ -163,14 +168,15 @@ class V3DevinClient:
     def __repr__(self) -> str:
         return f"V3DevinClient(mode={self.mode!r})"
 
-    def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int) -> SessionRef:
+    def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int | None) -> SessionRef:
         body = {
             "prompt": prompt,
             "title": title,
-            "max_acu_limit": max_acu,
             "devin_mode": self.mode,
             "structured_output_schema": schema,
         }
+        if max_acu is not None:
+            body["max_acu_limit"] = max_acu
         created = self._call("POST", self._sessions(), "session creation", json=body)
         session_id = created.get("session_id") if isinstance(created, dict) else None
         if not isinstance(session_id, str) or not session_id:
@@ -566,7 +572,7 @@ class FakeDevin:
         self._sessions: dict[str, _FakeSession] = {}
         self._lock = threading.Lock()
 
-    def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int) -> SessionRef:
+    def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int | None) -> SessionRef:
         created = self._clock()
         with self._lock:
             # The id carries its own start time, so a restarted server can replay the run from the id alone.

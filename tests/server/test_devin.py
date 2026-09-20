@@ -483,7 +483,7 @@ def test_devin_mode_falls_back_to_fast(monkeypatch, value, mode):
     assert make_client()[0].mode == mode
 
 
-@pytest.mark.parametrize("value, expected", [(None, 5), ("", 5), ("3", 3), ("0", 5), ("-2", 5), ("lots", 5)])
+@pytest.mark.parametrize("value, expected", [(None, None), ("", None), ("3", 3), ("0", None), ("-2", None), ("lots", None)])
 def test_max_acu(monkeypatch, value, expected):
     if value is None:
         monkeypatch.delenv("KINGDOM_MAX_ACU", raising=False)
@@ -575,6 +575,12 @@ def test_create_session_request_and_response(http, client):
 def test_create_session_without_url_is_tolerated(http, client):
     http.add(SELF, Response(body={"session_id": "devin-abc"}))
     assert client.create_session("p", title="t", schema={}, max_acu=1) == SessionRef("devin-abc", None)
+
+
+def test_uncapped_session_omits_the_usage_limit(http, client):
+    http.add(SELF, Response(body={"session_id": "devin-abc"}))
+    client.create_session("p", title="t", schema={}, max_acu=None)
+    assert "max_acu_limit" not in http.calls[-1]["json"]
 
 
 @pytest.mark.parametrize("body", [{}, {"session_id": ""}, {"session_id": 7}, ["x"], None])

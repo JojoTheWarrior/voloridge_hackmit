@@ -8,6 +8,7 @@ from urllib.parse import quote, urlsplit
 from flask import Flask, Response, jsonify, request, send_file
 from werkzeug.exceptions import HTTPException
 
+from server.autonomy import CONTINUE
 from server.brief import (
     OUTPUT_SCHEMA,
     REPORT_REQUEST,
@@ -16,8 +17,22 @@ from server.brief import (
     derive_title,
     session_title,
 )
-from server.devin import AttachmentRejected, DevinClient, DevinUnavailable, devin_mode, make_client, max_acu
-from server.explorer import DOCUMENT_EXTENSIONS, KIT_DIR, content_type, extension, read_kit, site_file
+from server.devin import (
+    AttachmentRejected,
+    DevinClient,
+    DevinUnavailable,
+    devin_mode,
+    make_client,
+    max_acu,
+)
+from server.explorer import (
+    DOCUMENT_EXTENSIONS,
+    KIT_DIR,
+    content_type,
+    extension,
+    read_kit,
+    site_file,
+)
 from server.poller import Poller
 from server.research import MAX_REFERENCE_CHARS, RESEARCH_DIR, list_findings
 from server.store import MissionRow, Store
@@ -129,6 +144,7 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
         mission = store.create_mission(
             hypothesis, title=title, dataset_ids=[d["id"] for d in datasets], reference=reference, prompt=prompt
         )
+        store.set_autonomy(mission.id, auto_phase="research")
         store.append_event(mission.id, "user_message", {"text": hypothesis})
         try:
             session = client.create_session(
@@ -148,26 +164,31 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
 
     @app.post("/api/missions/<mission_id>/messages")
     def send_message(mission_id: str):
-        mission = require_mission(mission_id)
+        require_mission(mission_id)
         text = _text(_body().get("text"))
         if not text:
             raise Invalid("text", "Write a reply")
-        store.append_event(mission_id, "user_message", {"text": text})
-        if not mission.session_id:
-            store.append_event(mission_id, "error", {"text": NO_SESSION})
-            return jsonify({}), 202
-        try:
-            client.send_message(mission.session_id, text)
-        except DevinUnavailable as exc:
-            store.append_event(mission_id, "error", {"text": f"That reply did not reach Devin: {exc}"})
-        else:
+        with store.run_lock(mission_id):
+            mission = require_mission(mission_id)
+            if not mission.session_id:
+                return jsonify(message=NO_SESSION), 409
+            # Older sessions received the previous, approval-driven brief. Upgrade them on a reply.
+            outgoing = text if mission.auto_phase else f"{CONTINUE}\n\nLatest user direction:\n{text}"
+            try:
+                client.send_message(mission.session_id, outgoing)
+            except DevinUnavailable as exc:
+                return jsonify(message=f"Could not confirm delivery to Devin: {exc}"), 503
+            store.append_event(mission_id, "user_message", {"text": text})
+            if not mission.auto_phase:
+                store.set_autonomy(mission_id, auto_phase="research")
             store.reopen(mission_id)
         return jsonify({}), 202
 
     @app.post("/api/missions/<mission_id>/done")
     def mark_done(mission_id: str):
         require_mission(mission_id)
-        store.mark_done(mission_id)
+        with store.run_lock(mission_id):
+            store.mark_done(mission_id)
         return jsonify({})
 
     @app.post("/api/missions/<mission_id>/report")
@@ -256,6 +277,10 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
 def serve(host: str, port: int, db: str | Path) -> None:
     store = Store(db)
     client, demo = make_client()
+    # Existing live sessions still have the older brief. Adopt them once; completed history stays closed.
+    for mission in store.live_missions():
+        if not mission.auto_phase and mission.status in ("working", "waiting"):
+            store.set_autonomy(mission.id, auto_phase="adopt")
     Poller(store, client).start()
     print(f"Kingdom server on http://{host}:{port} ({'demo mode' if demo else 'live Devin'})")
     create_app(store, client, demo=demo).run(host=host, port=port, threaded=True)

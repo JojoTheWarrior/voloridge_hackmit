@@ -77,13 +77,19 @@ ADDED_MISSION_COLUMNS = (
     ("explorer_requested_at", "text"),
     ("explorer_restore_done", "integer not null default 0"),
     ("explorer_seen_version", "integer not null default 0"),
+    ("auto_phase", "text not null default ''"),
+    ("revision", "integer not null default 0"),
+    ("last_snapshot", "text not null default ''"),
+    ("awaiting_at", "text"),
+    ("auto_nudges", "integer not null default 0"),
 )
 
 _MISSION_COLUMNS = (
     "id, title, hypothesis, reference, prompt, status, created_at, updated_at, dataset_ids, "
     "session_id, session_url, needs_user, answered_needs_user, failures, "
     "report, report_pending, report_requested_at, report_restore_done, "
-    "explorer, explorer_pending, explorer_requested_at, explorer_restore_done, explorer_seen_version"
+    "explorer, explorer_pending, explorer_requested_at, explorer_restore_done, explorer_seen_version, "
+    "auto_phase, revision, last_snapshot, awaiting_at, auto_nudges"
 )
 
 
@@ -123,6 +129,11 @@ class MissionRow:
     # The highest version Devin has offered so far, used or rejected. Only a higher one is a new build,
     # so an archive that was turned down is not fetched again when the user asks for another.
     explorer_seen_version: int
+    auto_phase: str = ""
+    revision: int = 0
+    last_snapshot: str = ""
+    awaiting_at: str | None = None
+    auto_nudges: int = 0
 
     @property
     def awaiting(self) -> bool:
@@ -140,6 +151,7 @@ class Store:
     def __init__(self, path: str | Path, *, now: Callable[[], str] = utc_now):
         self._now = now
         self._lock = threading.RLock()
+        self._run_locks: dict[str, threading.RLock] = {}
         # Absolute, because explorer files are handed to Flask, which resolves relative paths against the package.
         path = Path(path).resolve()
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -194,7 +206,23 @@ class Store:
 
     def mark_done(self, mission_id: str) -> None:
         with self._lock, self._db:
-            self._update(mission_id, status="done", needs_user=None)
+            mission = self._require(mission_id)
+            self._update(mission_id, status="done", needs_user=None, revision=mission.revision + 1,
+                         auto_phase="complete" if mission.auto_phase else "", awaiting_at=None)
+
+    def run_lock(self, mission_id: str):
+        """Serialize commands for one session without blocking other missions or database reads."""
+        with self._lock:
+            return self._run_locks.setdefault(mission_id, threading.RLock())
+
+    def set_autonomy(self, mission_id: str, **fields: object) -> None:
+        with self._lock, self._db:
+            self._update(mission_id, **fields)
+
+    def record_snapshot(self, mission_id: str, fingerprint: str) -> None:
+        # A poll is not itself research activity: do not advance the visible last-update timestamp.
+        with self._lock, self._db:
+            self._db.execute("update missions set last_snapshot = ? where id = ?", (fingerprint, mission_id))
 
     def reopen(self, mission_id: str) -> None:
         with self._lock, self._db:
@@ -205,6 +233,10 @@ class Store:
                 needs_user=None,
                 answered_needs_user=mission.needs_user or mission.answered_needs_user,
                 failures=0,
+                revision=mission.revision + 1,
+                auto_phase="research" if mission.auto_phase else "",
+                awaiting_at=self._now(),
+                auto_nudges=0,
                 # A reply is the user carrying on, so a pending report or explorer no longer closes the mission.
                 report_restore_done=0,
                 explorer_restore_done=0,
@@ -266,11 +298,15 @@ class Store:
             ).fetchall()
         return [{"id": r["id"], "at": r["at"], "kind": r["kind"], **json.loads(r["payload"])} for r in rows]
 
-    def apply_sync(self, mission_id: str, result: SyncResult, *, expected_status: str) -> None:
+    def apply_sync(
+        self, mission_id: str, result: SyncResult, *, expected_status: str, expected_revision: int | None = None
+    ) -> bool:
         """Persist a sync. `expected_status` is the status the sync was computed from:
         if the user marked the mission done or replied meanwhile, their status wins."""
         with self._lock, self._db:
             mission = self._require(mission_id)
+            if expected_revision is not None and mission.revision != expected_revision:
+                return False
             changed = False
             if result.report_settled and mission.report_pending:
                 self._settle_report(mission_id, result.report)
@@ -292,6 +328,7 @@ class Store:
                 self._update(mission_id, status=result.status, needs_user=result.needs_user)
             elif changed:
                 self._touch(mission_id)
+            return True
 
     # ---------- datasets ----------
 

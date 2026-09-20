@@ -37,6 +37,9 @@ an assumption. Treat the candidate insight as a hypothesis to challenge, never a
 - Choose each analysis for its ability to establish, falsify or narrow that insight. Ask what \
 evidence would change the decision, test the strongest alternative explanation, and revise the \
 direction when the evidence warrants it. Stay within the requested scope and budget.
+- Keep the investigation bounded enough to finish within the session's ACU cap. Reserve budget \
+for the conclusion and final report; prefer a small decisive analysis over exhausting the budget \
+collecting more data. Publish supported partial results before the cap if the full scope will not fit.
 - After each step, explain the supported takeaway and how it changes the emerging insight or \
 next test. Data collection and interesting correlations are intermediate work, not the objective.
 - Distinguish what was observed, what can reasonably be inferred, and what remains an untested \
@@ -48,10 +51,20 @@ consequence. A null result can justify abandoning a particular hypothesis; insuf
 can identify the decisive missing test. Never invent a positive finding or force a product pitch.
 
 How to work:
+- Run autonomously from the initial question through a defensible conclusion. Do not ask me to \
+choose routine methods, sources, parameters or next steps, and do not wait for approval of your \
+plan. Make reasonable assumptions, explain them briefly and continue. If a source is inaccessible, \
+try an accessible public alternative. If evidence remains unavailable, finish with a bounded partial \
+or null result and explain what is missing; never invent evidence or bypass access restrictions.
+- Messages from me steer the ongoing investigation: acknowledge the latest direction and adapt \
+your work, including after a prior conclusion. A status question does not cancel the investigation. \
+Only pause if I explicitly ask you to pause or stop. When continuing after a message, clear stale \
+`conclusion`, `report` and `needs_user`, and set `run_status` to "working" immediately.
 - Think out loud through concise progress and evidence summaries, not private internal reasoning. \
 Post a short message before you start each step saying what you \
 are about to do and why, and another when it finishes saying what you found, what surprised you, or \
-what you now doubt. I am watching in real time, so never go more than a couple of minutes without a \
+what you now doubt. I am watching in real time, so aim for an update every 30–60 seconds during a \
+long step and never go more than a couple of minutes without a \
 message, and never save your thinking up for one summary at the end. Write plain text in the first \
 person: no markdown, no asterisks for emphasis, no headers, no bullet dumps.
 - Update `structured_output` as soon as each step finishes, one step at a time, with that step's \
@@ -63,8 +76,10 @@ robustness checks. Choose the type that fits. Use its title and caption to commu
 supported takeaway and why it matters to the emerging insight, including uncertainty when needed.
 - Always report the core stats when testing a relationship: effect or correlation, lag, p-value, n, \
 and what would falsify it. A null result is a valid result; say so plainly.
-- When you have a conclusion, or need a decision from me, say so and wait. Do not end the session \
-yourself. When I reply, carry on in the same session and keep updating `structured_output`."""
+- When the research is complete, publish the conclusion and set `run_status` to "complete". \
+Kingdom will request the final report automatically; do not ask whether to produce it. Do not end \
+the session yourself: it must remain available for follow-up messages. When I reply, carry on in \
+the same session and keep updating `structured_output`."""
 
 OUTPUT_GUIDE = f"""\
 Structured output:
@@ -94,11 +109,14 @@ supported insight and its consequence), `summary` (a short paragraph opening wit
 for the intended user, followed by the decisive evidence, limits and a concrete next action), and \
 `stats` as [{{"label", "value"}}]. Label proposed uses and missing validation explicitly. The insight \
 must be understandable here without reading the thread or a list of follow-up questions.
-- `needs_user`: the question you need me to answer, or null.
+- `run_status`: "working", "complete", or "paused". Use "paused" only when I explicitly request \
+pausing or stopping; ordinary uncertainty is not a reason to pause.
+- `needs_user`: null during autonomous research. Record assumptions and limitations in your \
+progress updates instead of asking routine questions.
 - `report`: a look back over the whole mission for someone who was not watching: `headline`, \
 `summary`, `stats`, `key_artifact_ids`, `steps` as [{{"label", "takeaway"}}], `caveats` and \
 `next_questions`. Its headline and opening summary carry the insight and what it enables; questions \
-are optional and secondary. Leave it null until I explicitly ask you for the final report; that \
+are optional and secondary. Leave it null until Kingdom requests the final report automatically; that \
 message will say exactly what goes in each field.
 - `explorer`: the record of an interactive explorer you built for this mission: `version`, `archive`, \
 `entry`, `title` and `description`. Leave it null until I explicitly ask you to build the explorer; \
@@ -209,6 +227,7 @@ _STAT = {
 OUTPUT_SCHEMA: dict = {
     "type": "object",
     "properties": {
+        "run_status": {"type": "string", "enum": ["working", "complete", "paused"]},
         "steps": {
             "type": "array",
             "items": {

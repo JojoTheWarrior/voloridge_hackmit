@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ReplyComposer } from './ReplyComposer'
 
@@ -13,9 +13,18 @@ const button = () => screen.getByRole('button', { name: 'Send reply' })
 describe('ReplyComposer', () => {
   it('invites a reply without stealing focus', () => {
     renderComposer()
-    expect(input()).toHaveAttribute('placeholder', 'Reply to Devin')
+    expect(input()).toHaveAttribute('placeholder', 'Ask a follow-up or take this further…')
     expect(input()).not.toHaveFocus()
     expect(button()).toHaveAttribute('aria-disabled', 'true')
+  })
+
+  it('invites steering during a run and stays available to send it', async () => {
+    const onSend = vi.fn().mockResolvedValue(undefined)
+    render(<ReplyComposer onSend={onSend} working />)
+    expect(input()).toHaveAttribute('placeholder', 'Steer the research…')
+    expect(screen.getByText('Runs on its own. Send a message anytime to guide it.')).toBeInTheDocument()
+    await userEvent.setup().type(input(), 'Focus on drought{Enter}')
+    expect(onSend).toHaveBeenCalledExactlyOnceWith('Focus on drought')
   })
 
   it('sends the trimmed text on Enter and clears the box', async () => {
@@ -64,7 +73,7 @@ describe('ReplyComposer', () => {
     expect(button()).toHaveAttribute('aria-disabled', 'true')
     expect(input()).toHaveValue('Only once')
 
-    finish()
+    await act(async () => finish())
     await vi.waitFor(() => expect(input()).toHaveValue(''))
 
     await user.type(input(), 'And again{Enter}')

@@ -92,7 +92,15 @@ Null results and insufficient evidence should change the recommendation rather
 than force a positive finding. These are prompt requirements; live adherence has
 not been evaluated for this revision. Existing reports are not rewritten.
 
-The mission header has **Thread**, **Report**, and **Explorer** views. Generate
+Missions research autonomously, choose routine methods without approval, and
+generate their final report automatically. Send a message during a run or afterward
+to redirect the same session. The thread shows a working spinner, latest step and
+last reported update; progress summaries and artifacts refresh as Devin emits them
+(server polls every 2 seconds). Explicit pause requests are respected. Routine
+stalls get at most two automatic recovery attempts; delivery failures and the
+organization-level usage limits remain visible errors, with unsent steering drafts preserved.
+
+The mission header has **Thread**, **Report**, and **Explorer** views. Regenerate
 a report after findings arrive, follow an "Ask next" link to prepare a reply,
 or export the report through the browser's print dialog. Explorers are versioned
 static sites, served in an opaque-origin sandbox. The Leaflet kit supports maps,
@@ -150,19 +158,19 @@ does not show a mode label. The light/dark toggle is in the top-right header.
 
 **Live mode.** Put a Devin **v3 service-user key** (`cog_…`) in `.env` as
 `DEVIN_API_KEY` (the file is gitignored; never commit it). Each mission creates
-one Devin session. Spend is capped per mission:
+one Devin session. Kingdom does not impose a per-mission ACU cap by default:
 
 ```bash
 docker compose up --build -d
 ```
 
 This switches the existing stack to real Devin and the local `.kingdom`
-database, with a 5-ACU cap per mission. It does not start another server or
+database, with no Kingdom-imposed ACU cap per mission. It does not start another server or
 create a mission. Use the demo override above to return to the separate demo database.
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `KINGDOM_MAX_ACU` | `5` | `max_acu_limit` for each session |
+| `KINGDOM_MAX_ACU` | `0` | No app cap; a positive value sets `max_acu_limit` per session. Organization limits still apply. |
 | `KINGDOM_DEVIN_MODE` | `fast` | Devin mode: `lite`, `fast`, `normal`, … |
 | `KINGDOM_FAKE_DEVIN` | unset | `1` forces demo mode even with a key |
 

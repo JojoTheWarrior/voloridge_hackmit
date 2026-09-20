@@ -6,10 +6,11 @@ Pick up on branch **`devin-backend`**.
 ## What Kingdom is
 
 You link datasets, start a **mission** (a question), and Devin researches it
-live. The app shows Devin's thinking as prose, its steps, and visual artifacts
-as they are produced; you reply to steer it like a chat and mark it done when
-satisfied. Each mission can then produce a **report** (a typeset, shareable
-summary) and an **explorer** (a small interactive site Devin writes for that
+autonomously. The app shows progress summaries, steps, visual artifacts and a
+persistent working spinner as they arrive. Messages steer the same session while
+running or afterward. Routine decisions do not require approval; completion
+automatically produces a **report** (a typeset, shareable summary) and closes the
+run. An **explorer** can be requested separately (a small interactive site Devin writes for that
 mission, for findings that are places rather than statistics — the motivating
 example is "which buildings in Ukraine likely have asbestos roofs").
 
@@ -32,14 +33,14 @@ same palette turned over. Rules live in
 Run it:
 
 ```bash
-docker compose up --build -d          # real Devin, 5-ACU cap per mission
+docker compose up --build -d          # real Devin, no app ACU cap
 # UI: http://localhost:5173, API: http://localhost:8030
 ```
 
 The original Python/Vite commands still work at ports 8030/5173. See README
 and AGENTS.md for container checks. Base Compose uses the local live DB.
 
-**Current running configuration:** Tom requested live Devin with a 5-ACU cap.
+**Current running configuration:** Live Devin with no Kingdom-imposed ACU cap; Tom authorized removing the limit after it stopped a mission.
 `docker compose up -d` uses the same two containers and the existing `.kingdom`
 live database. The `compose.demo.yaml` override provides the isolated scripted
 demo when explicitly wanted. No test mission was launched for this switch.
@@ -47,7 +48,7 @@ demo when explicitly wanted. No test mission was launched for this switch.
 **Demo mode** (no key, or `KINGDOM_FAKE_DEVIN=1`): a scripted fake Devin plays
 a full mission, a report, and an explorer. Free. **Live mode**: a v3
 service-user key (`cog_…`) in `.env` as `DEVIN_API_KEY`; each mission is one
-Devin session capped by `KINGDOM_MAX_ACU` (5) in `KINGDOM_DEVIN_MODE` (`fast`).
+Devin session with optional `KINGDOM_MAX_ACU` (0 means no app cap) in `KINGDOM_DEVIN_MODE` (`fast`).
 The key exists only in the local, gitignored `.env`. v1 endpoints reject it, so
 the old CLI's `--brain devin` does not work with it; only `server/` does.
 

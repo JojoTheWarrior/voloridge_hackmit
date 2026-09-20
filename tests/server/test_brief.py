@@ -96,7 +96,7 @@ def test_schema_shape():
     json.dumps(OUTPUT_SCHEMA)
     assert OUTPUT_SCHEMA["type"] == "object"
     properties = OUTPUT_SCHEMA["properties"]
-    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user", "report", "explorer"}
+    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user", "report", "explorer", "run_status"}
     assert properties["steps"]["items"]["properties"]["state"]["enum"] == ["active", "done"]
     artifact = properties["artifacts"]["items"]
     assert artifact["properties"]["type"]["enum"] == ["chart", "images", "relation", "table", "stats", "image"]

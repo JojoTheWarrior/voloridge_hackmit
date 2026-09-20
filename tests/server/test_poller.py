@@ -184,7 +184,42 @@ def test_mark_done_during_a_sync_is_not_undone(store, devin):
 
     Poller(store, MarksDoneMidSync()).tick()
     assert store.get_mission(mission.id).status == "done"
-    assert [e["text"] for e in store.list_events(mission.id)] == ["Late thought"]
+    assert store.list_events(mission.id) == []  # The entire stale response is discarded.
+
+
+def test_routine_pause_resumes_once_but_an_explicit_pause_is_respected(store, devin):
+    mission = _mission(store, "devin-a")
+    store.set_autonomy(mission.id, auto_phase="research")
+    sent = []
+    devin.send_message = lambda session_id, text: sent.append(text)
+    devin.snapshots["devin-a"] = SessionSnapshot("waiting", None, {"needs_user": "Choose a method?"})
+    poller = Poller(store, devin)
+    poller.tick()
+    poller.tick()  # The unchanged waiting snapshot is not another request.
+    assert len(sent) == 1
+    assert store.get_mission(mission.id).status == "working"
+    devin.snapshots["devin-a"] = SessionSnapshot("running", None, {"needs_user": None})
+    poller.tick()
+    devin.snapshots["devin-a"] = SessionSnapshot("waiting", None, {"run_status": "paused"})
+    poller.tick()
+    assert store.get_mission(mission.id).status == "waiting"
+    assert store.get_mission(mission.id).needs_user == "Paused at your request"
+    assert len(sent) == 1
+
+
+def test_steering_during_a_working_poll_discards_the_previous_response(store):
+    mission = _mission(store, "devin-a")
+
+    class SteeredMidSync(ScriptedDevin):
+        def list_messages(self, session_id):
+            store.reopen(mission.id)
+            return [DevinMessage("1", "devin", "Old response", "")]
+
+    devin = SteeredMidSync()
+    devin.snapshots["devin-a"] = SessionSnapshot("waiting", None, {"needs_user": "Old question?"})
+    Poller(store, devin).tick()
+    assert store.get_mission(mission.id).status == "working"
+    assert store.list_events(mission.id) == []
 
 
 def test_resumes_missions_from_disk_after_a_restart(tmp_path, devin):

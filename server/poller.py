@@ -4,12 +4,27 @@ import json
 import logging
 import threading
 from collections.abc import Callable
+from dataclasses import replace
+from hashlib import sha256
 
 from server.artifacts import ATTACHMENT_PREFIX
-from server.devin import Attachment, AttachmentRejected, AttachmentUnavailable, DevinClient, DevinUnavailable
+from server.autonomy import advance, waiting_for_start
+from server.devin import (
+    Attachment,
+    AttachmentRejected,
+    AttachmentUnavailable,
+    DevinClient,
+    DevinUnavailable,
+)
 from server.explorer import ArchiveRejected, unpack
 from server.store import MissionRow, Store, utc_now
-from server.sync import ExplorerDue, ExplorerOutcome, explorer_announced, explorer_due, sync
+from server.sync import (
+    ExplorerDue,
+    ExplorerOutcome,
+    explorer_announced,
+    explorer_due,
+    sync,
+)
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +40,7 @@ class Poller:
         store: Store,
         client: DevinClient,
         *,
-        interval: float = 5.0,
+        interval: float = 2.0,
         sleep: Callable[[float], object] | None = None,
         now: Callable[[], str] = utc_now,
     ):
@@ -76,9 +91,36 @@ class Poller:
             mission, self._store.list_events(mission.id), snapshot, messages, attachments,
             now=self._now(), explorer=explorer,
         )
-        self._store.apply_sync(mission.id, result, expected_status=mission.status)
-        if mission.failures:
-            self._store.clear_failures(mission.id)
+        fingerprint = sha256(json.dumps([
+            snapshot.structured_output,
+            [(m.id, m.text) for m in messages if m.role == "devin"],
+        ], sort_keys=True).encode()).hexdigest()
+        with self._store.run_lock(mission.id):
+            current = self._store.get_mission(mission.id)
+            if current.revision != mission.revision:
+                return
+            queued = waiting_for_start(mission, snapshot, fingerprint, self._now())
+            if queued or (mission.auto_phase and result.status == "waiting"):
+                result = replace(result, status="working", needs_user=None)
+            if not self._store.apply_sync(
+                mission.id, result, expected_status=mission.status, expected_revision=mission.revision
+            ):
+                return
+            if mission.failures:
+                self._store.clear_failures(mission.id)
+            if queued:
+                # Preserve the pre-message snapshot until Devin starts or emits genuinely new output.
+                if not mission.last_snapshot:
+                    self._store.record_snapshot(mission.id, fingerprint)
+                return
+            if (mission.awaiting_at and snapshot.status in ("waiting", "finished")
+                    and fingerprint == mission.last_snapshot):
+                self._store.fail(mission.id, "Devin has not picked up the latest message after two minutes. Send a message to retry.")
+                return
+            self._store.record_snapshot(mission.id, fingerprint)
+            if mission.awaiting_at:
+                self._store.set_autonomy(mission.id, awaiting_at=None)
+            advance(self._store, self._client, self._store.get_mission(mission.id), snapshot, now=self._now())
 
     def _fetch_explorer(
         self, mission: MissionRow, due: ExplorerDue, attachments: list[Attachment]
