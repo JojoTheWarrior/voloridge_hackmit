@@ -108,7 +108,12 @@ python main.py queue --n 5 --viz
 python main.py queue --n 5 --max-retries 1
 python main.py queue --reset
 python main.py queue --requeue-failed
+python main.py queue --add "Hormuz news share leads Brent-WTI spread" --push
 ```
+
+`queue --add` appends one line to `missions/queue.txt` (dedupes; `--round R2`
+prefixes the tag) so it appears under Kingdom's Queued Missions; `--push`
+commits only `queue.txt` and pushes so agents and other machines see it.
 
 ## Mission protocol
 

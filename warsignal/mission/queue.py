@@ -36,6 +36,25 @@ def pop_next(queue_path=ROOT / "missions" / "queue.txt"):
     return line
 
 
+def add(hypothesis, queue_path=ROOT / "missions" / "queue.txt", round_tag=None):
+    """Append one hypothesis line (optionally ``R2 | ...``); returns the line, or None if already queued."""
+    queue_path = Path(queue_path)
+    line = " ".join(hypothesis.split())
+    if not line:
+        raise ValueError("empty hypothesis")
+    if round_tag and not line.startswith(f"{round_tag} |"):
+        line = f"{round_tag} | {line}"
+    existing = queue_path.read_text(encoding="utf-8") if queue_path.exists() else ""
+    if line in existing.splitlines():
+        return None
+    queue_path.parent.mkdir(parents=True, exist_ok=True)
+    with queue_path.open("a", encoding="utf-8") as handle:
+        if existing and not existing.endswith("\n"):
+            handle.write("\n")
+        handle.write(line + "\n")
+    return line
+
+
 def mark_done(line):
     path = _ACTIVE_DIR / "in_progress.txt"
     lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []

@@ -69,6 +69,7 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py queue [--n N] [--no-ai] [--brain X] [--viz]` | Run queued hypotheses |
 | `python main.py queue --reset` | Restore `missions/queue.txt` from its backup |
 | `python main.py queue --requeue-failed` | Put failed hypotheses back in the queue |
+| `python main.py queue --add "A vs B" --push` | Append a hypothesis to `missions/queue.txt` (shows under Kingdom "Queued Missions"); `--push` publishes it |
 | `python main.py viz M... [--headless]` | Render a mission visualization |
 | `python main.py ui [--port 8000]` | Start the Flask hypothesis interface |
 | `python main.py graph [--port 8010] [--charts-port 8011]` | NL prompt → pygame chart web UI + launcher |

@@ -16,6 +16,9 @@ def main():
     status.add_argument("--push", action="store_true", help="commit only the status file (+queue if --followup) and push")
     queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true"); queue.add_argument("--max-retries", type=int, default=1); queue.add_argument("--publish", action="store_true"); queue.add_argument("--brain", choices=("devin", "openai", "heuristic")); queue.add_argument("--detach", action="store_true")
     queue.add_argument("--reset", action="store_true"); queue.add_argument("--requeue-failed", action="store_true")
+    queue.add_argument("--add", metavar="HYPOTHESIS", help="append a hypothesis to missions/queue.txt (Kingdom shows it under Queued Missions)")
+    queue.add_argument("--round", help="prefix the added line with a round tag, e.g. R2")
+    queue.add_argument("--push", action="store_true", help="with --add: commit queue.txt and push so other machines/agents see it")
     indicators = sub.add_parser("indicators"); indicators.add_argument("--source")
     fetch = sub.add_parser("fetch"); fetch.add_argument("--quick", action="store_true"); fetch.add_argument("--all", action="store_true")
     fetch.add_argument("--rebuild-cache", action="store_true")
@@ -84,6 +87,18 @@ def main():
             st.publish_status(args.mission_id, extra_paths=extra)
         print(json.dumps(st.read_status(args.mission_id) or current, indent=2))
     elif args.command == "queue":
+        if args.add:
+            from warsignal.mission import queue as q
+            from warsignal.mission.status import QUEUE, git_publish
+
+            line = q.add(args.add, round_tag=args.round)
+            if line is None:
+                print("already queued")
+            else:
+                print(f"queued: {line}")
+                if args.push:
+                    print("pushed" if git_publish([QUEUE], f"queue: {line[:60]}") else "push skipped")
+            return
         if args.detach:
             from warsignal.ai.devin_client import BrainUnavailable
             from warsignal.mission.detach import spawn_mission_agent
