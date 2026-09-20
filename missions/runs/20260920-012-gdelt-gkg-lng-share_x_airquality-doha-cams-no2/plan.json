@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.lng_share",
+  "indicator_b": "airquality.doha.cams_no2",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 7,
+  "window": "compare_pre_post",
+  "event_category": "domestic",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use global LNG-news salience (a proxy for the timing and intensity of the Qatar LNG halt, since no direct production series exists) and Doha NO2 anomalies versus the 2025 baseline to test whether air-quality in Doha measurably improved (lower NO2) around and after the March 2 2026 production halt, controlling for seasonality by using anomalies and comparing pre- vs post-event behavior."
+}

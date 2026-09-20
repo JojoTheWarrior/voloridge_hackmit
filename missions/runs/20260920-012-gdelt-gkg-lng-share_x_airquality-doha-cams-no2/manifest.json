@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:49:06.779677+00:00",
+  "git_commit": "054a7841c24268dcafd939b8f39bd6a9389edd92",
+  "folder": "20260920-012-gdelt-gkg-lng-share_x_airquality-doha-cams-no2",
+  "mission_id": "M20260920-31a0e4",
+  "hypothesis": "Doha air quality changed measurably after Qatar halted LNG production on March 2 2026.",
+  "status": "ok",
+  "n_obs": 566,
+  "r": -0.07571395911185483,
+  "perm_p": 0.18962075848303392,
+  "validity": 3.0,
+  "interestingness": 3.5,
+  "unexpectedness": 1.78,
+  "indicator_coverage": {
+    "gdelt.gkg.lng_share": "configured analysis window",
+    "airquality.doha.cams_no2": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
