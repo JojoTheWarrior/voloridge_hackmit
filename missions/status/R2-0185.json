@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0185",
+  "title": "[risk-macro-em] Null control: Crossref lithium weekly pubs 20d z-score > 1 shoul",
+  "hypothesis": "R2 | [risk-macro-em] Null control: Crossref lithium weekly pubs 20d z-score > 1 should NOT lead INDA returns by 1-5 days (-); if it matches the hormuz result the crossref->INDA channel is noise; trade short INDA 5d [research.lithium.crossref_pubs -> finance.INDA.log_return] (parent: R2-0087)",
+  "parent_mission_id": "R2-0087",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:24:42Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
