@@ -13,3 +13,13 @@ missions/viz_generated/
 missions/runs/.lock
 .pytest_cache
 .kingdom_cache/
+# Round 2: small shared caches committed so mission children start without fetching
+!data/raw/
+data/raw/*
+!data/raw/finance/
+!data/raw/crossref/
+!data/raw/open_meteo/
+!data/raw/open_meteo_aq/
+!data/cache/
+data/cache/*
+!data/cache/gdelt_daily.parquet
