@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:13:21.883552+00:00",
+  "git_commit": "f14df4bacf2a82725703c1a17986abd3dbc074f7",
+  "folder": "20260920-257-gdelt-gkg-drone-share_x_finance-ratio-jets-spy",
   "mission_id": "R2-0164",
-  "title": "Drone mentions vs JETS/SPY",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT GKG drone mention share 20d z-score > 1 precedes airline underperformance vs SPY (-); trade short JETS vs SPY 5d at 3d lag [gdelt.gkg.drone_share -> finance.ratio.jets_spy] (parent: R2-0064)",
-  "parent_mission_id": "R2-0064",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/d6f163b16c664ad48a78432db9169d07",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:13:12Z",
-  "updated_at": "2026-09-20T13:13:23Z",
-  "finished_at": null,
-  "elapsed_s": 11,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-257-gdelt-gkg-drone-share_x_finance-ratio-jets-spy",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 8.16
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.1154800413238529,
+  "perm_p": 0.11976047904191617,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 8.16,
   "trade_idea": {
     "instrument": "ratio:jets_spy",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 8.16,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.drone_share": "configured analysis window",
+    "finance.ratio.jets_spy": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

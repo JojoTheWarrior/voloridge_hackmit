@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT GKG drone mention share 20d z-score > 1 precedes airline underperformance vs SPY (-); trade short JETS vs SPY 5d at 3d lag [gdelt.gkg.drone_share -> finance.ratio.jets_spy] (parent: R2-0064)
