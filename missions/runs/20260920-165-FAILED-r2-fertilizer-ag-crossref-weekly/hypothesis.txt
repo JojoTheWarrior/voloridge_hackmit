@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Crossref weekly energy_security count 26w z-score > 1 leads YAR.OL returns by 6 days (+) tracking European gas-input anxiety; long YAR.OL 6d [research.oil_price.crossref_pubs -> finance.YAR.OL.log_return]

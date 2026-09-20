@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T03:47:15.982160+00:00",
+  "git_commit": "02273233db4573b5ff53a250a40b8171523d3607",
+  "folder": "20260920-165-FAILED-r2-fertilizer-ag-crossref-weekly",
+  "mission_id": "R2-0048",
+  "hypothesis": "R2 | [fertilizer-ag] Crossref weekly energy_security count 26w z-score > 1 leads YAR.OL returns by 6 days (+) tracking European gas-input anxiety; long YAR.OL 6d [research.oil_price.crossref_pubs -> finance.YAR.OL.log_return]",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.oil_price.crossref_pubs": "2025-03..current week",
+    "finance.YAR.OL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
