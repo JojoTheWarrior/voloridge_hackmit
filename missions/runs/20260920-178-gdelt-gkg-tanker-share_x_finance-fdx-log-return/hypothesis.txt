@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT tanker GKG share 20d z-score > 1 raises jet-fuel and bunker cost fears for freight (-); trade short FDX 3d at 3d lag [gdelt.gkg.tanker_share -> finance.FDX.log_return]

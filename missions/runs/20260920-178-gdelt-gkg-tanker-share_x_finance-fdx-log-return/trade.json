@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 28,
+    "hit_rate": 0.39285714285714285,
+    "avg_return": -0.005372258390542934,
+    "baseline_avg_return": -0.0013064636984234598,
+    "excess_return": -0.004065794692119475,
+    "sharpe_like": -1.6944875700847641,
+    "max_drawdown": -0.16438281166624413,
+    "total_return": -0.14350224074060192
+  },
+  "fit_pre_war": {
+    "n_trades": 17,
+    "hit_rate": 0.23529411764705882,
+    "avg_return": -0.01043669723910566,
+    "baseline_avg_return": -0.002049610418492649,
+    "excess_return": -0.008387086820613012,
+    "sharpe_like": -2.2391881426145606,
+    "max_drawdown": -0.16438281166624413,
+    "total_return": -0.16608603416637902
+  },
+  "test_war": {
+    "n_trades": 11,
+    "hit_rate": 0.6363636363636364,
+    "avg_return": 0.0024546016481449173,
+    "baseline_avg_return": 3.3992254394990558e-06,
+    "excess_return": 0.0024512024227054184,
+    "sharpe_like": 1.2169186482394483,
+    "max_drawdown": -0.01900406790750686,
+    "total_return": 0.027081682704763743
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "FDX",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.tanker_share rolling_zscore_20d > 1 at close -> short FDX next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.39285714285714285,
+    "avg_return": -0.005372258390542934,
+    "excess_return": -0.004065794692119475,
+    "n_trades": 28,
+    "sharpe_like": -1.6944875700847641,
+    "max_drawdown": -0.16438281166624413,
+    "oos_n_trades": 11,
+    "oos_avg_return": 0.0024546016481449173,
+    "oos_hit_rate": 0.6363636363636364,
+    "actionability": 2.07,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
