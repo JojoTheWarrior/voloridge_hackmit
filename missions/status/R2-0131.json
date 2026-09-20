@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0131",
+  "title": "[gas-lng] Crossref hormuz share of all publications (control-normalized) 8-week ",
+  "hypothesis": "R2 | [gas-lng] Crossref hormuz share of all publications (control-normalized) 8-week z-score > 1 leads TTF gas futures returns by 7 days (+) as chokepoint attention prices European supply risk; trade long TTF=F 7d [research.hormuz.crossref_share -> finance.TTF=F.log_return] (parent: R2-0031)",
+  "parent_mission_id": "R2-0031",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:53:16Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
