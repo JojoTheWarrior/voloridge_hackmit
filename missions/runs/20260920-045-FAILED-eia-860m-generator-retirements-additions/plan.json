@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.generators.new_capacity_mw",
+  "indicator_b": "utility.generators.retired_capacity_mw",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "To test whether 2026 EIA-860m generator additions and retirements shifted toward gas and storage versus 2025, we compare monthly new and retired capacity levels pre- and post-war; the catalogue lacks fuel-specific series, so we can only infer mix shifts indirectly from aggregate capacity timing, not directly by fuel type."
+}
