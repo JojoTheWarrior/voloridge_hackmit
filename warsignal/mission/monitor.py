@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 import re
 import subprocess
 import threading
@@ -65,8 +66,13 @@ def _iso_from_ts(ts: Optional[float]) -> Optional[str]:
         return None
 
 
-def _status_file(path: Path, now: float) -> dict:
-    data = _read_json(path)
+def _status_file(path: Path, now: float) -> Optional[dict]:
+    try:
+        data = json.loads(path.read_bytes().decode("utf-8", errors="replace"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(data, dict) or not data:
+        return None
     stage = _pick_str(data.get("stage"))
     progress = _num(data.get("progress"))
     if progress is None:
@@ -76,16 +82,15 @@ def _status_file(path: Path, now: float) -> dict:
     started_at = _pick_str(data.get("started_at")) or None
     finished_at = _pick_str(data.get("finished_at")) or None
     elapsed = _num(data.get("elapsed_s"))
-    if elapsed is None:
-        started_ts = _parse_ts(started_at or "")
-        if state == "running":
-            elapsed = (now - started_ts) if started_ts is not None else 0.0
+    started_ts = _parse_ts(started_at or "")
+    if state == "running":
+        elapsed = (now - started_ts) if started_ts is not None else (elapsed or 0.0)
+    elif elapsed is None:
+        finished_ts = _parse_ts(finished_at or "")
+        if started_ts is not None and finished_ts is not None:
+            elapsed = finished_ts - started_ts
         else:
-            finished_ts = _parse_ts(finished_at or "")
-            if started_ts is not None and finished_ts is not None:
-                elapsed = finished_ts - started_ts
-            else:
-                elapsed = 0.0
+            elapsed = 0.0
     scores_in = data.get("scores") if isinstance(data.get("scores"), dict) else {}
     scores = {key: _num(scores_in.get(key)) for key in _SCORE_KEYS}
     brains = data.get("brain_sessions")
@@ -132,7 +137,9 @@ def read_status_dir(status_dir: Path, now: float) -> list[dict]:
                 continue
         except OSError:
             continue
-        out.append(_status_file(path, now))
+        entry = _status_file(path, now)
+        if entry is not None:
+            out.append(entry)
 
     def _key(entry: dict):
         rank = {"running": 0, "queued": 1}.get(entry["state"], 2)
@@ -276,6 +283,16 @@ def _match_status(mission_id: str, folder: str, idx: dict) -> Optional[dict]:
     return idx["by_id"].get(mission_id) or idx["by_folder"].get(folder)
 
 
+_EXTRA_FILES = ("manifest.json", "stats.json", "judge.json", "trade_idea.json")
+
+
+def _mtime_or_none(path: Path) -> Optional[float]:
+    try:
+        return path.stat().st_mtime
+    except OSError:
+        return None
+
+
 def _run_extra(path: Path) -> dict:
     """Extra per-folder fields beyond what ``kingdom.data.read_run`` returns."""
     manifest = _read_json(path / "manifest.json")
@@ -316,19 +333,13 @@ def build_runs(root: Path, results: dict, statuses: list[dict], cache: dict) -> 
     seen_extra = set()
     out = []
     for m in missions:
-        try:
-            manifest_mtime = (m.path / "manifest.json").stat().st_mtime
-        except OSError:
-            manifest_mtime = None
-        extra = None
-        if manifest_mtime is not None:
-            cached = extra_cache.get(m.folder)
-            if cached is not None and cached[0] == manifest_mtime:
-                extra = cached[1]
-        if extra is None:
+        key = tuple(_mtime_or_none(m.path / f) for f in _EXTRA_FILES)
+        cached = extra_cache.get(m.folder)
+        if cached is not None and cached[0] == key:
+            extra = cached[1]
+        else:
             extra = _run_extra(m.path)
-            if manifest_mtime is not None:
-                extra_cache[m.folder] = (manifest_mtime, extra)
+            extra_cache[m.folder] = (key, extra)
         seen_extra.add(m.folder)
         status_file = _match_status(m.mission_id, m.folder, idx) or {}
         status_scores = status_file.get("scores") if isinstance(status_file.get("scores"), dict) else {}
@@ -536,6 +547,7 @@ class Monitor:
 
     def state(self) -> dict:
         with self._lock:
-            if self._state is None:
-                return self.refresh()
-            return self._state
+            state = self._state
+        if state is None:
+            return self.refresh()
+        return state

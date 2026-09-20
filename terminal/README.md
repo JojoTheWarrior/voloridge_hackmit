@@ -12,6 +12,9 @@ python main.py terminal --pull-interval 30   # pull every 30 s
 python main.py terminal --no-pull --snapshot snap.html
 ```
 
+`--host` defaults to `127.0.0.1`; binding to anything else prints a warning
+— the terminal exposes mission data without authentication.
+
 ## How the pull loop works
 
 GitHub `main` is the source of truth. A daemon thread calls

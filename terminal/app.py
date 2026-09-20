@@ -49,6 +49,19 @@ def _run_dir(monitor: Monitor, folder: str) -> Path | None:
     return target
 
 
+def run_detail(monitor: Monitor, folder: str) -> dict | None:
+    """Full detail dict for a run folder, with its matching status file."""
+    target = _run_dir(monitor, folder)
+    if target is None:
+        return None
+    status = next(
+        (s for s in monitor.state().get("statuses", [])
+         if Path(s.get("run_folder") or "").name == folder),
+        None,
+    )
+    return read_run_details(target, status)
+
+
 def create_app(monitor: Monitor) -> Flask:
     app = Flask(__name__)
 
@@ -64,15 +77,10 @@ def create_app(monitor: Monitor) -> Flask:
 
     @app.get("/api/run/<folder>")
     def api_run(folder):
-        target = _run_dir(monitor, folder)
-        if target is None:
+        detail = run_detail(monitor, folder)
+        if detail is None:
             abort(404)
-        status = next(
-            (s for s in monitor.state().get("statuses", [])
-             if Path(s.get("run_folder") or "").name == folder),
-            None,
-        )
-        return jsonify(read_run_details(target, status))
+        return jsonify(detail)
 
     @app.get("/runs/<folder>/<file>")
     def run_file(folder, file):

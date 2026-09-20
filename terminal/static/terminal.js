@@ -294,10 +294,19 @@
     return '<table class="kv">' + rows + "</table>";
   }
   function openDetail(folder) {
-    fetch("/api/run/" + encodeURIComponent(folder)).then(function (r) {
-      if (!r.ok) throw new Error("404");
-      return r.json();
-    }).then(function (d) {
+    var get;
+    if (SNAPSHOT) {
+      get = new Promise(function (res, rej) {
+        var d = (S.run_details || {})[folder];
+        d ? res(d) : rej(new Error("no detail"));
+      });
+    } else {
+      get = fetch("/api/run/" + encodeURIComponent(folder)).then(function (r) {
+        if (!r.ok) throw new Error("404");
+        return r.json();
+      });
+    }
+    get.then(function (d) {
       detailOpen = true;
       var h = "<h2>" + esc(d.folder) + "</h2>";
       h += '<div class="meta">' + esc(d.mission_id || "") + " · " + esc(d.status || "") +
@@ -320,7 +329,10 @@
           num(d.scores.supported_prob, 2) + "</td><td>" + esc(d.scores.judge_model || "") + "</td></tr></table>";
       }
       if (d.trade_idea) h += "<h3>Trade idea</h3>" + kvTable(d.trade_idea);
-      if (d.has_viz) h += '<h3>Viz</h3><img src="/runs/' + encodeURIComponent(d.folder) + '/viz.png">';
+      if (d.has_viz) {
+        h += SNAPSHOT ? '<h3>Viz</h3><p class="dim">viz.png not embedded in snapshot</p>'
+          : '<h3>Viz</h3><img src="/runs/' + encodeURIComponent(d.folder) + '/viz.png">';
+      }
       if (d.note_md) h += '<h3>Note</h3><div class="note">' + md(d.note_md) + "</div>";
       elDetail.innerHTML = h;
       elDetail.classList.remove("hidden");

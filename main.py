@@ -125,6 +125,10 @@ def main():
             from terminal.snapshot import write_snapshot
             print(write_snapshot(monitor, Path(args.snapshot)))
             return
+        if args.host not in ("127.0.0.1", "localhost", "::1"):
+            import sys
+            print(f"terminal: binding to {args.host} exposes mission data "
+                  "without authentication", file=sys.stderr)
         start_refresh_thread(monitor)
         create_app(monitor).run(host=args.host, port=args.port)
     else:

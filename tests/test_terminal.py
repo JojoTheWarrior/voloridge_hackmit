@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import threading
 import time
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -163,6 +164,32 @@ def test_read_status_dir_malformed_and_archive(tmp_path):
     assert "GOOD" in ids and "OLD" not in ids
 
 
+def test_running_elapsed_recomputed(tmp_path):
+    """Running statuses recompute elapsed from started_at, ignoring stored elapsed_s."""
+    m = _missions(tmp_path)
+    started = (datetime.now(timezone.utc) - timedelta(seconds=600)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    _write_status(m, "R", state="running", started_at=started, elapsed_s=5)
+    entry = read_status_dir(m / "status", time.time())[0]
+    assert entry["elapsed_s"] == pytest.approx(600, abs=2)
+
+
+def test_done_keeps_stored_elapsed(tmp_path):
+    m = _missions(tmp_path)
+    _write_status(m, "D", state="done", elapsed_s=5,
+                  finished_at="2026-09-21T03:20:00Z")
+    entry = read_status_dir(m / "status", time.time())[0]
+    assert entry["elapsed_s"] == 5
+
+
+def test_status_malformed_skipped(tmp_path):
+    m = _missions(tmp_path)
+    (m / "status" / "broken.json").write_text("{")
+    (m / "status" / "array.json").write_text("[]")
+    _write_status(m, "OK")
+    entries = read_status_dir(m / "status", time.time())
+    assert [e["mission_id"] for e in entries] == ["OK"]
+
+
 def test_read_status_dir_ordering(tmp_path):
     m = _missions(tmp_path)
     _write_status(m, "Q", state="queued")
@@ -209,6 +236,22 @@ def test_build_runs_actionability_fallback(tmp_path):
     results = {"M1": {"mission_id": "M1", "actionability": "3.5"}}
     runs = build_runs(tmp_path, results, [], cache={})
     assert runs[0]["actionability"] == pytest.approx(3.5)
+
+
+def test_build_runs_extra_cache_invalidation(tmp_path):
+    """Editing judge.json (not manifest) must invalidate the extra cache."""
+    import os
+
+    m = _missions(tmp_path)
+    d = _fixture_run(m)
+    cache = {}
+    assert build_runs(tmp_path, {}, [], cache=cache)[0]["actionability"] == 7.5
+    judge = json.loads((d / "judge.json").read_text())
+    judge["scores"]["actionability"] = 1.0
+    (d / "judge.json").write_text(json.dumps(judge))
+    future = time.time() + 10
+    os.utime(d / "judge.json", (future, future))
+    assert build_runs(tmp_path, {}, [], cache=cache)[0]["actionability"] == 1.0
 
 
 def test_build_runs_trade_idea_from_status(tmp_path):
@@ -299,6 +342,23 @@ def test_state_nonblocking_during_pull(tmp_path, monkeypatch):
     worker.join()
 
 
+def test_state_returns_during_first_pull(tmp_path, monkeypatch):
+    """state() on a fresh monitor must not deadlock while a pull runs."""
+    import warsignal.mission.monitor as mon_mod
+
+    _missions(tmp_path)
+    monkeypatch.setattr(
+        mon_mod, "git_pull",
+        lambda root, timeout=30: (time.sleep(1), {"ok": True, "output": "", "at": "x"})[1])
+    mon = Monitor(tmp_path, pull_interval=0, pull=True)
+    worker = threading.Thread(target=mon.refresh)
+    worker.start()
+    time.sleep(0.05)  # pull in progress inside refresh
+    mon.state()  # must return, not hang
+    worker.join(timeout=5)
+    assert not worker.is_alive()
+
+
 # ---------- Flask app ----------
 
 def _app(tmp_path):
@@ -355,6 +415,8 @@ def test_write_snapshot(tmp_path):
     assert "window.__STATE__" in html
     assert "/static/" not in html and "<style>" in html
     assert "20260921-001-a_x_b" in html
+    assert '"run_details"' in html
+    assert '"20260921-001-a_x_b":' in html
 
 
 # ---------- real repo ----------
