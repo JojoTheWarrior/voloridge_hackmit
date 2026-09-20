@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.GC=F.log_return",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "Use daily log returns on gold futures (GC=F) and Brent futures (BZ=F) to test whether their usual positive co-movement weakened or reversed around the 2026 Iran war period, allowing short lags and explicitly comparing pre-war to wartime/post-war correlation rather than price levels."
+}
