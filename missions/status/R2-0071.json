@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/393919d7bed742648f0eeb5d6f4804a0",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:00:17Z",
-  "updated_at": "2026-09-20T04:00:27Z",
+  "updated_at": "2026-09-20T04:00:50Z",
   "finished_at": null,
-  "elapsed_s": 10,
+  "elapsed_s": 33,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-182-airquality-kuwait-cams-so2_x_finance-ual-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 1.42,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Null control: Kuwait CAMS SO2 20d z-score > 1 (refinery activity, not outage) should NOT predict airline ETF moves (-); trade short JETS 2d at 1d lag [airquality.kuwait.cams_so2 -> finance.JETS.log_return] (parent: R2-0071)"
 }
