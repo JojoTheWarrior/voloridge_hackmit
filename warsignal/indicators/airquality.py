@@ -22,9 +22,26 @@ def available_cities():
     frame = _index()
     if frame.empty:
         return []
+    files = list((DATA_RAW / "openaq" / "records").glob("csv.gz/locationid=*/year=*/month=*/*.csv.gz"))
+    downloaded = {}
+    for path in files:
+        location_id = path.parts[-4].split("=")[-1]
+        if location_id in downloaded:
+            continue
+        try:
+            with gzip.open(path, "rt", errors="replace") as handle:
+                next(handle)
+                downloaded[location_id] = bool(next(handle, "").strip())
+        except (OSError, StopIteration):
+            downloaded[location_id] = False
     result = []
     for city, coords in CITIES.items():
-        if any(haversine_km(float(row.lat), float(row.lon), coords["lat"], coords["lon"]) <= 50 for row in frame.itertuples() if pd.notna(row.lat)):
+        if any(
+            downloaded.get(str(row.id), False)
+            and haversine_km(float(row.lat), float(row.lon), coords["lat"], coords["lon"]) <= 50
+            for row in frame.itertuples()
+            if pd.notna(row.lat) and pd.notna(row.lon)
+        ):
             result.append(city)
     return result
 

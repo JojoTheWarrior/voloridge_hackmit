@@ -54,8 +54,9 @@ def _fred(series):
     if not path.exists():
         raise FileNotFoundError(path)
     frame = pd.read_csv(path)
-    value = next(column for column in frame.columns if column != "DATE")
-    return pd.Series(pd.to_numeric(frame[value], errors="coerce").to_numpy(), index=pd.to_datetime(frame["DATE"]))
+    date_col = "observation_date" if "observation_date" in frame.columns else "DATE"
+    value = next(column for column in frame.columns if column != date_col)
+    return pd.Series(pd.to_numeric(frame[value], errors="coerce").to_numpy(), index=pd.to_datetime(frame[date_col]))
 
 
 _register()

@@ -10,7 +10,7 @@ def _docs():
     path = DATA_RAW / "materials_project" / "doc_dates.csv"
     if not path.exists():
         raise FileNotFoundError(path)
-    return pd.read_csv(path)
+    return pd.read_csv(path, low_memory=False)
 
 
 def _date_count(column):

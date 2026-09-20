@@ -7,7 +7,7 @@ from typing import Callable
 
 import pandas as pd
 
-from warsignal.config import DATA_RAW, ROOT
+from warsignal.config import DATA_RAW, END, ROOT, START
 
 
 @dataclass(frozen=True)
@@ -66,7 +66,8 @@ def get_series(name: str, start=None, end=None) -> pd.Series:
     path = _cache_path(name)
     series = None
     gdelt_cache = ROOT / "data" / "cache" / "gdelt_daily.parquet"
-    source_changed = name.startswith("gdelt.") and gdelt_cache.exists() and gdelt_cache.stat().st_mtime > path.stat().st_mtime
+    source_changed = (name.startswith("gdelt.") and gdelt_cache.exists() and path.exists()
+                      and gdelt_cache.stat().st_mtime > path.stat().st_mtime)
     if path.exists() and not source_changed and time.time() - path.stat().st_mtime < 86400:
         try:
             cached = pd.read_parquet(path)
@@ -85,6 +86,8 @@ def get_series(name: str, start=None, end=None) -> pd.Series:
         series = series[series.index >= pd.Timestamp(start)]
     if end is not None:
         series = series[series.index <= pd.Timestamp(end)]
+    if name.startswith("gdelt."):
+        series = series[(series.index >= pd.Timestamp(START)) & (series.index <= pd.Timestamp(END))]
     series.name = name
     return series
 

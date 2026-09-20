@@ -5,7 +5,7 @@ import re
 
 from warsignal.ai.openai_client import AIUnavailable, chat_json
 from warsignal.ai.prompts import PLANNER_SYSTEM
-from warsignal.config import env
+from warsignal.config import CITIES, env
 from warsignal.indicators import REGISTRY, catalogue_text
 from .model import MissionPlan
 
@@ -25,6 +25,36 @@ _DOMAIN_RULES = (
     ("materials", ("materials project",), ("materials.",)),
     ("utility", ("electricity", "demand", "generation", "fuel cost", "pudl", "eia"), ("utility.",)),
 )
+
+
+class PlanValidationError(ValueError):
+    pass
+
+
+def _requested_cities(hypothesis):
+    text = hypothesis.lower()
+    found = []
+    for slug in CITIES:
+        names = {slug.replace("_", " ")}
+        if slug == "nyc_jfk":
+            names.add("new york")
+        if any(re.search(rf"\b{re.escape(name)}\b", text) for name in names):
+            found.append(slug)
+    return found
+
+
+def _validate_plan(hypothesis, plan):
+    if plan.indicator_a == plan.indicator_b:
+        raise PlanValidationError("indicator_a and indicator_b must differ")
+    missing = [name for name in (plan.indicator_a, plan.indicator_b) if name not in REGISTRY]
+    if missing:
+        raise PlanValidationError(f"invalid indicator names: {missing}")
+    for city in _requested_cities(hypothesis):
+        for name in (plan.indicator_a, plan.indicator_b):
+            spec = REGISTRY[name]
+            if spec.source in {"weather", "airquality"} and spec.region != city:
+                raise PlanValidationError(f"requested city {city} has no data for {spec.source}")
+    return plan
 
 
 def _keyword_scores(text):
@@ -83,23 +113,25 @@ def heuristic_plan(hypothesis):
                        "Heuristic keyword overlap with source-diverse catalogue entries.")
 
 
-def plan_mission(hypothesis):
-    if not env("OPENAI_API_KEY"):
-        return _semantic_adjust(hypothesis, heuristic_plan(hypothesis)), "heuristic"
+def plan_mission(hypothesis, use_ai=True):
+    if not use_ai or not env("OPENAI_API_KEY"):
+        return _validate_plan(hypothesis, _semantic_adjust(hypothesis, heuristic_plan(hypothesis))), "heuristic"
     prompt = f"MISSION:\n{hypothesis}\n\nCATALOGUE:\n{catalogue_text()}"
+    last_error = None
     for attempt in range(2):
         try:
             result = chat_json(PLANNER_SYSTEM, prompt, model=env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
             fields = {key: result[key] for key in MissionPlan.__dataclass_fields__ if key in result}
             plan = MissionPlan(**fields)
-            missing = [x for x in (plan.indicator_a, plan.indicator_b) if x not in REGISTRY]
-            if missing:
-                prompt += f"\nInvalid indicator names: {missing}. Choose exact names from catalogue."
-                continue
-            return _semantic_adjust(hypothesis, plan), result.get("_meta", {}).get("model", env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
+            plan = _validate_plan(hypothesis, _semantic_adjust(hypothesis, plan))
+            return plan, result.get("_meta", {}).get("model", env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
         except Exception as exc:
+            last_error = exc
             prompt += f"\nPlanner error: {exc}. Use exact registered indicator names."
-    return _semantic_adjust(hypothesis, heuristic_plan(hypothesis)), "heuristic"
+    if isinstance(last_error, PlanValidationError):
+        raise last_error
+    fallback = _validate_plan(hypothesis, _semantic_adjust(hypothesis, heuristic_plan(hypothesis)))
+    return fallback, "heuristic"
 
 
 def _semantic_adjust(hypothesis, plan):

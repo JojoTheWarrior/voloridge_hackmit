@@ -33,7 +33,10 @@ for ba in ("ERCO", "PJM", "MISO", "CISO", "NYIS", "ISNE", "SWPP"):
 def _fuel(fuel):
     frame = _load("out_eia923__monthly_fuel_receipts_costs")
     frame = frame[frame.fuel_type_code_pudl.astype(str).str.lower().str.contains(fuel)]
-    return frame.groupby("report_date").apply(lambda x: (x.fuel_cost_per_mmbtu * x.fuel_received_mmbtu).sum() / x.fuel_received_mmbtu.sum())
+    weighted = frame["fuel_cost_per_mmbtu"] * frame["fuel_received_mmbtu"]
+    return weighted.groupby(frame["report_date"]).sum().divide(
+        frame["fuel_received_mmbtu"].groupby(frame["report_date"]).sum()
+    )
 
 
 for fuel in ("gas", "coal", "oil"):

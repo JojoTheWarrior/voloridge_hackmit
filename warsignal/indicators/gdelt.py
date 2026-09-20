@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from warsignal.config import DATA_RAW
+from warsignal.config import DATA_RAW, END, START
 from .base import IndicatorSpec, register
 
 COUNTRIES = {"IRN", "ISR", "USA", "QAT", "SAU", "ARE", "KWT", "IRQ", "OMN", "LBN", "BHR"}
@@ -135,11 +135,13 @@ def rebuild_cache():
 
 def _series(column):
     frame = _daily().set_index("date")
+    frame.index = pd.to_datetime(frame.index)
+    frame = frame[(frame.index >= pd.Timestamp(START)) & (frame.index <= pd.Timestamp(END))]
     if column.endswith(".tone") or column.endswith(".goldstein"):
         prefix, field = column.rsplit(".", 1)
         numerator = frame.get(f"{prefix}.{field}_sum", pd.Series(0, index=frame.index))
         denom = frame.get(f"{prefix}.events", pd.Series(0, index=frame.index))
-        return numerator.divide(denom.replace(0, pd.NA)).fillna(0)
+        return numerator.divide(denom.replace(0, pd.NA))
     return frame.get(column, pd.Series(dtype=float))
 
 

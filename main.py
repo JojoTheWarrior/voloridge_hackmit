@@ -6,7 +6,7 @@ import argparse
 def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
-    mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true")
+    mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true"); mission.add_argument("--dry-run", action="store_true")
     queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true")
     queue.add_argument("--reset", action="store_true"); queue.add_argument("--requeue-failed", action="store_true")
     indicators = sub.add_parser("indicators"); indicators.add_argument("--source")
@@ -18,8 +18,14 @@ def main():
     viz.add_argument("--codegen", action="store_true"); viz.add_argument("--allow-exec", action="store_true")
     args = parser.parse_args()
     if args.command == "mission":
-        from warsignal.mission.runner import run_mission
-        print(run_mission(args.hypothesis, use_ai=not args.no_ai, viz=args.viz, show=args.show).narrative_md)
+        from warsignal.mission.planner import plan_mission
+        if args.dry_run:
+            import json
+            plan, _ = plan_mission(args.hypothesis, use_ai=not args.no_ai)
+            print(json.dumps(plan.__dict__, indent=2))
+        else:
+            from warsignal.mission.runner import run_mission
+            print(run_mission(args.hypothesis, use_ai=not args.no_ai, viz=args.viz, show=args.show).narrative_md)
     elif args.command == "queue":
         from warsignal.mission.harness import requeue_failed_missions, reset_queue, run_queue
         if args.reset:

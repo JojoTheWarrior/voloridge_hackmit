@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import time
 from datetime import date
 from pathlib import Path
@@ -18,7 +19,13 @@ def fetch(start=date(2025, 3, 1), end=date.today(), **_) -> list[Path]:
                   "daily": "temperature_2m_mean,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,shortwave_radiation_sum", "timezone": "UTC"}
         path = output_dir("open_meteo") / f"{slug}.json"
         if path.exists() and path.stat().st_size > 0:
-            paths.append(path); continue
+            try:
+                existing = json.loads(path.read_text(encoding="utf-8")).get("daily", {}).get("time", [])
+                if existing and existing[0] <= start.isoformat() and existing[-1] >= end.isoformat():
+                    paths.append(path)
+                    continue
+            except (OSError, ValueError, TypeError):
+                pass
         try:
             response = retry(lambda: requests.get(url, params=params, timeout=60))
             response.raise_for_status()

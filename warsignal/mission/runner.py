@@ -12,7 +12,7 @@ from warsignal.analysis.stats import run_all
 from warsignal.config import DATA_RAW, START, END
 from warsignal.indicators import get_series
 from .model import MissionResult
-from .planner import plan_mission
+from .planner import heuristic_plan, plan_mission
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -58,7 +58,7 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False)
     mission_id = mission_id or f"M{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(3)}"
     created = datetime.now(timezone.utc).isoformat()
     try:
-        plan, planner_model = plan_mission(hypothesis)
+        plan, planner_model = plan_mission(hypothesis, use_ai=use_ai)
         a = get_series(plan.indicator_a, START, END)
         b = get_series(plan.indicator_b, START, END)
         overlap = __import__("pandas").concat([a.rename("a"), b.rename("b")], axis=1).dropna()
@@ -84,7 +84,10 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False)
     except Exception as exc:
         failed_plan = locals().get("plan", None)
         if failed_plan is None:
-            failed_plan, failed_model = plan_mission(hypothesis)
+            try:
+                failed_plan, failed_model = plan_mission(hypothesis)
+            except Exception:
+                failed_plan, failed_model = heuristic_plan(hypothesis), "heuristic"
         else:
             failed_model = locals().get("planner_model", "")
         result = MissionResult(
