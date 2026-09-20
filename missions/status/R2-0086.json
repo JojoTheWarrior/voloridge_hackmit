@@ -2,21 +2,21 @@
   "schema_version": 1,
   "mission_id": "R2-0086",
   "title": "Sanctions pubs z>1 -> short TUR 7d",
-  "hypothesis": "R2 | [risk-macro-em] Crossref sanctions weekly counts 8-week z-score > 1 lead Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [research.sanctions.crossref_pubs -> finance.TUR.log_return]",
+  "hypothesis": "R2 | [risk-macro-em] Crossref Iran weekly counts 8-week z-score > 1 lead Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [research.iran.crossref_pubs -> finance.TUR.log_return]",
   "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/507bd0ae2083419ab7ed3f27c3b6dbb0",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "planning",
-  "progress": 0.1,
+  "state": "failed",
+  "stage": "done",
+  "progress": 1.0,
   "signal": null,
   "started_at": "2026-09-20T04:08:19Z",
-  "updated_at": "2026-09-20T04:08:19Z",
-  "finished_at": null,
-  "elapsed_s": 0,
-  "message": "queued",
-  "run_folder": null,
+  "updated_at": "2026-09-20T04:10:09Z",
+  "finished_at": "2026-09-20T04:08:38Z",
+  "elapsed_s": 110,
+  "message": "FAILED: research.sanctions.crossref_pubs raw cache not committed (IndicatorUnavailable); one-time swap to research.iran.crossref_pubs gave insufficient overlap (crossref iran covers only 2025-03-03..2025-04-14, n=7 weeks vs TUR n=390). No run folder kept; follow-up queued using gdelt.gkg.sanctions_share.",
+  "run_folder": "missions/runs/20260920-191-FAILED-r2-risk-macro-em-crossref",
   "scores": {
     "validity": null,
     "interestingness": null,
@@ -24,5 +24,5 @@
     "actionability": null
   },
   "trade_idea": null,
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] GDELT GKG sanctions-share 20d z-score > 1 leads Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [gdelt.gkg.sanctions_share -> finance.TUR.log_return] (parent: R2-0086)"
 }
