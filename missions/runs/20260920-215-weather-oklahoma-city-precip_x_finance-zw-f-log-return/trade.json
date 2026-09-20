@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 34,
+    "hit_rate": 0.35294117647058826,
+    "avg_return": -0.001560844474232009,
+    "baseline_avg_return": -0.0009093384247054893,
+    "excess_return": -0.0006515060495265197,
+    "sharpe_like": -0.7635225202140851,
+    "max_drawdown": -0.11263967782777806,
+    "total_return": -0.054015932734483796
+  },
+  "fit_pre_war": {
+    "n_trades": 19,
+    "hit_rate": 0.21052631578947367,
+    "avg_return": -0.005359276008424627,
+    "baseline_avg_return": -0.0003162400497939117,
+    "excess_return": -0.005043035958630715,
+    "sharpe_like": -2.6749008515091317,
+    "max_drawdown": -0.10442479722030729,
+    "total_return": -0.09772276750110087
+  },
+  "test_war": {
+    "n_trades": 15,
+    "hit_rate": 0.5333333333333333,
+    "avg_return": 0.003250502135745307,
+    "baseline_avg_return": -0.0019699888031969965,
+    "excess_return": 0.005220490938942304,
+    "sharpe_like": 0.9280045818719923,
+    "max_drawdown": -0.031597225684700025,
+    "total_return": 0.048440582553068046
+  },
+  "n_signal_days": 382,
+  "trade_idea": {
+    "instrument": "ZW=F",
+    "direction": "short",
+    "entry_rule": "weather.oklahoma_city.precip rolling_zscore_20d > 1 at close -> short ZW=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.35294117647058826,
+    "avg_return": -0.001560844474232009,
+    "excess_return": -0.0006515060495265197,
+    "n_trades": 34,
+    "sharpe_like": -0.7635225202140851,
+    "max_drawdown": -0.11263967782777806,
+    "oos_n_trades": 15,
+    "oos_avg_return": 0.003250502135745307,
+    "oos_hit_rate": 0.5333333333333333,
+    "actionability": 2.81,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

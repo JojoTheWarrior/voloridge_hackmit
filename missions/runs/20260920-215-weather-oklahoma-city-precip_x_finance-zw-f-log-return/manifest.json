@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:29:39.041343+00:00",
+  "git_commit": "212876a9c9de9cd2d91bf24f46967b749a0d2778",
+  "folder": "20260920-215-weather-oklahoma-city-precip_x_finance-zw-f-log-return",
+  "mission_id": "S-0011",
+  "hypothesis": "SHERLOCK | [#2 rivers/crops] Oklahoma City precipitation 20d z-score > 1 (southern Plains hard-red-winter-wheat moisture proxy) leads wheat futures returns by 3 days (-); trade short ZW=F 3d [weather.oklahoma_city.precip -> finance.ZW=F.log_return]",
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.04726857499735726,
+  "perm_p": 0.20958083832335328,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.81,
+  "trade_idea": {
+    "instrument": "ZW=F",
+    "direction": "short",
+    "entry_rule": "weather.oklahoma_city.precip rolling_zscore_20d > 1 at close -> short ZW=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.35294117647058826,
+    "avg_return": -0.001560844474232009,
+    "excess_return": -0.0006515060495265197,
+    "n_trades": 34,
+    "sharpe_like": -0.7635225202140851,
+    "max_drawdown": -0.11263967782777806,
+    "oos_n_trades": 15,
+    "oos_avg_return": 0.003250502135745307,
+    "oos_hit_rate": 0.5333333333333333,
+    "actionability": 2.81,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.oklahoma_city.precip": "configured analysis window",
+    "finance.ZW=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,1 @@
+SHERLOCK | [#2 rivers/crops] Oklahoma City precipitation 20d z-score > 1 (southern Plains hard-red-winter-wheat moisture proxy) leads wheat futures returns by 3 days (-); trade short ZW=F 3d [weather.oklahoma_city.precip -> finance.ZW=F.log_return]
