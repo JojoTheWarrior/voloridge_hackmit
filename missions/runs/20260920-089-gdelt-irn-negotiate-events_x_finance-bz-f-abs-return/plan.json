@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.negotiate_events",
+  "indicator_b": "finance.BZ=F.abs_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "war",
+  "event_category": "diplomacy",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Iran negotiation-event counts as a proxy for diplomatic days and Brent futures absolute returns as the volatility measure during the war window, to test whether days with more diplomacy-linked news coincide with larger absolute Brent moves than days dominated by military (conflict/fight) events in a separate comparison."
+}
