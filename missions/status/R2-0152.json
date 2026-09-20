@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/851147b9a4344ea69baf27719efc55e0",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:06:46Z",
-  "updated_at": "2026-09-20T13:07:07Z",
+  "updated_at": "2026-09-20T13:07:57Z",
   "finished_at": null,
-  "elapsed_s": 21,
+  "elapsed_s": 71,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-249-airquality-doha-cams-so2_x_finance-ntr-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.79,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Doha CAMS NO2 and SO2 both fail as NTR leads, so test the price channel directly: TTF-to-Henry-Hub ratio 20d z-score > 1 leads NTR log returns by 5 days (+), higher European gas costs favour North American producers; long NTR 7d [finance.ratio.ttf_henryhub -> finance.NTR.log_return] (parent: R2-0152)"
 }
