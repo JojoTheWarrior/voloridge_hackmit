@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:55:22Z",
-  "updated_at": "2026-09-20T13:21:20Z",
+  "updated_at": "2026-09-20T13:24:13Z",
   "finished_at": "2026-09-20T12:56:27Z",
-  "elapsed_s": 1558,
+  "elapsed_s": 1731,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-235-finance-ng-f-log-return_x_finance-xlu-log-return",
   "scores": {
