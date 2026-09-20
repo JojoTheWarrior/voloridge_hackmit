@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0070",
+  "title": "[fuel-airspace-losers] Abu Dhabi CAMS AOD 20d z-score > 1.5 marks dust or smoke ",
+  "hypothesis": "R2 | [fuel-airspace-losers] Abu Dhabi CAMS AOD 20d z-score > 1.5 marks dust or smoke episodes that cut Gulf flight volumes (-); trade short IAG.L 2d at 1d lag [airquality.abu_dhabi.cams_aod -> finance.IAG.L.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:58:24Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
