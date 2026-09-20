@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] MOS close 20d z-score > 1 (post-spike price level) leads MOS log returns by 2 days (-) as fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.close -> finance.MOS.log_return]

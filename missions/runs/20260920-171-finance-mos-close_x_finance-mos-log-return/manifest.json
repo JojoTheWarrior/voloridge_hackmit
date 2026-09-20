@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:52:10.020760+00:00",
+  "git_commit": "cc1644783630aa27524b6aa7fbee48136d1478ba",
+  "folder": "20260920-171-finance-mos-close_x_finance-mos-log-return",
   "mission_id": "R2-0056",
-  "title": "MOS post-spike mean reversion (short 4d)",
   "hypothesis": "R2 | [fertilizer-ag] MOS close 20d z-score > 1 (post-spike price level) leads MOS log returns by 2 days (-) as fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.close -> finance.MOS.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/28173aa2d7f341ef967bb9da2d9061d7",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:51:43Z",
-  "updated_at": "2026-09-20T03:52:11Z",
-  "finished_at": null,
-  "elapsed_s": 28,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-171-finance-mos-close_x_finance-mos-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.9999999999999998,
+  "perm_p": 0.041916167664670656,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "MOS",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.MOS.close": "configured analysis window",
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
