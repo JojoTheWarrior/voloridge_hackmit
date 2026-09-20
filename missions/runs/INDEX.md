@@ -94,3 +94,4 @@
 | `20260920-090-gdelt-gkg-ceasefire-share_x_finance-fred-dcoilbrenteu` | Ceasefire announcements produce larger oil moves than the strikes themselves (event-study comparison). | ok | 133 | -0.21178185970145336 | 0.031936127744510975 | 6.02 | 4.06 | 3.82 |
 | `20260920-091-gdelt-gkg-hormuz-share_x_finance-fred-dcoilbrenteu` | Oil-price reaction to Hormuz events decayed over successive closures (market desensitization). | ok | 142 | 0.08445454010193726 | 0.24750499001996007 | 1.98 | 3.3 | 4.86 |
 | `20260920-092-gdelt-irn-negotiate-events_x_gdelt-irn-mentions` | GDELT news volume about Iran decays faster after diplomatic events than after military events. | ok | 568 | 0.8759763877357523 | 0.011976047904191617 | 6.18 | 1.16 | 2.8 |
+| `20260920-093-gdelt-irn-tone_x_finance-gspc-log-return` | GDELT average tone about Iran predicts next-day S&P 500 returns during the war. | ok | 140 | 0.12543146493088086 | 0.021956087824351298 | 6.02 | 4.06 | 5.32 |
