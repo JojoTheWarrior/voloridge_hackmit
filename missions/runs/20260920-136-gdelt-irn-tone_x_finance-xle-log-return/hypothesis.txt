@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Iran GDELT tone 10d z-score below -1.5 (sharply negative) leads XLE log returns by 1 day (+); trade long XLE 3d [gdelt.irn.tone -> finance.XLE.log_return]
