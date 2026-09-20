@@ -1,0 +1,39 @@
+{
+  "created_at": "2026-09-20T02:44:09.889647+00:00",
+  "git_commit": "dba78d83e274ae9d2e9aa7da1a1c9cab0a0e63d6",
+  "folder": "20260920-131-airquality-houston-cams-so2_prepost",
+  "mission_id": "M20260920-99b24e",
+  "hypothesis": "US Gulf Coast (Houston) air quality worsened as US refineries ran harder to replace lost Gulf supply.",
+  "status": "ok",
+  "n_obs": 566,
+  "r": null,
+  "perm_p": 0.07784431137724551,
+  "validity": 4.0,
+  "interestingness": 2.88,
+  "unexpectedness": 9.6,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/0edf026e9f6f44f2bca786b83021487e"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/9ba46da62a2247acb8d7f3c3a06bbf54"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/0a4c1aa4e29443bbb065eb58e41c1937"
+    }
+  ],
+  "indicator_coverage": {
+    "airquality.houston.cams_so2": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

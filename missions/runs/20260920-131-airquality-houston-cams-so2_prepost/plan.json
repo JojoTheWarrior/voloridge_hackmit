@@ -1,0 +1,13 @@
+{
+  "indicator_a": "airquality.houston.cams_so2",
+  "indicator_b": "airquality.houston.cams_so2",
+  "transform_a": "anomaly",
+  "transform_b": "anomaly",
+  "max_lag_days": 0,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "No refinery-throughput series is visible in the catalogue, so we test the outcome directly: SO2 is the most refinery-specific CAMS pollutant for Houston, and its anomaly vs the same-week 2025 baseline (removing seasonality) should be higher in the war period than pre-war if refineries ran harder; confounders include weather, model-reanalysis artefacts, and other 2026 emission changes.",
+  "mode": "single"
+}

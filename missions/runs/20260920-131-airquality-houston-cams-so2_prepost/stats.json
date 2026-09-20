@@ -1,0 +1,36 @@
+{
+  "mode": "single",
+  "n_obs": 566,
+  "coverage_start": "2025-03-01",
+  "coverage_end": "2026-09-17",
+  "correlation": null,
+  "lagged": {
+    "lags": [],
+    "best_lag": null,
+    "best_r": null
+  },
+  "n_lags_tested": 0,
+  "perm_p": 0.07784431137724551,
+  "bonferroni_p": 0.07784431137724551,
+  "pre_post": {
+    "pre": {
+      "n": 364,
+      "mean": 0.04168458515884993,
+      "std": 1.01576242937889
+    },
+    "post": {
+      "n": 202,
+      "mean": -0.37406883545497405,
+      "std": 0.9433038821900717
+    },
+    "mean_diff": -0.415753420613824,
+    "welch_t": 4.886281344504768,
+    "welch_p": 1.4399676226957944e-06,
+    "cohens_d": -0.41972083011555167
+  },
+  "event_study": null,
+  "event_study_b": null,
+  "window": "compare_pre_post",
+  "lag_unit": "days",
+  "sign_matches_expectation": false
+}
