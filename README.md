@@ -85,9 +85,15 @@ for natural-language charts and a `charts.py` pygame launcher window manager.
 
 - Type a prompt ("the instagram reels of the price of brent"); the planner maps
   it to registered indicators (or external yfinance/FRED symbols when nothing
-  fits), writes a `graphs/YYYYMMDD-NNN-<type>_<slugs>/` folder, generates a
-  `chart.py`, renders `thumbnail.png`, commits the folder + `graphs/INDEX.md`,
-  and pushes — each graph folder is a shareable, committed artifact.
+  fits), writes a `graphs/YYYYMMDD-NNN-<type>_<slugs>/` folder, renders
+  `thumbnail.png`, commits the folder + `graphs/INDEX.md`, and pushes — each
+  graph folder is a shareable, committed artifact.
+- `chart.py` defaults to a deterministic reference template; the planner sets
+  `needs_custom_code` only for requests outside reel/line/spread/scatter
+  (histograms, dual-axis, candlesticks…), in which case gpt-5.1 adapts the
+  template under strict "change as little as possible" rules with validator and
+  render-repair fallbacks back to the template. `plan.json` records
+  `codegen: template|llm|llm-repaired|template-fallback`.
 - Chart types: `reel` (animated day-by-day playback), `line`, `spread`, and
   `scatter` (with OLS fit and `r=` readout).
 - Reel controls: Space play/pause, ←/→ scrub (hold to repeat), ↑/↓ speed,

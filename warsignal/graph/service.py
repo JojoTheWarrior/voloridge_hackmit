@@ -87,18 +87,31 @@ class GraphService:
                 plan.setdefault("y_series", series[1]["file"])
             plan["source_notes"] = [n for n in notes if n]
             import json
-            (folder / "plan.json").write_text(json.dumps(plan, indent=2, default=str), encoding="utf-8")
 
-            self._set(job, "codegen")
-            source = generate_chart(plan, series)
-            errors = validate_script(source)
-            if errors:
-                source = generate_chart(plan, series, feedback="; ".join(errors))
+            def write_plan():
+                (folder / "plan.json").write_text(json.dumps(plan, indent=2, default=str),
+                                                  encoding="utf-8")
+
+            if plan.get("needs_custom_code"):
+                self._set(job, "codegen")
+                source = generate_chart(plan, series)
                 errors = validate_script(source)
-            if errors:
-                log.warning("generated chart still invalid (%s); using template", errors)
+                repaired_once = False
+                if errors:
+                    repaired_once = True
+                    source = generate_chart(plan, series, feedback="; ".join(errors))
+                    errors = validate_script(source)
+                if errors:
+                    log.warning("generated chart still invalid (%s); using template", errors)
+                    source = CHART_TEMPLATE
+                    plan["codegen"] = "template-fallback"
+                else:
+                    plan["codegen"] = "llm-repaired" if repaired_once else "llm"
+            else:
                 source = CHART_TEMPLATE
+                plan["codegen"] = "template"
             (folder / "chart.py").write_text(source, encoding="utf-8")
+            write_plan()
 
             self._set(job, "rendering")
             try:
@@ -107,7 +120,11 @@ class GraphService:
                 repaired = generate_chart(plan, series, feedback=str(exc))
                 if validate_script(repaired):
                     repaired = CHART_TEMPLATE
+                    plan["codegen"] = "template-fallback"
+                else:
+                    plan["codegen"] = "llm-repaired"
                 (folder / "chart.py").write_text(repaired, encoding="utf-8")
+                write_plan()
                 try:
                     store.render_thumbnail(folder)
                 except store.RenderError as exc2:

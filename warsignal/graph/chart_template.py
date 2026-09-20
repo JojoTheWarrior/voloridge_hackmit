@@ -50,7 +50,7 @@ def load_events():
             day = pd.Timestamp(row["date"])
         except Exception:
             continue
-        events.append((day, str(row.get("event", ""))))
+        events.append((day, str(row.get("category", "")), str(row.get("event", ""))))
     return events
 
 
@@ -97,15 +97,25 @@ def draw_grid(screen, font, rect, low, high, start, end):
         value = high - (high - low) * i / 4
         label = font.render(f"{value:.2f}", True, PALETTE["muted"])
         screen.blit(label, (max(0, rect.left - label.get_width() - 8), y - label.get_height() // 2))
+    months = []
     month = start.to_period("M").to_timestamp()
     date_font = pygame.font.SysFont("dejavusans", 10)
     while month <= end:
+        months.append(month)
+        month = month + pd.offsets.MonthBegin()
+    step = 1
+    if len(months) > 1:
+        gap = xmap(months[1], start, end, rect) - xmap(months[0], start, end, rect)
+        while gap * step < 44:
+            step += 1
+    for i, month in enumerate(months):
         x = xmap(month, start, end, rect)
         pygame.draw.line(screen, PALETTE["muted"], (x, rect.bottom), (x, rect.bottom + 4), 1)
+        if i % step:
+            continue
         label = date_font.render(month.strftime("%Y-%m"), True, PALETTE["muted"])
         screen.blit(label, (max(rect.left, min(rect.right - label.get_width(), x - label.get_width() // 2)),
                             rect.bottom + 6))
-        month = month + pd.offsets.MonthBegin()
 
 
 def draw_bands(screen, rect, start, end):
@@ -121,16 +131,16 @@ def draw_bands(screen, rect, start, end):
 
 
 def draw_events(screen, font, rect, start, end, events, hover_x=None):
-    colors = {"war": (247, 37, 133), "hormuz": (255, 209, 102), "diplomacy": (6, 214, 160),
-              "market": (76, 201, 240)}
+    colors = {"war": (247, 37, 133), "diplomacy": (6, 214, 160)}
     shown = None
-    for day, text in events:
+    for day, category, text in events:
         if not (start <= day <= end):
             continue
         x = xmap(day, start, end, rect)
-        color = colors.get("war" if "war" in text.lower() else "", PALETTE["series"][2])
-        pygame.draw.line(screen, color, (x, rect.top), (x, rect.top + 10), 2)
-        pygame.draw.circle(screen, color, (x, rect.top + 2), 2)
+        if category in colors:
+            color = colors[category]
+            pygame.draw.line(screen, color, (x, rect.top), (x, rect.top + 10), 2)
+            pygame.draw.circle(screen, color, (x, rect.top + 2), 2)
         if hover_x is not None and abs(hover_x - x) <= 6:
             shown = (x, text)
     if shown:

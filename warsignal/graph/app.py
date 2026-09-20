@@ -19,7 +19,7 @@ img.thumb{max-width:220px;border-radius:4px}.hint{color:#94a3b8;font-size:12px}a
 <button onclick="run()">Run</button>
 <div class="card"><h2>History</h2><div id="past"></div></div>
 <script>
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','&gt;':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 async function refresh(){
 let r=await fetch('/api/history');let x=await r.json();
 document.getElementById('past').innerHTML='<table><tr><th>Status</th><th>Prompt</th><th>Type</th><th>Indicators</th><th>Chart</th><th></th></tr>'+x.map(j=>{

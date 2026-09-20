@@ -48,6 +48,7 @@ def render_thumbnail(folder: Path, timeout: int = 90) -> Path:
 def write_readme(folder: Path, prompt: str, plan: dict, series: list[dict]) -> Path:
     lines = [f"# {plan.get('title', folder.name)}", "",
              f"- prompt: {prompt}", f"- chart_type: {plan.get('chart_type')}",
+             f"- codegen: {plan.get('codegen', 'unknown')}",
              f"- folder: {folder.name}", "", "## Series", ""]
     for s in series:
         lines.append(f"- `{s.get('indicator', s['file'])}` — {s.get('label', '')} "

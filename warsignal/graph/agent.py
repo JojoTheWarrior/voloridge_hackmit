@@ -25,6 +25,7 @@ Return a JSON object:
 {"chart_type": "reel|line|spread|scatter",
  "indicators": ["finance.BZ=F.close", ...],
  "external": [{"source": "yfinance"|"fred", "symbol": "MOS", "label": "Mosaic close", "field": "close"|"log_return"}],
+ "needs_custom_code": bool, "custom_code_notes": str,
  "title": str, "notes": str, "rationale": str}
 Rules:
 - If the prompt mentions reel/reels/instagram/animate/video/play, chart_type is "reel".
@@ -34,6 +35,9 @@ Rules:
 - Otherwise "line". Multi-series line charts are fine.
 - Only use "external" when nothing in the catalogue fits. For fertilizer equities suggest MOS/CF/NTR closes.
 - Every entry in "indicators" must appear verbatim in the catalogue below.
+- Set needs_custom_code true ONLY when the request cannot be expressed as one of
+  reel/line/spread/scatter over the listed series (e.g. bar chart, histogram, dual-axis,
+  rolling correlation, candlesticks). Otherwise false, and leave custom_code_notes empty.
 """
 
 
@@ -48,6 +52,8 @@ def plan_request(prompt: str) -> dict:
     plan.setdefault("chart_type", "line")
     plan["indicators"] = [name for name in plan.get("indicators", []) if name in REGISTRY]
     plan.setdefault("external", [])
+    plan.setdefault("needs_custom_code", False)
+    plan.setdefault("custom_code_notes", "")
     plan.setdefault("title", prompt[:80])
     if not plan["indicators"] and not plan["external"]:
         raise GraphError(f"no usable indicators for prompt: {prompt}")
@@ -71,6 +77,7 @@ def heuristic_plan(prompt: str) -> dict:
     else:
         chart_type = "line"
     return {"chart_type": chart_type, "indicators": indicators, "external": [],
+            "needs_custom_code": False, "custom_code_notes": "",
             "title": prompt[:80], "notes": "heuristic plan", "rationale": "keyword match"}
 
 
@@ -123,14 +130,17 @@ def collect_data(plan: dict, data_dir: Path) -> list[dict]:
 
 
 def generate_chart(plan: dict, series: list[dict], feedback: str | None = None) -> str:
-    user = json.dumps({"plan": plan, "series": series}, indent=2, default=str)
+    user = json.dumps({"plan": plan, "series": series,
+                       "custom_code_notes": plan.get("custom_code_notes", "")}, indent=2, default=str)
     if feedback:
         user += f"\n\nThe previous script failed. Fix this:\n{feedback}"
     system = (
-        "You are writing a self-contained pygame script. Here is a reference implementation that "
-        "already satisfies the spec; return ONLY the full Python source (no markdown fences) adapted "
-        "to this plan: keep all controls, keep it loading only files from its own folder, no network, "
-        "imports limited to ALLOWED_IMPORTS.\n\n" + CHART_TEMPLATE
+        "You are writing a self-contained pygame script. Start from the reference implementation "
+        "below and change as little as possible: keep the 1280x800 landscape window, palette, fonts, "
+        "layout, status bar, controls and headless contract exactly; only add or alter the drawing "
+        "needed for the plan's custom_code_notes. Keep it loading only files from its own folder, "
+        "no network, imports limited to ALLOWED_IMPORTS. Return ONLY the full Python source "
+        "(no markdown fences).\n\n" + CHART_TEMPLATE
     )
     try:
         source, _meta = chat_text(system, user, model="gpt-5.1", max_tokens=12000)

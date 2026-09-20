@@ -113,3 +113,42 @@ def test_headless_render(tmp_path, chart_type):
     folder = _make_graph_folder(tmp_path, chart_type)
     png = store.render_thumbnail(folder, timeout=120)
     assert png.exists() and png.stat().st_size > 1024
+
+
+def test_run_template_default(tmp_path, monkeypatch):
+    import warsignal.graph.service as service
+    import warsignal.graph.store as st
+    monkeypatch.setattr(service, "GRAPHS_DIR", tmp_path)
+    monkeypatch.setattr(st, "GRAPHS_DIR", tmp_path)
+    monkeypatch.setattr(service, "plan_request",
+                        lambda prompt: {"chart_type": "line", "indicators": ["finance.BZ=F.close"],
+                                        "external": [], "needs_custom_code": False,
+                                        "title": "test", "notes": "", "rationale": ""})
+
+    def fake_collect(plan, data_dir):
+        data_dir = Path(data_dir)
+        data_dir.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame({"date": pd.date_range("2025-09-01", periods=60).date.astype(str),
+                      "value": range(60)}).to_csv(data_dir / "bz-f-close.csv", index=False)
+        return [{"file": "bz-f-close.csv", "label": "Brent", "indicator": "finance.BZ=F.close",
+                 "rows": 60, "start": "2025-09-01", "end": "2025-10-30"}]
+
+    monkeypatch.setattr(service, "collect_data", fake_collect)
+    monkeypatch.setattr(service.GraphService, "launch", lambda self, folder: None)
+    monkeypatch.setattr(st, "git_commit_push", lambda *a, **k: {"committed": False, "pushed": False, "error": None})
+    monkeypatch.setattr(service.store, "git_commit_push", st.git_commit_push)
+    monkeypatch.setattr(service.cache, "find_match", lambda *a, **k: None)
+    monkeypatch.setattr(service.cache, "llm_confirm", lambda *a, **k: None)
+
+    job = {"id": "t1", "prompt": "brent line", "status": "queued", "folder": None,
+           "indicators": [], "chart_type": None, "error": None, "created": "now",
+           "cached_from": None}
+    svc = service.GraphService()
+    svc._run(job)
+    assert job["status"] == "done", job.get("error")
+    folder = tmp_path / job["folder"]
+    assert (folder / "chart.py").read_text() == CHART_TEMPLATE
+    assert (folder / "thumbnail.png").exists()
+    plan = json.loads((folder / "plan.json").read_text())
+    assert plan["codegen"] == "template"
+    assert job["folder"] in (tmp_path / "INDEX.md").read_text()

@@ -54,8 +54,12 @@ class Handler(BaseHTTPRequestHandler):
         if not inside or not folder.is_dir():
             self._send(400, {"error": "folder must be inside graphs/"})
             return
-        script_path = folder / script
-        if not script_path.exists():
+        if "\n" not in script and len(script) < 200 and (folder / script).exists():
+            script_path = folder / script
+        elif "\n" not in script and len(script) < 200:
+            self._send(400, {"error": f"script not found: {script}"})
+            return
+        else:
             script_path = folder / "_posted_chart.py"
             script_path.write_text(script, encoding="utf-8")
         proc = STATE["proc"]

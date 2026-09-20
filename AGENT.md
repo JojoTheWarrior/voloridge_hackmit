@@ -170,7 +170,9 @@ allowlist; generated scripts may not open files — data is read via
 pandas/pathlib only), `chart_template.py` (the self-contained reference
 `chart.py`), `agent.py` (`plan_request` via gpt-5.1 + catalogue, heuristic
 fallback, `fetch_external` for yfinance/FRED, `collect_data`, `generate_chart`
-via gpt-5.1), `store.py` (folders, headless thumbnails via
+via gpt-5.1 — used only when `plan["needs_custom_code"]` is true; the default
+is the deterministic `CHART_TEMPLATE`, and `plan["codegen"]` records
+template|llm|llm-repaired|template-fallback), `store.py` (folders, headless thumbnails via
 `CHART_HEADLESS`/`SDL_VIDEODRIVER=dummy`, `INDEX.md`, best-effort
 `git commit`/`push`, disabled by `WARSIGNAL_GRAPH_NO_GIT=1`), `service.py`
 (orchestrator thread + in-memory history), `app.py` (Flask UI).
