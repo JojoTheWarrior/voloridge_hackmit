@@ -90,13 +90,26 @@ def ymap(value, low, high, rect):
     return int(rect.bottom - (value - low) / span * rect.height)
 
 
-def draw_grid(screen, font, rect, low, high, start, end):
+def fmt_value(value):
+    return f"{value:.4g}" if abs(value) < 1 else f"{value:.2f}"
+
+
+def draw_grid(screen, font, rect, low, high, start, end, xnum=None):
     for i in range(5):
         y = rect.top + i * rect.height // 4
         pygame.draw.line(screen, PALETTE["grid"], (rect.left, y), (rect.right, y), 1)
         value = high - (high - low) * i / 4
-        label = font.render(f"{value:.2f}", True, PALETTE["muted"])
+        label = font.render(fmt_value(value), True, PALETTE["muted"])
         screen.blit(label, (max(0, rect.left - label.get_width() - 8), y - label.get_height() // 2))
+    if xnum is not None:
+        xmin, xmax = xnum
+        for i in range(6):
+            x = rect.left + i * rect.width // 5
+            pygame.draw.line(screen, PALETTE["grid"], (x, rect.top), (x, rect.bottom), 1)
+            label = font.render(fmt_value(xmin + (xmax - xmin) * i / 5), True, PALETTE["muted"])
+            screen.blit(label, (min(rect.right - label.get_width(), max(rect.left, x - label.get_width() // 2)),
+                                rect.bottom + 6))
+        return
     months = []
     month = start.to_period("M").to_timestamp()
     date_font = pygame.font.SysFont("dejavusans", 10)
@@ -220,7 +233,7 @@ def main():
     font = pygame.font.SysFont("dejavusans", 13)
     title_font = pygame.font.SysFont("dejavusans", 18, bold=True)
     small = pygame.font.SysFont("dejavusans", 11)
-    rect = pygame.Rect(80, 70, WIDTH - 140, HEIGHT - 160)
+    rect = pygame.Rect(96, 70, WIDTH - 156, HEIGHT - 160)
 
     cursor = int((len(days) - 1) * 0.7) if HEADLESS else (0 if chart_type == "reel" else len(days) - 1)
     playing = chart_type == "reel" and not HEADLESS
@@ -241,7 +254,7 @@ def main():
                 xmin, xmax = xmin - 1, xmax + 1
             if ymin == ymax:
                 ymin, ymax = ymin - 1, ymax + 1
-            draw_grid(screen, font, rect, ymin, ymax, start, end)
+            draw_grid(screen, font, rect, ymin, ymax, start, end, xnum=(xmin, xmax))
             for d, xv, yv in zip(frame.index, xs, ys):
                 color = PALETTE["series"][1] if d >= WAR_START else PALETTE["muted"]
                 px = int(rect.left + (xv - xmin) / (xmax - xmin) * rect.width)
@@ -258,9 +271,9 @@ def main():
             labels = plan.get("series", [])
             if len(labels) >= 2:
                 screen.blit(font.render(labels[0].get("label", "x"), True, PALETTE["muted"]),
-                            (rect.centerx - 30, rect.bottom + 22))
+                            (rect.centerx - 30, rect.bottom + 26))
                 yl = pygame.transform.rotate(font.render(labels[1].get("label", "y"), True, PALETTE["muted"]), 90)
-                screen.blit(yl, (rect.left - 60, rect.centery - yl.get_height() // 2))
+                screen.blit(yl, (rect.left - 76, rect.centery - yl.get_height() // 2))
             if hover and rect.collidepoint(hover):
                 idx = int(np.argmin(np.abs(((xs - xmin) / (xmax - xmin) * rect.width + rect.left - hover[0]))))
                 screen.blit(font.render(str(frame.index[idx].date()), True, PALETTE["text"]),
