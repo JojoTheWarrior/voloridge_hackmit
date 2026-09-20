@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/ff77654774b147e9a1219b933f944bf6",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:19:49Z",
-  "updated_at": "2026-09-20T13:20:07Z",
+  "updated_at": "2026-09-20T13:20:31Z",
   "finished_at": null,
-  "elapsed_s": 18,
+  "elapsed_s": 42,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-265-finance-spread-gasoline-crack_x_finance-jets-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 6.92,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score < -1 explicitly (fuel-cost collapse, low-z regime) predicts 5d JETS outperformance vs SPY at 1d lag; null control if signal is symmetric [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0174)"
 }
