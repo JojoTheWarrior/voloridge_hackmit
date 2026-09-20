@@ -2,19 +2,46 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, send_file
 from werkzeug.exceptions import HTTPException
 
-from server.brief import OUTPUT_SCHEMA, build_prompt, derive_title, session_title
+from server.brief import (
+    OUTPUT_SCHEMA,
+    REPORT_REQUEST,
+    build_explorer_request,
+    build_prompt,
+    derive_title,
+    session_title,
+)
 from server.devin import AttachmentRejected, DevinClient, DevinUnavailable, devin_mode, make_client, max_acu
+from server.explorer import DOCUMENT_EXTENSIONS, KIT_DIR, content_type, extension, read_kit, site_file
 from server.poller import Poller
 from server.store import MissionRow, Store
 
 log = logging.getLogger(__name__)
 
 NO_SESSION = "This mission never reached Devin, so there is nothing to reply to. Start a new mission instead."
+NO_SESSION_REPORT = "This mission never reached Devin, so there is nothing to report on. Start a new mission instead."
+NO_SESSION_EXPLORER = "This mission never reached Devin, so there is nothing to explore. Start a new mission instead."
+MAX_INSTRUCTIONS = 2000
+
+# An explorer is code Devin wrote. Its frame has an opaque origin, so its own relative fetches are
+# cross-origin and need the CORS header; the policy sandboxes it the same way when it is opened directly.
+EXPLORER_HEADERS = {
+    "Access-Control-Allow-Origin": "*",
+    "X-Content-Type-Options": "nosniff",
+    "Cache-Control": "no-store",
+}
+EXPLORER_CSP = (
+    "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox; "
+    "default-src 'self' data: blob:; "
+    "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+    "style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com; "
+    "font-src 'self' data: https://fonts.gstatic.com; "
+    "img-src * data: blob:; connect-src *; worker-src blob:; child-src blob:"
+)
 
 
 class Invalid(Exception):
@@ -28,9 +55,15 @@ class NotFound(Exception):
     pass
 
 
-def create_app(store: Store, client: DevinClient, *, demo: bool) -> Flask:
+def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path = KIT_DIR) -> Flask:
     app = Flask(__name__)
     app.json.sort_keys = False
+
+    @app.after_request
+    def explorer_headers(response: Response) -> Response:
+        if request.endpoint == "explorer_file":
+            response.headers.update(EXPLORER_HEADERS)
+        return response
 
     @app.errorhandler(Invalid)
     def invalid(error: Invalid):
@@ -113,6 +146,54 @@ def create_app(store: Store, client: DevinClient, *, demo: bool) -> Flask:
         store.mark_done(mission_id)
         return jsonify({})
 
+    @app.post("/api/missions/<mission_id>/report")
+    def request_report(mission_id: str):
+        mission = require_mission(mission_id)
+        if mission.report_pending:
+            return jsonify({}), 202
+        if not mission.session_id:
+            store.append_event(mission_id, "error", {"text": NO_SESSION_REPORT})
+            return jsonify({}), 202
+        try:
+            client.send_message(mission.session_id, REPORT_REQUEST)
+        except DevinUnavailable as exc:
+            store.append_event(mission_id, "error", {"text": f"The report request did not reach Devin: {exc}"})
+        else:
+            store.request_report(mission_id)
+        return jsonify({}), 202
+
+    @app.post("/api/missions/<mission_id>/explorer")
+    def request_explorer(mission_id: str):
+        mission = require_mission(mission_id)
+        instructions = _text(_body().get("instructions")) or None
+        if instructions and len(instructions) > MAX_INSTRUCTIONS:
+            raise Invalid("text", "Keep instructions under 2,000 characters")
+        if mission.explorer_pending:
+            return jsonify({}), 202
+        if not mission.session_id:
+            store.append_event(mission_id, "error", {"text": NO_SESSION_EXPLORER})
+            return jsonify({}), 202
+        message = build_explorer_request(
+            instructions, read_kit(kit_dir), next_version=mission.explorer_seen_version + 1)
+        try:
+            client.send_message(mission.session_id, message)
+        except DevinUnavailable as exc:
+            store.append_event(mission_id, "error", {"text": f"The explorer request did not reach Devin: {exc}"})
+        else:
+            store.request_explorer(mission_id)
+        return jsonify({}), 202
+
+    @app.get("/api/missions/<mission_id>/explorer/<int:version>/<path:path>")
+    def explorer_file(mission_id: str, version: int, path: str):
+        require_mission(mission_id)
+        file = site_file(store.explorer_dir(mission_id, version), path, kit_dir)
+        if file is None:
+            raise NotFound("File not found")
+        response = send_file(file, mimetype=content_type(path), conditional=False, max_age=None)
+        if extension(path) in DOCUMENT_EXTENSIONS:
+            response.headers["Content-Security-Policy"] = EXPLORER_CSP
+        return response
+
     @app.get("/api/missions/<mission_id>/attachments/<name>")
     def attachment(mission_id: str, name: str):
         mission = require_mission(mission_id)
@@ -188,5 +269,18 @@ def _mission(store: Store, mission_id: str) -> dict:
         body["sessionUrl"] = mission.session_url
     if mission.needs_user:
         body["needsUser"] = mission.needs_user
+    if mission.report:
+        body["report"] = mission.report
+    body["reportPending"] = mission.report_pending
+    if mission.explorer:
+        build = mission.explorer
+        body["explorer"] = {
+            "version": build["version"],
+            "title": build["title"],
+            "description": build["description"],
+            "src": f"/api/missions/{mission.id}/explorer/{build['version']}/{quote(build['entry'])}",
+            "builtAt": build["builtAt"],
+        }
+    body["explorerPending"] = mission.explorer_pending
     body["events"] = store.list_events(mission_id)
     return body

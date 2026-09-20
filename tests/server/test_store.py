@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import itertools
+import json
 import sqlite3
 import threading
 
@@ -487,3 +488,240 @@ def test_a_database_from_before_reports_is_migrated_in_place(tmp_path):
 
     reopened = Store(path, now=Clock())
     assert reopened.get_mission("m_old").report == REPORT
+
+
+# ---------- explorers ----------
+
+BUILD = {"version": 1, "title": "Roofs by score", "description": "Click a roof.", "entry": "index.html",
+         "builtAt": "2026-09-20T12:40:00Z"}
+
+# The missions table as it was once reports existed and explorers did not; databases like this are in use too.
+REPORT_ERA_MISSIONS = OLD_MISSIONS.replace("    failures integer not null default 0\n", """\
+    failures integer not null default 0, report text, report_pending integer not null default 0,
+    report_requested_at text, report_restore_done integer not null default 0
+""")
+
+
+def _built(explorer=None, status="waiting", seen=None, new_events=()):
+    return SyncResult(list(new_events), [], status, None, explorer=explorer, explorer_settled=True,
+                      explorer_seen=seen if seen is not None else (explorer or {}).get("version"))
+
+
+def test_a_new_mission_has_no_explorer(store):
+    mission = _mission(store)
+    assert (mission.explorer, mission.explorer_pending, mission.explorer_requested_at, mission.explorer_restore_done,
+            mission.explorer_seen_version) == (None, False, None, False, 0)
+    assert not mission.awaiting and not mission.restore_done
+
+
+@pytest.mark.parametrize("before, restore", [("working", False), ("waiting", False), ("done", True)])
+def test_request_explorer_sets_pending_and_working_and_remembers_done(store, before, restore):
+    mission = _mission(store)
+    if before == "waiting":
+        store.apply_sync(mission.id, SyncResult([], [], "waiting", "Drop it?"), expected_status="working")
+    elif before == "done":
+        store.mark_done(mission.id)
+    asked = store.get_mission(mission.id)
+
+    store.request_explorer(mission.id)
+    pending = store.get_mission(mission.id)
+    assert (pending.status, pending.explorer_pending, pending.explorer_restore_done) == ("working", True, restore)
+    assert asked.updated_at < pending.explorer_requested_at <= pending.updated_at
+    assert (pending.needs_user, pending.report_pending, pending.awaiting) == (asked.needs_user, False, True)
+    assert store.list_events(mission.id) == []
+
+
+def test_request_explorer_for_an_unknown_mission_raises(store):
+    with pytest.raises(KeyError):
+        store.request_explorer("m_nope")
+
+
+def test_a_second_request_from_a_done_mission_also_remembers_done(store):
+    for first, second in ((store.request_report, store.request_explorer), (store.request_explorer, store.request_report)):
+        mission = _mission(store)
+        store.mark_done(mission.id)
+        first(mission.id)
+        second(mission.id)
+        both = store.get_mission(mission.id)
+        assert (both.status, both.report_restore_done, both.explorer_restore_done) == ("working", True, True)
+
+
+def test_a_pending_explorer_keeps_a_done_mission_live(store):
+    done, pending_done, sessionless = _mission(store), _mission(store), _mission(store)
+    for mission in (done, pending_done):
+        store.set_session(mission.id, f"devin-{mission.id}", None)
+    store.mark_done(done.id)
+    store.request_explorer(pending_done.id)
+    store.mark_done(pending_done.id)
+    store.request_explorer(sessionless.id)
+    assert [m.id for m in store.live_missions()] == [pending_done.id]
+
+
+def test_apply_sync_delivers_an_explorer(store):
+    mission = _mission(store)
+    store.request_explorer(mission.id)
+    before = store.get_mission(mission.id)
+    store.apply_sync(mission.id, _built(BUILD), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.explorer, after.explorer_seen_version) == (BUILD, 1)
+    assert (after.status, after.explorer_pending, after.explorer_requested_at, after.explorer_restore_done) == (
+        "waiting", False, None, False)
+    assert after.updated_at > before.updated_at
+
+
+def test_apply_sync_returns_a_mission_to_done_after_an_explorer(store):
+    mission = _mission(store)
+    store.mark_done(mission.id)
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, _built(BUILD, status="done"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.status, after.explorer, after.explorer_restore_done) == ("done", BUILD, False)
+
+
+def test_a_rejected_build_clears_pending_keeps_the_old_build_and_remembers_the_version(store):
+    mission = _mission(store)
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, _built(BUILD), expected_status="working")
+    store.request_explorer(mission.id)
+    error = {"id": "error:explorer:1", "at": "2026-09-20T12:50:00Z", "kind": "error", "text": "It has no files"}
+    store.apply_sync(mission.id, _built(None, seen=2, new_events=[NewEvent(error)]), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.explorer, after.explorer_pending, after.explorer_requested_at, after.explorer_seen_version) == (
+        BUILD, False, None, 2)
+    assert _ids(store, mission.id) == ["error:explorer:1"]
+
+
+def test_a_request_that_times_out_leaves_the_seen_version_alone(store):
+    mission = _mission(store)
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, _built(BUILD), expected_status="working")
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, SyncResult([], [], "waiting", None, explorer_settled=True), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.explorer, after.explorer_pending, after.explorer_seen_version) == (BUILD, False, 1)
+
+
+def test_the_seen_version_never_goes_down(store):
+    mission = _mission(store)
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, _built({**BUILD, "version": 5}), expected_status="working")
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, _built(None, seen=3), expected_status="working")
+    assert store.get_mission(mission.id).explorer_seen_version == 5
+
+
+def test_an_explorer_in_a_sync_that_settles_nothing_is_not_stored(store):
+    mission = _mission(store)
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, SyncResult([], [], "working", None, explorer=BUILD, explorer_seen=1),
+                     expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.explorer, after.explorer_pending, after.explorer_seen_version) == (None, True, 0)
+
+
+def test_a_settled_explorer_sync_does_nothing_when_no_build_is_pending(store):
+    mission = _mission(store)
+    store.apply_sync(mission.id, _built(BUILD, status="working"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.explorer, after.explorer_pending, after.updated_at) == (None, False, mission.updated_at)
+
+
+def test_mark_done_while_a_build_is_pending_wins_and_the_build_still_lands(store):
+    mission = _mission(store)
+    store.request_explorer(mission.id)
+    store.mark_done(mission.id)
+    assert store.get_mission(mission.id).explorer_pending
+
+    store.apply_sync(mission.id, _built(BUILD, status="waiting"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.status, after.explorer, after.explorer_pending) == ("done", BUILD, False)
+
+
+def test_a_reply_while_a_build_is_pending_cancels_the_return_to_done(store):
+    mission = _mission(store)
+    store.mark_done(mission.id)
+    store.request_explorer(mission.id)
+    store.request_report(mission.id)
+    store.reopen(mission.id)
+    reopened = store.get_mission(mission.id)
+    assert (reopened.status, reopened.explorer_pending, reopened.report_pending, reopened.restore_done) == (
+        "working", True, True, False)
+
+    # This sync was computed before the reply, when the mission was still due to go back to done.
+    store.apply_sync(mission.id, _built(BUILD, status="done"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.status, after.explorer, after.explorer_pending, after.report_pending) == ("working", BUILD, False, True)
+
+
+def test_a_report_and_an_explorer_settle_independently(store):
+    mission = _mission(store)
+    store.request_report(mission.id)
+    store.request_explorer(mission.id)
+    store.apply_sync(mission.id, _settled(REPORT, status="working"), expected_status="working")
+    half = store.get_mission(mission.id)
+    assert (half.report, half.report_pending, half.explorer, half.explorer_pending) == (REPORT, False, None, True)
+    store.apply_sync(mission.id, _built(BUILD), expected_status="working")
+    whole = store.get_mission(mission.id)
+    assert (whole.report, whole.explorer, whole.awaiting, whole.status) == (REPORT, BUILD, False, "waiting")
+
+
+def test_explorer_files_live_next_to_the_database_by_mission_and_version(tmp_path):
+    store = Store(tmp_path / "data" / "kingdom.db")
+    assert store.explorer_dir("m_1", 2) == tmp_path / "data" / "explorers" / "m_1" / "2"
+    assert store.explorer_dir("m_1", 3).parent == store.explorer_dir("m_1", 2).parent
+    # Nothing is created until a build is unpacked.
+    assert not (tmp_path / "data" / "explorers").exists()
+
+
+def test_explorer_state_survives_a_restart(tmp_path):
+    path = tmp_path / "k.db"
+    first = Store(path, now=Clock())
+    delivered, pending = _mission(first), _mission(first)
+    first.request_explorer(delivered.id)
+    first.apply_sync(delivered.id, _built(BUILD), expected_status="working")
+    first.mark_done(pending.id)
+    first.request_explorer(pending.id)
+
+    second = Store(path, now=Clock())
+    assert second.get_mission(delivered.id) == first.get_mission(delivered.id)
+    assert second.get_mission(delivered.id).explorer == BUILD
+    assert second.get_mission(pending.id) == first.get_mission(pending.id)
+    assert second.get_mission(pending.id).explorer_restore_done
+    assert second.explorer_dir(delivered.id, 1) == first.explorer_dir(delivered.id, 1)
+
+
+@pytest.mark.parametrize("schema, extra_columns, extra_values", [
+    (OLD_MISSIONS, "", ""),
+    (REPORT_ERA_MISSIONS, ", report, report_pending, report_requested_at, report_restore_done",
+     f", '{json.dumps(REPORT)}', 1, '2026-09-19T11:00:00Z', 1"),
+], ids=["before-reports", "before-explorers"])
+def test_a_database_from_any_earlier_release_is_migrated_in_place(tmp_path, schema, extra_columns, extra_values):
+    path = tmp_path / "old.db"
+    with sqlite3.connect(path) as db:
+        db.executescript(schema)
+        db.execute(
+            "insert into missions (id, title, hypothesis, prompt, status, created_at, updated_at, dataset_ids, "
+            f"session_id, needs_user{extra_columns}) values ('m_old', 'Old', 'Does A lead B?', 'brief', 'working', "
+            f"'2026-09-19T10:00:00Z', '2026-09-19T11:00:00Z', '[\"gdelt\"]', 'devin-old', 'Drop it?'{extra_values})")
+    db.close()
+
+    store = Store(path, now=Clock())
+    old = store.get_mission("m_old")
+    assert (old.title, old.status, old.dataset_ids, old.needs_user) == ("Old", "working", ["gdelt"], "Drop it?")
+    assert (old.explorer, old.explorer_pending, old.explorer_requested_at, old.explorer_restore_done,
+            old.explorer_seen_version) == (None, False, None, False, 0)
+    kept_report = bool(extra_columns)
+    assert (old.report, old.report_pending, old.report_restore_done) == (
+        (REPORT, True, True) if kept_report else (None, False, False))
+
+    store.request_explorer("m_old")
+    store.apply_sync("m_old", _built(BUILD), expected_status="working")
+    assert store.get_mission("m_old").explorer == BUILD
+    newer = _mission(store)
+    assert [m.id for m in store.list_missions()] == [newer.id, "m_old"]
+
+    # Opening it again changes nothing: the migration only ever adds what is missing.
+    reopened = Store(path, now=Clock())
+    assert reopened.get_mission("m_old") == store.get_mission("m_old")
+    columns = [row[1] for row in sqlite3.connect(path).execute("pragma table_info(missions)")]
+    assert len(columns) == len(set(columns)) and {"report", "explorer", "explorer_seen_version"} <= set(columns)

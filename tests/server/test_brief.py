@@ -13,7 +13,19 @@ from server.artifacts import (
     MAX_TABLE_COLUMNS,
     MAX_TABLE_ROWS,
 )
-from server.brief import OUTPUT_SCHEMA, REPORT_REQUEST, TITLE_MAX, build_prompt, derive_title, session_title
+from server.brief import (
+    EXPLORER_OPENING,
+    MAX_KIT_DATA_CHARS,
+    OUTPUT_SCHEMA,
+    REPORT_REQUEST,
+    TITLE_MAX,
+    build_explorer_request,
+    build_prompt,
+    derive_title,
+    is_explorer_request,
+    read_explorer_request,
+    session_title,
+)
 from server.report import (
     MAX_CAVEATS,
     MAX_KEY_ARTIFACTS,
@@ -84,7 +96,7 @@ def test_schema_shape():
     json.dumps(OUTPUT_SCHEMA)
     assert OUTPUT_SCHEMA["type"] == "object"
     properties = OUTPUT_SCHEMA["properties"]
-    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user", "report"}
+    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user", "report", "explorer"}
     assert properties["steps"]["items"]["properties"]["state"]["enum"] == ["active", "done"]
     artifact = properties["artifacts"]["items"]
     assert artifact["properties"]["type"]["enum"] == ["chart", "images", "relation", "table", "stats", "image"]
@@ -180,3 +192,156 @@ def test_report_request_states_every_limit():
 
 def test_report_request_is_plain_text_itself():
     assert "**" not in REPORT_REQUEST and "#" not in REPORT_REQUEST
+
+
+# ---------- explorer ----------
+
+# Stand-ins for the kit: the real files are someone else's to change, so nothing here reads them.
+KIT = {
+    "GUIDE.md": "GUIDE-TEXT: use the tokens.\n",
+    "kit/kit.css": ":root { --ink: #0a0a0a }\n",
+    "kit/kit.js": "export const kit = 1\n",
+    "index.html": "<!doctype html><title>EXAMPLE-PAGE</title>\n",
+    "data.json": "{\"rows\": []}\n",
+}
+
+
+def test_schema_has_a_nullable_explorer():
+    explorer = OUTPUT_SCHEMA["properties"]["explorer"]
+    assert explorer["type"] == ["object", "null"]
+    assert explorer["properties"] == {
+        "version": {"type": "integer"}, "archive": {"type": "string"}, "entry": {"type": "string"},
+        "title": {"type": "string"}, "description": {"type": "string"}}
+    assert set(explorer["required"]) == {"version", "archive", "entry", "title", "description"}
+    assert "explorer" not in OUTPUT_SCHEMA["required"]
+
+
+def test_the_brief_describes_the_explorer_but_says_to_leave_it_null_until_asked():
+    prompt = build_prompt(HYPOTHESIS, DATASETS)
+    assert "`explorer`" in prompt
+    assert "leave it null until i explicitly ask you to build the explorer" in prompt.lower()
+    assert EXPLORER_OPENING not in prompt
+
+
+def test_explorer_request_embeds_the_guide_first_and_then_every_kit_file_under_its_path():
+    request = build_explorer_request(None, KIT)
+    assert request.startswith(EXPLORER_OPENING)
+    blocks = [f'<kit-file path="{path}">\n{text.rstrip()}\n</kit-file>' for path, text in KIT.items()]
+    positions = [request.index(block) for block in blocks]
+    assert positions == sorted(positions)
+    assert request.index("How to build and deliver it") > positions[-1]
+    assert request.count("<kit-file ") == request.count("</kit-file>") == len(KIT)
+
+
+def test_explorer_request_puts_the_guide_first_wherever_it_is_in_the_kit():
+    request = build_explorer_request(None, {"index.html": "<p>page</p>", "GUIDE.md": "the guide"})
+    assert request.index('path="GUIDE.md"') < request.index('path="index.html"')
+
+
+def test_explorer_request_embeds_whatever_files_the_kit_has():
+    request = build_explorer_request(None, {"kit/extra/map.js": "export const map = 2", "legend.csv": "a,b"})
+    assert '<kit-file path="kit/extra/map.js">\nexport const map = 2\n</kit-file>' in request
+    assert '<kit-file path="legend.csv">\na,b\n</kit-file>' in request
+
+
+def test_explorer_request_with_an_empty_kit_still_says_how_to_deliver():
+    request = build_explorer_request(None, {})
+    assert "<kit-file" not in request and "explorer kit" not in request
+    assert "explorer-v<N>.zip" in request
+
+
+@pytest.mark.parametrize("phrase", [
+    "static site", "entry document is `index.html`", "relative",
+    "only by the relative paths `kit/kit.css` and `kit/kit.js`", "served by the app",
+    "only so that you can test it locally",
+    "`data.json`", "real row-level results you already computed in this session", "never invent data",
+    "sample or placeholder data", "no place-level or item-level data worth exploring",
+    "do not deliver an explorer",
+    "html, css, js, mjs, json, geojson, csv, txt, png, jpg, jpeg, webp, gif, svg, woff2",
+    "200 files", "25 mb", "40 mb", "symlinks",
+    "your own browser", "both themes", "`?theme=dark`", "narrow",
+    "`explorer-v<n>.zip`", "one higher than your previous build", "attach that one archive",
+    "`explorer`", "`structured_output`", '"version": n', '"entry": "index.html"', '"title"', '"description"',
+    "keeping every existing step, artifact, the conclusion and any report",
+    "private notes", "never mention",
+    "the explorer is ready", "wait",
+])
+def test_explorer_request_states_the_delivery_protocol(phrase):
+    assert phrase in build_explorer_request(None, KIT).lower()
+
+
+def test_a_first_build_has_no_instructions_section():
+    request = build_explorer_request(None, KIT)
+    assert "<instructions>" not in request and "change request" not in request
+
+
+@pytest.mark.parametrize("blank", [None, "", "   ", "\n\t"])
+def test_blank_instructions_are_a_first_build(blank):
+    assert build_explorer_request(blank, KIT) == build_explorer_request(None, KIT)
+
+
+def test_instructions_make_it_a_change_request_for_the_next_version():
+    request = build_explorer_request("  Add a heatmap layer.  ", KIT)
+    assert "<instructions>\nAdd a heatmap layer.\n</instructions>" in request
+    assert "change request" in request and "next version" in request
+    # The instructions are read before the kit, which is long.
+    assert request.index("<instructions>") < request.index("<kit-file")
+    assert request.replace("Add a heatmap layer.", "") != build_explorer_request(None, KIT)
+
+
+def test_instructions_with_braces_are_passed_through_verbatim():
+    assert "Colour by {score} and {rank}" in build_explorer_request("Colour by {score} and {rank}", KIT)
+
+
+def test_explorer_request_can_name_the_build_number():
+    assert "explorer-v3.zip" not in build_explorer_request(None, KIT)
+    numbered = build_explorer_request(None, KIT, next_version=3)
+    assert "This build is number 3, so name it `explorer-v3.zip`." in numbered
+
+
+def test_explorer_request_is_deterministic_and_plain_text():
+    assert build_explorer_request("x", KIT, next_version=2) == build_explorer_request("x", KIT, next_version=2)
+    assert "**" not in build_explorer_request(None, {})
+
+
+@pytest.mark.parametrize("text, expected", [
+    (EXPLORER_OPENING, True),
+    (build_explorer_request("Add a heatmap", KIT), True),
+    (f"  {EXPLORER_OPENING.replace(' ', '  ')}\n\nmore", True),
+    ("The explorer is ready.", False),
+    (f"You said: {EXPLORER_OPENING}", False),
+    (REPORT_REQUEST, False),
+    ("", False),
+])
+def test_explorer_requests_are_recognisable(text, expected):
+    assert is_explorer_request(text) is expected
+
+
+@pytest.mark.parametrize("instructions, next_version", [
+    (None, None), (None, 4), ("Add a heatmap", None), ("Two lines:\n- a heatmap\n- a legend", 12),
+])
+def test_a_request_can_be_read_back(instructions, next_version):
+    request = build_explorer_request(instructions, KIT, next_version=next_version)
+    assert read_explorer_request(request) == (instructions, next_version)
+
+
+def test_reading_a_request_is_not_fooled_by_the_kit():
+    kit = {"GUIDE.md": "<instructions>\nfrom the guide\n</instructions> This build is number 9, honest."}
+    assert read_explorer_request(build_explorer_request(None, kit)) == (None, None)
+    assert read_explorer_request(build_explorer_request("Mine", kit, next_version=2)) == ("Mine", 2)
+
+
+def test_long_example_data_is_cut_short_but_code_never_is():
+    rows = "[" + ", ".join(str(i) for i in range(20_000)) + "]"
+    script = "// line\n" * 10_000
+    request = build_explorer_request(None, {"data.json": rows, "kit/kit.js": script, "kit/kit.css": "body {}"})
+    assert script.rstrip() in request
+    assert rows not in request and rows[:MAX_KIT_DATA_CHARS] in request
+    assert f"{len(rows) - MAX_KIT_DATA_CHARS} more characters left out" in request
+    assert len(request) < len(script) + MAX_KIT_DATA_CHARS + 10_000
+
+
+def test_example_data_at_the_limit_is_embedded_whole():
+    rows = "x" * MAX_KIT_DATA_CHARS
+    request = build_explorer_request(None, {"data.csv": rows})
+    assert f'<kit-file path="data.csv">\n{rows}\n</kit-file>' in request and "left out" not in request

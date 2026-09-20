@@ -6,10 +6,21 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from server.brief import REPORT_REQUEST
+from server.brief import REPORT_REQUEST, build_explorer_request
 from server.devin import Attachment, DevinMessage, SessionSnapshot
 from server.store import Store
-from server.sync import REPORT_MISSING, REPORT_TIMEOUT_SECONDS, SyncResult, sync
+from server.sync import (
+    EXPLORER_MISSING,
+    EXPLORER_TIMEOUT_SECONDS,
+    REPORT_MISSING,
+    REPORT_TIMEOUT_SECONDS,
+    ExplorerDue,
+    ExplorerOutcome,
+    SyncResult,
+    explorer_announced,
+    explorer_due,
+    sync,
+)
 
 NOW = "2026-09-20T13:00:00Z"
 # The store's clock, fixed a little before NOW so a report requested through it is not yet overdue.
@@ -35,9 +46,9 @@ def _snapshot(output=None, status="running", detail=None):
     return SessionSnapshot(status, detail, output)
 
 
-def _output(steps=(), artifacts=(), conclusion=None, needs_user=None, title=None, report=None):
+def _output(steps=(), artifacts=(), conclusion=None, needs_user=None, title=None, report=None, explorer=None):
     return {"title": title, "steps": list(steps), "artifacts": list(artifacts), "conclusion": conclusion,
-            "needs_user": needs_user, "report": report}
+            "needs_user": needs_user, "report": report, "explorer": explorer}
 
 
 def _step(step_id, state="done", label=None):
@@ -57,10 +68,11 @@ CONCLUSION = {"verdict": "A modest link.", "summary": "r = 0.58 at one week.",
               "stats": [{"label": "Correlation", "value": 0.58}]}
 
 
-def _run(store, mission_id, snapshot, messages=(), attachments=(), now=NOW) -> SyncResult:
+def _run(store, mission_id, snapshot, messages=(), attachments=(), now=NOW, explorer=None) -> SyncResult:
     """Sync against what is stored and persist the result, as the poller does."""
     row = store.get_mission(mission_id)
-    result = sync(row, store.list_events(mission_id), snapshot, list(messages), list(attachments), now=now)
+    result = sync(row, store.list_events(mission_id), snapshot, list(messages), list(attachments), now=now,
+                  explorer=explorer)
     store.apply_sync(mission_id, result, expected_status=row.status)
     return result
 
@@ -147,6 +159,44 @@ def test_own_echo_is_skipped_even_when_the_role_is_wrong(store, mission):
 def test_brief_is_never_shown_even_if_devin_wraps_it(store, mission):
     wrapped = _devin("e1", f"Task received:\n{PROMPT}\n--")
     assert _run(store, mission.id, _snapshot(), [wrapped]).new_events == []
+
+
+@pytest.mark.parametrize("text, shown", [
+    ('Here is the map.\nATTACHMENT:{"url":"https://app.devin.ai/attachments/a1/map.png","fileSize":26}',
+     "Here is the map."),
+    ('Two files.\n\nATTACHMENT:{"url":"https://x.test/a"}\nATTACHMENT:{"url":"https://x.test/b"}\n', "Two files."),
+    ('ATTACHMENT:{"url":"https://x.test/a"}\nThat is the archive.', "That is the archive."),
+    ('Before\nATTACHMENT: {"url": "https://x.test/a", "fileSize": 1}\nAfter', "Before\nAfter"),
+    ('Windows line ends.\r\nATTACHMENT:{"url":"https://x.test/a"}\r\n', "Windows line ends."),
+    ('  ATTACHMENT:{"url":"https://x.test/a"}  \nIndented marker.', "Indented marker."),
+    ("First line\n\nThird line", "First line\n\nThird line"),
+])
+def test_attachment_lines_are_stripped_from_messages(store, mission, text, shown):
+    _run(store, mission.id, _snapshot(), [_devin("m1", text)])
+    assert _event(store, mission.id, "msg:m1")["text"] == shown
+
+
+@pytest.mark.parametrize("text", [
+    'ATTACHMENT:{"url":"https://app.devin.ai/attachments/a1/explorer-v1.zip","fileSize":26}',
+    '\nATTACHMENT:{"url":"https://x.test/a"}\n  \nATTACHMENT:{"url":"https://x.test/b"}\n',
+])
+def test_a_message_that_is_nothing_but_attachment_lines_is_no_thought_at_all(store, mission, text):
+    result = _run(store, mission.id, _snapshot(), [_devin("m1", text), _devin("m2", "Real words")])
+    assert [new.event["id"] for new in result.new_events] == ["msg:m2"]
+
+
+@pytest.mark.parametrize("text", [
+    "ATTACHMENT: I attached the archive.", "The ATTACHMENT:{} marker is odd.", "attachment:{\"url\": 1}",
+    "ATTACHMENTS:{}", "See attachment:map.png",
+])
+def test_lines_that_only_look_a_bit_like_the_marker_are_kept(store, mission, text):
+    _run(store, mission.id, _snapshot(), [_devin("m1", text)])
+    assert _event(store, mission.id, "msg:m1")["text"] == text
+
+
+def test_an_echo_is_still_recognised_under_an_attachment_line(store, mission):
+    echo = _devin("e1", f'{PROMPT}\nATTACHMENT:{{"url":"https://x.test/a"}}')
+    assert _run(store, mission.id, _snapshot(), [echo]).new_events == []
 
 
 def test_blank_messages_are_skipped(store, mission):
@@ -786,3 +836,440 @@ def test_sync_with_a_pending_report_does_not_mutate_its_inputs(store, reported):
     frozen = repr((row, stored, output))
     sync(row, stored, _snapshot(output), [_devin("m2", "x")], [], now=NOW)
     assert repr((row, stored, output)) == frozen
+
+
+# ---------- explorer: what is due ----------
+
+RAW_EXPLORER = {"version": 1, "archive": "explorer-v1.zip", "entry": "index.html", "title": " Roofs by score ",
+                "description": "Pan the map.\nClick a roof."}
+DUE = ExplorerDue(1, "explorer-v1.zip", "index.html", "Roofs by score", "Pan the map. Click a roof.")
+BUILT = {"version": 1, "title": "Roofs by score", "description": "Pan the map. Click a roof.", "entry": "index.html",
+         "builtAt": NOW}
+EXPLORER_EVENT = {"id": "explorer", "at": NOW, "kind": "explorer"}
+ARCHIVE = Attachment("explorer-v1.zip", "https://app.devin.ai/attachments/att-1/explorer-v1.zip", "att-1")
+
+
+def _explored(explorer=RAW_EXPLORER, report=None, **over):
+    return {**_concluded(report), "explorer": explorer, **over}
+
+
+def _after_explorer_request(store, mission_id, seconds):
+    asked = datetime.strptime(store.get_mission(mission_id).explorer_requested_at, STAMP)
+    return (asked + timedelta(seconds=seconds)).strftime(STAMP)
+
+
+@pytest.fixture
+def asked(store, concluded):
+    store.request_explorer(concluded.id)
+    return store.get_mission(concluded.id)
+
+
+@pytest.fixture
+def explored(store, asked):
+    """A concluded mission whose first explorer build has been delivered."""
+    _run(store, asked.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")], explorer=ExplorerOutcome(DUE))
+    assert _thread(store, asked.id)[-2:] == ["conclusion", "explorer"]
+    return store.get_mission(asked.id)
+
+
+def test_a_build_is_due_once_it_is_announced_and_its_archive_is_attached(asked):
+    snapshot = _snapshot(_explored())
+    assert explorer_announced(asked, snapshot) == DUE
+    assert explorer_due(asked, snapshot, []) is None
+    assert explorer_due(asked, snapshot, [Attachment("explorer-v2.zip", "u"), Attachment("plot.png", "u")]) is None
+    assert explorer_due(asked, snapshot, [Attachment("plot.png", "u"), ARCHIVE]) == DUE
+
+
+def test_nothing_is_due_when_no_build_was_asked_for(concluded):
+    assert explorer_announced(concluded, _snapshot(_explored())) is None
+    assert explorer_due(concluded, _snapshot(_explored()), [ARCHIVE]) is None
+
+
+@pytest.mark.parametrize("output", [None, {}, {"explorer": None}, {"explorer": "soon"}, {"explorer": []},
+                                    {"explorer": {}}, {"explorer": {"archive": "explorer-v1.zip"}}])
+def test_nothing_is_due_until_the_output_says_so(asked, output):
+    assert explorer_due(asked, _snapshot(output), [ARCHIVE]) is None
+
+
+@pytest.mark.parametrize("version, expected", [
+    (1, 1), (3, 3), ("2", 2), (" 4 ", 4), (0, None), (-1, None), (True, None), (1.0, None), (1.5, None), ("v2", None),
+    ("", None), (None, None), ([1], None),
+])
+def test_only_a_positive_whole_version_counts(asked, version, expected):
+    due = explorer_announced(asked, _snapshot(_explored({**RAW_EXPLORER, "version": version})))
+    assert (due.version if due else None) == expected
+
+
+def test_only_a_version_above_every_one_seen_so_far_is_new(store, explored):
+    store.request_explorer(explored.id)
+    again = store.get_mission(explored.id)
+    assert again.explorer_seen_version == 1
+    assert explorer_announced(again, _snapshot(_explored())) is None
+    newer = {**RAW_EXPLORER, "version": 2, "archive": "explorer-v2.zip"}
+    assert explorer_announced(again, _snapshot(_explored(newer))).version == 2
+
+
+def test_missing_fields_fall_back_to_the_protocols_defaults(asked):
+    due = explorer_announced(asked, _snapshot(_explored({"version": 2, "title": " ", "entry": 7})))
+    assert due == ExplorerDue(2, "explorer-v2.zip", "index.html", "Storms", "")
+
+
+def test_the_archive_is_the_one_devin_names(asked):
+    named = {**RAW_EXPLORER, "archive": "site.zip"}
+    assert explorer_due(asked, _snapshot(_explored(named)), [ARCHIVE]) is None
+    assert explorer_due(asked, _snapshot(_explored(named)), [Attachment("site.zip", "u")]).archive == "site.zip"
+
+
+# ---------- explorer: delivery ----------
+
+def test_a_fetched_build_is_delivered_after_the_conclusion(store, asked):
+    result = _run(store, asked.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")], [ARCHIVE],
+                  explorer=ExplorerOutcome(DUE))
+    assert (result.explorer, result.explorer_settled, result.explorer_seen, result.status) == (BUILT, True, 1, "waiting")
+    assert [(n.event, n.after) for n in result.new_events] == [(EXPLORER_EVENT, None)]
+    assert store.list_events(asked.id)[-2:] == [_event(store, asked.id, "conclusion"), EXPLORER_EVENT]
+    row = store.get_mission(asked.id)
+    assert (row.explorer, row.explorer_pending, row.explorer_seen_version, row.status) == (BUILT, False, 1, "waiting")
+
+
+def test_explorer_delivery_is_idempotent(store, explored):
+    before = store.list_events(explored.id)
+    again = _run(store, explored.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")], [ARCHIVE],
+                 now="2026-09-20T14:00:00Z")
+    assert (again.new_events, again.updated_events, again.explorer, again.explorer_settled) == ([], [], None, False)
+    assert store.list_events(explored.id) == before
+    assert store.get_mission(explored.id).explorer["builtAt"] == NOW
+
+
+def test_an_outcome_nobody_is_waiting_for_is_ignored(store, concluded):
+    result = _run(store, concluded.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")],
+                  explorer=ExplorerOutcome(DUE))
+    assert (result.explorer, result.explorer_settled, result.explorer_seen, result.new_events) == (None, False, None, [])
+    assert store.get_mission(concluded.id).explorer is None
+
+
+def test_a_mission_without_a_conclusion_can_still_get_an_explorer(store, mission):
+    store.request_explorer(mission.id)
+    _run(store, mission.id, _snapshot(_output([_step("s1")], explorer=RAW_EXPLORER), "waiting"),
+         explorer=ExplorerOutcome(DUE))
+    assert _thread(store, mission.id) == ["user:first", "step:s1", "explorer"]
+
+
+@pytest.mark.parametrize("session_status, needs_user, expected", [
+    ("running", None, ("working", None)),
+    ("waiting", None, ("working", None)),
+    ("finished", None, ("working", None)),
+    ("waiting", "Which county?", ("waiting", "Which county?")),
+])
+def test_a_pending_build_holds_the_mission_at_working(store, asked, session_status, needs_user, expected):
+    output = {**_concluded(), "needs_user": needs_user}
+    result = _run(store, asked.id, _snapshot(output, session_status), [_devin("m1", "Working")])
+    assert (result.status, result.needs_user) == expected
+    assert (result.explorer, result.explorer_settled) == (None, False)
+    assert store.get_mission(asked.id).explorer_pending
+
+
+def test_an_announced_build_whose_archive_could_not_be_fetched_yet_keeps_waiting(store, asked):
+    result = _run(store, asked.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")], [ARCHIVE])
+    assert (result.explorer, result.explorer_settled, result.status, result.new_events) == (None, False, "working", [])
+
+
+def test_a_rejected_archive_ends_the_request_with_the_reason(store, asked):
+    outcome = ExplorerOutcome(DUE, rejected="'run.exe' is not an allowed kind of file")
+    result = _run(store, asked.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")], [ARCHIVE],
+                  explorer=outcome)
+    assert (result.explorer, result.explorer_settled, result.explorer_seen, result.status) == (None, True, 1, "waiting")
+    (error,) = result.new_events
+    assert (error.event["kind"], error.event["text"]) == (
+        "error", "The explorer could not be used: 'run.exe' is not an allowed kind of file")
+    row = store.get_mission(asked.id)
+    assert (row.explorer, row.explorer_pending, row.explorer_seen_version) == (None, False, 1)
+    assert "explorer" not in _thread(store, asked.id)
+
+
+def test_a_rejected_archive_is_not_tried_again_but_the_next_version_is(store, asked):
+    _run(store, asked.id, _snapshot(_explored(), "waiting"), explorer=ExplorerOutcome(DUE, rejected="bad"))
+    store.request_explorer(asked.id)
+    again = store.get_mission(asked.id)
+    # The turned-down build is still what Devin's output says, until it delivers the next one.
+    assert explorer_due(again, _snapshot(_explored()), [ARCHIVE]) is None
+    fixed = {**RAW_EXPLORER, "version": 2, "archive": "explorer-v2.zip"}
+    due = explorer_due(again, _snapshot(_explored(fixed)), [ARCHIVE, Attachment("explorer-v2.zip", "u")])
+    _run(store, asked.id, _snapshot(_explored(fixed), "waiting"), explorer=ExplorerOutcome(due))
+    row = store.get_mission(asked.id)
+    assert (row.explorer["version"], row.explorer_seen_version, row.explorer_pending) == (2, 2, False)
+
+
+def test_a_rejected_change_keeps_the_previous_build(store, explored):
+    store.request_explorer(explored.id)
+    due = ExplorerDue(2, "explorer-v2.zip", "index.html", "Roofs", "")
+    _run(store, explored.id, _snapshot(_explored(), "waiting"), explorer=ExplorerOutcome(due, rejected="it has no files"))
+    row = store.get_mission(explored.id)
+    assert (row.explorer, row.explorer_pending, row.explorer_seen_version) == (BUILT, False, 2)
+    assert _thread(store, explored.id)[-3:] == ["conclusion", "explorer", "error:explorer:1"]
+
+
+def test_a_new_version_replaces_the_old_one_and_restamps_the_marker(store, explored):
+    store.request_explorer(explored.id)
+    later = "2026-09-20T16:00:00Z"
+    due = ExplorerDue(2, "explorer-v2.zip", "index.html", "Roofs with a heatmap", "Now with heat.")
+    result = _run(store, explored.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")], now=later,
+                  explorer=ExplorerOutcome(due))
+    assert result.explorer == {"version": 2, "title": "Roofs with a heatmap", "description": "Now with heat.",
+                               "entry": "index.html", "builtAt": later}
+    assert [(u.event, u.move_to_end) for u in result.updated_events] == [({**EXPLORER_EVENT, "at": later}, True)]
+    assert store.list_events(explored.id)[-1] == {**EXPLORER_EVENT, "at": later}
+    assert [e["kind"] for e in store.list_events(explored.id)].count("explorer") == 1
+
+
+def test_the_explorer_request_is_never_shown_even_if_it_comes_back_as_devins(store, asked):
+    kit = {"GUIDE.md": "Use the tokens.", "kit/kit.css": "body {}"}
+    echo = _devin("e1", build_explorer_request("Add a heatmap", kit, next_version=2).replace("\n\n", "\n \n"))
+    result = _run(store, asked.id, _snapshot(_concluded(), "running"), [_devin("m1", "Working"), echo])
+    assert result.new_events == []
+
+
+# ---------- explorer: giving up ----------
+
+def test_a_build_that_never_arrives_is_given_up_on_with_one_error(store, asked):
+    snapshot, messages = _snapshot(_concluded(), "waiting"), [_devin("m1", "Working")]
+    on_time = _run(store, asked.id, snapshot, messages,
+                   now=_after_explorer_request(store, asked.id, EXPLORER_TIMEOUT_SECONDS))
+    assert (on_time.explorer_settled, on_time.new_events, on_time.status) == (False, [], "working")
+
+    overdue = _after_explorer_request(store, asked.id, EXPLORER_TIMEOUT_SECONDS + 1)
+    result = _run(store, asked.id, snapshot, messages, now=overdue)
+    assert (result.explorer, result.explorer_settled, result.explorer_seen, result.status) == (None, True, None, "waiting")
+    (error,) = result.new_events
+    assert (error.event["kind"], error.event["text"], error.event["at"]) == ("error", EXPLORER_MISSING, overdue)
+    assert (EXPLORER_MISSING, EXPLORER_TIMEOUT_SECONDS) == ("The explorer did not arrive", 15 * 60)
+    row = store.get_mission(asked.id)
+    assert (row.explorer, row.explorer_pending, row.status) == (None, False, "waiting")
+
+    again = _run(store, asked.id, snapshot, messages, now=overdue)
+    assert not again.explorer_settled
+    assert [e["kind"] for e in store.list_events(asked.id)].count("error") == 1
+
+
+def test_a_build_that_arrives_at_the_last_moment_still_counts(store, asked):
+    overdue = _after_explorer_request(store, asked.id, EXPLORER_TIMEOUT_SECONDS + 60)
+    result = _run(store, asked.id, _snapshot(_explored(), "waiting"), now=overdue, explorer=ExplorerOutcome(DUE))
+    assert result.explorer == {**BUILT, "builtAt": overdue}
+    assert [e["kind"] for e in store.list_events(asked.id)].count("error") == 0
+
+
+def test_a_report_outlives_its_deadline_without_ending_the_build_and_the_other_way_round(store, concluded):
+    store.request_report(concluded.id)
+    store.request_explorer(concluded.id)
+    between = _after_explorer_request(store, concluded.id, REPORT_TIMEOUT_SECONDS + 1)
+    result = _run(store, concluded.id, _snapshot(_concluded(), "waiting"), now=between)
+    assert (result.report_settled, result.explorer_settled, result.status) == (True, False, "working")
+    assert [n.event["text"] for n in result.new_events] == [REPORT_MISSING]
+    row = store.get_mission(concluded.id)
+    assert (row.report_pending, row.explorer_pending) == (False, True)
+
+
+def test_a_report_and_a_build_given_up_on_together_get_an_error_each(store, concluded):
+    store.request_report(concluded.id)
+    store.request_explorer(concluded.id)
+    result = _run(store, concluded.id, _snapshot(_concluded(), "waiting"),
+                  now=_after_explorer_request(store, concluded.id, EXPLORER_TIMEOUT_SECONDS + 1))
+    assert [n.event["text"] for n in result.new_events] == [REPORT_MISSING, EXPLORER_MISSING]
+    assert len({n.event["id"] for n in result.new_events}) == 2
+    assert [e["kind"] for e in store.list_events(concluded.id)].count("error") == 2
+
+
+@pytest.mark.parametrize("requested_at", [None, "", "yesterday"])
+def test_a_build_request_with_no_usable_start_time_counts_as_overdue(store, asked, requested_at):
+    row = dataclasses.replace(asked, explorer_requested_at=requested_at)
+    result = sync(row, store.list_events(asked.id), _snapshot(_concluded(), "waiting"), [], [], now=NOW)
+    assert result.explorer_settled and result.new_events[-1].event["text"] == EXPLORER_MISSING
+
+
+def test_a_session_error_ends_the_build_request_without_a_second_error(store, asked):
+    result = _run(store, asked.id, _snapshot(_concluded(), "error", "out_of_credits"), [_devin("m1", "Working")])
+    assert (result.status, result.explorer, result.explorer_settled) == ("failed", None, True)
+    assert [e["text"] for e in store.list_events(asked.id) if e["kind"] == "error"] == [
+        "The Devin session stopped: out of credits."]
+    row = store.get_mission(asked.id)
+    assert (row.status, row.explorer_pending) == ("failed", False)
+
+
+# ---------- explorer: back to done ----------
+
+def test_a_done_mission_returns_to_done_when_the_build_arrives(store, concluded):
+    store.mark_done(concluded.id)
+    store.request_explorer(concluded.id)
+    assert _run(store, concluded.id, _snapshot(_concluded(), "running")).status == "working"
+    result = _run(store, concluded.id, _snapshot(_explored(needs_user="Stale question?"), "running"),
+                  explorer=ExplorerOutcome(DUE))
+    assert (result.status, result.needs_user) == ("done", None)
+    row = store.get_mission(concluded.id)
+    assert (row.status, row.explorer_pending, row.explorer_restore_done, row.explorer) == ("done", False, False, BUILT)
+
+
+@pytest.mark.parametrize("outcome", [None, ExplorerOutcome(DUE, rejected="it has no files")])
+def test_a_done_mission_returns_to_done_when_the_build_fails(store, concluded, outcome):
+    store.mark_done(concluded.id)
+    store.request_explorer(concluded.id)
+    result = _run(store, concluded.id, _snapshot(_explored(), "waiting"), explorer=outcome,
+                  now=_after_explorer_request(store, concluded.id, EXPLORER_TIMEOUT_SECONDS + 1))
+    assert (result.status, result.explorer_settled) == ("done", True)
+    assert store.get_mission(concluded.id).status == "done"
+    assert store.list_events(concluded.id)[-1]["kind"] == "error"
+
+
+def test_a_mission_marked_done_while_the_build_is_pending_stays_done(store, asked):
+    store.mark_done(asked.id)
+    pending = _run(store, asked.id, _snapshot(_concluded(), "running"))
+    assert (pending.status, pending.explorer_settled) == ("done", False)
+    delivered = _run(store, asked.id, _snapshot(_explored(), "waiting"), explorer=ExplorerOutcome(DUE))
+    assert (delivered.status, delivered.explorer_settled) == ("done", True)
+    row = store.get_mission(asked.id)
+    assert (row.status, row.explorer_pending, row.explorer) == ("done", False, BUILT)
+    assert store.live_missions() == []
+
+
+def test_a_reply_while_the_build_is_pending_means_it_no_longer_returns_to_done(store, concluded):
+    store.mark_done(concluded.id)
+    store.request_explorer(concluded.id)
+    store.append_event(concluded.id, "user_message", {"text": "Actually, one more thing"})
+    store.reopen(concluded.id)
+    result = _run(store, concluded.id, _snapshot(_explored(), "running"), explorer=ExplorerOutcome(DUE))
+    assert (result.status, result.explorer_settled) == ("working", True)
+    assert store.get_mission(concluded.id).status == "working"
+
+
+def test_a_done_mission_with_both_asked_for_is_done_again_once_the_first_lands_and_still_gets_the_second(store, concluded):
+    store.mark_done(concluded.id)
+    store.request_explorer(concluded.id)
+    store.request_report(concluded.id)
+    both = store.get_mission(concluded.id)
+    assert (both.report_restore_done, both.explorer_restore_done, both.status) == (True, True, "working")
+
+    first = _run(store, concluded.id, _snapshot(_concluded(RAW_REPORT), "running"))
+    assert (first.status, first.report_settled, first.explorer_settled) == ("done", True, False)
+    assert [m.id for m in store.live_missions()] == [concluded.id]
+
+    second = _run(store, concluded.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), explorer=ExplorerOutcome(DUE))
+    assert (second.status, second.explorer_settled) == ("done", True)
+    assert _thread(store, concluded.id)[-3:] == ["conclusion", "report", "explorer"]
+    assert store.live_missions() == []
+
+
+# ---------- the thread closes: conclusion, report, explorer ----------
+
+def test_a_thought_that_comes_with_the_build_goes_above_the_conclusion_and_the_explorer(store, asked):
+    messages = [_devin("m1", "Working"), _devin("m2", "The explorer is ready.")]
+    _run(store, asked.id, _snapshot(_explored(), "waiting"), messages, explorer=ExplorerOutcome(DUE))
+    assert _thread(store, asked.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "msg:m2", "conclusion", "explorer"]
+    assert _run(store, asked.id, _snapshot(_explored(), "waiting"), messages).updated_events == []
+
+
+def test_a_thought_that_arrives_after_the_build_goes_above_the_conclusion_and_the_explorer(store, explored):
+    messages = [_devin("m1", "Working"), _devin("m2", "The explorer is ready.")]
+    result = _run(store, explored.id, _snapshot(_explored(), "waiting"), messages, now="2026-09-20T14:00:00Z")
+    assert _thread(store, explored.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "msg:m2", "conclusion", "explorer"]
+    assert [(u.event["id"], u.move_to_end) for u in result.updated_events] == [("conclusion", True), ("explorer", True)]
+    assert _event(store, explored.id, "explorer")["at"] == NOW
+    assert _run(store, explored.id, _snapshot(_explored(), "waiting"), messages).updated_events == []
+
+
+def test_the_conclusion_does_not_jump_below_an_explorer_that_is_already_last(store, explored):
+    result = _run(store, explored.id, _snapshot(_explored(), "waiting"), [_devin("m1", "Working")])
+    assert result.updated_events == []
+    assert _thread(store, explored.id)[-2:] == ["conclusion", "explorer"]
+
+
+def test_a_report_delivered_after_the_explorer_slots_in_above_it(store, explored):
+    store.request_report(explored.id)
+    messages = [_devin("m1", "Working"), _devin("m2", "The report is ready.")]
+    _run(store, explored.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), messages)
+    assert _thread(store, explored.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "msg:m2", "conclusion", "report", "explorer"]
+    assert _event(store, explored.id, "explorer")["at"] == NOW
+    again = _run(store, explored.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), messages)
+    assert (again.new_events, again.updated_events) == ([], [])
+
+
+def test_an_explorer_delivered_after_the_report_goes_below_it(store, reported):
+    store.request_explorer(reported.id)
+    messages = [_devin("m1", "Working"), _devin("m2", "The explorer is ready.")]
+    _run(store, reported.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), messages, explorer=ExplorerOutcome(DUE))
+    assert _thread(store, reported.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "msg:m2", "conclusion", "report", "explorer"]
+    assert _run(store, reported.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), messages).updated_events == []
+
+
+def test_a_report_and_an_explorer_delivered_in_the_same_sync_land_in_order(store):
+    for messages in ([_devin("m1", "Working")], [_devin("m1", "Working"), _devin("m2", "Both are ready.")]):
+        fresh = store.create_mission("h", title="t", dataset_ids=[], reference=None, prompt=PROMPT)
+        store.set_session(fresh.id, "devin-x", None)
+        _run(store, fresh.id, _snapshot(_concluded(), "waiting"), [_devin("m1", "Working")])
+        store.request_report(fresh.id)
+        store.request_explorer(fresh.id)
+        result = _run(store, fresh.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), messages,
+                      explorer=ExplorerOutcome(DUE))
+        assert (result.report_settled, result.explorer_settled, result.status) == (True, True, "waiting")
+        assert _thread(store, fresh.id)[-3:] == ["conclusion", "report", "explorer"]
+        assert _run(store, fresh.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), messages).updated_events == []
+
+
+def test_a_regenerated_report_stays_above_the_explorer(store, reported):
+    store.request_explorer(reported.id)
+    _run(store, reported.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), [_devin("m1", "Working")],
+         explorer=ExplorerOutcome(DUE))
+    store.request_report(reported.id)
+    rewritten = {**RAW_REPORT, "headline": "Still a modest link"}
+    _run(store, reported.id, _snapshot(_explored(report=rewritten), "waiting"), [_devin("m1", "Working")],
+         now="2026-09-20T16:00:00Z")
+    assert _thread(store, reported.id)[-3:] == ["conclusion", "report", "explorer"]
+    assert _event(store, reported.id, "report")["at"] == "2026-09-20T16:00:00Z"
+    assert _event(store, reported.id, "explorer")["at"] == NOW
+
+
+def test_late_steps_and_artifacts_stay_above_the_conclusion_the_report_and_the_explorer(store, reported):
+    store.request_explorer(reported.id)
+    _run(store, reported.id, _snapshot(_explored(report=RAW_REPORT), "waiting"), [_devin("m1", "Working")],
+         explorer=ExplorerOutcome(DUE))
+    late = {**_output([_step("s1"), _step("s2")], [_stats("a1", "s1"), _stats("a2", "s1")], CONCLUSION,
+                      report=RAW_REPORT), "explorer": RAW_EXPLORER}
+    _run(store, reported.id, _snapshot(late, "waiting"), [_devin("m1", "Working")])
+    assert _thread(store, reported.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "artifact:a2", "step:s2", "conclusion", "report", "explorer"]
+
+
+def test_a_revised_conclusion_keeps_the_report_and_the_explorer_below_it(store, explored):
+    revised = {**CONCLUSION, "verdict": "No link after all."}
+    _run(store, explored.id, _snapshot({**_concluded(conclusion=revised), "explorer": RAW_EXPLORER}, "waiting"),
+         [_devin("m1", "Working")])
+    assert _thread(store, explored.id)[-2:] == ["conclusion", "explorer"]
+    assert _event(store, explored.id, "conclusion")["verdict"] == "No link after all."
+
+
+def test_once_the_user_replies_below_the_explorer_it_stays_where_it_was_delivered(store, explored):
+    store.append_event(explored.id, "user_message", {"text": "Only the north?"}, event_id="user:second")
+    store.reopen(explored.id)
+    messages = [_devin("m1", "Working"), _devin("m9", "Filtering")]
+    _run(store, explored.id, _snapshot(_explored()), messages)
+    assert _thread(store, explored.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "conclusion", "explorer", "user:second", "msg:m9"]
+
+    # A change request then closes the thread again with the one marker.
+    store.request_explorer(explored.id)
+    due = ExplorerDue(2, "explorer-v2.zip", "index.html", "Roofs, north only", "")
+    messages.append(_devin("m10", "The explorer is ready."))
+    _run(store, explored.id, _snapshot(_explored(), "waiting"), messages, explorer=ExplorerOutcome(due))
+    assert _thread(store, explored.id) == [
+        "user:first", "msg:m1", "step:s1", "artifact:a1", "conclusion", "user:second", "msg:m9", "msg:m10", "explorer"]
+
+
+def test_sync_with_a_pending_build_does_not_mutate_its_inputs(store, explored):
+    store.request_explorer(explored.id)
+    row, stored, output = store.get_mission(explored.id), store.list_events(explored.id), _explored()
+    outcome = ExplorerOutcome(ExplorerDue(2, "explorer-v2.zip", "index.html", "t", "d"))
+    frozen = repr((row, stored, output, outcome))
+    sync(row, stored, _snapshot(output), [_devin("m2", "x")], [ARCHIVE], now=NOW, explorer=outcome)
+    assert repr((row, stored, output, outcome)) == frozen

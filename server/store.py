@@ -69,12 +69,18 @@ ADDED_MISSION_COLUMNS = (
     ("report_pending", "integer not null default 0"),
     ("report_requested_at", "text"),
     ("report_restore_done", "integer not null default 0"),
+    ("explorer", "text"),
+    ("explorer_pending", "integer not null default 0"),
+    ("explorer_requested_at", "text"),
+    ("explorer_restore_done", "integer not null default 0"),
+    ("explorer_seen_version", "integer not null default 0"),
 )
 
 _MISSION_COLUMNS = (
     "id, title, hypothesis, reference, prompt, status, created_at, updated_at, dataset_ids, "
     "session_id, session_url, needs_user, answered_needs_user, failures, "
-    "report, report_pending, report_requested_at, report_restore_done"
+    "report, report_pending, report_requested_at, report_restore_done, "
+    "explorer, explorer_pending, explorer_requested_at, explorer_restore_done, explorer_seen_version"
 )
 
 
@@ -106,6 +112,23 @@ class MissionRow:
     report_requested_at: str | None
     # The mission was done when the report was requested, and goes back to done once that is settled.
     report_restore_done: bool
+    # The last explorer build that was unpacked: version, title, description, entry, builtAt.
+    explorer: dict | None
+    explorer_pending: bool
+    explorer_requested_at: str | None
+    explorer_restore_done: bool
+    # The highest version Devin has offered so far, used or rejected. Only a higher one is a new build,
+    # so an archive that was turned down is not fetched again when the user asks for another.
+    explorer_seen_version: int
+
+    @property
+    def awaiting(self) -> bool:
+        """Devin owes this mission a report or an explorer, so it is followed whatever its status."""
+        return self.report_pending or self.explorer_pending
+
+    @property
+    def restore_done(self) -> bool:
+        return self.report_restore_done or self.explorer_restore_done
 
 
 class Store:
@@ -116,6 +139,7 @@ class Store:
         self._lock = threading.RLock()
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
+        self._explorers = path.parent / "explorers"
         self._db = sqlite3.connect(path, check_same_thread=False)
         self._db.row_factory = sqlite3.Row
         with self._lock, self._db:
@@ -152,8 +176,8 @@ class Store:
 
     def live_missions(self) -> list[MissionRow]:
         """Missions the poller should sync: also what it resumes after a restart.
-        A mission marked done while its report is being written is followed until the report lands."""
-        return [m for m in self.list_missions() if (m.status in LIVE_STATUSES or m.report_pending) and m.session_id]
+        A mission marked done while a report or an explorer is being made is followed until that lands."""
+        return [m for m in self.list_missions() if (m.status in LIVE_STATUSES or m.awaiting) and m.session_id]
 
     def set_session(self, mission_id: str, session_id: str, session_url: str | None) -> None:
         with self._lock, self._db:
@@ -177,8 +201,9 @@ class Store:
                 needs_user=None,
                 answered_needs_user=mission.needs_user or mission.answered_needs_user,
                 failures=0,
-                # A reply is the user carrying on, so a pending report no longer closes the mission.
+                # A reply is the user carrying on, so a pending report or explorer no longer closes the mission.
                 report_restore_done=0,
+                explorer_restore_done=0,
             )
 
     def request_report(self, mission_id: str) -> None:
@@ -189,9 +214,25 @@ class Store:
                 status="working",
                 report_pending=1,
                 report_requested_at=self._now(),
-                report_restore_done=int(mission.status == "done"),
+                report_restore_done=int(mission.status == "done" or mission.restore_done),
                 failures=0,
             )
+
+    def request_explorer(self, mission_id: str) -> None:
+        with self._lock, self._db:
+            mission = self._require(mission_id)
+            self._update(
+                mission_id,
+                status="working",
+                explorer_pending=1,
+                explorer_requested_at=self._now(),
+                explorer_restore_done=int(mission.status == "done" or mission.restore_done),
+                failures=0,
+            )
+
+    def explorer_dir(self, mission_id: str, version: int) -> Path:
+        """Where one build's files live. Older versions stay on disk next to it."""
+        return self._explorers / mission_id / str(version)
 
     def record_failure(self, mission_id: str) -> int:
         with self._lock, self._db:
@@ -230,6 +271,9 @@ class Store:
             if result.report_settled and mission.report_pending:
                 self._settle_report(mission_id, result.report)
                 changed = True
+            if result.explorer_settled and mission.explorer_pending:
+                self._settle_explorer(mission, result.explorer, result.explorer_seen)
+                changed = True
             for new in result.new_events:
                 changed |= self._insert(mission_id, new.event, after=new.after)
             for updated in result.updated_events:
@@ -237,11 +281,9 @@ class Store:
             if result.title and result.title != mission.title:
                 self._update(mission_id, title=result.title)
                 changed = True
-            # A sync only closes a mission to put it back where a report found it, and a reply
-            # that landed while the sync was being computed has called that off.
-            user_acted = mission.status != expected_status or (
-                result.status == "done" and not mission.report_restore_done
-            )
+            # A sync only closes a mission to put it back where a report or an explorer request found
+            # it, and a reply that landed while the sync was being computed has called that off.
+            user_acted = mission.status != expected_status or (result.status == "done" and not mission.restore_done)
             if not user_acted and (result.status, result.needs_user) != (mission.status, mission.needs_user):
                 self._update(mission_id, status=result.status, needs_user=result.needs_user)
             elif changed:
@@ -281,6 +323,14 @@ class Store:
         if report is not None:
             fields["report"] = json.dumps(report)
         self._update(mission_id, **fields)
+
+    def _settle_explorer(self, mission: MissionRow, explorer: dict | None, seen: int | None) -> None:
+        fields: dict = {"explorer_pending": 0, "explorer_requested_at": None, "explorer_restore_done": 0}
+        if explorer is not None:
+            fields["explorer"] = json.dumps(explorer)
+        if seen is not None:
+            fields["explorer_seen_version"] = max(seen, mission.explorer_seen_version)
+        self._update(mission.id, **fields)
 
     def _seed_datasets(self) -> None:
         if self._db.execute("select 1 from datasets limit 1").fetchone():
@@ -366,6 +416,9 @@ def _mission(row: sqlite3.Row) -> MissionRow:
     fields["report"] = json.loads(fields["report"]) if fields["report"] else None
     fields["report_pending"] = bool(fields["report_pending"])
     fields["report_restore_done"] = bool(fields["report_restore_done"])
+    fields["explorer"] = json.loads(fields["explorer"]) if fields["explorer"] else None
+    fields["explorer_pending"] = bool(fields["explorer_pending"])
+    fields["explorer_restore_done"] = bool(fields["explorer_restore_done"])
     return MissionRow(**fields)
 
 

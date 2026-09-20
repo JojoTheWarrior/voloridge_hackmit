@@ -1,11 +1,22 @@
 """Tests for server.poller."""
 from __future__ import annotations
 
+import io
 import threading
+import zipfile
 
 import pytest
 
-from server.devin import Attachment, DevinMessage, DevinUnavailable, FakeDevin, SessionSnapshot
+from server.brief import build_explorer_request
+from server.devin import (
+    Attachment,
+    AttachmentRejected,
+    AttachmentUnavailable,
+    DevinMessage,
+    DevinUnavailable,
+    FakeDevin,
+    SessionSnapshot,
+)
 from server.poller import LOST_CONTACT, LOST_CONTACT_AFTER, Poller
 from server.store import Store
 
@@ -18,6 +29,7 @@ class ScriptedDevin:
         self.messages: dict[str, list[DevinMessage]] = {}
         self.attachments: dict[str, list[Attachment]] = {}
         self.down: dict[str, Exception] = {}
+        self.files: dict[str, bytes | Exception] = {}
         self.calls: list[tuple[str, str]] = []
 
     def _answer(self, name, session_id, table, default):
@@ -34,6 +46,13 @@ class ScriptedDevin:
 
     def list_attachments(self, session_id):
         return self._answer("list_attachments", session_id, self.attachments, [])
+
+    def download_file(self, attachment):
+        self.calls.append(("download_file", attachment.name))
+        result = self.files[attachment.name]
+        if isinstance(result, Exception):
+            raise result
+        return result
 
 
 @pytest.fixture
@@ -245,3 +264,232 @@ def test_start_runs_a_daemon_thread_and_stop_ends_it(store, devin):
     assert [e["text"] for e in store.list_events(mission.id)] == ["Hello"]
     assert poller.start() is not thread
     poller.stop()
+
+
+# ---------- explorer builds ----------
+
+NOW = "2026-09-20T13:00:00Z"
+SITE = {"index.html": b"<!doctype html><title>Roofs</title>", "data.json": b'{"rows": [1]}',
+        "kit/kit.css": b"from the archive"}
+
+
+def _zip(files=SITE) -> bytes:
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        for name, data in files.items():
+            archive.writestr(name, data)
+    return buffer.getvalue()
+
+
+def _announce(devin, session_id, version=1, files=SITE, **over):
+    """Devin says build `version` is ready and its archive is among the attachments."""
+    name = f"explorer-v{version}.zip"
+    explorer = {"version": version, "archive": name, "entry": "index.html", "title": "Roofs by score",
+                "description": "Click a roof.", **over}
+    devin.snapshots[session_id] = SessionSnapshot("waiting", None, {"steps": [], "artifacts": [], "explorer": explorer})
+    devin.attachments[session_id] = [Attachment("plot.png", "u"), Attachment(name, "u", f"att-{version}")]
+    devin.files[name] = files if isinstance(files, (bytes, Exception)) else _zip(files)
+
+
+@pytest.fixture
+def poller(store, devin):
+    return Poller(store, devin)
+
+
+def _asked(store, session_id):
+    mission = _mission(store, session_id)
+    store.request_explorer(mission.id)
+    return store.get_mission(mission.id)
+
+
+def _files(store, mission_id, version):
+    root = store.explorer_dir(mission_id, version)
+    return {path.relative_to(root).as_posix(): path.read_bytes() for path in root.rglob("*") if path.is_file()}
+
+
+def test_a_due_build_is_downloaded_unpacked_and_delivered(tmp_path, devin):
+    store = Store(tmp_path / "k.db")
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a")
+    Poller(store, devin, now=lambda: NOW).tick()
+
+    row = store.get_mission(mission.id)
+    assert row.explorer == {"version": 1, "title": "Roofs by score", "description": "Click a roof.",
+                            "entry": "index.html", "builtAt": NOW}
+    assert (row.explorer_pending, row.explorer_seen_version, row.status) == (False, 1, "waiting")
+    assert _kinds(store, mission.id) == ["explorer"]
+    assert store.explorer_dir(mission.id, 1) == tmp_path / "explorers" / mission.id / "1"
+    assert _files(store, mission.id, 1) == {"index.html": SITE["index.html"], "data.json": SITE["data.json"]}
+    assert devin.calls.count(("download_file", "explorer-v1.zip")) == 1
+
+
+def test_a_delivered_build_is_not_fetched_again(store, devin, poller):
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a")
+    for _ in range(3):
+        poller.tick()
+    assert devin.calls.count(("download_file", "explorer-v1.zip")) == 1
+    assert _kinds(store, mission.id) == ["explorer"]
+    # Nor are the attachments listed once nothing is awaited.
+    assert devin.calls.count(("list_attachments", "devin-a")) == 1
+
+
+def test_nothing_is_fetched_for_a_build_nobody_asked_for(store, devin, poller):
+    mission = _mission(store, "devin-a")
+    _announce(devin, "devin-a")
+    poller.tick()
+    assert ("list_attachments", "devin-a") not in devin.calls and ("download_file", "explorer-v1.zip") not in devin.calls
+    assert store.get_mission(mission.id).explorer is None
+
+
+def test_attachments_are_not_listed_until_a_new_build_is_announced(store, devin, poller):
+    mission = _asked(store, "devin-a")
+    poller.tick()
+    assert ("list_attachments", "devin-a") not in devin.calls
+    assert store.get_mission(mission.id).explorer_pending
+
+
+def test_an_announced_build_waits_for_its_archive(store, devin, poller):
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a")
+    devin.attachments["devin-a"] = [Attachment("plot.png", "u")]
+    poller.tick()
+    row = store.get_mission(mission.id)
+    assert (row.explorer, row.explorer_pending, row.status) == (None, True, "working")
+    assert ("download_file", "explorer-v1.zip") not in devin.calls
+
+    devin.attachments["devin-a"].append(Attachment("explorer-v1.zip", "u"))
+    poller.tick()
+    assert store.get_mission(mission.id).explorer["version"] == 1
+
+
+@pytest.mark.parametrize("files, reason", [
+    ({"index.html": b"x", "run.exe": b"MZ"}, "'run.exe' is not an allowed kind of file"),
+    ({"index.html": b"x", "../evil.html": b"x"}, "climbs out of the archive"),
+    ({"main.html": b"x"}, "its entry page 'index.html' is missing"),
+    (b"this is not a zip", "it is not a zip archive"),
+    (AttachmentRejected("attachment is larger than 40 MB"), "attachment is larger than 40 MB"),
+    (AttachmentRejected("attachment download failed (404)"), "its archive could not be downloaded"),
+])
+def test_an_unusable_archive_ends_the_request_with_an_error_that_names_the_reason(store, devin, poller, files, reason):
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a", files=files)
+    poller.tick()
+    row = store.get_mission(mission.id)
+    assert (row.explorer, row.explorer_pending, row.explorer_seen_version, row.status) == (None, False, 1, "waiting")
+    (error,) = store.list_events(mission.id)
+    assert error["kind"] == "error" and error["text"].startswith("The explorer could not be used: ")
+    assert reason in error["text"]
+    assert not store.explorer_dir(mission.id, 1).exists()
+
+    # Asking again does not fetch the same bad archive; the next version is what counts.
+    store.request_explorer(mission.id)
+    poller.tick()
+    assert devin.calls.count(("download_file", "explorer-v1.zip")) == 1
+    _announce(devin, "devin-a", version=2)
+    poller.tick()
+    assert store.get_mission(mission.id).explorer["version"] == 2
+
+
+@pytest.mark.parametrize("failure", [
+    AttachmentUnavailable("attachment download failed (503)"), DevinUnavailable("Devin identity lookup failed (503)"),
+    OSError("disk full"),
+])
+def test_a_download_that_may_yet_work_is_tried_again_and_the_rest_of_the_sync_goes_ahead(store, devin, poller, failure):
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a", files=failure)
+    devin.messages["devin-a"] = [DevinMessage("1", "devin", "The explorer is ready.", "")]
+    poller.tick()
+    row = store.get_mission(mission.id)
+    assert (row.explorer, row.explorer_pending, row.status, row.failures) == (None, True, "working", 0)
+    assert _kinds(store, mission.id) == ["thought"]
+
+    devin.files["explorer-v1.zip"] = _zip()
+    poller.tick()
+    assert store.get_mission(mission.id).explorer["version"] == 1
+    assert _kinds(store, mission.id) == ["thought", "explorer"]
+
+
+def test_a_download_that_never_works_is_given_up_on_at_the_deadline(tmp_path, devin):
+    store = Store(tmp_path / "k.db", now=lambda: NOW)
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a", files=AttachmentUnavailable("attachment download failed (503)"))
+    Poller(store, devin, now=lambda: "2026-09-20T13:14:59Z").tick()
+    assert store.get_mission(mission.id).explorer_pending and store.list_events(mission.id) == []
+    Poller(store, devin, now=lambda: "2026-09-20T13:15:01Z").tick()
+    row = store.get_mission(mission.id)
+    assert (row.explorer, row.explorer_pending, row.explorer_seen_version) == (None, False, 0)
+    assert [e["text"] for e in store.list_events(mission.id)] == ["The explorer did not arrive"]
+
+
+def test_a_failing_explorer_does_not_stop_other_missions(store, devin, poller):
+    bad, crashing, good = _asked(store, "devin-x"), _asked(store, "devin-y"), _asked(store, "devin-z")
+    _announce(devin, "devin-x", version=1, files={"index.html": b"x", "run.exe": b"MZ"})
+    _announce(devin, "devin-y", version=2, files=RuntimeError("bug in the client"))
+    _announce(devin, "devin-z", version=3)
+    poller.tick()
+    assert _kinds(store, bad.id) == ["error"]
+    assert store.list_events(crashing.id) == [] and store.get_mission(crashing.id).explorer_pending
+    assert store.get_mission(good.id).explorer["version"] == 3
+
+
+def test_a_change_request_unpacks_next_to_the_old_version(store, devin, poller):
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a")
+    poller.tick()
+    store.request_explorer(mission.id)
+    poller.tick()
+    assert store.get_mission(mission.id).explorer_pending
+
+    _announce(devin, "devin-a", version=2, files={"index.html": b"second"}, title="Roofs with a heatmap")
+    poller.tick()
+    row = store.get_mission(mission.id)
+    assert (row.explorer["version"], row.explorer["title"], row.explorer_pending) == (2, "Roofs with a heatmap", False)
+    assert _files(store, mission.id, 1)["index.html"] == SITE["index.html"]
+    assert _files(store, mission.id, 2) == {"index.html": b"second"}
+    assert _kinds(store, mission.id) == ["explorer"]
+
+
+def test_a_mission_marked_done_while_its_build_is_pending_still_gets_it(store, devin, poller):
+    mission = _asked(store, "devin-a")
+    store.mark_done(mission.id)
+    _announce(devin, "devin-a")
+    poller.tick()
+    row = store.get_mission(mission.id)
+    assert (row.status, row.explorer["version"], row.explorer_pending) == ("done", 1, False)
+    poller.tick()
+    assert devin.calls.count(("get_session", "devin-a")) == 1
+
+
+def test_a_custom_entry_is_what_gets_checked(store, devin, poller):
+    mission = _asked(store, "devin-a")
+    _announce(devin, "devin-a", files={"pages/start.html": b"x", "data.json": b"{}"}, entry="pages/start.html")
+    poller.tick()
+    assert store.get_mission(mission.id).explorer["entry"] == "pages/start.html"
+
+
+def test_a_full_demo_explorer_build_through_the_poller(tmp_path):
+    kit = tmp_path / "kit"
+    kit.mkdir()
+    for name, text in {"GUIDE.md": "guide", "kit.css": "body {}", "kit.js": "1", "index.html": "<p>example</p>",
+                       "data.json": "{}"}.items():
+        (kit / name).write_text(text)
+    store = Store(tmp_path / "k.db")
+    clock = [1_800_000_000.0]
+    fake = FakeDevin(clock=lambda: clock[0], beat_seconds=3.0, kit_dir=kit)
+    mission = _mission(store, fake.create_session("the brief " * 10, title="t", schema={}, max_acu=5).session_id)
+    poller = Poller(store, fake)
+    for _ in range(12):
+        poller.tick()
+        clock[0] += 5
+
+    fake.send_message(store.get_mission(mission.id).session_id,
+                      build_explorer_request(None, {"GUIDE.md": "guide"}, next_version=1))
+    store.request_explorer(mission.id)
+    for _ in range(3):
+        poller.tick()
+        clock[0] += 5
+    row = store.get_mission(mission.id)
+    assert (row.status, row.explorer_pending, row.explorer["version"]) == ("waiting", False, 1)
+    assert _kinds(store, mission.id)[-2:] == ["conclusion", "explorer"]
+    assert _files(store, mission.id, 1) == {"index.html": b"<p>example</p>", "data.json": b"{}"}

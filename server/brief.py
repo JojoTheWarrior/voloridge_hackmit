@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from server.artifacts import (
     MAX_IMAGES,
     MAX_NODES,
@@ -17,6 +19,10 @@ from server.report import (
 )
 
 TITLE_MAX = 80
+KIT_GUIDE = "GUIDE.md"
+# The worked example's data only shows a shape, and Devin must not reuse it, so a long file is cut short.
+KIT_DATA_SUFFIXES = (".json", ".geojson", ".csv")
+MAX_KIT_DATA_CHARS = 20_000
 
 ROLE = """\
 You are a research analyst investigating a question for a colleague who is watching your \
@@ -68,7 +74,10 @@ paragraph), and `stats` as [{{"label", "value"}}].
 - `report`: a look back over the whole mission for someone who was not watching: `headline`, \
 `summary`, `stats`, `key_artifact_ids`, `steps` as [{{"label", "takeaway"}}], `caveats` and \
 `next_questions`. Leave it null until I explicitly ask you for the final report; that message will \
-say exactly what goes in each field."""
+say exactly what goes in each field.
+- `explorer`: the record of an interactive explorer you built for this mission: `version`, `archive`, \
+`entry`, `title` and `description`. Leave it null until I explicitly ask you to build the explorer; \
+that message will say exactly what to build and how to deliver it."""
 
 REPORT_REQUEST = f"""\
 Please write the final report for this mission now.
@@ -98,6 +107,54 @@ If you were given private notes at the start, the same rule holds for the report
 quote, or allude to them.
 
 When `report` is filled, post one short message saying the report is ready, then wait."""
+
+# Every explorer request opens with this line, which is how the request is recognised when it comes back.
+EXPLORER_OPENING = "Please build the interactive explorer for this mission now."
+
+EXPLORER_FIRST_BUILD = """\
+Some findings are places or things rather than statistics. An explorer is a small static website that \
+lets someone look through the row-level results of this mission for themselves: a map to pan, a list \
+to rank, an item to click for its evidence. It is shown inside the mission page in a sandboxed frame."""
+
+EXPLORER_CHANGE = """\
+This is a change request. If you have already built an explorer in this session, apply the \
+instructions below to it and deliver the result as the next version; if you have not, build the \
+first one with them in mind.
+
+<instructions>
+{instructions}
+</instructions>"""
+
+EXPLORER_KIT_INTRO = """\
+What keeps an explorer looking like the rest of the app is the explorer kit: a stylesheet, optional \
+helpers, one complete worked example, and a guide. Read the guide first. It and every kit file follow \
+in full, each under the path it has inside a site. The kit is a design system and a starting point, \
+not a widget: restructure or replace the example freely, but keep to the guide."""
+
+EXPLORER_DELIVERY = """\
+How to build and deliver it:
+- Build a static site whose entry document is `index.html`, with every path in it relative.
+- Reference the kit only by the relative paths `kit/kit.css` and `kit/kit.js`. Those two are served \
+by the app, which always supplies its own current copy; put a copy of the kit in your site only so \
+that you can test it locally.
+- The site loads its own data from relative files next to it, such as `data.json`. That data must be \
+real row-level results you already computed in this session. Never invent data, never ship sample or \
+placeholder data, and do not leave the worked example's data in place. If this mission has no \
+place-level or item-level data worth exploring, say so in a message and do not deliver an explorer.
+- Allowed file types: html, css, js, mjs, json, geojson, csv, txt, png, jpg, jpeg, webp, gif, svg, \
+woff2. At most 200 files, 25 MB per file and 40 MB in total, with no symlinks.
+- Test it in your own browser before delivering: in both themes (open it with `?theme=dark` and with \
+`?theme=light`) and at a narrow phone width. Fix what looks broken.
+- Zip the site root as `explorer-v<N>.zip`, where N is one higher than your previous build in this \
+session, starting at 1. {numbering}Attach that one archive to this session.
+- Then set `explorer` in `structured_output` to {{"version": N, "archive": "explorer-v<N>.zip", \
+"entry": "index.html", "title", "description"}}, keeping every existing step, artifact, the conclusion \
+and any report exactly as they are. `title` is a plain three-to-six-word name for the explorer; \
+`description` is one or two sentences on what can be explored and how.
+- If you were given private notes at the start, the same rule holds for the explorer and everything \
+in it: never mention, quote, or allude to them.
+
+When `explorer` is set, post one short message saying the explorer is ready, then wait."""
 
 REFERENCE_GUIDE = """\
 Private notes on where to look follow. Treat them as a map, not a script. Retrace that line of \
@@ -194,6 +251,17 @@ OUTPUT_SCHEMA: dict = {
             },
             "required": ["headline", "summary"],
         },
+        "explorer": {
+            "type": ["object", "null"],
+            "properties": {
+                "version": {"type": "integer"},
+                "archive": {"type": "string"},
+                "entry": {"type": "string"},
+                "title": {"type": "string"},
+                "description": {"type": "string"},
+            },
+            "required": ["version", "archive", "entry", "title", "description"],
+        },
     },
     "required": ["steps", "artifacts"],
 }
@@ -204,6 +272,50 @@ def build_prompt(hypothesis: str, datasets: list[dict], reference: str | None = 
     if reference and reference.strip():
         sections.append(f"{REFERENCE_GUIDE}\n\n<notes>\n{reference.strip()}\n</notes>")
     return "\n\n".join(sections)
+
+
+def build_explorer_request(
+    instructions: str | None, kit: dict[str, str], *, next_version: int | None = None
+) -> str:
+    """The message that asks Devin for an explorer build. `kit` maps each kit file's path inside a
+    site to its text, with the guide under `GUIDE.md`. With `instructions` it is a change request."""
+    instructions = (instructions or "").strip()
+    sections = [EXPLORER_OPENING, EXPLORER_CHANGE.format(instructions=instructions) if instructions
+                else EXPLORER_FIRST_BUILD]
+    guide = kit.get(KIT_GUIDE, "").strip()
+    files = [(path, text) for path, text in kit.items() if path != KIT_GUIDE]
+    if guide or files:
+        sections.append(EXPLORER_KIT_INTRO)
+    if guide:
+        sections.append(_kit_block(KIT_GUIDE, guide))
+    sections.extend(_kit_block(path, text) for path, text in files)
+    numbering = ""
+    if next_version:
+        numbering = f"This build is number {next_version}, so name it `explorer-v{next_version}.zip`. "
+    sections.append(EXPLORER_DELIVERY.format(numbering=numbering))
+    return "\n\n".join(sections)
+
+
+def is_explorer_request(text: str) -> bool:
+    return " ".join(text.split()).startswith(EXPLORER_OPENING)
+
+
+def read_explorer_request(text: str) -> tuple[str | None, int | None]:
+    """The instructions and build number inside a request made by `build_explorer_request`."""
+    # The kit is quoted in full and may say anything, so it is set aside first.
+    text = re.sub(r"<kit-file path=\"[^\"]*\">\n.*?\n</kit-file>", "", text, flags=re.DOTALL)
+    instructions = re.search(r"<instructions>\n(.*?)\n</instructions>", text, re.DOTALL)
+    number = re.search(r"This build is number (\d+),", text)
+    return (instructions.group(1) if instructions else None), (int(number.group(1)) if number else None)
+
+
+def _kit_block(path: str, text: str) -> str:
+    text = text.rstrip()
+    if path.endswith(KIT_DATA_SUFFIXES) and len(text) > MAX_KIT_DATA_CHARS:
+        left_out = len(text) - MAX_KIT_DATA_CHARS
+        note = f"[the example's data goes on in the same shape; {left_out} more characters left out]"
+        text = f"{text[:MAX_KIT_DATA_CHARS]}\n{note}"
+    return f"<kit-file path=\"{path}\">\n{text}\n</kit-file>"
 
 
 def derive_title(hypothesis: str) -> str:

@@ -6,9 +6,10 @@ import threading
 from collections.abc import Callable
 
 from server.artifacts import ATTACHMENT_PREFIX
-from server.devin import DevinClient, DevinUnavailable
+from server.devin import Attachment, AttachmentRejected, AttachmentUnavailable, DevinClient, DevinUnavailable
+from server.explorer import ArchiveRejected, unpack
 from server.store import MissionRow, Store, utc_now
-from server.sync import sync
+from server.sync import ExplorerDue, ExplorerOutcome, explorer_announced, explorer_due, sync
 
 log = logging.getLogger(__name__)
 
@@ -64,15 +65,38 @@ class Poller:
     def _sync(self, mission: MissionRow) -> None:
         snapshot = self._client.get_session(mission.session_id)
         messages = self._client.list_messages(mission.session_id)
-        # Most runs never attach a file, so skip the extra request until one is referenced.
+        # Most runs never attach a file, so skip the extra request until one is referenced or awaited.
         refers_to_attachment = ATTACHMENT_PREFIX in json.dumps(snapshot.structured_output or {})
-        attachments = self._client.list_attachments(mission.session_id) if refers_to_attachment else []
+        awaits_archive = explorer_announced(mission, snapshot) is not None
+        lists = refers_to_attachment or awaits_archive
+        attachments = self._client.list_attachments(mission.session_id) if lists else []
+        due = explorer_due(mission, snapshot, attachments)
+        explorer = self._fetch_explorer(mission, due, attachments) if due is not None else None
         result = sync(
-            mission, self._store.list_events(mission.id), snapshot, messages, attachments, now=self._now()
+            mission, self._store.list_events(mission.id), snapshot, messages, attachments,
+            now=self._now(), explorer=explorer,
         )
         self._store.apply_sync(mission.id, result, expected_status=mission.status)
         if mission.failures:
             self._store.clear_failures(mission.id)
+
+    def _fetch_explorer(
+        self, mission: MissionRow, due: ExplorerDue, attachments: list[Attachment]
+    ) -> ExplorerOutcome | None:
+        """Download and unpack a due build. None means it could not be fetched this time and is worth
+        another try; the rest of the sync goes ahead either way."""
+        archive = next(item for item in attachments if item.name == due.archive)
+        try:
+            data = self._client.download_file(archive)
+            unpack(data, self._store.explorer_dir(mission.id, due.version), entry=due.entry)
+        except (AttachmentUnavailable, DevinUnavailable, OSError) as exc:
+            log.warning("explorer archive for mission %s not fetched yet: %s", mission.id, exc)
+            return None
+        except AttachmentRejected as exc:
+            return ExplorerOutcome(due, rejected=f"its archive could not be downloaded ({exc})")
+        except ArchiveRejected as exc:
+            return ExplorerOutcome(due, rejected=str(exc))
+        return ExplorerOutcome(due)
 
     def _lost_contact(self, mission: MissionRow, exc: DevinUnavailable) -> None:
         log.warning("Devin unavailable for mission %s: %s", mission.id, exc)

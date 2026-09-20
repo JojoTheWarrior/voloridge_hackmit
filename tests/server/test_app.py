@@ -1,12 +1,16 @@
 """Tests for server.app: every route, with a scripted Devin and a real SQLite store."""
 from __future__ import annotations
 
+import io
+import zipfile
+
 import pytest
 
-from server.app import create_app
-from server.brief import REPORT_REQUEST
+from server.app import EXPLORER_CSP, create_app
+from server.brief import EXPLORER_OPENING, REPORT_REQUEST, build_explorer_request
 from server.devin import Attachment, AttachmentRejected, DevinUnavailable, FakeDevin, SessionRef
 from server.poller import Poller
+from server.explorer import unpack
 from server.store import Store
 from server.sync import SyncResult
 
@@ -57,8 +61,19 @@ def devin():
 
 
 @pytest.fixture
-def client(store, devin):
-    return create_app(store, devin, demo=False).test_client()
+def kit(tmp_path):
+    """A stand-in kit: the real one is someone else's to change, so no test here reads it."""
+    root = tmp_path / "kit"
+    root.mkdir()
+    for name, text in {"GUIDE.md": "KIT-GUIDE-TEXT", "kit.css": "body { color: canonical }", "kit.js": "KIT-JS",
+                       "index.html": "<!doctype html><title>EXAMPLE-PAGE</title>", "data.json": '{"rows": [1]}'}.items():
+        (root / name).write_text(text)
+    return root
+
+
+@pytest.fixture
+def client(store, devin, kit):
+    return create_app(store, devin, demo=False, kit_dir=kit).test_client()
 
 
 def _create(client, **over):
@@ -92,8 +107,8 @@ def test_create_mission(client, devin, store, monkeypatch):
     mission = response.get_json()
 
     assert set(mission) == {"id", "title", "hypothesis", "status", "createdAt", "updatedAt", "datasetIds",
-                            "sessionUrl", "reportPending", "events"}
-    assert mission["reportPending"] is False
+                            "sessionUrl", "reportPending", "explorerPending", "events"}
+    assert (mission["reportPending"], mission["explorerPending"]) == (False, False)
     assert mission["id"].startswith("m_")
     assert mission["title"] == "Do satellite images of storm damage predict how long power outages last"
     assert mission["hypothesis"] == HYPOTHESIS
@@ -408,6 +423,356 @@ def test_a_reply_while_a_report_is_pending_goes_through_and_the_report_is_still_
     assert not store.get_mission(mission["id"]).report_restore_done
 
 
+# ---------- explorer: requesting ----------
+
+def test_request_explorer(client, devin, store, kit):
+    mission = _create(client).get_json()
+    store.apply_sync(mission["id"], SyncResult([], [], "waiting", None), expected_status="working")
+    response = client.post(f"/api/missions/{mission['id']}/explorer")
+    assert response.status_code == 202 and response.get_json() == {}
+
+    ((session_id, message),) = devin.sent
+    assert session_id == "devin-abc"
+    assert message == build_explorer_request(None, {
+        "GUIDE.md": "KIT-GUIDE-TEXT", "data.json": '{"rows": [1]}', "index.html": "<!doctype html><title>EXAMPLE-PAGE</title>",
+        "kit/kit.css": "body { color: canonical }", "kit/kit.js": "KIT-JS"}, next_version=1)
+    assert message.startswith(EXPLORER_OPENING) and "KIT-GUIDE-TEXT" in message and "explorer-v1.zip" in message
+
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["explorerPending"], fetched["reportPending"]) == ("working", True, False)
+    assert "explorer" not in fetched
+    # The request is between the server and Devin: it is not something the user said.
+    assert [e["kind"] for e in fetched["events"]] == ["user_message"]
+
+
+def test_request_explorer_with_instructions_is_a_change_request(client, devin):
+    mission = _create(client).get_json()
+    response = client.post(f"/api/missions/{mission['id']}/explorer", json={"instructions": "  Add a heatmap  "})
+    assert response.status_code == 202
+    assert "<instructions>\nAdd a heatmap\n</instructions>" in devin.sent[0][1]
+    assert "Add a heatmap" not in repr(client.get(f"/api/missions/{mission['id']}").get_json())
+
+
+@pytest.mark.parametrize("body", [None, {}, {"instructions": ""}, {"instructions": "  \n "}, {"instructions": None},
+                                  {"instructions": 7}, {"instructions": ["Add a heatmap"]}, [1], "text"])
+def test_blank_or_malformed_instructions_are_a_plain_build(client, devin, body):
+    mission = _create(client).get_json()
+    assert client.post(f"/api/missions/{mission['id']}/explorer", json=body).status_code == 202
+    assert "<instructions>" not in devin.sent[0][1]
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["explorerPending"] is True
+
+
+def test_instructions_over_the_limit_are_422_and_nothing_is_sent(client, devin):
+    mission = _create(client).get_json()
+    response = client.post(f"/api/missions/{mission['id']}/explorer", json={"instructions": "x" * 2001})
+    assert response.status_code == 422
+    assert response.get_json() == {"field": "text", "message": "Keep instructions under 2,000 characters"}
+    assert devin.sent == []
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["explorerPending"] is False
+
+
+def test_instructions_at_the_limit_are_accepted_and_padding_does_not_count(client, devin):
+    mission = _create(client).get_json()
+    response = client.post(f"/api/missions/{mission['id']}/explorer", json={"instructions": f"  {'x' * 2000}\n"})
+    assert response.status_code == 202 and "x" * 2000 in devin.sent[0][1]
+
+
+def test_request_explorer_for_an_unknown_mission_is_404(client, devin):
+    response = client.post("/api/missions/m_nope/explorer")
+    assert response.status_code == 404
+    assert response.get_json() == {"message": "Mission not found"}
+    assert devin.sent == []
+
+
+def test_request_explorer_while_one_is_pending_does_nothing(client, devin):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/explorer")
+    before = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert client.post(f"/api/missions/{mission['id']}/explorer", json={"instructions": "More"}).status_code == 202
+    assert len(devin.sent) == 1
+    assert client.get(f"/api/missions/{mission['id']}").get_json() == before
+
+
+def test_request_explorer_without_a_session_explains_itself(client, devin):
+    devin.create_error = DevinUnavailable("down")
+    mission = _create(client).get_json()
+    devin.create_error = None
+    response = client.post(f"/api/missions/{mission['id']}/explorer")
+    assert response.status_code == 202 and response.get_json() == {}
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["explorerPending"]) == ("failed", False)
+    assert [e["kind"] for e in fetched["events"]] == ["user_message", "error", "error"]
+    assert "nothing to explore" in fetched["events"][-1]["text"]
+    assert devin.sent == []
+
+
+@pytest.mark.parametrize("was_done", [False, True])
+def test_request_explorer_when_devin_is_down_leaves_the_mission_as_it_was(client, devin, was_done):
+    mission = _create(client).get_json()
+    if was_done:
+        client.post(f"/api/missions/{mission['id']}/done")
+    devin.send_error = DevinUnavailable("Devin message failed (503)")
+    assert client.post(f"/api/missions/{mission['id']}/explorer").status_code == 202
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["explorerPending"]) == ("done" if was_done else "working", False)
+    assert [e["kind"] for e in fetched["events"]] == ["user_message", "error"]
+    assert "did not reach Devin" in fetched["events"][-1]["text"] and "503" in fetched["events"][-1]["text"]
+
+    devin.send_error = None
+    client.post(f"/api/missions/{mission['id']}/explorer")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["explorerPending"] is True
+
+
+def test_a_report_and_an_explorer_can_be_pending_together(client, devin):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/report")
+    client.post(f"/api/missions/{mission['id']}/explorer")
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["reportPending"], fetched["explorerPending"], fetched["status"]) == (True, True, "working")
+    assert len(devin.sent) == 2
+
+
+# ---------- explorer: on the mission ----------
+
+BUILD = {"version": 2, "title": "Roofs by score", "description": "Click a roof.", "entry": "index.html",
+         "builtAt": "2026-09-20T12:40:00Z"}
+SITE = {"index.html": b"<!doctype html><script src=kit/kit.js></script>", "data.json": b'{"rows": [1, 2]}',
+        "assets/pin.svg": b"<svg xmlns='http://www.w3.org/2000/svg'/>", "assets/map.mjs": b"export default 1",
+        "kit/kit.css": b"body { color: from-the-archive }"}
+
+
+def _site_zip(files=SITE) -> bytes:
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        for name, data in files.items():
+            archive.writestr(name, data)
+    return buffer.getvalue()
+
+
+def _build(store, mission_id, build=BUILD, status="waiting"):
+    """What the poller does when a build arrives: unpack it, then record it."""
+    unpack(_site_zip(), store.explorer_dir(mission_id, build["version"]), entry=build["entry"])
+    row = store.get_mission(mission_id)
+    store.apply_sync(mission_id, SyncResult([], [], status, None, explorer=build, explorer_settled=True,
+                                            explorer_seen=build["version"]), expected_status=row.status)
+
+
+@pytest.fixture
+def built(client, store):
+    mission_id = _create(client).get_json()["id"]
+    client.post(f"/api/missions/{mission_id}/explorer")
+    _build(store, mission_id)
+    return mission_id
+
+
+def test_a_built_explorer_is_on_the_mission_but_not_on_summaries(client, built):
+    fetched = client.get(f"/api/missions/{built}").get_json()
+    assert fetched["explorer"] == {"version": 2, "title": "Roofs by score", "description": "Click a roof.",
+                                   "src": f"/api/missions/{built}/explorer/2/index.html",
+                                   "builtAt": "2026-09-20T12:40:00Z"}
+    assert (fetched["explorerPending"], fetched["status"]) == (False, "waiting")
+    (summary,) = client.get("/api/missions").get_json()
+    assert set(summary) == {"id", "title", "hypothesis", "status", "createdAt", "updatedAt"}
+
+
+def test_the_src_of_an_unusual_entry_is_url_safe(client, store, built):
+    _build_entry = {**BUILD, "version": 3, "entry": "pages/start page.html"}
+    row = store.get_mission(built)
+    store.request_explorer(built)
+    store.apply_sync(built, SyncResult([], [], "waiting", None, explorer=_build_entry, explorer_settled=True),
+                     expected_status=row.status)
+    src = client.get(f"/api/missions/{built}").get_json()["explorer"]["src"]
+    assert src == f"/api/missions/{built}/explorer/3/pages/start%20page.html"
+
+
+def test_a_change_request_keeps_the_old_build_usable_and_asks_for_the_next_version(client, devin, built):
+    client.post(f"/api/missions/{built}/explorer", json={"instructions": "Add a heatmap"})
+    fetched = client.get(f"/api/missions/{built}").get_json()
+    assert (fetched["explorer"]["version"], fetched["explorerPending"], fetched["status"]) == (2, True, "working")
+    assert client.get(fetched["explorer"]["src"]).status_code == 200
+    assert "explorer-v3.zip" in devin.sent[-1][1]
+
+
+def test_an_explorer_for_a_done_mission_reopens_it_only_until_it_arrives(client, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/done")
+    client.post(f"/api/missions/{mission['id']}/explorer")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["status"] == "working"
+    assert [m.id for m in store.live_missions()] == [mission["id"]]
+    _build(store, mission["id"], status="done")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["status"] == "done"
+    assert store.live_missions() == []
+
+
+def test_mark_done_while_a_build_is_pending_is_done_at_once_and_still_gets_the_explorer(client, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/explorer")
+    assert client.post(f"/api/missions/{mission['id']}/done").status_code == 200
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["explorerPending"]) == ("done", True)
+    assert [m.id for m in store.live_missions()] == [mission["id"]]
+
+    _build(store, mission["id"], status="done")
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["explorerPending"], fetched["explorer"]["version"]) == ("done", False, 2)
+    assert store.live_missions() == []
+
+
+def test_a_reply_while_a_build_is_pending_goes_through_and_the_build_is_still_expected(client, devin, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/done")
+    client.post(f"/api/missions/{mission['id']}/explorer")
+    assert client.post(f"/api/missions/{mission['id']}/messages", json={"text": "One more thing"}).status_code == 202
+    assert devin.sent[-1][1] == "One more thing" and len(devin.sent) == 2
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["explorerPending"]) == ("working", True)
+    # The reply reopened the mission, so the build no longer puts it back to done.
+    assert not store.get_mission(mission["id"]).explorer_restore_done
+    _build(store, mission["id"], status="waiting")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["status"] == "waiting"
+
+
+# ---------- explorer: serving ----------
+
+def test_the_entry_is_served_sandboxed(client, built):
+    response = client.get(f"/api/missions/{built}/explorer/2/index.html?theme=dark")
+    assert response.status_code == 200
+    assert response.data == SITE["index.html"]
+    assert response.content_type == "text/html; charset=utf-8"
+    assert response.headers["Access-Control-Allow-Origin"] == "*"
+    assert response.headers["X-Content-Type-Options"] == "nosniff"
+    assert response.headers["Cache-Control"] == "no-store"
+    assert response.headers["Content-Security-Policy"] == EXPLORER_CSP
+
+
+def test_the_policy_is_the_contracts_word_for_word():
+    assert EXPLORER_CSP == (
+        "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox; default-src 'self' data: blob:; "
+        "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' "
+        "'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' "
+        "data: https://fonts.gstatic.com; img-src * data: blob:; connect-src *; worker-src blob:; child-src blob:")
+    assert "allow-same-origin" not in EXPLORER_CSP
+
+
+@pytest.mark.parametrize("path, content_type, sandboxed", [
+    ("data.json", "application/json", False),
+    ("assets/map.mjs", "text/javascript; charset=utf-8", False),
+    ("assets/pin.svg", "image/svg+xml; charset=utf-8", True),
+])
+def test_other_files_are_served_with_the_same_headers_and_no_policy_unless_they_are_documents(
+        client, built, path, content_type, sandboxed):
+    response = client.get(f"/api/missions/{built}/explorer/2/{path}")
+    assert (response.status_code, response.data, response.content_type) == (200, SITE[path], content_type)
+    assert (response.headers["Access-Control-Allow-Origin"], response.headers["X-Content-Type-Options"],
+            response.headers["Cache-Control"]) == ("*", "nosniff", "no-store")
+    assert ("Content-Security-Policy" in response.headers) is sandboxed
+
+
+def test_a_repeat_request_is_never_answered_from_a_cache(client, built):
+    first = client.get(f"/api/missions/{built}/explorer/2/data.json")
+    again = client.get(f"/api/missions/{built}/explorer/2/data.json", headers={
+        "If-None-Match": first.headers.get("ETag", "x"), "If-Modified-Since": first.headers.get("Last-Modified", "x")})
+    assert (again.status_code, again.data) == (200, SITE["data.json"])
+
+
+def test_kit_paths_serve_the_canonical_kit_not_the_archives_copy(client, built, store, kit):
+    response = client.get(f"/api/missions/{built}/explorer/2/kit/kit.css")
+    assert (response.status_code, response.data) == (200, b"body { color: canonical }")
+    assert response.content_type == "text/css; charset=utf-8"
+    assert response.headers["Access-Control-Allow-Origin"] == "*" and response.headers["Cache-Control"] == "no-store"
+    assert not (store.explorer_dir(built, 2) / "kit").exists()
+
+    # A design fix reaches explorers that were built before it.
+    (kit / "kit.css").write_text("body { color: fixed }")
+    assert client.get(f"/api/missions/{built}/explorer/2/kit/kit.css").data == b"body { color: fixed }"
+    assert client.get(f"/api/missions/{built}/explorer/2/kit/kit.js").data == b"KIT-JS"
+
+
+@pytest.mark.parametrize("path", [
+    "kit/GUIDE.md", "kit/index.html", "kit/data.json", "kit/nope.css", "kit/", "kit", "kit/../index.html",
+    "kit/../../k.db", "kit/%2e%2e/GUIDE.md",
+])
+def test_kit_paths_outside_the_kits_own_files_are_404(client, built, path):
+    assert client.get(f"/api/missions/{built}/explorer/2/{path}").status_code == 404
+
+
+def test_the_kit_is_only_served_under_a_build_that_exists(client, built):
+    assert client.get(f"/api/missions/{built}/explorer/9/kit/kit.css").status_code == 404
+    assert client.get("/api/missions/m_nope/explorer/2/kit/kit.css").status_code == 404
+
+
+@pytest.mark.parametrize("url", [
+    "/api/missions/m_nope/explorer/2/index.html",
+    "/api/missions/{id}/explorer/1/index.html",
+    "/api/missions/{id}/explorer/3/index.html",
+    "/api/missions/{id}/explorer/0/index.html",
+    "/api/missions/{id}/explorer/-2/index.html",
+    "/api/missions/{id}/explorer/two/index.html",
+    "/api/missions/{id}/explorer/2.0/index.html",
+    "/api/missions/{id}/explorer/2/",
+    "/api/missions/{id}/explorer/2",
+    "/api/missions/{id}/explorer/2/missing.html",
+    "/api/missions/{id}/explorer/2/assets",
+    "/api/missions/{id}/explorer/2/assets/",
+    "/api/missions/{id}/explorer/2/INDEX.HTM",
+])
+def test_unknown_missions_versions_and_paths_are_404(client, built, url):
+    response = client.get(url.format(id=built))
+    assert response.status_code == 404
+    assert "message" in response.get_json()
+
+
+@pytest.mark.parametrize("path", [
+    "../2/index.html", "../../../k.db", "..%2F..%2F..%2Fk.db", "%2e%2e/%2e%2e/%2e%2e/k.db", "assets/../../../../k.db",
+    "assets/../index.html", "/etc/passwd", "%2Fetc%2Fpasswd", "//etc/passwd", "..\\..\\k.db", "assets\\pin.svg",
+    "....//....//k.db", "index.html%00.png", "./index.html",
+])
+def test_path_traversal_is_404(client, built, store, tmp_path, path):
+    assert (tmp_path / "k.db").is_file()
+    # Doubled slashes are first redirected to the tidied URL, which is then judged like any other.
+    response = client.get(f"/api/missions/{built}/explorer/2/{path}", follow_redirects=True)
+    assert response.status_code == 404
+    assert b"SQLite" not in response.data
+
+
+def test_a_file_outside_the_allowlist_is_not_served_even_if_it_is_on_disk(client, built, store):
+    (store.explorer_dir(built, 2) / "notes.md").write_text("left by hand")
+    assert client.get(f"/api/missions/{built}/explorer/2/notes.md").status_code == 404
+
+
+def test_a_link_out_of_the_build_is_not_followed(client, built, store, tmp_path):
+    (store.explorer_dir(built, 2) / "link.html").symlink_to(tmp_path / "k.db")
+    (store.explorer_dir(built, 2) / "inside.html").symlink_to(store.explorer_dir(built, 2) / "index.html")
+    assert client.get(f"/api/missions/{built}/explorer/2/link.html").status_code == 404
+    assert client.get(f"/api/missions/{built}/explorer/2/inside.html").status_code == 200
+
+
+def test_another_missions_build_is_not_reachable_through_this_one(client, built):
+    other = _create(client).get_json()["id"]
+    assert client.get(f"/api/missions/{other}/explorer/2/index.html").status_code == 404
+    assert client.get(f"/api/missions/{other}/explorer/2/../../{built}/2/index.html").status_code == 404
+
+
+def test_older_versions_stay_served(client, store, built):
+    store.request_explorer(built)
+    _build(store, built, {**BUILD, "version": 3})
+    assert client.get(f"/api/missions/{built}").get_json()["explorer"]["src"].endswith("/explorer/3/index.html")
+    assert client.get(f"/api/missions/{built}/explorer/2/index.html").status_code == 200
+    assert client.get(f"/api/missions/{built}/explorer/3/index.html").status_code == 200
+
+
+def test_explorer_404s_carry_the_cors_header_too_and_other_routes_never_do(client, built):
+    missing = client.get(f"/api/missions/{built}/explorer/2/missing.json")
+    assert (missing.status_code, missing.headers["Access-Control-Allow-Origin"]) == (404, "*")
+    for url in ("/api/meta", f"/api/missions/{built}", f"/api/missions/{built}/attachments/plot.png"):
+        assert "Access-Control-Allow-Origin" not in client.get(url).headers
+
+
+def test_explorer_files_are_read_only(client, built):
+    for method in (client.post, client.put, client.delete):
+        assert method(f"/api/missions/{built}/explorer/2/index.html").status_code == 405
+
+
 # ---------- attachments ----------
 
 def test_attachment_proxy_serves_images(client):
@@ -586,3 +951,59 @@ def test_report_end_to_end_with_the_fake_and_the_poller(store):
     assert second["report"]["summary"] != first["report"]["summary"]
     assert [e["kind"] for e in second["events"]].count("report") == 1
     assert [e["kind"] for e in second["events"]][-2:] == ["conclusion", "report"]
+
+
+def test_explorer_end_to_end_with_the_fake_and_the_poller(store, kit):
+    clock = [1_800_000_000.0]
+    fake = FakeDevin(clock=lambda: clock[0], beat_seconds=3.0, kit_dir=kit)
+    client = create_app(store, fake, demo=True, kit_dir=kit).test_client()
+    poller = Poller(store, fake)
+    mission_id = _create(client).get_json()["id"]
+    _tick(poller, clock, 12)
+    before = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (before["status"], before["explorerPending"], "explorer" in before) == ("waiting", False, False)
+
+    client.post(f"/api/missions/{mission_id}/explorer")
+    poller.tick()
+    pending = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (pending["status"], pending["explorerPending"], "explorer" in pending) == ("working", True, False)
+    assert pending["events"] == before["events"]
+
+    clock[0] += 5
+    _tick(poller, clock, 2)
+    first = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (first["status"], first["explorerPending"]) == ("waiting", False)
+    assert [e["kind"] for e in first["events"]][-3:] == ["thought", "conclusion", "explorer"]
+    assert first["events"][-3]["text"] == "The explorer is ready."
+    # Neither the request nor the kit inside it ever shows in the thread.
+    assert EXPLORER_OPENING not in repr(first["events"]) and "KIT-GUIDE-TEXT" not in repr(first["events"])
+    assert set(first["explorer"]) == {"version", "title", "description", "src", "builtAt"}
+    assert (first["explorer"]["version"], first["explorer"]["src"]) == (
+        1, f"/api/missions/{mission_id}/explorer/1/index.html")
+
+    page = client.get(first["explorer"]["src"])
+    assert (page.status_code, page.data) == (200, b"<!doctype html><title>EXAMPLE-PAGE</title>")
+    assert client.get(f"/api/missions/{mission_id}/explorer/1/data.json").get_json() == {"rows": [1]}
+    assert client.get(f"/api/missions/{mission_id}/explorer/1/kit/kit.css").data == b"body { color: canonical }"
+    assert not (store.explorer_dir(mission_id, 1) / "kit").exists()
+
+    # A report and a change request from a done mission: both land, in order, and it goes back to done.
+    client.post(f"/api/missions/{mission_id}/done")
+    client.post(f"/api/missions/{mission_id}/report")
+    client.post(f"/api/missions/{mission_id}/explorer", json={"instructions": "Add a heatmap"})
+    assert client.get(f"/api/missions/{mission_id}").get_json()["status"] == "working"
+    clock[0] += 5
+    _tick(poller, clock, 2)
+    second = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (second["status"], second["explorerPending"], second["reportPending"]) == ("done", False, False)
+    assert second["explorer"]["version"] == 2 and "Add a heatmap" in second["explorer"]["description"]
+    assert second["explorer"]["src"].endswith("/explorer/2/index.html")
+    kinds = [e["kind"] for e in second["events"]]
+    assert kinds[-3:] == ["conclusion", "report", "explorer"]
+    assert (kinds.count("report"), kinds.count("explorer"), kinds.count("error")) == (1, 1, 0)
+    assert client.get(first["explorer"]["src"]).status_code == 200
+    assert store.live_missions() == []
+
+    before = client.get(f"/api/missions/{mission_id}").get_json()
+    _tick(poller, clock, 2)
+    assert client.get(f"/api/missions/{mission_id}").get_json() == before

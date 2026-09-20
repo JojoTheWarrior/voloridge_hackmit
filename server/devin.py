@@ -1,25 +1,32 @@
 from __future__ import annotations
 
 import copy
+import io
 import re
 import threading
 import time
 import uuid
+import zipfile
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Protocol
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, unquote, urljoin, urlsplit
 
 import requests
 
-from server.brief import REPORT_REQUEST
+from server.brief import KIT_GUIDE, REPORT_REQUEST, is_explorer_request, read_explorer_request
+from server.explorer import DEFAULT_ENTRY, KIT_DIR, kit_paths
 from warsignal.config import env
 
 DEFAULT_MAX_ACU = 5
 DEFAULT_MODE = "fast"
 DEVIN_MODES = ("normal", "fast", "lite", "ultra", "fusion")
 MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
+MAX_ARCHIVE_BYTES = 40 * 1024 * 1024
+MAX_REDIRECTS = 5
+REDIRECT_STATUSES = {301, 302, 303, 307, 308}
 RETRY_STATUSES = {429, 500, 502, 503, 504}
 MESSAGE_PAGE_SIZE = 200
 MAX_MESSAGE_PAGES = 25
@@ -80,7 +87,9 @@ class DevinMessage:
 @dataclass(frozen=True)
 class Attachment:
     name: str
+    # The web-app link Devin lists. It rejects API keys, so downloads go by `attachment_id` instead.
     url: str
+    attachment_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -98,6 +107,10 @@ class AttachmentRejected(RuntimeError):
     pass
 
 
+class AttachmentUnavailable(AttachmentRejected):
+    """The download failed in a way that may pass (network trouble, a 5xx), so it is worth another try."""
+
+
 class DevinClient(Protocol):
     def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int) -> SessionRef: ...
     def get_session(self, session_id: str) -> SessionSnapshot: ...
@@ -105,6 +118,7 @@ class DevinClient(Protocol):
     def send_message(self, session_id: str, text: str) -> None: ...
     def list_attachments(self, session_id: str) -> list[Attachment]: ...
     def download(self, attachment: Attachment) -> tuple[bytes, str]: ...
+    def download_file(self, attachment: Attachment) -> bytes: ...
 
 
 def make_client() -> tuple[DevinClient, bool]:
@@ -201,26 +215,62 @@ class V3DevinClient:
         for item in _items(page):
             if not isinstance(item, dict):
                 continue
-            name, url = item.get("name"), item.get("url")
-            if isinstance(name, str) and name and isinstance(url, str) and url:
-                attachments.append(Attachment(name, url))
+            name, url, attachment_id = item.get("name"), item.get("url"), item.get("attachment_id")
+            url = url if isinstance(url, str) else ""
+            attachment_id = attachment_id if isinstance(attachment_id, str) and attachment_id else None
+            if isinstance(name, str) and name and (url or attachment_id):
+                attachments.append(Attachment(name, url, attachment_id))
         return attachments
 
     def download(self, attachment: Attachment) -> tuple[bytes, str]:
-        parts = urlsplit(attachment.url)
-        if parts.scheme != "https" or not parts.hostname:
-            raise AttachmentRejected("attachment URL is not https")
-        # Attachment URLs are usually pre-signed storage links; the key only goes to Devin itself.
-        host = parts.hostname.lower()
-        headers = self._headers if host == "devin.ai" or host.endswith(".devin.ai") else {}
-        try:
-            response = requests.request("GET", attachment.url, headers=headers, stream=True, timeout=30)
-        except requests.RequestException as exc:
-            raise AttachmentRejected(f"attachment download failed: {exc}") from exc
+        """An image Devin attached, for the image proxy."""
+        response = self._open(attachment)
         try:
             return _read_image(response)
         finally:
             response.close()
+
+    def download_file(self, attachment: Attachment) -> bytes:
+        """Any attached file, as bytes. What is inside is the caller's to validate."""
+        response = self._open(attachment)
+        try:
+            return _read_body(response, MAX_ARCHIVE_BYTES)
+        finally:
+            response.close()
+
+    def _open(self, attachment: Attachment) -> requests.Response:
+        """Start streaming an attachment. Redirects are followed by hand so the key only ever
+        goes to Devin: the API answers with a redirect to pre-signed storage, which must not see it."""
+        url = self._attachment_route(attachment)
+        trusted = True
+        for _ in range(MAX_REDIRECTS + 1):
+            parts = urlsplit(url)
+            if parts.scheme != "https" or not parts.hostname:
+                raise AttachmentRejected("attachment URL is not https")
+            # Once the chain has left Devin it never gets the key back, wherever it points next.
+            trusted = trusted and _is_devin_host(parts.hostname)
+            try:
+                response = requests.request(
+                    "GET", url, headers=self._headers if trusted else {}, stream=True, timeout=30,
+                    allow_redirects=False,
+                )
+            except requests.RequestException as exc:
+                raise AttachmentUnavailable(f"attachment download failed: {exc}") from exc
+            if response.status_code not in REDIRECT_STATUSES:
+                return _checked(response)
+            location = response.headers.get("Location")
+            response.close()
+            if not location:
+                raise AttachmentRejected("attachment redirect has no location")
+            url = urljoin(url, location)
+        raise AttachmentRejected("attachment download redirected too many times")
+
+    def _attachment_route(self, attachment: Attachment) -> str:
+        attachment_id = attachment.attachment_id or _attachment_id(attachment.url)
+        if attachment_id is None:
+            return attachment.url
+        org, name = quote(self._org(), safe=""), quote(attachment.name, safe="")
+        return f"{self.base_url}/v3/organizations/{org}/attachments/{quote(attachment_id, safe='')}/{name}"
 
     @property
     def _headers(self) -> dict:
@@ -316,22 +366,52 @@ def _iso(value: object) -> str:
     return moment.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _is_devin_host(hostname: str) -> bool:
+    host = hostname.lower()
+    return host == "devin.ai" or host.endswith(".devin.ai")
+
+
+def _attachment_id(url: str) -> str | None:
+    """The id inside a listed `https://app.devin.ai/attachments/{attachment_id}/{name}` link."""
+    parts = urlsplit(url)
+    segments = [unquote(segment) for segment in parts.path.split("/") if segment]
+    if parts.scheme != "https" or not parts.hostname or not _is_devin_host(parts.hostname):
+        return None
+    if len(segments) != 3 or segments[0] != "attachments":
+        return None
+    return segments[1]
+
+
+def _checked(response):
+    if response.status_code < 400:
+        return response
+    response.close()
+    failure = AttachmentUnavailable if response.status_code in RETRY_STATUSES else AttachmentRejected
+    raise failure(f"attachment download failed ({response.status_code})")
+
+
 def _read_image(response) -> tuple[bytes, str]:
-    if response.status_code >= 400:
-        raise AttachmentRejected(f"attachment download failed ({response.status_code})")
     content_type = (response.headers.get("Content-Type") or "").split(";")[0].strip().lower()
     # SVG can carry script, and this is served from the app's own origin.
     if not content_type.startswith("image/") or content_type == "image/svg+xml":
         raise AttachmentRejected(f"attachment is not an image ({content_type or 'unknown type'})")
+    return _read_body(response, MAX_ATTACHMENT_BYTES), content_type
+
+
+def _read_body(response, limit: int) -> bytes:
+    too_large = f"attachment is larger than {limit // (1024 * 1024)} MB"
     declared = response.headers.get("Content-Length")
-    if declared and declared.isdigit() and int(declared) > MAX_ATTACHMENT_BYTES:
-        raise AttachmentRejected("attachment is larger than 10 MB")
+    if declared and declared.isdigit() and int(declared) > limit:
+        raise AttachmentRejected(too_large)
     data = bytearray()
-    for chunk in response.iter_content(chunk_size=64 * 1024):
-        data.extend(chunk)
-        if len(data) > MAX_ATTACHMENT_BYTES:
-            raise AttachmentRejected("attachment is larger than 10 MB")
-    return bytes(data), content_type
+    try:
+        for chunk in response.iter_content(chunk_size=64 * 1024):
+            data.extend(chunk)
+            if len(data) > limit:
+                raise AttachmentRejected(too_large)
+    except requests.RequestException as exc:
+        raise AttachmentUnavailable(f"attachment download failed: {exc}") from exc
+    return bytes(data)
 
 
 # ---------- demo mode ----------
@@ -412,6 +492,10 @@ SCRIPT: tuple[Beat, ...] = (
 REPLY_ACK = "Good point. Let me rerun the comparison with that in mind."
 REPLY_DONE = "Done. I split the panel in half by date and the link holds in both halves, so the conclusion stands."
 REPORT_READY = "The report is ready."
+EXPLORER_READY = "The explorer is ready."
+EXPLORER_TITLE = "Where the link is strongest"
+EXPLORER_DESCRIPTION = ("Every place in the panel, ranked and on a map. Pan and zoom, then click a place to see "
+                        "its record and how it scores.")
 
 REPORT = {
     "headline": "A leads B by about a week, but only modestly",
@@ -449,12 +533,21 @@ REPORT = {
 }
 
 
+@dataclass(frozen=True)
+class _ExplorerRequest:
+    sent: float
+    text: str
+    version: int
+    instructions: str | None
+
+
 @dataclass
 class _FakeSession:
     prompt: str
     created: float
     replies: list[tuple[float, str]] = field(default_factory=list)
     report_requests: list[float] = field(default_factory=list)
+    explorer_requests: list[_ExplorerRequest] = field(default_factory=list)
 
 
 _DEMO_PREFIX = "devin-demo-"
@@ -464,9 +557,12 @@ _DEMO_ID = re.compile(rf"{_DEMO_PREFIX}(\d+)-[0-9a-f]{{6}}")
 class FakeDevin:
     """A scripted research run that advances with the clock, so the app works with no key."""
 
-    def __init__(self, *, clock: Callable[[], float] = time.time, beat_seconds: float = 3.0):
+    def __init__(
+        self, *, clock: Callable[[], float] = time.time, beat_seconds: float = 3.0, kit_dir: Path = KIT_DIR
+    ):
         self._clock = clock
         self._beat = beat_seconds
+        self._kit_dir = kit_dir
         self._sessions: dict[str, _FakeSession] = {}
         self._lock = threading.Lock()
 
@@ -496,12 +592,14 @@ class FakeDevin:
         for number, (sent, _) in enumerate(session.replies, start=1):
             if now >= sent + 2 * self._beat:
                 artifacts.append(_reply_artifact(number, steps[-1]["id"] if steps else None))
-        # Replies and report requests are both answered two beats after they arrive.
+        # Replies, report requests and explorer requests are all answered two beats after they arrive.
         answered = [now >= sent + 2 * self._beat for sent in session.report_requests]
-        running = len(beats) < len(SCRIPT) or not all(answered) or any(
+        built = self._built(session, now)
+        running = len(beats) < len(SCRIPT) or not all(answered) or len(built) < len(session.explorer_requests) or any(
             now < sent + 2 * self._beat for sent, _ in session.replies)
         output = {"steps": steps, "artifacts": artifacts, "conclusion": conclusion, "needs_user": None,
-                  "report": _report(sum(answered)) if any(answered) else None}
+                  "report": _report(sum(answered)) if any(answered) else None,
+                  "explorer": _explorer(built[-1]) if built else None}
         return SessionSnapshot("running" if running else "waiting", None, output)
 
     def list_messages(self, session_id: str) -> list[DevinMessage]:
@@ -519,6 +617,10 @@ class FakeDevin:
             timeline.append((sent, f"{session_id}:q{number}", "user", REPORT_REQUEST))
             if now >= sent + 2 * self._beat:
                 timeline.append((sent + 2 * self._beat, f"{session_id}:p{number}", "devin", REPORT_READY))
+        for number, request in enumerate(session.explorer_requests, start=1):
+            timeline.append((request.sent, f"{session_id}:x{number}", "user", request.text))
+            if now >= request.sent + 2 * self._beat:
+                timeline.append((request.sent + 2 * self._beat, f"{session_id}:e{number}", "devin", EXPLORER_READY))
         timeline.sort(key=lambda entry: entry[0])
         return [DevinMessage(message_id, role, text, _iso(at)) for at, message_id, role, text in timeline]
 
@@ -527,15 +629,37 @@ class FakeDevin:
         with self._lock:
             if text == REPORT_REQUEST:
                 session.report_requests.append(self._clock())
+            elif is_explorer_request(text):
+                instructions, number = read_explorer_request(text)
+                # Kingdom says which build it expects, which also survives a restart of the demo;
+                # without that, the count is Devin's own.
+                previous = session.explorer_requests[-1].version if session.explorer_requests else 0
+                session.explorer_requests.append(
+                    _ExplorerRequest(self._clock(), text, max(number or 0, previous + 1), instructions))
             else:
                 session.replies.append((self._clock(), text))
 
     def list_attachments(self, session_id: str) -> list[Attachment]:
-        self._session(session_id)
-        return []
+        session = self._session(session_id)
+        return [Attachment(_archive(request), f"https://demo.invalid/{session_id}/{_archive(request)}")
+                for request in self._built(session, self._clock())]
 
     def download(self, attachment: Attachment) -> tuple[bytes, str]:
-        raise AttachmentRejected("the demo has no attachments")
+        raise AttachmentRejected("the demo has no image attachments")
+
+    def download_file(self, attachment: Attachment) -> bytes:
+        """The kit's worked example as Devin would deliver it, zipped afresh so kit edits show at once."""
+        if not _ARCHIVE_NAME.fullmatch(attachment.name):
+            raise AttachmentRejected(f"the demo has no attachment called {attachment.name}")
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+            for path, file in kit_paths(self._kit_dir).items():
+                if path != KIT_GUIDE:
+                    archive.writestr(path, file.read_bytes())
+        return buffer.getvalue()
+
+    def _built(self, session: _FakeSession, now: float) -> list[_ExplorerRequest]:
+        return [request for request in session.explorer_requests if now >= request.sent + 2 * self._beat]
 
     def _session(self, session_id: str) -> _FakeSession:
         with self._lock:
@@ -559,6 +683,25 @@ def _reply_artifact(number: int, after_step: str | None) -> dict:
         "x_label": "Half", "y_label": "r",
         "series": [{"name": "r", "points": [["First half", round(0.55 + 0.01 * number, 2)], ["Second half", 0.6]]}],
     }
+
+
+_ARCHIVE_NAME = re.compile(r"explorer-v\d+\.zip")
+
+
+def _archive(request: _ExplorerRequest) -> str:
+    return f"explorer-v{request.version}.zip"
+
+
+def _explorer(request: _ExplorerRequest) -> dict:
+    description = EXPLORER_DESCRIPTION
+    if request.instructions:
+        description += f" Changed as asked: {_squash(request.instructions)}"
+    return {"version": request.version, "archive": _archive(request), "entry": DEFAULT_ENTRY,
+            "title": EXPLORER_TITLE, "description": description}
+
+
+def _squash(text: str) -> str:
+    return " ".join(text.split())
 
 
 def _report(number: int) -> dict:
