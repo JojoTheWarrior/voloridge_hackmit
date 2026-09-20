@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "utility.us.demand_mwh",
+  "transform_a": "level",
+  "transform_b": "diff",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Brent spot price levels as the oil-shock proxy and first-differences in daily US electricity demand to test whether the sensitivity (growth response) of demand to oil prices became more positive during the 2026 war/oil-shock months versus the 2025 baseline."
+}
