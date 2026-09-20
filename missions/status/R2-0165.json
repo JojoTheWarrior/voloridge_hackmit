@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0165",
+  "title": "[fuel-airspace-losers] Crossref hormuz weekly counts z-score > 1 mark strait-esc",
+  "hypothesis": "R2 | [fuel-airspace-losers] Crossref hormuz weekly counts z-score > 1 mark strait-escalation regimes that compress cruise demand (-); trade short RCL 10d at 5d lag [research.hormuz.crossref_pubs -> finance.RCL.log_return] (parent: R2-0065)",
+  "parent_mission_id": "R2-0065",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:12:22Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
