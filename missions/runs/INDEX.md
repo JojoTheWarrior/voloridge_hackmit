@@ -99,3 +99,4 @@
 | `20260920-095-finance-fred-dcoilbrenteu_x_gdelt-gkg-protest-share` | GDELT protest event counts worldwide rose with fuel-price increases (gasoline shock). | ok | 142 | 0.12122366402865671 | 0.12375249500998003 | 3.88 | 3.78 | 2.82 |
 | `20260920-096-gdelt-gkg-food-prices-share_x_finance-zw-f-log-return` | News volume about "food prices" in GDELT rose after the fertilizer shock and correlates with wheat futures. | ok | 82 | -0.04828647486837595 | 0.3213572854291417 | 1.92 | 1.98 | 5.42 |
 | `20260920-097-gdelt-gkg-qatar-share_x_gdelt-gkg-helium-share` | GDELT mentions of "helium" or "semiconductor" rose after the Ras Laffan strike. | ok | 204 | -0.007831038747885327 | 0.19560878243512975 | 3.28 | 2.48 | 3.3 |
+| `20260920-098-gdelt-gkg-qatar-share_x_finance-ttf-f-log-return` | GDELT mentions of Qatar spike on the same days as TTF gas price jumps. | ok | 391 | 0.2979943994424811 | 0.007984031936127744 | 6.14 | 4.22 | 2.74 |

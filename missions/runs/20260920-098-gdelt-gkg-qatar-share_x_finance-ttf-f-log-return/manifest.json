@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:00:56.393475+00:00",
+  "git_commit": "c23f8b3e574e22982158e8afe03e45ed314929ef",
+  "folder": "20260920-098-gdelt-gkg-qatar-share_x_finance-ttf-f-log-return",
+  "mission_id": "M20260920-302570",
+  "hypothesis": "GDELT mentions of Qatar spike on the same days as TTF gas price jumps.",
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.2979943994424811,
+  "perm_p": 0.007984031936127744,
+  "validity": 6.14,
+  "interestingness": 4.22,
+  "unexpectedness": 2.74,
+  "indicator_coverage": {
+    "gdelt.gkg.qatar_share": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
