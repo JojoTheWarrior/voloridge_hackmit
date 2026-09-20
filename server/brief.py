@@ -9,7 +9,7 @@ from server.artifacts import (
     MAX_TABLE_ROWS,
 )
 
-TITLE_MAX = 48
+TITLE_MAX = 80
 
 ROLE = """\
 You are a research analyst investigating a question for a colleague who is watching your \
@@ -30,6 +30,8 @@ yourself. When I reply, carry on in the same session and keep updating `structur
 
 OUTPUT_GUIDE = f"""\
 Structured output:
+- `title`: a plain three-to-six-word name for this mission, such as "Storm damage vs outages". Set it \
+in your first update.
 - `steps`: your plan as it unfolds, in order. Each has a stable `id` ("s1", "s2", ...), a short \
 `label`, and a `state` of "active" (at most one) or "done".
 - `artifacts`: each has a stable `id` ("a1", ...), `after_step` (the step it belongs to), `type`, \
@@ -123,6 +125,7 @@ OUTPUT_SCHEMA: dict = {
             "required": ["verdict", "summary"],
         },
         "needs_user": {"type": ["string", "null"]},
+        "title": {"type": "string"},
     },
     "required": ["steps", "artifacts"],
 }

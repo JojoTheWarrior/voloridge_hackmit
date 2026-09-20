@@ -617,3 +617,46 @@ def test_download_failures_are_rejections(http, client, failure):
     http.add(failure)
     with pytest.raises(AttachmentRejected):
         client.download(Attachment("plot.png", "https://files.test/plot.png"))
+
+
+# ---------- FakeDevin across restarts ----------
+
+def test_fake_picks_a_session_back_up_after_a_restart(fake, ticker):
+    ref = _start(fake)
+    ticker.t += 600
+    before = fake.get_session(ref.session_id)
+
+    restarted = FakeDevin(clock=ticker, beat_seconds=3.0)
+    after = restarted.get_session(ref.session_id)
+    assert (after.status, after.structured_output) == (before.status, before.structured_output)
+    assert _devin_texts(restarted, ref.session_id) == _devin_texts(fake, ref.session_id)
+
+
+def test_fake_resumes_mid_run_where_the_clock_says(fake, ticker):
+    ref = _start(fake)
+    ticker.t += 7
+    restarted = FakeDevin(clock=ticker, beat_seconds=3.0)
+    assert restarted.get_session(ref.session_id).status == "running"
+    assert restarted.get_session(ref.session_id).structured_output == fake.get_session(ref.session_id).structured_output
+
+
+def test_fake_accepts_a_reply_after_a_restart(fake, ticker):
+    ref = _start(fake)
+    ticker.t += 600
+    restarted = FakeDevin(clock=ticker, beat_seconds=3.0)
+    restarted.send_message(ref.session_id, "And without the first month?")
+    assert restarted.get_session(ref.session_id).status == "running"
+    ticker.t += 60
+    assert restarted.get_session(ref.session_id).status == "waiting"
+
+
+def test_fake_ids_stay_unique_across_restarts(fake, ticker):
+    first = _start(fake)
+    restarted = FakeDevin(clock=ticker, beat_seconds=3.0)
+    assert _start(restarted).session_id != first.session_id
+
+
+@pytest.mark.parametrize("session_id", ["devin-abc123", "devin-demo-", "devin-demo-notanumber-1", "", "devin-demo-1"])
+def test_fake_rejects_ids_it_could_not_have_issued(fake, session_id):
+    with pytest.raises(DevinUnavailable):
+        fake.get_session(session_id)

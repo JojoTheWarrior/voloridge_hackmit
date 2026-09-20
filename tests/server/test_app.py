@@ -93,7 +93,7 @@ def test_create_mission(client, devin, store, monkeypatch):
     assert set(mission) == {"id", "title", "hypothesis", "status", "createdAt", "updatedAt", "datasetIds",
                             "sessionUrl", "events"}
     assert mission["id"].startswith("m_")
-    assert mission["title"] == "Do satellite images of storm damage predict how"
+    assert mission["title"] == "Do satellite images of storm damage predict how long power outages last"
     assert mission["hypothesis"] == HYPOTHESIS
     assert mission["status"] == "working"
     assert mission["datasetIds"] == ["gdelt"]

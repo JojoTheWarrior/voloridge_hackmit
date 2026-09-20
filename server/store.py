@@ -199,6 +199,9 @@ class Store:
                 changed |= self._insert(mission_id, new.event, after=new.after)
             for updated in result.updated_events:
                 changed |= self._replace(mission_id, updated.event, move_to_end=updated.move_to_end)
+            if result.title and result.title != mission.title:
+                self._update(mission_id, title=result.title)
+                changed = True
             if mission.status == expected_status and (
                 (result.status, result.needs_user) != (mission.status, mission.needs_user)
             ):

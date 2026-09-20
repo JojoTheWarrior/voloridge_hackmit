@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import copy
+import re
 import threading
 import time
+import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -417,6 +419,10 @@ class _FakeSession:
     replies: list[tuple[float, str]] = field(default_factory=list)
 
 
+_DEMO_PREFIX = "devin-demo-"
+_DEMO_ID = re.compile(rf"{_DEMO_PREFIX}(\d+)-[0-9a-f]{{6}}")
+
+
 class FakeDevin:
     """A scripted research run that advances with the clock, so the app works with no key."""
 
@@ -427,9 +433,11 @@ class FakeDevin:
         self._lock = threading.Lock()
 
     def create_session(self, prompt: str, *, title: str, schema: dict, max_acu: int) -> SessionRef:
+        created = self._clock()
         with self._lock:
-            session_id = f"devin-demo-{len(self._sessions) + 1}"
-            self._sessions[session_id] = _FakeSession(prompt, self._clock())
+            # The id carries its own start time, so a restarted server can replay the run from the id alone.
+            session_id = f"{_DEMO_PREFIX}{int(created * 1000)}-{uuid.uuid4().hex[:6]}"
+            self._sessions[session_id] = _FakeSession(prompt, created)
         return SessionRef(session_id, None)
 
     def get_session(self, session_id: str) -> SessionSnapshot:
@@ -483,8 +491,11 @@ class FakeDevin:
     def _session(self, session_id: str) -> _FakeSession:
         with self._lock:
             session = self._sessions.get(session_id)
-        if session is None:
-            raise DevinUnavailable(f"unknown demo session {session_id}")
+            if session is None:
+                match = _DEMO_ID.fullmatch(session_id)
+                if match is None:
+                    raise DevinUnavailable(f"unknown demo session {session_id}")
+                session = self._sessions[session_id] = _FakeSession("", int(match.group(1)) / 1000)
         return session
 
     def _beats_played(self, session: _FakeSession, now: float) -> tuple[Beat, ...]:

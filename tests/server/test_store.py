@@ -290,3 +290,25 @@ def test_schema_uses_a_real_sqlite_file(store, tmp_path):
     with sqlite3.connect(tmp_path / "nested" / "kingdom.db") as db:
         tables = {row[0] for row in db.execute("select name from sqlite_master where type='table'")}
     assert {"missions", "events", "datasets"} <= tables
+
+
+def test_apply_sync_retitles_the_mission(store):
+    mission = _mission(store)
+    store.apply_sync(mission.id, SyncResult([], [], "working", None, title="Storm damage vs outages"),
+                     expected_status="working")
+    assert store.get_mission(mission.id).title == "Storm damage vs outages"
+
+
+def test_apply_sync_without_a_title_keeps_the_current_one(store):
+    mission = _mission(store)
+    store.apply_sync(mission.id, SyncResult([], [], "working", None, title="First"), expected_status="working")
+    store.apply_sync(mission.id, SyncResult([], [], "working", None), expected_status="working")
+    assert store.get_mission(mission.id).title == "First"
+
+
+def test_apply_sync_retitles_even_when_the_user_changed_the_status(store):
+    mission = _mission(store)
+    store.mark_done(mission.id)
+    store.apply_sync(mission.id, SyncResult([], [], "working", None, title="Late title"), expected_status="working")
+    done = store.get_mission(mission.id)
+    assert (done.status, done.title) == ("done", "Late title")

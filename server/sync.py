@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from server.store import MissionRow
 
 STEP_STATES = ("active", "done")
+TITLE_MAX = 60
 CONCLUSION_ID = "conclusion"
 # Below this length a containment match on the brief would be too easy to hit by accident.
 MIN_PROMPT_MATCH = 40
@@ -35,6 +36,7 @@ class SyncResult:
     updated_events: list[UpdatedEvent]
     status: str
     needs_user: str | None
+    title: str | None = None
 
 
 def sync(
@@ -71,6 +73,8 @@ def sync(
                     after_step=f"step:{raw.get('after_step')}",
                 )
 
+    title = _title(output.get("title")) if output is not None else None
+
     if output is not None and (conclusion := _conclusion(output.get("conclusion"))):
         thread.upsert(CONCLUSION_ID, "conclusion", conclusion, replace_at_end=True)
 
@@ -78,11 +82,11 @@ def sync(
         if mission.status != "failed":
             errors = sum(event["kind"] == "error" for event in stored_events)
             thread.add(f"error:session:{errors + 1}", "error", {"text": _error_text(snapshot.detail)})
-        return SyncResult(thread.new, thread.updated, "failed", None)
+        return SyncResult(thread.new, thread.updated, "failed", None, title)
 
     needs_user = mission.needs_user if output is None else _needs_user(output.get("needs_user"), mission)
     waiting = snapshot.status in ("waiting", "finished") or needs_user is not None
-    return SyncResult(thread.new, thread.updated, "waiting" if waiting else "working", needs_user)
+    return SyncResult(thread.new, thread.updated, "waiting" if waiting else "working", needs_user, title)
 
 
 class _Thread:
@@ -187,6 +191,11 @@ def _conclusion(raw: object) -> dict | None:
         "summary": _text(raw.get("summary")),
         "stats": normalise_stats(raw.get("stats")),
     }
+
+
+def _title(raw: object) -> str | None:
+    title = _text(raw).rstrip(".")[:TITLE_MAX].strip()
+    return title or None
 
 
 def _needs_user(raw: object, mission: MissionRow) -> str | None:

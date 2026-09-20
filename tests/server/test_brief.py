@@ -77,7 +77,7 @@ def test_schema_shape():
     json.dumps(OUTPUT_SCHEMA)
     assert OUTPUT_SCHEMA["type"] == "object"
     properties = OUTPUT_SCHEMA["properties"]
-    assert set(properties) == {"steps", "artifacts", "conclusion", "needs_user"}
+    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user"}
     assert properties["steps"]["items"]["properties"]["state"]["enum"] == ["active", "done"]
     artifact = properties["artifacts"]["items"]
     assert artifact["properties"]["type"]["enum"] == ["chart", "images", "relation", "table", "stats", "image"]
@@ -90,9 +90,11 @@ def test_schema_shape():
     ("Do storms predict outages?", "Do storms predict outages"),
     ("Short one...", "Short one"),
     ("  padded!  ", "padded"),
-    ("x" * 80, "x" * TITLE_MAX),
+    ("x" * 200, "x" * TITLE_MAX),
     ("Do satellite images of storm damage predict how long power outages last?",
-     "Do satellite images of storm damage predict how"),
+     "Do satellite images of storm damage predict how long power outages last"),
+    ("Do satellite images of storm damage across the whole Gulf Coast predict how long outages last?",
+     "Do satellite images of storm damage across the whole Gulf Coast predict how long"),
 ])
 def test_derive_title(hypothesis, title):
     assert derive_title(hypothesis) == title
@@ -101,3 +103,8 @@ def test_derive_title(hypothesis, title):
 
 def test_session_title():
     assert session_title("Storms vs outages") == "Kingdom: Storms vs outages"
+
+
+def test_schema_and_guide_ask_for_a_short_title():
+    assert OUTPUT_SCHEMA["properties"]["title"] == {"type": "string"}
+    assert "`title`" in build_prompt("Does A lead B?", [], None)

@@ -34,19 +34,23 @@ export function MissionHeader({ mission, reconnecting }: MissionHeaderProps) {
   }
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-line-soft bg-white px-6 text-[13px]">
+    <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-line-soft bg-white px-4 text-[13px] sm:px-6">
       <StatusDot status={mission.status} />
       <h1 className="truncate font-medium">{mission.title}</h1>
-      <span className="shrink-0 text-muted">{reconnecting ? 'Reconnecting' : STATUS_TEXT[mission.status]}</span>
-      <div className="ml-auto flex shrink-0 items-center gap-4 pl-3">
+      {/* On phones the dot carries the status so the title keeps the room; an outage is always spelled out. */}
+      <span className={`shrink-0 text-muted ${reconnecting ? '' : 'max-sm:hidden'}`}>
+        {reconnecting ? 'Reconnecting' : STATUS_TEXT[mission.status]}
+      </span>
+      <div className="ml-auto flex shrink-0 items-center gap-3 pl-2 sm:gap-4 sm:pl-3">
         {mission.sessionUrl && (
           <a
             href={mission.sessionUrl}
             target="_blank"
             rel="noreferrer"
+            aria-label="Open in Devin"
             className="flex items-center gap-0.5 text-muted transition-colors duration-150 hover:text-ink"
           >
-            Open in Devin
+            <span className="max-sm:hidden">Open in&nbsp;</span>Devin
             <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
           </a>
         )}

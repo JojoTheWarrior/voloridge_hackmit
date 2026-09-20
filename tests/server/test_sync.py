@@ -29,8 +29,9 @@ def _snapshot(output=None, status="running", detail=None):
     return SessionSnapshot(status, detail, output)
 
 
-def _output(steps=(), artifacts=(), conclusion=None, needs_user=None):
-    return {"steps": list(steps), "artifacts": list(artifacts), "conclusion": conclusion, "needs_user": needs_user}
+def _output(steps=(), artifacts=(), conclusion=None, needs_user=None, title=None):
+    return {"title": title, "steps": list(steps), "artifacts": list(artifacts), "conclusion": conclusion,
+            "needs_user": needs_user}
 
 
 def _step(step_id, state="done", label=None):
@@ -370,3 +371,26 @@ def test_a_second_failure_after_reopening_gets_its_own_error_event(store, missio
     _run(store, mission.id, snapshot)
     errors = [e for e in store.list_events(mission.id) if e["kind"] == "error"]
     assert len(errors) == 2 and errors[0]["id"] != errors[1]["id"]
+
+
+# ---------- title ----------
+
+@pytest.mark.parametrize("raw, expected", [
+    ("Storm damage vs outages", "Storm damage vs outages"),
+    ("  Padded title \n", "Padded title"),
+    ("Ends with a full stop.", "Ends with a full stop"),
+    ("x" * 200, "x" * 60),
+    ("", None),
+    ("   ", None),
+    (None, None),
+    (42, None),
+    (["list"], None),
+])
+def test_title_comes_from_the_structured_output(mission, raw, expected):
+    result = sync(mission, [], _snapshot(_output(title=raw)), [], [], now=NOW)
+    assert result.title == expected
+
+
+def test_no_title_without_structured_output(mission):
+    assert sync(mission, [], _snapshot(None), [], [], now=NOW).title is None
+    assert sync(mission, [], _snapshot("not a dict"), [], [], now=NOW).title is None
