@@ -1,0 +1,1 @@
+R2 | [gas-lng] Houston temperature anomaly 20d z-score > 1.5 (cooling burn) leads Henry Hub log returns by 2 days (+) narrowing the TTF ratio; trade long NG=F 3d [weather.houston.temp_anomaly -> finance.NG=F.log_return]
