@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:50:11.822183+00:00",
+  "git_commit": "e32a0cb501f325185122ac461627af1795209735",
+  "folder": "20260920-020-weather-riyadh-temp-max_x_finance-ksa-range-pct",
+  "mission_id": "M20260920-3f6428",
+  "hypothesis": "Extreme heat days in Riyadh coincide with higher Saudi equity ETF (KSA) volatility during the war.",
+  "status": "ok",
+  "n_obs": 137,
+  "r": -0.2024430954123625,
+  "perm_p": 0.46107784431137727,
+  "validity": 2.0,
+  "interestingness": 3.92,
+  "unexpectedness": 7.5,
+  "indicator_coverage": {
+    "weather.riyadh.temp_max": "configured analysis window",
+    "finance.KSA.range_pct": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

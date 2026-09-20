@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.riyadh.temp_max",
+  "indicator_b": "finance.KSA.range_pct",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Riyadh daily max temperature anomalies (proxy for extreme heat days) against the Saudi equity ETF KSA\u2019s daily intraday range percentage during the active war period, allowing heat shocks to lead volatility by up to several trading days to test whether unusually hot days coincide with higher market volatility."
+}
