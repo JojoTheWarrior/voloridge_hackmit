@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:06:08Z",
-  "updated_at": "2026-09-20T04:07:09Z",
+  "updated_at": "2026-09-20T04:07:19Z",
   "finished_at": "2026-09-20T04:07:09Z",
-  "elapsed_s": 61,
+  "elapsed_s": 71,
   "message": "Null: contemporaneous r=0.008 (p=0.88), best lag -3 r=0.106, perm_p=0.59; auto trade rule long DXY 1d hit 42% sharpe -1.24 (OOS n=17 hit 59%) - tone does not lead USD",
   "run_folder": "missions/runs/20260920-188-gdelt-usa-tone_x_finance-dx-y-nyb-log-return",
   "scores": {
