@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:14:29.485210+00:00",
+  "git_commit": "57d8a09b606de12402f781196141cbae0b8f1450",
+  "folder": "20260920-258-gdelt-gkg-oil-share_x_finance-jets-log-return",
   "mission_id": "R2-0166",
-  "title": "Oil GKG share z>1 -> short JETS 3d",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1 precedes airline fuel-cost derating more sharply than cruise lines (-); trade short JETS 3d at 3d lag as a higher-fuel-beta comparison to the weak CCL result [gdelt.gkg.oil_share -> finance.JETS.log_return] (parent: R2-0067)",
-  "parent_mission_id": "R2-0067",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/675d1491013b4b0789fe90c9653b8f5e",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:14:15Z",
-  "updated_at": "2026-09-20T13:14:30Z",
-  "finished_at": null,
-  "elapsed_s": 15,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-258-gdelt-gkg-oil-share_x_finance-jets-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.59
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.00032887920011135524,
+  "perm_p": 0.654690618762475,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.59,
   "trade_idea": {
     "instrument": "JETS",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 3.59,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.oil_share": "configured analysis window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
