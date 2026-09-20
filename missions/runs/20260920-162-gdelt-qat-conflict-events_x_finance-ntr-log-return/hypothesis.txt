@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Qatar GDELT conflict-event count 10d z-score > 1.5 leads NTR log returns by 2 days (+) via North Field urea and ammonia export halts; trade long NTR 6d [gdelt.qat.conflict_events -> finance.NTR.log_return]
