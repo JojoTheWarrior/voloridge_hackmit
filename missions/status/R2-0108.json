@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/47419ef6233845be9213d5a9e6e4b30f",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:41:46Z",
-  "updated_at": "2026-09-20T12:42:03Z",
+  "updated_at": "2026-09-20T12:44:09Z",
   "finished_at": null,
-  "elapsed_s": 17,
+  "elapsed_s": 143,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-219-weather-muscat-wind-max_x_finance-bz-f-range-pct",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Bandar Abbas max wind 20d z-score above 1 (Strait of Hormuz gales) leads DHT tanker intraday range higher by 2 days (+); trade long DHT volatility 3d [weather.bandar_abbas.wind_max -> finance.DHT.range_pct] (parent: R2-0108)"
 }
