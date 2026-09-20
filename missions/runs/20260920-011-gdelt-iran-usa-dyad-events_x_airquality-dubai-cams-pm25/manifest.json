@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:48:59.084395+00:00",
+  "git_commit": "fbd2b44ade3cb259a45c72efae78d22be0407189",
+  "folder": "20260920-011-gdelt-iran-usa-dyad-events_x_airquality-dubai-cams-pm25",
+  "mission_id": "M20260920-2306e8",
+  "hypothesis": "Dubai PM2.5 fell after Gulf airspace closures on March 1 2026 compared with the same weeks in 2025.",
+  "status": "ok",
+  "n_obs": 202,
+  "r": -0.31613026842463116,
+  "perm_p": 0.043912175648702596,
+  "validity": 6.0,
+  "interestingness": 4.8,
+  "unexpectedness": 5.18,
+  "indicator_coverage": {
+    "gdelt.iran_usa_dyad_events": "configured analysis window",
+    "airquality.dubai.cams_pm25": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

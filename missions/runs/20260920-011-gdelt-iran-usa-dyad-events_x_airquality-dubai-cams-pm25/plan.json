@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.iran_usa_dyad_events",
+  "indicator_b": "airquality.dubai.cams_pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Iran\u2013USA dyadic event counts as a proxy for Gulf airspace closures and associated conflict intensity, and test whether Dubai CAMS PM2.5 anomalies decreased relative to the same-calendar-week 2025 baseline during the war window after March 1, 2026."
+}
