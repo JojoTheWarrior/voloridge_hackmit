@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/bf96b5aeb7ab4fca9a91684e5b946ed8",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 1.0,
   "signal": null,
   "started_at": "2026-09-20T03:47:08Z",
-  "updated_at": "2026-09-20T03:47:36Z",
+  "updated_at": "2026-09-20T03:48:07Z",
   "finished_at": "2026-09-20T03:47:16Z",
-  "elapsed_s": 28,
+  "elapsed_s": 59,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-166-FAILED-r2-fertilizer-ag-crossref-weekly",
   "scores": {
@@ -24,5 +24,5 @@
     "actionability": null
   },
   "trade_idea": null,
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] GDELT daily Iran energy news share z-score > 1 leads YAR.OL returns by 6 days (+) as a daily-frequency substitute for the sparse Crossref series; long YAR.OL 6d [gdelt.gkg.iran_share -> finance.YAR.OL.log_return] (parent: R2-0048)"
 }
