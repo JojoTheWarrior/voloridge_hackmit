@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:54:34Z",
-  "updated_at": "2026-09-20T12:55:15Z",
+  "updated_at": "2026-09-20T12:55:58Z",
   "finished_at": "2026-09-20T12:55:15Z",
-  "elapsed_s": 41,
+  "elapsed_s": 84,
   "message": "Not supported: TTF/HH ratio z>1 vs LNG r=+0.14 at lag 0 (n=389), sign opposite to hypothesis; short-LNG rule loses pre-war (29 trades, -0.2%/trade), only war-period OOS positive (15 trades). Actionability 6.94 is not backed by validity (0).",
   "run_folder": "missions/runs/20260920-234-finance-ratio-ttf-henryhub_x_finance-lng-log-return",
   "scores": {
