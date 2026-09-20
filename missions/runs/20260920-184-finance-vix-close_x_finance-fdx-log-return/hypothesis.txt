@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] VIX 3-day pct change > 20 pct precedes freight and travel beta drawdowns (-); trade short FDX 2d at 1d lag [finance.^VIX.close -> finance.FDX.log_return]

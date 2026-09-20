@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:02:59.628403+00:00",
+  "git_commit": "f3fa1e6d20787b2e2bb154d67f796f69c07250e9",
+  "folder": "20260920-184-finance-vix-close_x_finance-fdx-log-return",
   "mission_id": "R2-0076",
-  "title": "VIX 3d spike precedes FDX drawdown",
   "hypothesis": "R2 | [fuel-airspace-losers] VIX 3-day pct change > 20 pct precedes freight and travel beta drawdowns (-); trade short FDX 2d at 1d lag [finance.^VIX.close -> finance.FDX.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/b6a61e92017849dabe9b2d7322559664",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:02:39Z",
-  "updated_at": "2026-09-20T04:03:01Z",
-  "finished_at": null,
-  "elapsed_s": 22,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-184-finance-vix-close_x_finance-fdx-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 5.4
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.47984187429127634,
+  "perm_p": 0.013972055888223553,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 5.4,
   "trade_idea": {
     "instrument": "FDX",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 5.4,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.^VIX.close": "configured analysis window",
+    "finance.FDX.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
