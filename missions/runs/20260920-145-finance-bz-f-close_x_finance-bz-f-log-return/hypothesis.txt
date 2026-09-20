@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Brent price over-extended (20d z-score of BZ=F close > 1) fades: Brent log return reverses over the next 4 days (-); trade short BZ=F 4d [finance.BZ=F.close -> finance.BZ=F.log_return]

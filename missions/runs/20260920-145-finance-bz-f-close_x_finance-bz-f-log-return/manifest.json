@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:28:40.538169+00:00",
+  "git_commit": "4771d6b470c6c429d7828eebd0af43ab7e03b241",
+  "folder": "20260920-145-finance-bz-f-close_x_finance-bz-f-log-return",
   "mission_id": "R2-0018",
-  "title": "Brent 3d overextension fades",
   "hypothesis": "R2 | [oil-shipping] Brent price over-extended (20d z-score of BZ=F close > 1) fades: Brent log return reverses over the next 4 days (-); trade short BZ=F 4d [finance.BZ=F.close -> finance.BZ=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/cce063e899aa49e3b201c8021c22de3b",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:28:10Z",
-  "updated_at": "2026-09-20T03:28:42Z",
-  "finished_at": null,
-  "elapsed_s": 32,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-145-finance-bz-f-close_x_finance-bz-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 3.1
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 1.0,
+  "perm_p": 0.05389221556886228,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 3.1,
   "trade_idea": {
     "instrument": "BZ=F",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 3.1,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.BZ=F.close": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

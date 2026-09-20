@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 50,
+    "hit_rate": 0.46,
+    "avg_return": -0.00304386438295712,
+    "baseline_avg_return": -0.0014601376365622868,
+    "excess_return": -0.001583726746394833,
+    "sharpe_like": -0.6798670350051252,
+    "max_drawdown": -0.2629021995395864,
+    "total_return": -0.1626695164895512
+  },
+  "fit_pre_war": {
+    "n_trades": 34,
+    "hit_rate": 0.5,
+    "avg_return": -0.0034481373979638593,
+    "baseline_avg_return": -0.0005711681731978795,
+    "excess_return": -0.0028769692247659798,
+    "sharpe_like": -0.9119856446200983,
+    "max_drawdown": -0.19422088951505934,
+    "total_return": -0.11829428200087855
+  },
+  "test_war": {
+    "n_trades": 16,
+    "hit_rate": 0.375,
+    "avg_return": -0.0021847842260677985,
+    "baseline_avg_return": -0.0030014444039782734,
+    "excess_return": 0.0008166601779104748,
+    "sharpe_like": -0.19079056185166296,
+    "max_drawdown": -0.10987805343749846,
+    "total_return": -0.05032884961818607
+  },
+  "n_signal_days": 381,
+  "trade_idea": {
+    "instrument": "BZ=F",
+    "direction": "short",
+    "entry_rule": "finance.BZ=F.close rolling_zscore_20d > 1 at close -> short BZ=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.46,
+    "avg_return": -0.00304386438295712,
+    "excess_return": -0.001583726746394833,
+    "n_trades": 50,
+    "sharpe_like": -0.6798670350051252,
+    "max_drawdown": -0.2629021995395864,
+    "oos_n_trades": 16,
+    "oos_avg_return": -0.0021847842260677985,
+    "oos_hit_rate": 0.375,
+    "actionability": 3.1,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
