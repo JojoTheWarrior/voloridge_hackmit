@@ -47,3 +47,4 @@
 | `20260920-043-FAILED-regional-us-demand-deviations-from` | Regional US demand deviations from seasonal norms correlate with regional PM2.5 during 2026. | failed | 0 | None | None | None | None | None |
 | `20260920-044-utility-us-demand-peak-mwh_x_airquality-tokyo-so2` | Regional US demand deviations from seasonal norms correlate with regional PM2.5 during 2026. | ok | 554 | 0.04944998791079877 | 0.5868263473053892 | 2.891859728460826 | 2.197799951643195 | 2.2472499395539938 |
 | `20260920-045-FAILED-eia-860m-generator-retirements-additions` | EIA-860m generator retirements/additions in 2026 shifted toward gas and storage relative to 2025. | failed | 0 | None | None | None | None | None |
+| `20260920-046-FAILED-eia-860m-generator-retirements-additions` | EIA-860m generator retirements/additions in 2026 shifted toward gas and storage relative to 2025. | failed | 0 | None | None | None | None | None |
