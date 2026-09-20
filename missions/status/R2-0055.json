@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:50:27Z",
-  "updated_at": "2026-09-20T03:51:27Z",
+  "updated_at": "2026-09-20T03:51:48Z",
   "finished_at": "2026-09-20T03:51:27Z",
-  "elapsed_s": 60,
+  "elapsed_s": 81,
   "message": "Not supported: TTF/HH ratio z>1 -> short YAR.OL gives r=+0.13 (wrong sign), perm p=0.48, hit rate 0.40 over 43 trades, negative Sharpe-like; no tradeable edge.",
   "run_folder": "missions/runs/20260920-169-finance-ratio-ttf-henryhub_x_finance-yar-ol-log-return",
   "scores": {
