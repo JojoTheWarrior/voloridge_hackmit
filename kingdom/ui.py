@@ -351,6 +351,9 @@ def clean_markdown(text: str) -> str:
     return "\n".join(out)
 
 
+SOURCE_CACHE_SIZE = 2
+
+
 class ThumbnailCache:
     """Loads and scales viz PNGs once per (path, size)."""
 
@@ -358,17 +361,25 @@ class ThumbnailCache:
         self._cache: dict[tuple[str, tuple[int, int], bool], Optional[pygame.Surface]] = {}
         self._sources: dict[str, Optional[pygame.Surface]] = {}
 
+    @staticmethod
+    def _load(key: str) -> Optional[pygame.Surface]:
+        try:
+            img = pygame.image.load(key)
+            return img.convert(24) if img.get_bitsize() != 24 else img
+        except (OSError, pygame.error, ValueError):
+            return None
+
     def source(self, path: Optional[Path]) -> Optional[pygame.Surface]:
-        """The full-resolution image (24-bit), loaded once."""
+        """The full-resolution image (24-bit); only the most recent few are retained."""
         if path is None:
             return None
         key = str(path)
-        if key not in self._sources:
-            try:
-                img = pygame.image.load(key)
-                self._sources[key] = img.convert(24) if img.get_bitsize() != 24 else img
-            except (OSError, pygame.error, ValueError):
-                self._sources[key] = None
+        if key in self._sources:
+            self._sources[key] = self._sources.pop(key)
+        else:
+            self._sources[key] = self._load(key)
+            while len(self._sources) > SOURCE_CACHE_SIZE:
+                self._sources.pop(next(iter(self._sources)))
         return self._sources[key]
 
     def get(self, path: Optional[Path], size: tuple[int, int], pixelate: bool = True) -> Optional[pygame.Surface]:
@@ -377,7 +388,7 @@ class ThumbnailCache:
         key = (str(path), size, pixelate)
         if key in self._cache:
             return self._cache[key]
-        img = self.source(path)
+        img = self._sources[str(path)] if str(path) in self._sources else self._load(str(path))
         surf: Optional[pygame.Surface] = None
         if img is not None:
             try:
