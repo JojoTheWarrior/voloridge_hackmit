@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/0241dd8c817544b8b07f611552d381c8",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:01:21Z",
-  "updated_at": "2026-09-20T04:01:39Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:02:17Z",
+  "finished_at": "2026-09-20T04:02:17Z",
+  "elapsed_s": 56,
+  "message": "Not supported: gasoline crack z>1 vs UAL next-day return r=0.04 (n=389, perm p n.s.); short rule 48 trades, hit 46%, sharpe-like -1.2, actionability 0.08",
   "run_folder": "missions/runs/20260920-183-finance-spread-gasoline-crack_x_finance-ual-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.08,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 weighs on the airline basket relative to the market rather than single names; trade short JETS/SPY ratio 3d at 1d lag [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0073)"
 }
