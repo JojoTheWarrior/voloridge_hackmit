@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Oklahoma City 30d temperature anomaly > 2 C leads ZW=F log returns by 3 days (+) via US Plains hard red winter wheat stress; trade long ZW=F 6d [weather.oklahoma_city.temp_anomaly -> finance.ZW=F.log_return]
