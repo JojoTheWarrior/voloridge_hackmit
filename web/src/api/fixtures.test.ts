@@ -25,6 +25,15 @@ describe('buildResult', () => {
     expect(buildResult('x', { strength: -0.7 }).correlation).toBeLessThan(-0.4)
   })
 
+  it('opens the note with the leading series rather than naming it mid-sentence', () => {
+    expect(buildResult('x', { seriesA: 'Wind', seriesB: 'Dust', strength: 0.7, lagDays: 2 }).note).toMatch(
+      /^Wind leads Dust by 2 days, and the two move together\./,
+    )
+    expect(buildResult('x', { seriesA: 'Wind', seriesB: 'Dust', strength: -0.7, lagDays: 0 }).note).toMatch(
+      /^Wind and Dust move in opposite directions on the same day\./,
+    )
+  })
+
   it('names series from the hypothesis, falling back to generic names', () => {
     expect(buildResult('Do protest events move gold futures?')).toMatchObject({ seriesA: 'Protest events', seriesB: 'Gold futures' })
     expect(buildResult('something vague')).toMatchObject({ seriesA: 'Signal', seriesB: 'Target' })

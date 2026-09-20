@@ -75,6 +75,26 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py selftest` | Check keys, judge availability, and indicator loading |
 | `python main.py kingdom [--scale N] [--scene S] [--screenshot out.png]` | Pixel-art mission dashboard (see [Kingdom](#kingdom)) |
 
+## Web
+
+`web/` is the product frontend: a minimal React app (Vite, TypeScript,
+Tailwind) where you link datasets, start missions that look for connections
+between them, and read each mission as a thread ending in a chart, the key
+stats, and a written verdict.
+
+```bash
+cd web
+npm install
+npm run dev      # http://localhost:5173
+npm test         # vitest
+npm run build    # type-check + production build
+```
+
+It currently runs on mock data: `web/src/api/mock.ts` is an in-memory
+implementation of the `Api` interface in `web/src/api/index.ts`, seeded from
+`fixtures.ts`, that walks running missions through their steps on a timer.
+Components only see that interface, so wiring a real backend means adding an
+HTTP implementation and passing it to `ApiProvider` in `web/src/main.tsx`.
 
 ## Iran Round 2 (tradeable rules)
 

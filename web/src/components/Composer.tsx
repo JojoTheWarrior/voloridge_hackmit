@@ -1,9 +1,7 @@
 import { ArrowUp } from 'lucide-react'
-import { useLayoutEffect, useState, type KeyboardEvent, type Ref } from 'react'
+import { useState, type KeyboardEvent, type Ref } from 'react'
 import type { Dataset } from '../types'
 import { DatasetChips } from './DatasetChips'
-
-const MAX_HEIGHT = 240
 
 interface ComposerProps {
   datasets: Dataset[]
@@ -16,15 +14,8 @@ interface ComposerProps {
 export function Composer({ datasets, value, onChange, onSubmit, inputRef }: ComposerProps) {
   // Tracking what is switched off keeps newly linked datasets on by default.
   const [deselected, setDeselected] = useState<Set<string>>(new Set())
-  const [textarea, setTextarea] = useState<HTMLTextAreaElement | null>(null)
   const selected = new Set(datasets.filter((d) => !deselected.has(d.id)).map((d) => d.id))
   const empty = value.trim() === ''
-
-  useLayoutEffect(() => {
-    if (!textarea) return
-    textarea.style.height = 'auto'
-    textarea.style.height = `${Math.min(textarea.scrollHeight, MAX_HEIGHT)}px`
-  }, [textarea, value])
 
   function toggle(id: string) {
     setDeselected((current) => {
@@ -47,11 +38,7 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
   return (
     <div className="rounded-2xl border border-line bg-white p-3 transition-colors duration-150 focus-within:border-ink">
       <textarea
-        ref={(node) => {
-          setTextarea(node)
-          if (typeof inputRef === 'function') inputRef(node)
-          else if (inputRef) inputRef.current = node
-        }}
+        ref={inputRef}
         aria-label="Mission prompt"
         autoFocus
         rows={2}
@@ -59,7 +46,7 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={onKeyDown}
         placeholder="Describe a connection to test"
-        className="block w-full resize-none bg-transparent px-1.5 pt-1 text-[15px] leading-relaxed outline-none placeholder:text-muted"
+        className="field-sizing-content block max-h-60 min-h-[3.25rem] w-full resize-none bg-transparent px-1.5 pt-1 text-[15px] leading-relaxed outline-none placeholder:text-muted"
       />
       <div className="mt-2 flex items-end justify-between gap-3">
         <DatasetChips datasets={datasets} selected={selected} onToggle={toggle} />

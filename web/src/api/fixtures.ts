@@ -76,9 +76,12 @@ function writeUp(a: string, b: string, r: number, lag: number, p: number): Pick<
     }
   }
   const direction = r > 0 ? 'move together' : 'move in opposite directions'
-  const timing = lag === 0 ? 'on the same day' : `with ${a} leading by ${lag} ${lag === 1 ? 'day' : 'days'}`
+  const finding =
+    lag === 0
+      ? `${a} and ${b} ${direction} on the same day.`
+      : `${a} leads ${b} by ${lag} ${lag === 1 ? 'day' : 'days'}, and the two ${direction}.`
   return {
-    note: `${a} and ${b} ${direction}, ${timing}. The link holds up under a permutation test, so it is unlikely to be chance.\n\n${caveat}`,
+    note: `${finding} The link holds up under a permutation test, so it is unlikely to be chance.\n\n${caveat}`,
     verdict: Math.abs(r) >= 0.5 ? 'A strong link.' : 'A real but modest link.',
   }
 }

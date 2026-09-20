@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { ApiProvider } from './api/context'
+import { ApiProvider } from './api/ApiProvider'
 import { createMockApi } from './api/mock'
 import { App } from './App'
 import './index.css'

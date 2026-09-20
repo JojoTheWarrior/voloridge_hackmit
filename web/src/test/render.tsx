@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { ApiProvider } from '../api/context'
+import { ApiProvider } from '../api/ApiProvider'
 import type { Api } from '../api/index'
 import { createMockApi } from '../api/mock'
 
