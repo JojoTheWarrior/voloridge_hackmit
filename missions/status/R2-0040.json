@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:42:44Z",
-  "updated_at": "2026-09-20T03:43:43Z",
+  "updated_at": "2026-09-20T03:44:16Z",
   "finished_at": "2026-09-20T03:43:43Z",
-  "elapsed_s": 59,
-  "message": "Not supported: Qatar GKG share does not lead NTR (best lag -5d, NTR leads news; perm p=0.18, Bonferroni 1.0). Trade rule 37 trades, hit 54%, excess +0.01%/trade, war OOS 7 trades hit 29% avg -0.58%; actionability 4.05 - story not a rule.",
+  "elapsed_s": 92,
+  "message": "Not supported: Qatar GKG share does not lead NTR (best lag -5d, NTR leads news; perm p=0.18, Bonferroni 1.0). Rule: 37 trades, hit 54%, excess +0.01%/trade; war OOS 7 trades hit 29% avg -0.58%; actionability 4.05 - story not a rule.",
   "run_folder": "missions/runs/20260920-160-gdelt-gkg-qatar-share_x_finance-ntr-log-return",
   "scores": {
     "validity": 0,
