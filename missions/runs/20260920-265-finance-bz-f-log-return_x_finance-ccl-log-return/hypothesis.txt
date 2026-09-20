@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Brent log-return spikes hit cruise names contemporaneously (r=-0.30 at lag 0) with no reversal at 1-4d; test whether the drop continues: trade short CCL 2d at 1d lag (-) [finance.BZ=F.log_return -> finance.CCL.log_return]
