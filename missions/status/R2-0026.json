@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:33:54Z",
-  "updated_at": "2026-09-20T03:34:34Z",
+  "updated_at": "2026-09-20T03:35:31Z",
   "finished_at": "2026-09-20T03:34:34Z",
-  "elapsed_s": 40,
+  "elapsed_s": 97,
   "message": "Null: London temp_min vs TTF close r=0.002 (n=387), best lag 2d r=0.06, validity 0; long-TTF rule 53 trades hit 47%, excess +0.67%/trade, OOS 19 trades avg +1.4% - noise, not tradeable",
   "run_folder": "missions/runs/20260920-149-weather-london-temp-min_x_finance-ttf-f-close",
   "scores": {
