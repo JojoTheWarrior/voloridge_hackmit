@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] GDELT tanker GKG share 20d z-score > 1 leads Japan ETF returns lower by 1-2 days (-) on Gulf shipping exposure; trade short EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return]
 R2 | [risk-macro-em] Israel conflict-event count 20d z-score > 1 leads VIX higher by 0-1 days (+); trade long VIX exposure 2d [gdelt.isr.conflict_events -> finance.^VIX.close]
 R2 | [risk-macro-em] Iran-USA dyad events 20d z-score > 1 lead Korea ETF returns lower by 2-4 days (-) on oil-import and risk beta; trade short EWY 4d [gdelt.iran_usa_dyad_events -> finance.EWY.log_return]
 R2 | [risk-macro-em] REVERSAL: Iran GDELT mentions 20d z-score > 2 marks news exhaustion and leads S&P returns higher by 3-5 days (+); fade the panic long SPY 5d [gdelt.irn.mentions -> finance.SPY.log_return]
