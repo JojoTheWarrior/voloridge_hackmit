@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Oklahoma City precipitation 20d z-score > 1 (wet spell, mirror of the drought rule) leads CF log returns by 5 days (+) as rain restores side-dress nitrogen demand; long CF 5d [weather.oklahoma_city.precip -> finance.CF.log_return] (parent: R2-0050)
