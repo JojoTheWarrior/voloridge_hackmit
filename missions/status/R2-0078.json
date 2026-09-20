@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0078",
+  "title": "[risk-macro-em] GDELT sanctions GKG share 20d z-score > 1.5 leads EEM/SPY ratio ",
+  "hypothesis": "R2 | [risk-macro-em] GDELT sanctions GKG share 20d z-score > 1.5 leads EEM/SPY ratio lower by 2-4 days (-); trade short EEM 4d [gdelt.gkg.sanctions_share -> finance.ratio.eem_spy]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:03:00Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
