@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "research.solar.crossref_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Brent crude daily spot price levels as the oil benchmark and weekly Crossref solar-publication share (as the closest available proxy to OpenAlex photovoltaic share) during the war period, testing whether higher oil prices are associated with greater relative research focus on solar/PV with up to a one\u2011month lag."
+}
