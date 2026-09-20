@@ -355,7 +355,6 @@ def read_runs(
                 manifest_mtime = (child / "manifest.json").stat().st_mtime
             except OSError:
                 manifest_mtime = None
-            key = (dir_mtime, manifest_mtime)
             cached = cache.get(child.name)
             if cached is not None and cached[0] == dir_mtime and cached[1] == manifest_mtime:
                 mission = cached[2]
