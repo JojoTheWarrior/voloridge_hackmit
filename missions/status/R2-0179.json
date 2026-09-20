@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/92377f77a2914938a4df52f3d10b4030",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:22:02Z",
-  "updated_at": "2026-09-20T13:22:20Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:22:47Z",
+  "finished_at": "2026-09-20T13:22:47Z",
+  "elapsed_s": 45,
+  "message": "Not supported: r=0.11 at lag 0 (n=390); short-ITA rule on Goldstein z>1 loses (54 trades, hit 37%, avg -0.45%, Sharpe-like -2.1; OOS 18 trades avg -0.09%) - de-escalation does not predict ITA weakness",
   "run_folder": "missions/runs/20260920-267-gdelt-irn-goldstein_x_finance-ita-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Sign flip of R2-0179: Iran GDELT Goldstein 20d z-score > 1 (de-escalation) is followed by positive defense ETF returns within 1-2 days (+); trade long ITA 1d [gdelt.irn.goldstein -> finance.ITA.log_return] (parent: R2-0179)"
 }
