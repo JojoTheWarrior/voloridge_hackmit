@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 58,
+    "hit_rate": 0.5172413793103449,
+    "avg_return": -0.0023258474612821863,
+    "baseline_avg_return": 0.002497518727527427,
+    "excess_return": -0.004823366188809613,
+    "sharpe_like": -0.4922350947092965,
+    "max_drawdown": -0.2504986871682141,
+    "total_return": -0.1591758904956534
+  },
+  "fit_pre_war": {
+    "n_trades": 40,
+    "hit_rate": 0.525,
+    "avg_return": -0.002690328192063979,
+    "baseline_avg_return": 0.0009716328319943949,
+    "excess_return": -0.003661961024058374,
+    "sharpe_like": -0.5027684307477662,
+    "max_drawdown": -0.22545262356619122,
+    "total_return": -0.12297667474933882
+  },
+  "test_war": {
+    "n_trades": 18,
+    "hit_rate": 0.5,
+    "avg_return": -0.0015158902817670923,
+    "baseline_avg_return": 0.005237430627535646,
+    "excess_return": -0.006753320909302738,
+    "sharpe_like": -0.15947460937594776,
+    "max_drawdown": -0.13966329454824333,
+    "total_return": -0.041275088933317106
+  },
+  "n_signal_days": 383,
+  "trade_idea": {
+    "instrument": "TTF=F",
+    "direction": "long",
+    "entry_rule": "weather.rotterdam.wind_max rolling_zscore_20d > 1 at close -> long TTF=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5172413793103449,
+    "avg_return": -0.0023258474612821863,
+    "excess_return": -0.004823366188809613,
+    "n_trades": 58,
+    "sharpe_like": -0.4922350947092965,
+    "max_drawdown": -0.2504986871682141,
+    "oos_n_trades": 18,
+    "oos_avg_return": -0.0015158902817670923,
+    "oos_hit_rate": 0.5,
+    "actionability": 0.67,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

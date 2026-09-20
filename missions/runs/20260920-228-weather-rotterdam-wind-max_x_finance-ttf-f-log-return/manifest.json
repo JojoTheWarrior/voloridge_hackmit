@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:49:51.587264+00:00",
+  "git_commit": "fb73be1c3e074a3e06f8b81a09ddd2624f70bc40",
+  "folder": "20260920-228-weather-rotterdam-wind-max_x_finance-ttf-f-log-return",
   "mission_id": "R2-0123",
-  "title": "Rotterdam wind surge leads TTF",
   "hypothesis": "R2 | [gas-lng] Rotterdam daily max wind 20d z-score > 1 (North Sea wind surge, more wind power, less gas burn) leads TTF log returns by 2 days (+wind, -price); trade TTF=F 2d [weather.rotterdam.wind_max -> finance.TTF=F.log_return] (parent: R2-0025)",
-  "parent_mission_id": "R2-0025",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/e2f1b5732ed340bcb307ab44c668eb45",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:49:43Z",
-  "updated_at": "2026-09-20T12:49:53Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-228-weather-rotterdam-wind-max_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.67
-  },
+  "status": "ok",
+  "n_obs": 388,
+  "r": -0.022754091585473594,
+  "perm_p": 0.47105788423153694,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.67,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.67,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.rotterdam.wind_max": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
