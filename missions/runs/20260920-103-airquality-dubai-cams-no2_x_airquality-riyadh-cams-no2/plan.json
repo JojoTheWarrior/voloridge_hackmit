@@ -1,0 +1,12 @@
+{
+  "indicator_a": "airquality.dubai.cams_no2",
+  "indicator_b": "airquality.riyadh.cams_no2",
+  "transform_a": "anomaly",
+  "transform_b": "anomaly",
+  "max_lag_days": 7,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use CAMS NO2 anomalies as a proxy for aviation/traffic-related air-quality changes in Dubai vs Riyadh and test whether Dubai\u2019s post-war-airspace-closure NO2 fell more (more negative anomaly) than Riyadh\u2019s, controlling for shared regional seasonality via a 2025 same-week baseline."
+}

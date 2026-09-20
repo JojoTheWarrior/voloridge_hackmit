@@ -104,3 +104,4 @@
 | `20260920-100-FAILED-weather-driven-us-electricity-demand` | Weather-driven US electricity demand spikes coincide with larger natural-gas price sensitivity to Hormuz news. | failed | 0 | None | None | None | None | None |
 | `20260920-101-weather-dubai-temp-max_x_gdelt-irn-events` | Hot days in Gulf cities during the war coincide with more Iran-related GDELT events (heat-and-conflict hypothesis). | ok | 200 | -0.07192929113373836 | 0.30538922155688625 | 2.04 | 3.9 | 6.46 |
 | `20260920-102-airquality-tehran-cams-pm25_x_gdelt-irn-tone` | Days with high PM2.5 in Tehran coincide with more negative GDELT tone about Iran. | ok | 566 | -0.15310196306524637 | 0.17564870259481039 | 3.92 | 3.94 | 4.34 |
+| `20260920-103-airquality-dubai-cams-no2_x_airquality-riyadh-cams-no2` | Gulf air quality improvements after airspace closures were larger in Dubai than in Riyadh. | ok | 566 | -0.054284579916593856 | 0.17365269461077845 | 3.72 | 4.6 | 6.24 |

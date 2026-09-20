@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:01:46.812629+00:00",
+  "git_commit": "d43330a9ed624f4b94c801236621a6a15ac35359",
+  "folder": "20260920-103-airquality-dubai-cams-no2_x_airquality-riyadh-cams-no2",
+  "mission_id": "M20260920-8e8bf1",
+  "hypothesis": "Gulf air quality improvements after airspace closures were larger in Dubai than in Riyadh.",
+  "status": "ok",
+  "n_obs": 566,
+  "r": -0.054284579916593856,
+  "perm_p": 0.17365269461077845,
+  "validity": 3.72,
+  "interestingness": 4.6,
+  "unexpectedness": 6.24,
+  "indicator_coverage": {
+    "airquality.dubai.cams_no2": "2025-03..2026-09 archive window",
+    "airquality.riyadh.cams_no2": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
