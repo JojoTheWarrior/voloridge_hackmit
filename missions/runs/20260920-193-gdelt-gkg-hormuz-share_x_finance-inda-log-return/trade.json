@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 7,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 3,
+    "hit_rate": 0.3333333333333333,
+    "avg_return": 0.0040567808536953924,
+    "baseline_avg_return": -0.004561260948371486,
+    "excess_return": 0.008618041802066878,
+    "sharpe_like": 0.6506997540074696,
+    "max_drawdown": -0.007132778636271597,
+    "total_return": 0.012045046109984803
+  },
+  "fit_pre_war": {
+    "n_trades": 0,
+    "hit_rate": null,
+    "avg_return": null,
+    "baseline_avg_return": null,
+    "excess_return": null,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "total_return": null
+  },
+  "test_war": {
+    "n_trades": 3,
+    "hit_rate": 0.3333333333333333,
+    "avg_return": 0.0040567808536953924,
+    "baseline_avg_return": -0.004561260948371486,
+    "excess_return": 0.008618041802066878,
+    "sharpe_like": 0.6506997540074696,
+    "max_drawdown": -0.007132778636271597,
+    "total_return": 0.012045046109984803
+  },
+  "n_signal_days": 72,
+  "trade_idea": {
+    "instrument": "INDA",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.hormuz_share rolling_zscore_20d > 1 at close -> short INDA next session",
+    "exit_rule": "close after 7 trading days (no overlapping entries)",
+    "holding_days": 7,
+    "hit_rate": 0.3333333333333333,
+    "avg_return": 0.0040567808536953924,
+    "excess_return": 0.008618041802066878,
+    "n_trades": 3,
+    "sharpe_like": 0.6506997540074696,
+    "max_drawdown": -0.007132778636271597,
+    "oos_n_trades": 3,
+    "oos_avg_return": 0.0040567808536953924,
+    "oos_hit_rate": 0.3333333333333333,
+    "actionability": 1.2,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

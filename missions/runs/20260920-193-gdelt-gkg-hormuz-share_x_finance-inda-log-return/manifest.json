@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:09:47.528952+00:00",
+  "git_commit": "8f45194d390ef410e150e741639c9cf7ae7211d5",
+  "folder": "20260920-193-gdelt-gkg-hormuz-share_x_finance-inda-log-return",
   "mission_id": "R2-0088",
-  "title": "Hormuz GKG share -> short INDA 3d",
   "hypothesis": "R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads India ETF returns lower by 2-3 days (-) as crude import bill jumps; trade short INDA 3d [gdelt.gkg.hormuz_share -> finance.INDA.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/d8c04c13873442bc83c2552397a63d8c",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:09:30Z",
-  "updated_at": "2026-09-20T04:09:49Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-193-gdelt-gkg-hormuz-share_x_finance-inda-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.2
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.06162642176754103,
+  "perm_p": 0.01996007984031936,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.2,
   "trade_idea": {
     "instrument": "INDA",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 1.2,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.hormuz_share": "configured analysis window",
+    "finance.INDA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

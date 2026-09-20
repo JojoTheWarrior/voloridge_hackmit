@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads India ETF returns lower by 2-3 days (-) as crude import bill jumps; trade short INDA 3d [gdelt.gkg.hormuz_share -> finance.INDA.log_return]
