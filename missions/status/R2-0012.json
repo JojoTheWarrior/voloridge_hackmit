@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0012",
+  "title": "[oil-shipping] Bandar Abbas temp anomaly 20d z-score > 1.5 (heat stress on loadi",
+  "hypothesis": "R2 | [oil-shipping] Bandar Abbas temp anomaly 20d z-score > 1.5 (heat stress on loading ops) leads XOP-to-SPY ratio by 5 days (+); trade long XOP 5d [weather.bandar_abbas.temp_anomaly -> finance.ratio.xop_spy]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:24:02Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
