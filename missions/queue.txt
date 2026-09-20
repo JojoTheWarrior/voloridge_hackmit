@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] Iran GDELT Goldstein 10d z-score < -1 (escalation) leads defense ETF returns by 2-5 days (+); trade long ITA 5d [gdelt.irn.goldstein -> finance.ITA.log_return]
 R2 | [risk-macro-em] Iran-Gulf dyad event count 20d z-score > 1 leads UAE ETF returns lower by 1-2 days (-); trade short UAE 3d [gdelt.irn.conflict_events -> finance.UAE.log_return]
 R2 | [risk-macro-em] US GDELT tone 20d z-score < -1 leads dollar index strength by 1-3 days (+) as risk-off bids USD; trade long DX-Y.NYB 3d [gdelt.usa.tone -> finance.DX-Y.NYB.log_return]
 R2 | [risk-macro-em] GDELT cyber GKG share 20d z-score > 2 leads Nasdaq ETF returns lower by 1-2 days (-); trade short QQQ 2d [gdelt.gkg.cyber_share -> finance.QQQ.log_return]

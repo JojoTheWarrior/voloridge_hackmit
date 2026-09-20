@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0080",
+  "title": "[risk-macro-em] Iran GDELT Goldstein 10d z-score < -1 (escalation) leads defense",
+  "hypothesis": "R2 | [risk-macro-em] Iran GDELT Goldstein 10d z-score < -1 (escalation) leads defense ETF returns by 2-5 days (+); trade long ITA 5d [gdelt.irn.goldstein -> finance.ITA.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:04:08Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
