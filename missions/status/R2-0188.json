@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/5dd5fd51b954408b8cd1e31fd6f31b2c",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:27:48Z",
-  "updated_at": "2026-09-20T13:28:03Z",
-  "finished_at": null,
-  "elapsed_s": 15,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:28:58Z",
+  "finished_at": "2026-09-20T13:28:58Z",
+  "elapsed_s": 70,
+  "message": "Not supported: tanker GKG share z>1 -> EWJ 3d rebound r=0.008 (n=390, perm p=0.64); in-sample 1d long hit 64% but OOS avg return negative. No reversal edge.",
   "run_folder": "missions/runs/20260920-274-gdelt-gkg-tanker-share_x_finance-ewj-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 5.24,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] GDELT tanker GKG share 20d z-score > 1 leads Japan ETF realized volatility (absolute return) higher by 1-3 days (+) as shipping-headline uncertainty widens EWJ ranges regardless of direction; trade long EWJ.abs_return 3d [gdelt.gkg.tanker_share -> finance.EWJ.abs_return] (parent: R2-0188)"
 }
