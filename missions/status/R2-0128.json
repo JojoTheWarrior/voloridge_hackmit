@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:51:54Z",
-  "updated_at": "2026-09-20T13:17:49Z",
+  "updated_at": "2026-09-20T13:20:41Z",
   "finished_at": "2026-09-20T12:52:40Z",
-  "elapsed_s": 1555,
+  "elapsed_s": 1727,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-230-airquality-doha-cams-so2_x_finance-ttf-f-log-return",
   "scores": {
