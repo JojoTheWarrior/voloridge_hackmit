@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0032",
+  "title": "[gas-lng] US peak demand 20d z-score > 1 leads utility ETF returns by 2 days (-)",
+  "hypothesis": "R2 | [gas-lng] US peak demand 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [utility.us.demand_peak_mwh -> finance.XLU.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:36:12Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}

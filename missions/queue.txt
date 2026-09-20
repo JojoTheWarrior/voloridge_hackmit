@@ -1,4 +1,3 @@
-R2 | [gas-lng] US peak demand 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [utility.us.demand_peak_mwh -> finance.XLU.log_return]
 R2 | [gas-lng] GDELT sanctions GKG share 20d z-score > 1.5 leads Yara returns by 2 days (-) via European gas feedstock cost; trade short YAR.OL 4d [gdelt.gkg.sanctions_share -> finance.YAR.OL.log_return]
 R2 | [gas-lng] GDELT hormuz GKG share 20d z-score > 1 leads BASF returns by 2 days (-) as LNG diversion lifts European gas input costs; trade short BAS.DE 5d [gdelt.gkg.hormuz_share -> finance.BAS.DE.log_return]
 R2 | [gas-lng] Houston temperature anomaly 20d z-score > 1.5 (cooling burn) leads Henry Hub log returns by 2 days (+) narrowing the TTF ratio; trade long NG=F 3d [weather.houston.temp_anomaly -> finance.NG=F.log_return]
