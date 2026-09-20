@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.NG=F.close",
+  "indicator_b": "finance.BZ=F.close",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 7,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "The catalogue text was truncated before any PUDL/EIA-923 petroleum-generation series, so no exact name for the response variable is visible; as the closest available proxy the fuel-switching mechanism is tested via the gas-vs-oil price relationship (Henry Hub NG=F leading Brent BZ=F, pct_change, pre/post war comparison) - if a pudl eia923 petroleum-generation series exists it should replace indicator_b with transform diff and monthly frequency handling.",
+  "mode": "pair"
+}
