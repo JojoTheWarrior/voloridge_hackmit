@@ -360,10 +360,10 @@ class CastleScene(Scene):
             elapsed = m.elapsed(now)
             progress = min(0.95, elapsed / MISSION_SECONDS)
             signal = m.signal()
-            bar = pygame.Rect(card.x + 8, ty, card_w - 16 - 44, 12)
+            draw_sprite_or_box(surface, assets, "icon_hammer", card.x + 8, ty - 2, (16, 16), t)
+            bar = pygame.Rect(card.x + 28, ty, card.right - 28 - 40, 12)
             ProgressBar.draw(surface, assets, bar, progress, signal_color(signal), t, shimmer=True, pulse=signal is None)
-            draw_sprite_or_box(surface, assets, "icon_hammer", card.right - 44, ty - 2, (16, 16), t)
-            draw_text(surface, fmt_elapsed(elapsed), (card.right - 8, ty + 2), INK, align="right")
+            draw_text(surface, fmt_elapsed(elapsed), (card.right - 6, ty + 2), INK, align="right")
         surface.set_clip(prev)
         self.scroll.draw_scrollbar(surface, assets, view.right + 2, t)
 
@@ -407,7 +407,10 @@ class CastleScene(Scene):
         rows = snap.completed
         self._draw_title(surface, "COMPLETED MISSIONS", dx, f"{len(rows)} missions   {len(snap.succeeded)} ok")
         self._footer(surface, "Enter/click: details   Esc: back", dx)
-        self.scroll.viewport = pygame.Rect(self.list_view.x, self.list_view.y + 10, self.list_view.w, self.list_view.h - 10)
+        header_bottom = PANEL.y + 10 + text_size("COMPLETED MISSIONS", "title")[1] + 17
+        self.scroll.viewport = pygame.Rect(self.list_view.x, max(self.list_view.y + 10, header_bottom),
+                                           self.list_view.w, self.list_view.y + self.list_view.h
+                                           - max(self.list_view.y + 10, header_bottom))
         view = self.scroll.viewport.move(dx, 0)
         if not rows:
             self.scroll.set_content_height(0)
@@ -416,7 +419,6 @@ class CastleScene(Scene):
             return
         self.selected = max(0, min(self.selected, len(rows) - 1))
         thumb_w, thumb_h = 48, 27
-        text_w = view.w - thumb_w - 20
         row_h = 3 * LH + LH + 8  # folder + 2 hyp lines + stats + padding
         self._row_tops = [(i * (row_h + 3), row_h) for i in range(len(rows))]
         self.scroll.set_content_height(len(rows) * (row_h + 3) - 3)
@@ -436,15 +438,19 @@ class CastleScene(Scene):
                 pygame.draw.rect(surface, lerp_color(WOOD_DARK, tint, 0.12), row)
             pygame.draw.rect(surface, tint, (row.x, row.y, 2, row.h))
             tx = row.x + 6
-            draw_text(surface, m.folder, (tx, y + 3), TEXT_FAINT, kind="small")
-            lines = clip_lines(m.hypothesis or "(no hypothesis)", text_w, 2)
+            has_thumb = m.viz_path is not None
+            text_right = row.right - thumb_w - 10 if has_thumb else row.right - 6
+            row_text_w = max(24, text_right - tx)
+            draw_text(surface, clip_lines(m.folder, row_text_w, 1, "small")[0], (tx, y + 3), TEXT_FAINT, kind="small")
+            lines = clip_lines(m.hypothesis or "(no hypothesis)", row_text_w, 2)
             for j, line in enumerate(lines):
                 draw_text(surface, line, (tx, y + 3 + LH * (j + 1)), TEXT)
             stats = (f"{m.status}  n={m.n_obs if m.n_obs is not None else '-'}  r={fmt_num(m.r, 3)}  "
                      f"p={fmt_num(m.perm_p, 3)}  V/I/U={fmt_num(m.validity, 1)}/"
                      f"{fmt_num(m.interestingness, 1)}/{fmt_num(m.unexpectedness, 1)}")
-            draw_text(surface, stats, (tx, y + 3 + LH * 3), lerp_color(tint, GOLD_LIGHT, 0.45), kind="small")
-            if m.viz_path is not None:
+            draw_text(surface, clip_lines(stats, row_text_w, 1, "small")[0], (tx, y + 3 + LH * 3),
+                      lerp_color(tint, GOLD_LIGHT, 0.45), kind="small")
+            if has_thumb:
                 draw_thumbnail(surface, self.thumbs.get(m.viz_path, (thumb_w, thumb_h)), row.right - thumb_w - 4,
                                y + (row_h - thumb_h) // 2, (thumb_w, thumb_h))
         surface.set_clip(prev)
