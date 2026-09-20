@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0176",
+  "title": "[fuel-airspace-losers] VIX daily log return spike predicts a next-day mean-rever",
+  "hypothesis": "R2 | [fuel-airspace-losers] VIX daily log return spike predicts a next-day mean-reversion bounce in FedEx after panic selling (+); trade long FDX 1d at 1d lag [finance.^VIX.log_return -> finance.FDX.log_return] (parent: R2-0076)",
+  "parent_mission_id": "R2-0076",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:19:04Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
