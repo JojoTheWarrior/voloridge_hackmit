@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:29:25.628426+00:00",
+  "git_commit": "4d5c6735d71368cfaf128b072b27070389aa17b2",
+  "folder": "20260920-211-utility-generation-hydro-mwh_x_finance-fred-dhhngsp",
+  "mission_id": "S-0007",
+  "hypothesis": "SHERLOCK | [#5 hydro] US monthly hydro generation (EIA-923 via PUDL, snowpack/reservoir proxy) is negatively related to Henry Hub spot gas price changes in the same month (-); trade short DHHNGSP 3d [utility.generation.hydro_mwh -> finance.fred.DHHNGSP]",
+  "status": "ok",
+  "n_obs": 15,
+  "r": -0.09097995469679329,
+  "perm_p": 0.6626746506986028,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
+  "trade_idea": {
+    "instrument": "fred:DHHNGSP",
+    "direction": "short",
+    "entry_rule": "utility.generation.hydro_mwh rolling_zscore_20d > 1 at close -> short fred:DHHNGSP next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": null,
+    "avg_return": null,
+    "excess_return": null,
+    "n_trades": 0,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "oos_n_trades": 0,
+    "oos_avg_return": null,
+    "oos_hit_rate": null,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "utility.generation.hydro_mwh": "configured analysis window",
+    "finance.fred.DHHNGSP": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

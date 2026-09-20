@@ -1,0 +1,1 @@
+SHERLOCK | [#5 hydro] US monthly hydro generation (EIA-923 via PUDL, snowpack/reservoir proxy) is negatively related to Henry Hub spot gas price changes in the same month (-); trade short DHHNGSP 3d [utility.generation.hydro_mwh -> finance.fred.DHHNGSP]
