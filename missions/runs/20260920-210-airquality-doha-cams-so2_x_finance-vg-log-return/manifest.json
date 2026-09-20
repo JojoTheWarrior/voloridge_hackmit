@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:29:22.207103+00:00",
+  "git_commit": "8f901e81a912c736bbad3fb87dfd52d1413eb5fd",
+  "folder": "20260920-210-airquality-doha-cams-so2_x_finance-vg-log-return",
+  "mission_id": "S-0006",
+  "hypothesis": "SHERLOCK | [#8 LNG flares] Doha CAMS SO2 20d z-score > 1 (Ras Laffan sour-gas flaring proxy) leads Venture Global returns by 3 days (+); trade long VG 3d [airquality.doha.cams_so2 -> finance.VG.log_return]",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.014368592800637865,
+  "perm_p": 0.6147704590818364,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
+  "trade_idea": {
+    "instrument": "VG",
+    "direction": "long",
+    "entry_rule": "airquality.doha.cams_so2 rolling_zscore_20d > 1 at close -> long VG next session",
+    "exit_rule": "close after 7 trading days (no overlapping entries)",
+    "holding_days": 7,
+    "hit_rate": 0.41379310344827586,
+    "avg_return": -0.004502492412245088,
+    "excess_return": -0.020636057926614434,
+    "n_trades": 29,
+    "sharpe_like": -0.1725370901798823,
+    "max_drawdown": -0.6564403403138694,
+    "oos_n_trades": 11,
+    "oos_avg_return": -0.005280255053605268,
+    "oos_hit_rate": 0.45454545454545453,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.doha.cams_so2": "2025-03..2026-09 archive window",
+    "finance.VG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

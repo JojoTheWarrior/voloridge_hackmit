@@ -1,0 +1,1 @@
+SHERLOCK | [#8 LNG flares] Doha CAMS SO2 20d z-score > 1 (Ras Laffan sour-gas flaring proxy) leads Venture Global returns by 3 days (+); trade long VG 3d [airquality.doha.cams_so2 -> finance.VG.log_return]
