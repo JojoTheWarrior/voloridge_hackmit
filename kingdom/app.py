@@ -18,6 +18,8 @@ import pygame  # noqa: E402
 
 from .assets import Assets  # noqa: E402
 from .data import DataAdapter  # noqa: E402
+from .gitsync import GitSync  # noqa: E402
+from .httpsync import HttpSync  # noqa: E402
 
 LOGICAL_W, LOGICAL_H = 480, 270
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,7 +45,9 @@ class Scene:
 
 
 class App:
-    def __init__(self, root: Path = ROOT, scale: int = 2, headless: bool = False, poll_interval: float = 2.0):
+    def __init__(self, root: Path = ROOT, scale: int = 2, headless: bool = False, poll_interval: float = 2.0,
+                 pull_interval: float | None = 60.0, http_interval: float | None = 30.0,
+                 remote: str = "", branch: str = "main"):
         self.root = Path(root)
         self.headless = headless
         if headless:
@@ -56,7 +60,13 @@ class App:
         pygame.display.set_caption("Kingdom")
         self.canvas = pygame.Surface((LOGICAL_W, LOGICAL_H)).convert()
         self.assets = Assets()
-        self.data = DataAdapter(self.root, poll_interval=poll_interval)
+        self.sync = GitSync(self.root, interval=pull_interval or 60.0, enabled=pull_interval is not None)
+        self.sync.start()
+        self.http = HttpSync(self.root, repo=remote, branch=branch, interval=http_interval or 30.0,
+                             enabled=http_interval is not None)
+        self.data = DataAdapter(self.root, poll_interval=poll_interval,
+                                overlay=self.http.cache_dir if self.http.enabled else None)
+        self.http.start()
         self.scenes: list[Scene] = []
         self.clock = pygame.time.Clock()
         self.running = True
@@ -123,6 +133,11 @@ class App:
                     self.scene.handle_event(event)
             elif not self.transitioning and self.scene:
                 self.scene.handle_event(event)
+        refresh = self.sync.tick(time.time())
+        if self.http.tick(time.time()):
+            refresh = True
+        if refresh:
+            self.data.refresh()
         if self._fade_dir:
             self._fade += self._fade_dir * dt * 2.5
             if self._fade >= 1.0 and self._pending:
@@ -164,6 +179,8 @@ class App:
             frames += 1
         if screenshot is not None:
             pygame.image.save(self.canvas, str(screenshot))
+        self.sync.stop()
+        self.http.stop()
         pygame.quit()
 
 
@@ -185,13 +202,22 @@ def parse_args(argv) -> argparse.Namespace:
     parser.add_argument("--scene", default="field", help="field | castle | current | queue | completed")
     parser.add_argument("--headless", action="store_true")
     parser.add_argument("--root", type=Path, default=ROOT, help="repo root containing missions/")
+    parser.add_argument("--no-pull", action="store_true", help="disable the background git pull loop")
+    parser.add_argument("--pull-interval", type=float, default=60.0, help="seconds between git pulls")
+    parser.add_argument("--no-http", action="store_true", help="disable the GitHub HTTP poller")
+    parser.add_argument("--http-interval", type=float, default=30.0, help="seconds between HTTP fetches")
+    parser.add_argument("--remote", default="", help="owner/repo override for the HTTP poller")
+    parser.add_argument("--branch", default="main", help="branch fetched by the pollers")
     return parser.parse_args(argv)
 
 
 def main(argv=None):
     args = parse_args(sys.argv[1:] if argv is None else argv)
     headless = args.headless or args.screenshot is not None
-    app = App(root=args.root, scale=args.scale, headless=headless)
+    app = App(root=args.root, scale=args.scale, headless=headless,
+              pull_interval=None if args.no_pull else args.pull_interval,
+              http_interval=None if args.no_http else args.http_interval,
+              remote=args.remote, branch=args.branch)
     app.push(make_scene(app, args.scene), fade=False)
     frames = args.frames if args.frames is not None else (120 if headless else None)
     app.run(max_frames=frames, screenshot=args.screenshot, fixed_dt=1 / 60 if headless else None)

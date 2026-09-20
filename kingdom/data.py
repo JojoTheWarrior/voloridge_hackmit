@@ -21,6 +21,10 @@ from typing import Optional
 _TS_PREFIX = re.compile(r"^(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?)\s*[\t|]\s*(.*)$")
 _RUN_DIR = re.compile(r"^(\d{8})-(\d{3})-(.+)$")
 _NULLISH = {"", "none", "nan", "null"}
+_QUEUE_ROUND = re.compile(r"^R\d+$")
+_QUEUE_PARENT = re.compile(r"^[A-Z]{1,3}\d*-[0-9A-Za-z]+$")
+LIVE_STATES = {"queued", "running"}
+DONE_STATES = {"done", "failed"}
 
 
 def _read_text(path: Path) -> str:
@@ -82,18 +86,50 @@ def _parse_ts(text: str) -> Optional[float]:
     return dt.timestamp()
 
 
+def agent_tag(url: str) -> str:
+    """Last path segment of a session URL, first 8 chars (``""`` when absent)."""
+    if not url:
+        return ""
+    return url.rstrip("/").rsplit("/", 1)[-1][:8]
+
+
+def _clip01(value: Optional[float]) -> Optional[float]:
+    return None if value is None else max(0.0, min(1.0, value))
+
+
 @dataclass
 class ActiveMission:
     hypothesis: str
     started_at: float  # unix seconds
     validity: Optional[float] = None  # 0-10 when known
     perm_p: Optional[float] = None
+    mission_id: str = ""
+    title: str = ""
+    stage: str = ""
+    state: str = "running"
+    progress: Optional[float] = None  # 0-1
+    live_signal: Optional[float] = None
+    message: str = ""
+    agent_session_url: str = ""
+    updated_at: Optional[float] = None
+    round: str = ""
+    parent_mission_id: str = ""
+
+    @property
+    def display_title(self) -> str:
+        return self.title or self.hypothesis
+
+    @property
+    def agent_tag(self) -> str:
+        return agent_tag(self.agent_session_url)
 
     def elapsed(self, now: Optional[float] = None) -> float:
         return max(0.0, (now if now is not None else time.time()) - self.started_at)
 
     def signal(self) -> Optional[float]:
         """0.0 (noise) .. 1.0 (signal), or None when no stats exist yet."""
+        if self.live_signal is not None:
+            return max(0.0, min(1.0, self.live_signal))
         return signal_strength(self.validity, self.perm_p)
 
 
@@ -113,6 +149,18 @@ class CompletedMission:
     unexpectedness: Optional[float] = None
     viz_path: Optional[Path] = None
     note_path: Optional[Path] = None
+    actionability: Optional[float] = None
+    trade_idea: Optional[dict] = None
+    stage: str = ""
+    message: str = ""
+    agent_session_url: str = ""
+    parent_mission_id: str = ""
+    round: str = ""
+    followup_hypothesis: str = ""
+
+    @property
+    def agent_tag(self) -> str:
+        return agent_tag(self.agent_session_url)
 
     @property
     def failed(self) -> bool:
@@ -134,6 +182,7 @@ class CompletedMission:
 @dataclass
 class Snapshot:
     queue: list[str] = field(default_factory=list)
+    queue_items: list["QueueItem"] = field(default_factory=list)
     active: list[ActiveMission] = field(default_factory=list)
     completed: list[CompletedMission] = field(default_factory=list)  # newest first
     failed: list[tuple[str, str]] = field(default_factory=list)  # (hypothesis, error)
@@ -150,6 +199,7 @@ class Snapshot:
             "queued": len(self.queue),
             "completed_ok": sum(1 for m in self.completed if not m.failed),
             "failed": sum(1 for m in self.completed if m.failed),
+            "live": sum(1 for m in self.active if m.mission_id),
         }
 
 
@@ -163,6 +213,184 @@ def signal_strength(validity: Optional[float], perm_p: Optional[float]) -> Optio
 
 def read_queue(path: Path) -> list[str]:
     return [line.strip() for line in _read_text(path).splitlines() if line.strip()]
+
+
+@dataclass
+class QueueItem:
+    text: str
+    round: str = ""
+    parent_mission_id: str = ""
+
+
+def parse_queue_line(line: str) -> QueueItem:
+    """``R2 | R2-0017 | hypothesis`` -> QueueItem(round, parent, text)."""
+    cells = [c.strip() for c in line.split("|")]
+    round_ = ""
+    parent = ""
+    if cells and _QUEUE_ROUND.match(cells[0]):
+        round_ = cells.pop(0)
+    if cells and _QUEUE_PARENT.match(cells[0]):
+        parent = cells.pop(0)
+    return QueueItem(text=" | ".join(cells).strip(), round=round_, parent_mission_id=parent)
+
+
+# -- live status files (missions/status/<mission_id>.json) ---------------------
+
+def read_status(path: Path) -> Optional[dict]:
+    """Parse one status JSON; ``None`` unless it's a dict with mission_id+state."""
+    data = _read_json(path)
+    if not data or not _pick_str(data.get("mission_id")) or not _pick_str(data.get("state")):
+        return None
+    return data
+
+
+def read_statuses(status_dir: Path) -> list[dict]:
+    """All ``*.json`` directly under ``missions/status/`` sorted by mission_id."""
+    out = []
+    try:
+        children = list(Path(status_dir).iterdir())
+    except OSError:
+        return out
+    for child in children:
+        try:
+            if not child.is_file() or child.suffix != ".json":
+                continue
+        except OSError:
+            continue
+        status = read_status(child)
+        if status is not None:
+            status["_path"] = child
+            out.append(status)
+    out.sort(key=lambda s: str(s.get("mission_id") or ""))
+    return out
+
+
+def _status_ts(status: dict, key: str) -> Optional[float]:
+    value = status.get(key)
+    return _parse_ts(str(value)) if isinstance(value, str) else None
+
+
+def active_from_status(status: dict, path: Path) -> ActiveMission:
+    started = _status_ts(status, "started_at")
+    if started is None:
+        updated = _status_ts(status, "updated_at")
+        if updated is not None:
+            started = updated - (_num(status.get("elapsed_s")) or 0.0)
+    if started is None:
+        try:
+            started = Path(path).stat().st_mtime
+        except OSError:
+            started = time.time()
+    return ActiveMission(
+        hypothesis=_pick_str(status.get("hypothesis"), status.get("title")),
+        started_at=started,
+        mission_id=_pick_str(status.get("mission_id")),
+        title=_pick_str(status.get("title")),
+        stage=_pick_str(status.get("stage")),
+        state=_pick_str(status.get("state"), "running"),
+        progress=_clip01(_num(status.get("progress"))),
+        live_signal=_clip01(_num(status.get("signal"))),
+        message=_pick_str(status.get("message")),
+        agent_session_url=_pick_str(status.get("agent_session_url")),
+        updated_at=_status_ts(status, "updated_at"),
+        round=_pick_str(status.get("round")),
+        parent_mission_id=_pick_str(status.get("parent_mission_id")),
+    )
+
+
+def _status_scores(status: dict) -> dict:
+    scores = status.get("scores")
+    return scores if isinstance(scores, dict) else {}
+
+
+def merge_status_into_completed(mission: CompletedMission, status: dict) -> None:
+    """Fill empty fields on a run-derived mission from its status file."""
+    scores = _status_scores(status)
+    if mission.validity is None:
+        mission.validity = _num(scores.get("validity"))
+    if mission.interestingness is None:
+        mission.interestingness = _num(scores.get("interestingness"))
+    if mission.unexpectedness is None:
+        mission.unexpectedness = _num(scores.get("unexpectedness"))
+    if mission.actionability is None:
+        mission.actionability = _num(scores.get("actionability"))
+    if mission.trade_idea is None and isinstance(status.get("trade_idea"), dict):
+        mission.trade_idea = status["trade_idea"]
+    for field_name, key in (("agent_session_url", "agent_session_url"), ("parent_mission_id", "parent_mission_id"),
+                            ("round", "round"), ("message", "message"), ("stage", "stage"),
+                            ("followup_hypothesis", "followup_hypothesis"), ("mission_id", "mission_id"),
+                            ("hypothesis", "hypothesis")):
+        if not getattr(mission, field_name):
+            setattr(mission, field_name, _pick_str(status.get(key)))
+    if status.get("state") == "failed":
+        mission.status = "failed"
+
+
+def completed_from_status(status: dict, root: Path) -> CompletedMission:
+    """Synthesize a CompletedMission for a done/failed status with no run folder."""
+    scores = _status_scores(status)
+    run_folder = _pick_str(status.get("run_folder"))
+    folder = Path(run_folder).name if run_folder else ""
+    mission_id = _pick_str(status.get("mission_id"))
+    path = Path(root) / run_folder if run_folder else Path(root) / "missions" / "runs" / (folder or mission_id)
+    try:
+        viz = path / "viz.png"
+        viz_path = viz if viz.is_file() else None
+        note = path / "note.md"
+        note_path = note if note.is_file() else None
+    except OSError:
+        viz_path = note_path = None
+    state = _pick_str(status.get("state"), "done")
+    return CompletedMission(
+        folder=folder or mission_id,
+        path=path,
+        hypothesis=_pick_str(status.get("hypothesis"), status.get("title")),
+        status="failed" if state == "failed" else "ok",
+        mission_id=mission_id,
+        created_at=_status_ts(status, "finished_at") or _status_ts(status, "updated_at"),
+        validity=_num(scores.get("validity")),
+        interestingness=_num(scores.get("interestingness")),
+        unexpectedness=_num(scores.get("unexpectedness")),
+        actionability=_num(scores.get("actionability")),
+        trade_idea=status.get("trade_idea") if isinstance(status.get("trade_idea"), dict) else None,
+        stage=_pick_str(status.get("stage")),
+        message=_pick_str(status.get("message")),
+        agent_session_url=_pick_str(status.get("agent_session_url")),
+        parent_mission_id=_pick_str(status.get("parent_mission_id")),
+        round=_pick_str(status.get("round")),
+        followup_hypothesis=_pick_str(status.get("followup_hypothesis")),
+        viz_path=viz_path,
+        note_path=note_path,
+    )
+
+
+def apply_statuses(snapshot_parts: dict, root: Path, statuses: list[dict]) -> None:
+    """Merge ``missions/status/*.json`` into the active/completed lists."""
+    completed = snapshot_parts["completed"]
+    by_folder = {m.folder: m for m in completed}
+    by_id = {m.mission_id: m for m in completed if m.mission_id}
+    actives = []
+    status_names = set()
+    for status in statuses:
+        state = str(status.get("state") or "")
+        status_names.add(_pick_str(status.get("hypothesis")))
+        status_names.add(_pick_str(status.get("title")))
+        if state in LIVE_STATES:
+            actives.append(active_from_status(status, status.get("_path", "")))
+        elif state in DONE_STATES:
+            run_folder = _pick_str(status.get("run_folder"))
+            folder = Path(run_folder).name if run_folder else ""
+            match = by_folder.get(folder) or by_id.get(_pick_str(status.get("mission_id")))
+            if match is not None:
+                merge_status_into_completed(match, status)
+            else:
+                completed.append(completed_from_status(status, root))
+    status_names.discard("")
+    for legacy in snapshot_parts["active"]:
+        if legacy.hypothesis.strip() not in status_names:
+            actives.append(legacy)
+    snapshot_parts["active"] = actives
+    completed.sort(key=lambda m: (bool(m.mission_id) and m.folder == m.mission_id, m.folder), reverse=True)
 
 
 def _inflight_stats(runs_dir: Path, hypothesis: str) -> tuple[Optional[float], Optional[float]]:
@@ -377,35 +605,72 @@ def read_runs(
     return out
 
 
+def _overlay_statuses(local: list[dict], overlay: list[dict]) -> list[dict]:
+    """Merge overlay statuses over local ones (later ``updated_at`` wins)."""
+    by_id = {str(s.get("mission_id") or ""): s for s in local}
+    for over in overlay:
+        mid = str(over.get("mission_id") or "")
+        existing = by_id.get(mid)
+        if existing is not None:
+            t_over = _status_ts(over, "updated_at")
+            t_local = _status_ts(existing, "updated_at")
+            if t_over is not None and t_local is not None and t_local > t_over:
+                continue
+        by_id[mid] = over
+    return sorted(by_id.values(), key=lambda s: str(s.get("mission_id") or ""))
+
+
 def load_snapshot(
     root: Path,
     now: Optional[float] = None,
     cache: Optional[dict] = None,
+    overlay: Optional[Path] = None,
 ) -> Snapshot:
     missions = Path(root) / "missions"
     now = now if now is not None else time.time()
     runs_dir = missions / "runs"
     index = read_index(runs_dir / "INDEX.md")
-    return Snapshot(
-        queue=read_queue(missions / "queue.txt"),
-        active=read_active(missions / "in_progress.txt", now, runs_dir=runs_dir),
-        completed=read_runs(runs_dir, index=index, cache=cache),
-        failed=read_failed(missions / "failed.txt"),
-        loaded_at=now,
-    )
+    overlay_dir = Path(overlay) if overlay else None
+    if overlay_dir is not None and not overlay_dir.exists():
+        overlay_dir = None
+
+    def pick(name: str) -> Path:
+        if overlay_dir is not None and (overlay_dir / name).exists():
+            return overlay_dir / name
+        return missions / name
+
+    queue_lines = read_queue(pick("queue.txt"))
+    parts = {
+        "queue": queue_lines,
+        "queue_items": [parse_queue_line(line) for line in queue_lines],
+        "active": read_active(pick("in_progress.txt"), now, runs_dir=runs_dir),
+        "completed": read_runs(runs_dir, index=index, cache=cache),
+        "failed": read_failed(pick("failed.txt")),
+        "loaded_at": now,
+    }
+    try:
+        statuses = read_statuses(missions / "status")
+        if overlay_dir is not None:
+            statuses = _overlay_statuses(statuses, read_statuses(overlay_dir / "status"))
+    except OSError:
+        statuses = []
+    if statuses:
+        apply_statuses(parts, Path(root), statuses)
+    return Snapshot(**parts)
 
 
 class DataAdapter:
-    def __init__(self, root: Path, poll_interval: float = 2.0):
+    def __init__(self, root: Path, poll_interval: float = 2.0, overlay: Optional[Path] = None):
         self.root = Path(root)
         self.poll_interval = poll_interval
+        self.overlay = overlay
         self._snapshot: Optional[Snapshot] = None
         self._run_cache: dict = {}
 
     def refresh(self, now: Optional[float] = None) -> Snapshot:
         now = now if now is not None else time.time()
         try:
-            self._snapshot = load_snapshot(self.root, now, cache=self._run_cache)
+            self._snapshot = load_snapshot(self.root, now, cache=self._run_cache, overlay=self.overlay)
         except Exception:
             if self._snapshot is None:
                 self._snapshot = Snapshot(loaded_at=now)

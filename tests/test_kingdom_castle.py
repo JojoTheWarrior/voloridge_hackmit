@@ -46,7 +46,7 @@ def app(tmp_path):
     root = make_root(tmp_path)
     # Keep pygame initialised between tests: kingdom.text caches Font objects and
     # pygame.quit() would invalidate them.
-    return App(root=root, headless=True, poll_interval=0.0)
+    return App(root=root, headless=True, poll_interval=0.0, pull_interval=None, http_interval=None)
 
 
 def run_frames(app, scene, n=5, dt=1 / 30):

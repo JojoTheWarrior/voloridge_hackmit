@@ -38,7 +38,7 @@ def _make_root(tmp_path: Path) -> Path:
 
 
 def _make_app(tmp_path: Path) -> App:
-    app = App(root=_make_root(tmp_path), scale=2, headless=True, poll_interval=0.0)
+    app = App(root=_make_root(tmp_path), scale=2, headless=True, poll_interval=0.0, pull_interval=None, http_interval=None)
     scene = FieldScene(app)
     app.push(scene, fade=False)
     return app

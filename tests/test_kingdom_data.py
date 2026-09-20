@@ -37,7 +37,7 @@ def _run_dir(missions: Path, name: str) -> Path:
 def test_empty_root(tmp_path):
     snap = load_snapshot(tmp_path)
     assert snap.queue == [] and snap.active == [] and snap.completed == [] and snap.failed == []
-    assert snap.counts == {"active": 0, "queued": 0, "completed_ok": 0, "failed": 0}
+    assert snap.counts == {"active": 0, "queued": 0, "completed_ok": 0, "failed": 0, "live": 0}
 
 
 def test_queue_blank_lines(tmp_path):
@@ -256,7 +256,7 @@ def test_counts_and_age(tmp_path):
     (m / "queue.txt").write_text("q1\nq2\n")
     (m / "in_progress.txt").write_text("act\n")
     snap = load_snapshot(tmp_path, now=0)
-    assert snap.counts == {"active": 1, "queued": 2, "completed_ok": 1, "failed": 1}
+    assert snap.counts == {"active": 1, "queued": 2, "completed_ok": 1, "failed": 1, "live": 0}
     c = snap.completed[0]
     assert c.age(c.created_at + 30) == 30.0
     assert CompletedMission(folder="f", path=tmp_path).age() is None

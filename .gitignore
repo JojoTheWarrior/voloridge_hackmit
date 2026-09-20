@@ -12,3 +12,4 @@ missions/summary.md
 missions/viz_generated/
 missions/runs/.lock
 .pytest_cache
+.kingdom_cache/
