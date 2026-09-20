@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-09-20T02:33:11.559952+00:00",
+  "git_commit": "f8d0a1264a14ce1e067e9c182075ad0a1a2090e6",
+  "folder": "20260920-122-finance-fred-dcoilbrenteu_x_utility-fuel-cost-oil-per-mmbtu",
+  "mission_id": "M20260920-83e523",
+  "hypothesis": "Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month.",
+  "status": "ok",
+  "n_obs": 14,
+  "r": 0.7320426706644398,
+  "perm_p": 0.08782435129740519,
+  "validity": 4.0,
+  "interestingness": 3.8,
+  "unexpectedness": 3.04,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/6b15d692db1f4be88eccb34c20e97550"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/1551c3ef201a4b72bb862b6e405718da"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/5b108b2f479a4a1189e31a3bed37885b"
+    }
+  ],
+  "indicator_coverage": {
+    "finance.fred.DCOILBRENTEU": "configured analysis window",
+    "utility.fuel_cost.oil_per_mmbtu": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

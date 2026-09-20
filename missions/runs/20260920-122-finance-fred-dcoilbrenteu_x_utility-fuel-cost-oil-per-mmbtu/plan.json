@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "utility.fuel_cost.oil_per_mmbtu",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Brent (FRED daily, aggregated to monthly) as driver and PUDL/EIA-923 oil delivered fuel cost (freq=M, ends 2026-05-01) as response, both as pct_change to remove common trends, with up to 30 days of lead to test the sub-one-month pass-through; caveats: monthly n is small (~15 points), the war-driven Brent spike is a common cause, and receipt costs reflect contract timing.",
+  "mode": "pair"
+}
