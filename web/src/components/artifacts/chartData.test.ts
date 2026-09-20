@@ -113,7 +113,7 @@ describe('buildChartModel', () => {
         ],
       }),
     )
-    expect(model.series.map((s) => [s.key, s.name, s.color])).toEqual([['s0', 'Real', '#0a0a0a']])
+    expect(model.series.map((s) => [s.key, s.name, s.color])).toEqual([['s0', 'Real', 'var(--color-ink)']])
   })
 
   it('keeps series with duplicate or missing names apart', () => {
@@ -183,11 +183,11 @@ describe('buildChartModel', () => {
 
 describe('seriesColor', () => {
   it('is ink, then faint, then lighter grays that never reach white', () => {
-    expect(seriesColor(0)).toBe('#0a0a0a')
-    expect(seriesColor(1)).toBe('#bdbdbd')
-    expect(seriesColor(2)).toBe('#d0d0d0')
-    expect(seriesColor(3)).toBe('#dcdcdc')
-    expect(seriesColor(40)).toBe('#dcdcdc')
+    expect(seriesColor(0)).toBe('var(--color-ink)')
+    expect(seriesColor(1)).toBe('var(--color-faint)')
+    expect(seriesColor(2)).toBe('var(--color-series-3)')
+    expect(seriesColor(3)).toBe('var(--color-series-4)')
+    expect(seriesColor(40)).toBe('var(--color-series-4)')
   })
 })
 

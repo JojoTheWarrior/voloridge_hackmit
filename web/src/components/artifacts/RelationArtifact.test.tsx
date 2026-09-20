@@ -35,18 +35,18 @@ describe('RelationArtifact', () => {
   it('draws ink-bordered white pills and faint edges', () => {
     const { container } = render(<RelationArtifact artifact={relation([{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], [{ from: 'a', to: 'b' }])} />)
     const pill = container.querySelector('rect')!
-    expect(pill).toHaveAttribute('fill', '#ffffff')
-    expect(pill).toHaveAttribute('stroke', '#0a0a0a')
-    expect(edgePaths(container)[0]).toHaveAttribute('stroke', '#bdbdbd')
+    expect(pill).toHaveAttribute('fill', 'var(--color-paper)')
+    expect(pill).toHaveAttribute('stroke', 'var(--color-ink)')
+    expect(edgePaths(container)[0]).toHaveAttribute('stroke', 'var(--color-faint)')
   })
 
   it('sets edge labels in muted mono on a white knockout wide enough for the text', () => {
     render(<RelationArtifact artifact={relation([{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], [{ from: 'a', to: 'b', label: 'county + day' }])} />)
     const label = screen.getByText('county + day')
     expect(label).toHaveClass('font-mono')
-    expect(label).toHaveAttribute('fill', '#8c8c8c')
+    expect(label).toHaveAttribute('fill', 'var(--color-muted)')
     const knockout = label.previousElementSibling!
-    expect(knockout).toHaveAttribute('fill', '#ffffff')
+    expect(knockout).toHaveAttribute('fill', 'var(--color-paper)')
     expect(Number(knockout.getAttribute('width'))).toBeGreaterThan('county + day'.length * 6.6)
   })
 

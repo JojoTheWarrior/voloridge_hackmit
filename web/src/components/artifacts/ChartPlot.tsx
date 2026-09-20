@@ -2,11 +2,11 @@ import { Bar, ComposedChart, Line, ReferenceLine, ResponsiveContainer, Scatter, 
 import { formatNumber, PLOT_HEIGHT, type ChartModel } from './chartData'
 import { ChartTooltip } from './ChartTooltip'
 
-const MUTED = '#8c8c8c'
+const MUTED = 'var(--color-muted)'
 // The right-hand axis is lettered in its series' own gray, so it reads as belonging to that line.
-const FAINT = '#bdbdbd'
-const LINE_SOFT = '#efefef'
-const FILL = '#f4f4f4'
+const FAINT = 'var(--color-faint)'
+const LINE_SOFT = 'var(--color-line-soft)'
+const FILL = 'var(--color-fill)'
 const DENSE = 150
 const DASHES = [undefined, undefined, '4 3', '2 3']
 

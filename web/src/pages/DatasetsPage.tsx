@@ -3,7 +3,7 @@ import { DatasetTable } from '../components/DatasetTable'
 import { LinkDatasetDialog } from '../components/LinkDatasetDialog'
 import { useDatasets } from '../hooks/useApiData'
 
-const pillClass = 'rounded-full bg-ink px-4 py-1.5 text-[13px] text-white transition-colors duration-150 hover:bg-ink/85'
+const pillClass = 'rounded-full bg-ink px-4 py-1.5 text-[13px] text-paper transition-colors duration-150 hover:bg-ink/85'
 
 export function DatasetsPage() {
   const datasets = useDatasets()

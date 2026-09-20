@@ -28,7 +28,7 @@ export function AppShell() {
             type="button"
             aria-label="Close menu"
             onClick={() => setMenuOpen(false)}
-            className="fade-in absolute inset-0 bg-ink/20"
+            className="fade-in absolute inset-0 bg-scrim"
           />
           <div className="slide-in relative h-full w-60">
             <Sidebar onNavigate={() => setMenuOpen(false)} />

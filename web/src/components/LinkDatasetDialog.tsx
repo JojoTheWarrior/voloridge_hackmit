@@ -75,7 +75,7 @@ export function LinkDatasetDialog({ onClose }: { onClose: () => void }) {
       onClick={(event) => {
         if (event.target === dialogRef.current) onClose()
       }}
-      className="fade-in m-auto w-[400px] max-w-[calc(100vw-2rem)] rounded-2xl border border-line bg-white p-0 text-ink backdrop:bg-ink/20"
+      className="fade-in m-auto w-[400px] max-w-[calc(100vw-2rem)] rounded-2xl border border-line bg-paper p-0 text-ink backdrop:bg-scrim"
     >
       <form onSubmit={submit} noValidate className="flex flex-col gap-4 p-6">
         <div>
@@ -90,7 +90,7 @@ export function LinkDatasetDialog({ onClose }: { onClose: () => void }) {
           <button type="button" onClick={onClose} className="rounded-full px-4 py-1.5 text-[13px] text-muted transition-colors duration-150 hover:text-ink">
             Cancel
           </button>
-          <button type="submit" className="rounded-full bg-ink px-4 py-1.5 text-[13px] text-white transition-colors duration-150 hover:bg-ink/85">
+          <button type="submit" className="rounded-full bg-ink px-4 py-1.5 text-[13px] text-paper transition-colors duration-150 hover:bg-ink/85">
             Link dataset
           </button>
         </div>

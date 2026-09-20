@@ -24,7 +24,7 @@ export function ChartTooltip({ active, point, model, xLabel, yLabel }: ChartTool
 
   if (model.kind === 'scatter') {
     return (
-      <div className="rounded-lg border border-line bg-white px-3 py-2 text-xs">
+      <div className="rounded-lg border border-line bg-paper px-3 py-2 text-xs">
         {model.series.length > 1 && <div className="max-w-[200px] truncate pb-1 text-muted">{point.series}</div>}
         <Entry label={xLabel || 'x'} value={model.xMode === 'number' ? formatValue(Number(point.x)) : x} />
         <Entry label={yLabel || 'y'} value={formatValue(Number(point.y))} />
@@ -33,7 +33,7 @@ export function ChartTooltip({ active, point, model, xLabel, yLabel }: ChartTool
   }
 
   return (
-    <div className="rounded-lg border border-line bg-white px-3 py-2 text-xs">
+    <div className="rounded-lg border border-line bg-paper px-3 py-2 text-xs">
       <div className="max-w-[200px] truncate pb-1 text-muted">{x}</div>
       {model.series
         .filter((series) => typeof point[series.key] === 'number')

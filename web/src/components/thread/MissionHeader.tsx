@@ -34,7 +34,7 @@ export function MissionHeader({ mission, reconnecting }: MissionHeaderProps) {
   }
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-line-soft bg-white px-4 text-[13px] sm:px-6">
+    <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-line-soft bg-paper px-4 text-[13px] sm:px-6">
       <StatusDot status={mission.status} />
       <h1 className="truncate font-medium">{mission.title}</h1>
       {/* On phones the dot carries the status so the title keeps the room; an outage is always spelled out. */}

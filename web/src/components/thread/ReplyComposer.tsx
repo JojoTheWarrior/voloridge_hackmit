@@ -34,7 +34,7 @@ export function ReplyComposer({ onSend }: { onSend: (text: string) => Promise<vo
 
   return (
     <div>
-      <div className="flex items-end gap-3 rounded-2xl border border-line bg-white p-2 pl-3 transition-colors duration-150 focus-within:border-ink">
+      <div className="flex items-end gap-3 rounded-2xl border border-line bg-paper p-2 pl-3 transition-colors duration-150 focus-within:border-ink">
         <textarea
           aria-label="Reply to Devin"
           rows={1}
@@ -49,7 +49,7 @@ export function ReplyComposer({ onSend }: { onSend: (text: string) => Promise<vo
           aria-label="Send reply"
           aria-disabled={idle}
           onClick={send}
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white transition-colors duration-150 ${
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-paper transition-colors duration-150 ${
             idle ? 'cursor-default bg-line' : 'bg-ink hover:bg-ink/85'
           }`}
         >

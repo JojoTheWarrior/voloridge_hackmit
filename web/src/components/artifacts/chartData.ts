@@ -37,7 +37,8 @@ export interface ChartModel {
 /** Shared by the plot and the placeholder shown while the chart library loads. */
 export const PLOT_HEIGHT = 220
 
-const COLORS = ['#0a0a0a', '#bdbdbd', '#d0d0d0', '#dcdcdc']
+// Theme tokens rather than hex: SVG attributes resolve var(), so charts turn over with dark mode.
+const COLORS = ['var(--color-ink)', 'var(--color-faint)', 'var(--color-series-3)', 'var(--color-series-4)']
 const KINDS: ChartKind[] = ['line', 'scatter', 'bar']
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}(T[\d:.]+(Z|[+-]\d{2}:?\d{2})?)?$/
 const DAY_MS = 86_400_000

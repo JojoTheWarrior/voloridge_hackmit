@@ -34,7 +34,7 @@ describe('ChartArtifact', () => {
     )
     const strokes = (await marks('.recharts-line-curve', 2)).map((path) => path.getAttribute('stroke'))
     // The ink series is drawn last so it sits on top.
-    expect(strokes).toEqual(['#bdbdbd', '#0a0a0a'])
+    expect(strokes).toEqual(['var(--color-faint)', 'var(--color-ink)'])
   })
 
   it('shows a legend only when there is more than one series', async () => {
@@ -62,7 +62,7 @@ describe('ChartArtifact', () => {
     const few: [number, number][] = [[0.1, 4.2], [0.3, 9.1], [NaN, 1], [0.5, Infinity]]
     const { unmount } = render(<ChartArtifact artifact={chart({ kind: 'scatter', series: [{ name: 'Counties', points: few }] })} />)
     let dots = await marks('circle[r="3"]', 2)
-    expect(dots[0]).toHaveAttribute('fill', '#0a0a0a')
+    expect(dots[0]).toHaveAttribute('fill', 'var(--color-ink)')
     expect(dots[0]).toHaveAttribute('fill-opacity', '1')
     unmount()
 
@@ -75,7 +75,7 @@ describe('ChartArtifact', () => {
   it('draws a bar per category', async () => {
     render(<ChartArtifact artifact={chart({ kind: 'bar', series: [{ name: 'A', points: [['West', 3], ['East', 1], ['North', 2]] }] })} />)
     const bars = await marks('.recharts-bar-rectangle path', 3)
-    for (const bar of bars) expect(bar).toHaveAttribute('fill', '#0a0a0a')
+    for (const bar of bars) expect(bar).toHaveAttribute('fill', 'var(--color-ink)')
   })
 
   it('keeps grouped bars in series order and adds a zero baseline when values go negative', async () => {
@@ -91,7 +91,7 @@ describe('ChartArtifact', () => {
       />,
     )
     const bars = await marks('.recharts-bar-rectangle path', 4)
-    expect(bars.map((bar) => bar.getAttribute('fill'))).toEqual(['#0a0a0a', '#0a0a0a', '#bdbdbd', '#bdbdbd'])
+    expect(bars.map((bar) => bar.getAttribute('fill'))).toEqual(['var(--color-ink)', 'var(--color-ink)', 'var(--color-faint)', 'var(--color-faint)'])
     expect((await plot()).querySelectorAll('.recharts-reference-line-line')).toHaveLength(1)
   })
 

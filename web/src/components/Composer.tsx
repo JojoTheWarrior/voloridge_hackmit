@@ -36,7 +36,7 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-white p-3 transition-colors duration-150 focus-within:border-ink">
+    <div className="rounded-2xl border border-line bg-paper p-3 transition-colors duration-150 focus-within:border-ink">
       <textarea
         ref={inputRef}
         aria-label="Mission prompt"
@@ -55,7 +55,7 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
           aria-label="Start mission"
           aria-disabled={empty}
           onClick={submit}
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white transition-colors duration-150 ${
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-paper transition-colors duration-150 ${
             empty ? 'cursor-default bg-line' : 'bg-ink hover:bg-ink/85'
           }`}
         >
