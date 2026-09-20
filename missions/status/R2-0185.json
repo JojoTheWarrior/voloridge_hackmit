@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/eb049b478b0c46a28bbfa8ab3ff97227",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:25:24Z",
-  "updated_at": "2026-09-20T13:25:43Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:26:34Z",
+  "finished_at": "2026-09-20T13:26:34Z",
+  "elapsed_s": 70,
+  "message": "Null control holds: lithium crossref pubs do not lead INDA (r=0.04, perm_p=0.98, validity 0); crossref->INDA channel is noise; the n=7 short-INDA rule (act 8.29) is a small-sample artifact, not tradeable.",
   "run_folder": "missions/runs/20260920-271-research-lithium-crossref-pubs_x_finance-inda-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 8.29,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Null control #2: Crossref ammonia weekly pubs 20d z-score > 1 should NOT lead INDA returns by 1-5 days (-); lithium null (R2-0185) gave r=0.04 perm_p=0.98 yet a 7-trade rule scored actionability 8.3, so test whether any unrelated crossref series produces a similar small-n artifact; trade short INDA 1d [research.ammonia.crossref_pubs -> finance.INDA.log_return] (parent: R2-0185)"
 }
