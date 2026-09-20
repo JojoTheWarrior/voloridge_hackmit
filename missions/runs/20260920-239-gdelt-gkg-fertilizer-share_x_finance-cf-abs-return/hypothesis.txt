@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] REVERSAL: GDELT fertilizer GKG share 20d z-score > 1.5 leads CF absolute returns (volatility) by 3 days (+); trade long CF straddle-proxy 5d [gdelt.gkg.fertilizer_share -> finance.CF.abs_return] (parent: R2-0039)
