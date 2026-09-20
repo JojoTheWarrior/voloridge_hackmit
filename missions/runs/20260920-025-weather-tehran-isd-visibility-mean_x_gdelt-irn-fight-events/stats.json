@@ -1,0 +1,36 @@
+{
+  "n_obs": 0,
+  "coverage_start": null,
+  "coverage_end": null,
+  "correlation": {
+    "n": 0,
+    "pearson_r": null,
+    "pearson_p": null,
+    "spearman_r": null,
+    "spearman_p": null
+  },
+  "lagged": {
+    "lags": [
+      -1,
+      0,
+      1
+    ],
+    "r": [
+      null,
+      null,
+      null
+    ],
+    "best_lag": null,
+    "best_r": null
+  },
+  "perm_p": null,
+  "n_lags_tested": 3,
+  "bonferroni_p": null,
+  "pre_post": null,
+  "event_study": null,
+  "event_study_b": null,
+  "window": "war",
+  "lag_unit": "days",
+  "max_lag_steps": 1,
+  "sign_matches_expectation": false
+}

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:51:03.441349+00:00",
+  "git_commit": "114e6e67250866138bf78d8067540956468bd52d",
+  "folder": "20260920-025-weather-tehran-isd-visibility-mean_x_gdelt-irn-fight-events",
+  "mission_id": "M20260920-fe52b0",
+  "hypothesis": "Cloud cover or low visibility over Tehran reduces the number of strike events reported the next day.",
+  "status": "ok",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": 0.0,
+  "interestingness": 1.66,
+  "unexpectedness": 1.22,
+  "indicator_coverage": {
+    "weather.tehran.isd_visibility_mean": "2025-03..2025-08",
+    "gdelt.irn.fight_events": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

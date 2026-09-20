@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.tehran.isd_visibility_mean",
+  "indicator_b": "gdelt.irn.fight_events",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 1,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Tehran\u2019s ISD mean visibility as a proxy for cloud/obscuration and same\u2011day GDELT Iran fight events, allowing a 1\u2011day lead to test whether lower visibility is associated with fewer reported strikes during the active war period."
+}
