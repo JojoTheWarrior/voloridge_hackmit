@@ -1,4 +1,3 @@
-R2 | [oil-shipping] Muscat max wind 10d z-score below -1 (calm Gulf of Oman) leads Brent higher by 3 days (+); trade long BZ=F 4d [weather.muscat.wind_max -> finance.BZ=F.log_return]
 R2 | [oil-shipping] Bandar Abbas temp anomaly 20d z-score > 1.5 (heat stress on loading ops) leads XOP-to-SPY ratio by 5 days (+); trade long XOP 5d [weather.bandar_abbas.temp_anomaly -> finance.ratio.xop_spy]
 R2 | [oil-shipping] Dubai CAMS NO2 20d z-score below -1.5 (Gulf refining/production slowdown proxy) leads Brent higher by 4 days (+); trade long BZ=F 7d [airquality.dubai.cams_no2 -> finance.BZ=F.log_return]
 R2 | [oil-shipping] Kuwait CAMS SO2 10d z-score > 1 (sour-crude processing ramp) leads gasoline crack narrower by 3 days (-); trade short RB=F 4d [airquality.kuwait.cams_so2 -> finance.spread.gasoline_crack]
