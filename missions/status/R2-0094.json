@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:12:57Z",
-  "updated_at": "2026-09-20T04:33:06Z",
+  "updated_at": "2026-09-20T04:35:58Z",
   "finished_at": "2026-09-20T04:13:34Z",
-  "elapsed_s": 1209,
+  "elapsed_s": 1381,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-196-finance-ratio-gold-oil_x_finance-eem-log-return",
   "scores": {
