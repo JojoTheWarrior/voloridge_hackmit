@@ -1,13 +1,17 @@
 import { useState } from 'react'
+import { DatasetCards } from '../components/DatasetCards'
 import { DatasetTable } from '../components/DatasetTable'
 import { LinkDatasetDialog } from '../components/LinkDatasetDialog'
+import { ViewToggle } from '../components/ViewToggle'
 import { useDatasets } from '../hooks/useApiData'
+import { useDatasetView } from '../hooks/useDatasetView'
 
 const pillClass = 'rounded-full bg-ink px-4 py-1.5 text-[13px] text-white transition-colors duration-150 hover:bg-ink/85'
 
 export function DatasetsPage() {
   const datasets = useDatasets()
   const [linking, setLinking] = useState(false)
+  const [view, setView] = useDatasetView()
 
   if (!datasets) return null
   const linkButton = (
@@ -28,10 +32,13 @@ export function DatasetsPage() {
         <>
           <div className="flex items-center justify-between gap-4">
             <h1 className="text-2xl font-medium tracking-[-0.025em]">Datasets</h1>
-            {linkButton}
+            <div className="flex items-center gap-3">
+              <ViewToggle view={view} onChange={setView} />
+              {linkButton}
+            </div>
           </div>
           <p className="mt-1 mb-9 text-sm text-muted">Sources your missions can draw on.</p>
-          <DatasetTable datasets={datasets} />
+          {view === 'card' ? <DatasetCards datasets={datasets} /> : <DatasetTable datasets={datasets} />}
         </>
       )}
       {linking && <LinkDatasetDialog onClose={() => setLinking(false)} />}

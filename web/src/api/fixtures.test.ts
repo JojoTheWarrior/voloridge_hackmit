@@ -49,6 +49,15 @@ describe('seeds', () => {
     missions.flatMap((m) => m.datasetIds).forEach((id) => expect(known).toContain(id))
   })
 
+  it('give each dataset the kind its thumbnail draws', () => {
+    expect(Object.fromEntries(seedDatasets().map((d) => [d.id, d.kind]))).toEqual({
+      gdelt: 'events',
+      yahoo: 'markets',
+      'open-meteo': 'weather',
+      cams: 'air',
+    })
+  })
+
   it('include an honest null result alongside real links', () => {
     const verdicts = missions.filter((m) => m.status === 'done').map((m) => m.result?.verdict)
     expect(verdicts).toContain('No reliable link.')

@@ -39,6 +39,8 @@ export interface Mission {
   error?: string
 }
 
+export type DatasetKind = 'events' | 'markets' | 'weather' | 'air' | 'other'
+
 export interface Dataset {
   id: string
   name: string
@@ -46,4 +48,6 @@ export interface Dataset {
   seriesCount: number
   dateRange: string
   syncedAt: string
+  /** What the data describes; picks the thumbnail drawn in card view. */
+  kind: DatasetKind
 }

@@ -99,6 +99,7 @@ export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
         seriesCount: 0,
         dateRange: '',
         syncedAt: new Date().toISOString(),
+        kind: 'other',
       }
       datasets.unshift(dataset)
       notify()

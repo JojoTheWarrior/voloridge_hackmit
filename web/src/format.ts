@@ -26,3 +26,7 @@ export function formatSynced(iso: string, now: Date = new Date()): string {
   if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`
   return `${Math.floor(minutes / 1440)}d ago`
 }
+
+export function hostname(url: string): string {
+  return new URL(url).hostname.replace(/^www\./, '')
+}

@@ -131,6 +131,7 @@ describe('mock api', () => {
       const dataset = await api.linkDataset({ name: '  FRED  ', url: ' https://fred.stlouisfed.org ' })
       expect(dataset.name).toBe('FRED')
       expect(dataset.url).toBe('https://fred.stlouisfed.org')
+      expect(dataset.kind).toBe('other')
       const after = await api.listDatasets()
       expect(after).toHaveLength(before + 1)
       expect(after[0].id).toBe(dataset.id)

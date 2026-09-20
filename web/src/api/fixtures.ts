@@ -1,3 +1,4 @@
+import { hash, mulberry32 } from '../random'
 import { stepsAt } from '../steps'
 import type { Dataset, Mission, MissionResult, SeriesPoint } from '../types'
 
@@ -7,25 +8,6 @@ const END_DATE = Date.UTC(2026, 8, 15)
 const DAY_MS = 86_400_000
 // Daily series are autocorrelated, so far fewer than N_DAYS observations are independent.
 const EFFECTIVE_N = N_DAYS / 4
-
-function hash(text: string): number {
-  let h = 2166136261
-  for (let i = 0; i < text.length; i++) {
-    h ^= text.charCodeAt(i)
-    h = Math.imul(h, 16777619)
-  }
-  return h >>> 0
-}
-
-function mulberry32(seed: number): () => number {
-  let a = seed
-  return () => {
-    a = (a + 0x6d2b79f5) | 0
-    let t = Math.imul(a ^ (a >>> 15), 1 | a)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-  }
-}
 
 function gaussian(rand: () => number): number {
   return Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand())
@@ -141,10 +123,10 @@ export function buildResult(hypothesis: string, shape: ResultShape = {}): Missio
 export function seedDatasets(now: number = Date.now()): Dataset[] {
   const hoursAgo = (h: number) => new Date(now - h * 3_600_000).toISOString()
   return [
-    { id: 'gdelt', name: 'GDELT events', url: 'https://www.gdeltproject.org', seriesCount: 42, dateRange: 'Mar 2025 – Sep 2026', syncedAt: hoursAgo(2) },
-    { id: 'yahoo', name: 'Yahoo Finance', url: 'https://finance.yahoo.com', seriesCount: 31, dateRange: 'Jan 2024 – Sep 2026', syncedAt: hoursAgo(2) },
-    { id: 'open-meteo', name: 'Open-Meteo weather', url: 'https://open-meteo.com', seriesCount: 18, dateRange: 'Jan 2024 – Sep 2026', syncedAt: hoursAgo(26) },
-    { id: 'cams', name: 'CAMS air quality', url: 'https://atmosphere.copernicus.eu', seriesCount: 12, dateRange: 'Jun 2024 – Sep 2026', syncedAt: hoursAgo(30) },
+    { id: 'gdelt', name: 'GDELT events', url: 'https://www.gdeltproject.org', seriesCount: 42, dateRange: 'Mar 2025 – Sep 2026', syncedAt: hoursAgo(2), kind: 'events' },
+    { id: 'yahoo', name: 'Yahoo Finance', url: 'https://finance.yahoo.com', seriesCount: 31, dateRange: 'Jan 2024 – Sep 2026', syncedAt: hoursAgo(2), kind: 'markets' },
+    { id: 'open-meteo', name: 'Open-Meteo weather', url: 'https://open-meteo.com', seriesCount: 18, dateRange: 'Jan 2024 – Sep 2026', syncedAt: hoursAgo(26), kind: 'weather' },
+    { id: 'cams', name: 'CAMS air quality', url: 'https://atmosphere.copernicus.eu', seriesCount: 12, dateRange: 'Jun 2024 – Sep 2026', syncedAt: hoursAgo(30), kind: 'air' },
   ]
 }
 

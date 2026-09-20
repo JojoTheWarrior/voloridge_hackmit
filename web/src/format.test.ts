@@ -1,4 +1,4 @@
-import { formatCorrelation, formatElapsed, formatLag, formatP, formatSynced } from './format'
+import { formatCorrelation, formatElapsed, formatLag, formatP, formatSynced, hostname } from './format'
 
 describe('formatElapsed', () => {
   it.each([
@@ -67,5 +67,16 @@ describe('formatLag', () => {
     [7, '7 days'],
   ])('%i -> %s', (days, expected) => {
     expect(formatLag(days)).toBe(expected)
+  })
+})
+
+describe('hostname', () => {
+  it.each([
+    ['https://www.gdeltproject.org', 'gdeltproject.org'],
+    ['https://finance.yahoo.com/quote/BZ=F?p=1', 'finance.yahoo.com'],
+    ['http://localhost:8080/data', 'localhost'],
+    ['https://wwwexample.com', 'wwwexample.com'],
+  ])('%s -> %s', (url, expected) => {
+    expect(hostname(url)).toBe(expected)
   })
 })
