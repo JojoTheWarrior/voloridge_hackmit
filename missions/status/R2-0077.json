@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0077",
+  "title": "[fuel-airspace-losers] RB=F gasoline futures 10d z-score > 1.5 keeps airlines la",
+  "hypothesis": "R2 | [fuel-airspace-losers] RB=F gasoline futures 10d z-score > 1.5 keeps airlines lagging SPY for over a week (-); trade short JETS vs SPY 8d at 0d lag [finance.RB=F.close -> finance.ratio.jets_spy]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:02:58Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
