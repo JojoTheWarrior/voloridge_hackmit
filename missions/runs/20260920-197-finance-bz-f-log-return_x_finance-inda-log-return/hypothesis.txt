@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Brent single-day log return > 3 pct leads India ETF returns lower by 1-2 days (-); trade short INDA 2d [finance.BZ=F.log_return -> finance.INDA.log_return]

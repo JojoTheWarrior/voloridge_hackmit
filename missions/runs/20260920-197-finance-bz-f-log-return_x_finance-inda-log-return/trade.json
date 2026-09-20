@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 50,
+    "hit_rate": 0.48,
+    "avg_return": 0.0008184187144961386,
+    "baseline_avg_return": 2.700488633091808e-07,
+    "excess_return": 0.0008181486656328294,
+    "sharpe_like": 0.6679930492271651,
+    "max_drawdown": -0.042097206335652726,
+    "total_return": 0.039806866947690756
+  },
+  "fit_pre_war": {
+    "n_trades": 34,
+    "hit_rate": 0.47058823529411764,
+    "avg_return": 0.0010140720877679006,
+    "baseline_avg_return": -0.0002118712756424171,
+    "excess_return": 0.0012259433634103176,
+    "sharpe_like": 0.6477013601720417,
+    "max_drawdown": -0.042097206335652726,
+    "total_return": 0.03360285977675592
+  },
+  "test_war": {
+    "n_trades": 16,
+    "hit_rate": 0.5,
+    "avg_return": 0.00040265529629364416,
+    "baseline_avg_return": 0.0003680834244451799,
+    "excess_return": 3.457187184846425e-05,
+    "sharpe_like": 0.2129803363960621,
+    "max_drawdown": -0.025625717199643794,
+    "total_return": 0.006002312311979008
+  },
+  "n_signal_days": 381,
+  "trade_idea": {
+    "instrument": "INDA",
+    "direction": "short",
+    "entry_rule": "finance.BZ=F.log_return rolling_zscore_20d > 1 at close -> short INDA next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.48,
+    "avg_return": 0.0008184187144961386,
+    "excess_return": 0.0008181486656328294,
+    "n_trades": 50,
+    "sharpe_like": 0.6679930492271651,
+    "max_drawdown": -0.042097206335652726,
+    "oos_n_trades": 16,
+    "oos_avg_return": 0.00040265529629364416,
+    "oos_hit_rate": 0.5,
+    "actionability": 6.75,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
