@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Muscat max wind 10d z-score below -1 (calm Gulf of Oman) leads Brent higher by 3 days (+); trade long BZ=F 4d [weather.muscat.wind_max -> finance.BZ=F.log_return]
