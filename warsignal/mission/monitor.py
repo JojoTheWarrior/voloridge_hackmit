@@ -2,7 +2,7 @@
 
 Merges ``missions/status/*.json`` progress files, run folders under
 ``missions/runs/``, ``queue.txt``, ``results.csv`` and ``failed.txt`` into a
-single JSON-serialisable state dict for the terminal web UI. GitHub ``main``
+single JSON-serialisable state dict for a web UI. GitHub ``main``
 is the source of truth: :class:`Monitor` runs ``git pull --rebase --autostash``
 on a fixed interval before re-reading disk. Every loader is defensive —
 missing files and malformed JSON never raise.

@@ -212,20 +212,13 @@ notes, event categories); `VIZ_SYSTEM` in `warsignal/ai/prompts.py` is the
 standard prompt and `warsignal/viz/agent.py` validates/falls back so the
 output is always in this format. Do not add per-mission styling.
 
-## Terminal web UI
+## Mission monitor
 
-```bash
-python main.py terminal [--port 8020] [--no-pull] [--pull-interval S] [--snapshot out.html]
-```
-
-Bloomberg-style Flask monitor (`terminal/`) over `missions/` — five panes
-(ACTIVE / QUEUE / HISTORY / LEADERBOARD / LOG), keyboard-driven, dark
-monospace. `warsignal/mission/monitor.py` merges `missions/status/*.json`,
-run folders, `queue.txt`, `results.csv`, and `failed.txt` into one
-JSON-safe state; a daemon thread runs `git pull --rebase --autostash` every
-`--pull-interval` seconds (GitHub main is the source of truth). `--snapshot`
-writes a self-contained HTML export. See `terminal/README.md` for keys and
-the `/api/state` shape.
+`warsignal/mission/monitor.py` merges `missions/status/*.json`, run folders,
+`queue.txt`, `results.csv`, and `failed.txt` into one JSON-safe state, and
+can `git pull --rebase --autostash` on an interval (GitHub main is the source
+of truth). It has no UI of its own; the web app in `web/` currently runs on
+mock data and will read this state once the backend exists.
 
 ## Statistical hygiene
 

@@ -1,4 +1,4 @@
-"""Tests for warsignal.mission.monitor and the terminal Flask app."""
+"""Tests for warsignal.mission.monitor."""
 from __future__ import annotations
 
 import json
@@ -9,7 +9,6 @@ from pathlib import Path
 
 import pytest
 
-from terminal.app import create_app, index_html
 from warsignal.mission.monitor import (
     Monitor,
     build_runs,
@@ -359,30 +358,7 @@ def test_state_returns_during_first_pull(tmp_path, monkeypatch):
     assert not worker.is_alive()
 
 
-# ---------- Flask app ----------
-
-def _app(tmp_path):
-    m = _missions(tmp_path)
-    _fixture_run(m)
-    return create_app(Monitor(tmp_path, pull=False)).test_client(), m
-
-
-def test_api_state(tmp_path):
-    client, _ = _app(tmp_path)
-    r = client.get("/api/state")
-    assert r.status_code == 200
-    body = r.get_json()
-    assert {"counts", "runs", "queue", "statuses"} <= set(body)
-
-
-def test_api_run_and_traversal(tmp_path):
-    client, _ = _app(tmp_path)
-    r = client.get("/api/run/20260921-001-a_x_b")
-    assert r.status_code == 200
-    assert "some **bold**" in r.get_json()["note_md"]
-    assert client.get("/api/run/..%2F..%2Fetc").status_code in (400, 404)
-    assert client.get("/api/run/not-a-run").status_code == 404
-
+# ---------- run details ----------
 
 def test_run_details_fall_back_to_status_scores(tmp_path):
     from warsignal.mission.monitor import read_run_details
@@ -394,42 +370,6 @@ def test_run_details_fall_back_to_status_scores(tmp_path):
     assert d["scores"]["validity"] == 8.0  # judge.json wins
     assert d["scores"]["actionability"] == 2  # status fills the gap
     assert read_run_details(run_dir, None)["scores"]["actionability"] is None
-
-
-def test_run_files(tmp_path):
-    client, _ = _app(tmp_path)
-    assert client.get("/runs/20260921-001-a_x_b/viz.png").status_code == 200
-    assert client.get("/runs/20260921-001-a_x_b/missing.png").status_code == 404
-
-
-def test_index_and_snapshot_routes(tmp_path):
-    client, _ = _app(tmp_path)
-    assert "WARSIGNAL TERMINAL" in client.get("/").get_data(as_text=True)
-    snap = client.get("/snapshot").get_data(as_text=True)
-    assert "window.__STATE__" in snap and "20260921-001-a_x_b" in snap
-    # snapshot is self-contained: CSS/JS inlined, no /static/ references
-    assert "/static/" not in snap
-    assert "<style>" in snap
-    assert '"run_details"' in snap and '"20260921-001-a_x_b":' in snap
-
-
-def test_index_html_embeds_state(tmp_path):
-    html = index_html({"runs": [{"folder": "x"}], "counts": {}})
-    assert "window.__STATE__ = {" in html
-    assert "/static/" not in html and "<style>" in html
-
-
-def test_write_snapshot(tmp_path):
-    from terminal.snapshot import write_snapshot
-    _missions(tmp_path)
-    _fixture_run(tmp_path / "missions")
-    out = write_snapshot(Monitor(tmp_path, pull=False), tmp_path / "snap.html")
-    html = out.read_text()
-    assert "window.__STATE__" in html
-    assert "/static/" not in html and "<style>" in html
-    assert "20260921-001-a_x_b" in html
-    assert '"run_details"' in html
-    assert '"20260921-001-a_x_b":' in html
 
 
 # ---------- real repo ----------
