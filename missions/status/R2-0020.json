@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/e8eacfccf8694279b14a064dbb8a46d2",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:29:20Z",
-  "updated_at": "2026-09-20T03:29:37Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:30:11Z",
+  "finished_at": "2026-09-20T03:30:11Z",
+  "elapsed_s": 51,
+  "message": "Null control holds: Tokyo temp z>1 vs STNG r=0.02 (n=387), validity 0, OOS hit 35%; no trade",
   "run_folder": "missions/runs/20260920-146-weather-tokyo-temp-mean_x_finance-stng-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 4.74,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Null control: Tokyo daily precipitation 20d z-score > 1 has no relation to tanker equity returns at 0-5 day lags (0); no trade [weather.tokyo.precip -> finance.FRO.log_return] (parent: R2-0020)"
 }
