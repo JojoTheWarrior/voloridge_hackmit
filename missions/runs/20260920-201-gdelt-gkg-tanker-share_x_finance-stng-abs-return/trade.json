@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "return"
+  },
+  "all": {
+    "n_trades": 28,
+    "hit_rate": 1.0,
+    "avg_return": 0.019848523812616727,
+    "baseline_avg_return": 0.01884632302429325,
+    "excess_return": 0.0010022007883234776,
+    "sharpe_like": 5.909361327849122,
+    "max_drawdown": 0.0,
+    "total_return": 0.7266348833375318
+  },
+  "fit_pre_war": {
+    "n_trades": 17,
+    "hit_rate": 1.0,
+    "avg_return": 0.018625521856667965,
+    "baseline_avg_return": 0.019409264894594283,
+    "excess_return": -0.0007837430379263183,
+    "sharpe_like": 3.7013318050923925,
+    "max_drawdown": 0.0,
+    "total_return": 0.363846560489111
+  },
+  "test_war": {
+    "n_trades": 11,
+    "hit_rate": 1.0,
+    "avg_return": 0.021738617744537538,
+    "baseline_avg_return": 0.01785408735361877,
+    "excess_return": 0.0038845303909187667,
+    "sharpe_like": 6.253818174339105,
+    "max_drawdown": 0.0,
+    "total_return": 0.2660037671087543
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "STNG",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.tanker_share rolling_zscore_20d > 1 at close -> long STNG next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 1.0,
+    "avg_return": 0.019848523812616727,
+    "excess_return": 0.0010022007883234776,
+    "n_trades": 28,
+    "sharpe_like": 5.909361327849122,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 11,
+    "oos_avg_return": 0.021738617744537538,
+    "oos_hit_rate": 1.0,
+    "actionability": 10.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

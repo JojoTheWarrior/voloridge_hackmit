@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT tanker GKG share 20d z-score > 1 leads STNG absolute returns (volatility) by 1 day (+), since direction was noise in R2-0002; trade long STNG straddle-proxy 1d [gdelt.gkg.tanker_share -> finance.STNG.abs_return] (parent: R2-0002)

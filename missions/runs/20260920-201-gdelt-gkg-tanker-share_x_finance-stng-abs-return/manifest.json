@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:17:37.613466+00:00",
+  "git_commit": "d0b7fcb7db3e912180e85b0bf19d7ac1e56a2d1d",
+  "folder": "20260920-201-gdelt-gkg-tanker-share_x_finance-stng-abs-return",
   "mission_id": "R2-0102",
-  "title": "Tanker GKG share z>1 leads STNG abs return 1d",
   "hypothesis": "R2 | [oil-shipping] GDELT tanker GKG share 20d z-score > 1 leads STNG absolute returns (volatility) by 1 day (+), since direction was noise in R2-0002; trade long STNG straddle-proxy 1d [gdelt.gkg.tanker_share -> finance.STNG.abs_return] (parent: R2-0002)",
-  "parent_mission_id": "R2-0002",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/d4af6ab62f2340579fa1f0729d6b18a6",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:17:27Z",
-  "updated_at": "2026-09-20T04:17:39Z",
-  "finished_at": null,
-  "elapsed_s": 12,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-201-gdelt-gkg-tanker-share_x_finance-stng-abs-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 10.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.07183500734380478,
+  "perm_p": 0.5369261477045908,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 10.0,
   "trade_idea": {
     "instrument": "STNG",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.tanker_share": "configured analysis window",
+    "finance.STNG.abs_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
