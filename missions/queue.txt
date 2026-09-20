@@ -1,4 +1,3 @@
-R2 | [gas-lng] Doha maximum temperature 20d z-score > 1.5 (Gulf cooling demand diverts cargoes) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 4d [weather.doha.temp_max -> finance.ratio.ttf_henryhub]
 R2 | [gas-lng] Doha CAMS NO2 20d z-score > 1 signals Ras Laffan restart and leads TTF log returns by 3 days (-); trade short TTF=F 5d [airquality.doha.cams_no2 -> finance.TTF=F.log_return]
 R2 | [gas-lng] Doha CAMS SO2 day-over-day drop below -30 pct signals LNG train outage and leads Cheniere returns by 2 days (+); trade long LNG 5d [airquality.doha.cams_so2 -> finance.LNG.log_return]
 R2 | [gas-lng] Crossref energy_security weekly counts 8-week z-score > 1 lead BASF returns by 5 days (-) via European gas input cost fear; trade short BAS.DE 5d [research.oil_price.crossref_pubs -> finance.BAS.DE.log_return]
