@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT cyber GKG share 20d z-score > 1 leads QQQ absolute returns (realized volatility) higher by 1-3 days (+); trade long QQQ.abs_return 3d [gdelt.gkg.cyber_share -> finance.QQQ.abs_return] (parent: R2-0083)
