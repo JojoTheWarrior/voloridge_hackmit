@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/75074c2453bb47efa1f34dc003310245",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:18:31Z",
-  "updated_at": "2026-09-20T04:18:49Z",
+  "updated_at": "2026-09-20T04:19:26Z",
   "finished_at": null,
-  "elapsed_s": 18,
+  "elapsed_s": 55,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-202-gdelt-irn-conflict-events_x_finance-dht-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 8.69,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Null control: Iran conflict event 20d z-score > 1 leads XLE log returns by 1 day (+), expect weaker edge than DHT (hit 64%, 28 trades); trade long XLE 6d [gdelt.irn.conflict_events -> finance.XLE.log_return] (parent: R2-0104)"
 }
