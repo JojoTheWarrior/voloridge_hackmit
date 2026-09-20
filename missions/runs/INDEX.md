@@ -35,3 +35,4 @@
 | `20260920-031-FAILED-the-coal-share-of-us` | The coal share of US monthly generation rose when natural gas prices spiked after March 2026. | failed | 0 | None | None | None | None | None |
 | `20260920-032-FAILED-the-coal-share-of-us` | The coal share of US monthly generation rose when natural gas prices spiked after March 2026. | failed | 0 | None | None | None | None | None |
 | `20260920-033-FAILED-us-monthly-fuel-receipt-costs` | US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war. | failed | 0 | None | None | None | None | None |
+| `20260920-034-finance-ng-f-close_x_gdelt-usa-events` | US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war. | ok | 391 | 0.028054495900143347 | 0.6746506986027944 | 2.6763402450962968 | 2.1122179836005732 | 2.140272479500717 |
