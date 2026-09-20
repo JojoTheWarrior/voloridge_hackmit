@@ -49,4 +49,12 @@ describe('AppShell', () => {
     expect(screen.getByText('datasets page')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Close menu' })).not.toBeInTheDocument()
   })
+
+  it('prints the page alone: no sidebar, no menu bar, nothing clipped to the window', async () => {
+    const { container } = renderShell()
+    expect((await screen.findByRole('navigation', { name: 'Main' })).parentElement).toHaveClass('print:hidden')
+    expect(screen.getByRole('button', { name: 'Open menu' }).parentElement).toHaveClass('print:hidden')
+    expect(screen.getByRole('main')).toHaveClass('print:overflow-visible')
+    expect(container.firstElementChild).toHaveClass('print:block', 'print:h-auto')
+  })
 })

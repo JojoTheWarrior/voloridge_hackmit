@@ -82,6 +82,25 @@ describe('http api', () => {
       expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({})
     })
 
+    it('asks for an explorer with an empty post when there are no instructions, escaping the id', async () => {
+      const fetchMock = stubFetch({ 'POST /api/missions/a%2Fb/explorer': () => json({}, 202) })
+      expect(await createHttpApi().buildExplorer('a/b')).toBeUndefined()
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({})
+    })
+
+    it.each(['', '   ', '\n\t'])('leaves blank instructions %j out of the explorer request', async (instructions) => {
+      const fetchMock = stubFetch({ 'POST /api/missions/m1/explorer': () => json({}, 202) })
+      await createHttpApi().buildExplorer('m1', instructions)
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({})
+    })
+
+    it('passes instructions for the explorer along', async () => {
+      const fetchMock = stubFetch({ 'POST /api/missions/m1/explorer': () => json({}, 202) })
+      await createHttpApi().buildExplorer('m1', ' Add a heatmap layer ')
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({ instructions: 'Add a heatmap layer' })
+    })
+
     it('links a dataset', async () => {
       const fetchMock = stubFetch({ 'POST /api/datasets': () => json({ id: 'd9', name: 'FRED' }, 201) })
       expect(await createHttpApi().linkDataset({ name: 'FRED', url: 'https://fred.stlouisfed.org' })).toMatchObject({ id: 'd9' })
@@ -92,6 +111,7 @@ describe('http api', () => {
       ['createMission', 'POST /api/missions', 'hypothesis', 'Describe a connection to test'],
       ['sendMessage', 'POST /api/missions/m1/messages', 'text', 'Write a reply'],
       ['linkDataset', 'POST /api/datasets', 'url', 'Enter an http or https URL'],
+      ['buildExplorer', 'POST /api/missions/m1/explorer', 'text', 'Keep instructions under 2,000 characters'],
     ] as const)('maps a 422 from %s to a ValidationError', async (method, route, field, message) => {
       stubFetch({ [route]: () => json({ field, message }, 422) })
       const api = createHttpApi()
@@ -99,6 +119,7 @@ describe('http api', () => {
         createMission: () => api.createMission({ hypothesis: '', datasetIds: [] }),
         sendMessage: () => api.sendMessage('m1', ''),
         linkDataset: () => api.linkDataset({ name: 'x', url: 'ftp://x' }),
+        buildExplorer: () => api.buildExplorer('m1', 'x'.repeat(2001)),
       }
       const error = await calls[method]().catch((e) => e)
       expect(error).toBeInstanceOf(ValidationError)
@@ -111,6 +132,7 @@ describe('http api', () => {
       ['sendMessage', 'POST /api/missions/m1/messages', 404],
       ['markDone', 'POST /api/missions/m1/done', 404],
       ['generateReport', 'POST /api/missions/m1/report', 404],
+      ['buildExplorer', 'POST /api/missions/m1/explorer', 404],
     ] as const)('rejects when %s gets an error status', async (method, route, status) => {
       stubFetch({ [route]: () => json({ message: 'nope' }, status) })
       const api = createHttpApi()
@@ -120,6 +142,7 @@ describe('http api', () => {
         sendMessage: () => api.sendMessage('m1', 'hi'),
         markDone: () => api.markDone('m1'),
         generateReport: () => api.generateReport('m1'),
+        buildExplorer: () => api.buildExplorer('m1'),
       }
       const error = await calls[method]().catch((e) => e)
       expect(error).toBeInstanceOf(Error)
@@ -149,6 +172,7 @@ describe('http api', () => {
         [`GET /api/missions/${state.missions[0].id}`]: () => json(state.missions[0]),
         'POST /api/missions/m1/done': () => json({}),
         'POST /api/missions/m1/report': () => json({}, 202),
+        'POST /api/missions/m1/explorer': () => json({}, 202),
       })
       return { state, fetchMock, api: createHttpApi() }
     }
@@ -286,6 +310,15 @@ describe('http api', () => {
       const listener = vi.fn()
       const unsubscribe = api.subscribe(listener)
       await api.generateReport('m1')
+      expect(listener).toHaveBeenCalledTimes(1)
+      unsubscribe()
+    })
+
+    it('notifies straight after asking for an explorer', async () => {
+      const { api } = pollable()
+      const listener = vi.fn()
+      const unsubscribe = api.subscribe(listener)
+      await api.buildExplorer('m1', 'Add a heatmap layer')
       expect(listener).toHaveBeenCalledTimes(1)
       unsubscribe()
     })

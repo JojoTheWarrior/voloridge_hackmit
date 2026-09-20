@@ -6,7 +6,8 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    proxy: { '/api': 'http://127.0.0.1:8030' },
+    // xfwd passes the browser's own host along, which the server needs to write an explorer's content policy.
+    proxy: { '/api': { target: 'http://127.0.0.1:8030', xfwd: true } },
   },
   test: {
     environment: 'jsdom',

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 
@@ -34,14 +35,30 @@ EXPLORER_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "Cache-Control": "no-store",
 }
-EXPLORER_CSP = (
-    "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox; "
-    "default-src 'self' data: blob:; "
-    "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
-    "style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com; "
-    "font-src 'self' data: https://fonts.gstatic.com; "
-    "img-src * data: blob:; connect-src *; worker-src blob:; child-src blob:"
-)
+_ORIGIN = re.compile(r"https?://[A-Za-z0-9.\-\[\]:]+")
+
+
+def explorer_csp(origin: str) -> str:
+    """The policy for a served explorer document. It names our own origin rather than 'self': a document
+    sandboxed without allow-same-origin has an opaque origin, and 'self' then matches nothing, which
+    would block the explorer's own kit and data files."""
+    own = origin if _ORIGIN.fullmatch(origin) else ""
+    return (
+        "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox; "
+        f"default-src {own} data: blob:; "
+        f"script-src {own} 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+        f"style-src {own} 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com; "
+        f"font-src {own} data: https://fonts.gstatic.com; "
+        "img-src * data: blob:; connect-src *; worker-src blob:; child-src blob:"
+    ).replace("  ", " ")
+
+
+def browser_origin() -> str:
+    """The origin the browser addressed, which behind a proxy is not the Host this server sees."""
+    host = request.headers.get("X-Forwarded-Host", "")
+    scheme = request.headers.get("X-Forwarded-Proto", "http")
+    forwarded = f"{scheme}://{host}"
+    return forwarded if host and _ORIGIN.fullmatch(forwarded) else request.host_url.rstrip("/")
 
 
 class Invalid(Exception):
@@ -191,7 +208,7 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
             raise NotFound("File not found")
         response = send_file(file, mimetype=content_type(path), conditional=False, max_age=None)
         if extension(path) in DOCUMENT_EXTENSIONS:
-            response.headers["Content-Security-Policy"] = EXPLORER_CSP
+            response.headers["Content-Security-Policy"] = explorer_csp(browser_origin())
         return response
 
     @app.get("/api/missions/<mission_id>/attachments/<name>")

@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { makeReport } from '../../test/missions'
+import { makeExplorer, makeReport } from '../../test/missions'
 import type { Artifact, MissionEvent } from '../../types'
 import { EventList } from './EventList'
 
@@ -120,6 +120,43 @@ describe('EventList', () => {
       expect(screen.queryByRole('region', { name: 'Report' })).not.toBeInTheDocument()
       expect(screen.queryByText('Report ready')).not.toBeInTheDocument()
       expect(screen.getByRole('region', { name: 'Conclusion' })).toBeInTheDocument()
+    })
+  })
+
+  describe('explorer event', () => {
+    const events: MissionEvent[] = [thread[7], { id: 'report', at, kind: 'report' }, { id: 'explorer', at, kind: 'explorer' }]
+    const longDescription = 'Pan the map and select a site to see its evidence. '.repeat(10).trim()
+
+    function renderExplored(explorer?: ReturnType<typeof makeExplorer>) {
+      return render(
+        <MemoryRouter>
+          <EventList events={events} live={false} missionId="m 1" report={makeReport()} explorer={explorer} />
+        </MemoryRouter>,
+      )
+    }
+
+    it('shows a card with the title, a clamped description and a link to the explorer tab', () => {
+      renderExplored(makeExplorer({ description: longDescription }))
+      const card = within(screen.getByRole('region', { name: 'Explorer' }))
+      expect(card.getByText('Explorer ready')).toHaveClass('text-muted')
+      expect(card.getByText('Clinics by flood risk')).toHaveClass('font-medium')
+      expect(card.getByText(longDescription)).toHaveClass('line-clamp-2', 'text-muted')
+      expect(card.getByRole('link', { name: 'Open explorer' })).toHaveAttribute('href', '/missions/m%201/explorer')
+    })
+
+    it('matches the report card it sits under', () => {
+      renderExplored(makeExplorer())
+      const report = screen.getByRole('region', { name: 'Report' })
+      const explorer = screen.getByRole('region', { name: 'Explorer' })
+      expect(explorer.className).toBe(report.className)
+      expect(report.compareDocumentPosition(explorer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
+    it('renders nothing for the event when the explorer itself is missing', () => {
+      renderExplored()
+      expect(screen.queryByRole('region', { name: 'Explorer' })).not.toBeInTheDocument()
+      expect(screen.queryByText('Explorer ready')).not.toBeInTheDocument()
+      expect(screen.getByRole('region', { name: 'Report' })).toBeInTheDocument()
     })
   })
 })

@@ -137,7 +137,8 @@ class Store:
     def __init__(self, path: str | Path, *, now: Callable[[], str] = utc_now):
         self._now = now
         self._lock = threading.RLock()
-        path = Path(path)
+        # Absolute, because explorer files are handed to Flask, which resolves relative paths against the package.
+        path = Path(path).resolve()
         path.parent.mkdir(parents=True, exist_ok=True)
         self._explorers = path.parent / "explorers"
         self._db = sqlite3.connect(path, check_same_thread=False)

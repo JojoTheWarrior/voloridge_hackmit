@@ -1,7 +1,8 @@
-import type { MissionEvent, Report } from '../../types'
+import type { Explorer, MissionEvent, Report } from '../../types'
 import { ArtifactView } from '../artifacts/ArtifactView'
 import { ConclusionCard } from './ConclusionCard'
 import { ErrorEvent } from './ErrorEvent'
+import { ExplorerCard } from './ExplorerCard'
 import { ReportCard } from './ReportCard'
 import { StepEvent } from './StepEvent'
 import { ThoughtEvent } from './ThoughtEvent'
@@ -18,7 +19,7 @@ interface EventProps extends Omit<EventListProps, 'events'> {
   event: MissionEvent
 }
 
-function Event({ event, live, missionId, report }: EventProps) {
+function Event({ event, live, missionId, report, explorer }: EventProps) {
   switch (event.kind) {
     case 'user_message':
       return <UserMessage text={event.text} />
@@ -35,6 +36,8 @@ function Event({ event, live, missionId, report }: EventProps) {
     case 'report':
       // The event only marks the place; without the report itself there is nothing to show.
       return missionId !== undefined && report ? <ReportCard missionId={missionId} report={report} /> : null
+    case 'explorer':
+      return missionId !== undefined && explorer ? <ExplorerCard missionId={missionId} explorer={explorer} /> : null
   }
 }
 
@@ -42,18 +45,19 @@ interface EventListProps {
   events: MissionEvent[]
   /** Whether Devin is working right now; only then does the active step spin. */
   live: boolean
-  /** Needed only by a list that may contain the `report` event. */
+  /** Needed only by a list that may contain the `report` or `explorer` event. */
   missionId?: string
   report?: Report
+  explorer?: Explorer
 }
 
 /** Consecutive steps sit closer together than the rest of the thread so a run of them reads as one list. */
-export function EventList({ events, live, missionId, report }: EventListProps) {
+export function EventList({ events, live, missionId, report, explorer }: EventListProps) {
   if (events.length === 0) return null
   return (
     <div className="flex flex-col gap-6 [&>[data-step]+[data-step]]:-mt-3.5">
       {events.map((event) => (
-        <Event key={event.id} event={event} live={live} missionId={missionId} report={report} />
+        <Event key={event.id} event={event} live={live} missionId={missionId} report={report} explorer={explorer} />
       ))}
     </div>
   )

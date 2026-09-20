@@ -1,5 +1,5 @@
 import { SCRIPT, threadAt } from '../api/script'
-import type { Mission, MissionStatus, Report } from '../types'
+import type { Explorer, Mission, MissionStatus, Report } from '../types'
 
 let counter = 0
 
@@ -19,6 +19,7 @@ export function makeMission(status: MissionStatus, overrides: Partial<Mission> =
     status,
     datasetIds: [],
     reportPending: false,
+    explorerPending: false,
     createdAt,
     updatedAt: events.at(-1)!.at,
     events,
@@ -43,6 +44,17 @@ export function makeReport(overrides: Partial<Report> = {}): Report {
     caveats: ['A correlation is not a causal claim.'],
     nextQuestions: ['Does it hold over two years?', 'Is there a weekday effect?'],
     generatedAt: '2026-09-20T12:30:00.000Z',
+    ...overrides,
+  }
+}
+
+export function makeExplorer(overrides: Partial<Explorer> = {}): Explorer {
+  return {
+    version: 1,
+    title: 'Clinics by flood risk',
+    description: 'Pan the map and select a clinic to see the evidence behind its score.',
+    src: '/api/missions/m1/explorer/1/index.html',
+    builtAt: '2026-09-20T12:40:00.000Z',
     ...overrides,
   }
 }

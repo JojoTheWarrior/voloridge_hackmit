@@ -1,14 +1,15 @@
 import type { Dataset, Mission, MissionSummary } from '../types'
+import { buildExplorer, INSTRUCTIONS_MAX } from './explorer'
 import { seedDatasets, seedMissions } from './fixtures'
 import { ValidationError, type Api } from './index'
 import { buildReport } from './report'
 import { applyBeat, REPLY_BEAT, SCRIPT, type Beat } from './script'
 
 const TITLE_MAX = 48
-const REPORT_EVENT_ID = 'report'
+const NOT_BEATS = new Set(['user_message', 'error', 'report', 'explorer'])
 
-/** Writing the report takes a turn like any beat, so it queues behind whatever Devin is still doing. */
-type Turn = Beat | { kind: 'report' }
+/** Writing a report or building an explorer takes a turn like any beat, so it queues behind whatever Devin is still doing. */
+type Turn = Beat | { kind: 'report' } | { kind: 'explorer'; instructions: string }
 
 interface MockOptions {
   stepMs?: number
@@ -42,7 +43,7 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
   const listeners = new Set<() => void>()
   // Beats still to play per mission. A mission works while its queue drains and waits once it is empty.
   const queues = new Map<string, Turn[]>()
-  // Done missions that are only working on a report, and go back to done once it is delivered.
+  // Done missions that are only working on a report or an explorer, and go back to done once it is delivered.
   const settlesDone = new Set<string>()
   const timers = new Map<string, ReturnType<typeof setTimeout>>()
   let nextId = 1
@@ -56,10 +57,17 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
   }
 
   function take(mission: Mission, turn: Turn, at: string) {
-    if (turn.kind !== 'report') return applyBeat(mission, turn, at)
-    mission.report = buildReport(mission, at)
-    mission.reportPending = false
-    mission.events = [...mission.events.filter((e) => e.kind !== 'report'), { id: REPORT_EVENT_ID, at, kind: 'report' }]
+    if (turn.kind === 'report') {
+      mission.report = buildReport(mission, at)
+      mission.reportPending = false
+    } else if (turn.kind === 'explorer') {
+      mission.explorer = buildExplorer(mission, turn.instructions, at)
+      mission.explorerPending = false
+    } else {
+      return applyBeat(mission, turn, at)
+    }
+    // Each delivery is a single event, named after its kind, that moves to the end of the thread.
+    mission.events = [...mission.events.filter((e) => e.kind !== turn.kind), { id: turn.kind, at, kind: turn.kind }]
     mission.updatedAt = at
   }
 
@@ -85,7 +93,7 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
 
   for (const mission of missions.filter((m) => m.status === 'working')) {
     // Every beat adds one event, so the thread length says how far a seeded run has got.
-    const played = mission.events.filter((e) => e.kind !== 'user_message' && e.kind !== 'error' && e.kind !== 'report').length
+    const played = mission.events.filter((e) => !NOT_BEATS.has(e.kind)).length
     enqueue(mission, SCRIPT.slice(played))
   }
 
@@ -115,6 +123,7 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
         updatedAt: now,
         datasetIds: [...datasetIds],
         reportPending: false,
+        explorerPending: false,
         events: [{ id: 'e1', at: now, kind: 'user_message', text: trimmed }],
       }
       missions.unshift(mission)
@@ -145,6 +154,7 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       settlesDone.delete(id)
       mission.status = 'done'
       mission.reportPending = false
+      mission.explorerPending = false
       delete mission.needsUser
       notify()
     },
@@ -156,6 +166,18 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       mission.reportPending = true
       mission.status = 'working'
       enqueue(mission, [{ kind: 'report' }])
+      notify()
+    },
+
+    async buildExplorer(id, instructions = '') {
+      const mission = find(id)
+      const trimmed = instructions.trim()
+      if (trimmed.length > INSTRUCTIONS_MAX) throw new ValidationError('text', 'Keep instructions under 2,000 characters')
+      if (mission.explorerPending) return
+      if (mission.status === 'done') settlesDone.add(id)
+      mission.explorerPending = true
+      mission.status = 'working'
+      enqueue(mission, [{ kind: 'explorer', instructions: trimmed }])
       notify()
     },
 

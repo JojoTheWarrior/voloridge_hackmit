@@ -84,6 +84,57 @@ describe('useTheme', () => {
     expect(renderHook(() => useTheme()).result.current.theme).toBe('light')
   })
 
+  describe('shared between consumers', () => {
+    it('flips every consumer when one of them toggles', () => {
+      const toggle = renderHook(() => useTheme())
+      const frame = renderHook(() => useTheme())
+      act(() => toggle.result.current.toggle())
+      expect(toggle.result.current.theme).toBe('dark')
+      expect(frame.result.current.theme).toBe('dark')
+      act(() => frame.result.current.toggle())
+      expect(toggle.result.current.theme).toBe('light')
+      expect(localStorage.getItem(THEME_KEY)).toBe('light')
+    })
+
+    it('moves every consumer with the system', () => {
+      const first = renderHook(() => useTheme())
+      const second = renderHook(() => useTheme())
+      act(() => setSystemDark(true))
+      expect([first.result.current.theme, second.result.current.theme]).toEqual(['dark', 'dark'])
+    })
+
+    it('hands a consumer that mounts later the choice already made', () => {
+      const first = renderHook(() => useTheme())
+      act(() => first.result.current.toggle())
+      expect(renderHook(() => useTheme()).result.current.theme).toBe('dark')
+    })
+
+    it('listens to the system once, until the last consumer is gone', () => {
+      const first = renderHook(() => useTheme())
+      const second = renderHook(() => useTheme())
+      expect(listeners).toHaveLength(1)
+      first.unmount()
+      expect(listeners).toHaveLength(1)
+      act(() => setSystemDark(true))
+      expect(second.result.current.theme).toBe('dark')
+      second.unmount()
+      expect(listeners).toHaveLength(0)
+    })
+
+    it('keeps a choice made while storage is blocked for a consumer that mounts later', () => {
+      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+        throw new Error('denied')
+      })
+      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new Error('denied')
+      })
+      const first = renderHook(() => useTheme())
+      act(() => first.result.current.toggle())
+      expect(renderHook(() => useTheme()).result.current.theme).toBe('dark')
+      vi.restoreAllMocks()
+    })
+  })
+
   it('stops listening to the system when unmounted', () => {
     const { unmount } = renderHook(() => useTheme())
     expect(listeners).toHaveLength(1)

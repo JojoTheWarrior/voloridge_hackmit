@@ -1,27 +1,19 @@
-import { useRef, useState } from 'react'
 import { useApi } from '../api/context'
 import type { Mission } from '../types'
+import { useDevinRequest } from './useDevinRequest'
 
-/** Asks for a mission's report at most once at a time. `busy` covers the request itself and the wait for Devin. */
-export function useGenerateReport(mission: Pick<Mission, 'id' | 'reportPending'>): { busy: boolean; generate: () => Promise<void> } {
+/** Asks for a mission's report. `busy` covers the request itself and the wait for Devin. */
+export function useGenerateReport(mission: Mission): { busy: boolean; generate: () => Promise<void> } {
   const api = useApi()
-  const [asking, setAsking] = useState(false)
-  // State lags a render behind; the ref is what stops a second click in the same tick.
-  const locked = useRef(false)
+  const { busy, request } = useDevinRequest(mission, mission.reportPending, () => api.generateReport(mission.id))
 
   async function generate() {
-    if (locked.current || mission.reportPending) return
-    locked.current = true
-    setAsking(true)
     try {
-      await api.generateReport(mission.id)
+      await request()
     } catch {
       // Nothing changed; the control is still there to try again.
-    } finally {
-      locked.current = false
-      setAsking(false)
     }
   }
 
-  return { busy: asking || mission.reportPending, generate }
+  return { busy, generate }
 }

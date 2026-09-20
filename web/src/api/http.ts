@@ -90,6 +90,11 @@ export function createHttpApi(baseUrl = ''): Api {
       await change(`/missions/${encodeURIComponent(id)}/report`, {})
     },
 
+    async buildExplorer(id, instructions) {
+      const trimmed = instructions?.trim()
+      await change(`/missions/${encodeURIComponent(id)}/explorer`, trimmed ? { instructions: trimmed } : {})
+    },
+
     async listDatasets() {
       return read<Dataset[]>(await send('/datasets'))
     },

@@ -5,8 +5,9 @@ import type { Api } from '../api/index'
 import { createMockApi } from '../api/mock'
 import { REPLY_TEXT, SCRIPT } from '../api/script'
 import { makeMission } from '../test/missions'
-import { renderWithApp } from '../test/render'
+import { renderMissionView, renderWithApp } from '../test/render'
 import type { Artifact, Mission } from '../types'
+import { MissionLayout } from './MissionLayout'
 import { MissionPage } from './MissionPage'
 
 vi.mock('../components/artifacts/ArtifactView', () => ({
@@ -18,13 +19,7 @@ const FIRST_STEP = 'Read the linked datasets'
 
 function renderMission(missions: Mission[], id: string, wrap: (api: Api) => Api = (api) => api) {
   const api = wrap(createMockApi({ stepMs: STEP_MS, seed: { missions, datasets: [] } }))
-  return renderWithApp(
-    <Routes>
-      <Route path="missions/:id" element={<MissionPage />} />
-      <Route path="/" element={<p>home page</p>} />
-    </Routes>,
-    { api, route: `/missions/${id}` },
-  )
+  return renderMissionView(<MissionPage />, '', { api, route: `/missions/${id}` })
 }
 
 const replyBox = () => screen.getByRole('textbox', { name: 'Reply to Devin' })
@@ -241,7 +236,9 @@ describe('MissionPage', () => {
     const api = createMockApi({ stepMs: STEP_MS, seed: { missions: [first, second], datasets: [] } })
     renderWithApp(
       <Routes>
-        <Route path="missions/:id" element={<><Link to={`/missions/${second.id}`}>next</Link><MissionPage /></>} />
+        <Route path="missions/:id" element={<><Link to={`/missions/${second.id}`}>next</Link><MissionLayout /></>}>
+          <Route index element={<MissionPage />} />
+        </Route>
       </Routes>,
       { api, route: `/missions/${first.id}` },
     )

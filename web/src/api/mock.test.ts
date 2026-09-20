@@ -1,4 +1,4 @@
-import { makeMission } from '../test/missions'
+import { makeExplorer, makeMission } from '../test/missions'
 import type { Mission } from '../types'
 import { ValidationError } from './index'
 import { createMockApi } from './mock'
@@ -359,10 +359,184 @@ describe('mock api', () => {
     })
   })
 
-  it('creates missions with no report pending', async () => {
+  describe('buildExplorer', () => {
+    it('goes to work on the explorer without adding a message, then delivers version 1 and waits', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      const listener = vi.fn()
+      api.subscribe(listener)
+
+      await api.buildExplorer(mission.id)
+      const pending = await api.getMission(mission.id)
+      expect(pending).toMatchObject({ status: 'working', explorerPending: true })
+      expect(pending?.explorer).toBeUndefined()
+      expect(pending?.events).toEqual(mission.events)
+      expect(listener).toHaveBeenCalledTimes(1)
+
+      vi.advanceTimersByTime(STEP_MS)
+      const delivered = await api.getMission(mission.id)
+      expect(delivered).toMatchObject({ status: 'waiting', explorerPending: false })
+      expect(delivered?.explorer).toMatchObject({ version: 1, src: `/api/missions/${mission.id}/explorer/1/index.html` })
+      expect(delivered?.explorer?.title).not.toBe('')
+      expect(delivered?.explorer?.description).not.toBe('')
+      expect(delivered?.events.at(-1)).toEqual({ id: 'explorer', kind: 'explorer', at: delivered?.explorer?.builtAt })
+      expect(delivered?.events.slice(0, -1)).toEqual(mission.events)
+      expect(delivered?.updatedAt).toBe(delivered?.explorer?.builtAt)
+      expect(listener).toHaveBeenCalledTimes(2)
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('escapes the mission id in the src', async () => {
+      const mission = makeMission('waiting', { id: 'a/b' })
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      vi.advanceTimersByTime(STEP_MS)
+      expect((await api.getMission(mission.id))?.explorer?.src).toBe('/api/missions/a%2Fb/explorer/1/index.html')
+    })
+
+    it('bumps the version on a change request and says what was asked for', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      vi.advanceTimersByTime(STEP_MS)
+      const first = (await api.getMission(mission.id))!.explorer!
+
+      await api.buildExplorer(mission.id, '  Add a heatmap layer  ')
+      const pending = await api.getMission(mission.id)
+      expect(pending).toMatchObject({ explorerPending: true, explorer: first })
+      vi.advanceTimersByTime(STEP_MS)
+
+      const rebuilt = await api.getMission(mission.id)
+      expect(rebuilt?.explorer).toMatchObject({ version: 2, src: `/api/missions/${mission.id}/explorer/2/index.html` })
+      expect(rebuilt?.explorer?.description).toBe(`${first.description} Add a heatmap layer`)
+      expect(kinds(rebuilt)?.filter((k) => k === 'explorer')).toHaveLength(1)
+      expect(new Set(rebuilt?.events.map((e) => e.id)).size).toBe(rebuilt?.events.length)
+    })
+
+    it.each([undefined, '', '  \n'])('treats instructions %j as a plain rebuild', async (instructions) => {
+      const mission = makeMission('waiting', { explorer: makeExplorer({ version: 4 }) })
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id, instructions)
+      vi.advanceTimersByTime(STEP_MS)
+      const rebuilt = (await api.getMission(mission.id))?.explorer
+      expect(rebuilt?.version).toBe(5)
+      expect(rebuilt?.description.endsWith(' ')).toBe(false)
+    })
+
+    it('puts the explorer after the report', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      await api.generateReport(mission.id)
+      vi.advanceTimersByTime(STEP_MS * 2)
+      await api.buildExplorer(mission.id)
+      vi.advanceTimersByTime(STEP_MS)
+      expect(kinds(await api.getMission(mission.id))?.slice(-3)).toEqual(['conclusion', 'report', 'explorer'])
+    })
+
+    it('returns a done mission to done', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      expect((await api.getMission(mission.id))?.status).toBe('working')
+      vi.advanceTimersByTime(STEP_MS)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'done', explorerPending: false })
+    })
+
+    it('returns a done mission to done only once the report and the explorer are both in', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      await api.buildExplorer(mission.id)
+      vi.advanceTimersByTime(STEP_MS)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'working', reportPending: false, explorerPending: true })
+      vi.advanceTimersByTime(STEP_MS)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'done', explorerPending: false })
+    })
+
+    it('leaves a done mission open if you reply while the explorer is being built', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      await api.sendMessage(mission.id, 'One more thing')
+      vi.advanceTimersByTime(STEP_MS * 2)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'waiting', explorerPending: false })
+    })
+
+    it('does nothing when asked again while one is pending', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      const listener = vi.fn()
+      api.subscribe(listener)
+      await api.buildExplorer(mission.id)
+      await api.buildExplorer(mission.id, 'Add a heatmap layer')
+      expect(listener).toHaveBeenCalledTimes(1)
+      expect(vi.getTimerCount()).toBe(1)
+      vi.advanceTimersByTime(STEP_MS * 3)
+      const delivered = await api.getMission(mission.id)
+      expect(delivered).toMatchObject({ status: 'waiting', explorerPending: false, explorer: { version: 1 } })
+      expect(delivered?.explorer?.description).not.toContain('heatmap')
+    })
+
+    it('rejects instructions over 2,000 characters and changes nothing', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      const error = await api.buildExplorer(mission.id, 'x'.repeat(2001)).catch((e) => e)
+      expect(error).toBeInstanceOf(ValidationError)
+      expect(error).toMatchObject({ field: 'text', message: 'Keep instructions under 2,000 characters' })
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'waiting', explorerPending: false })
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('accepts exactly 2,000 characters', async () => {
+      const mission = makeMission('waiting')
+      await expect(seeded(mission).buildExplorer(mission.id, 'x'.repeat(2000))).resolves.toBeUndefined()
+      vi.clearAllTimers()
+    })
+
+    it('delivers after the script when asked mid-run', async () => {
+      const mission = makeMission('working')
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      vi.advanceTimersByTime(STEP_MS * (SCRIPT.length - (mission.events.length - 1)))
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'working', explorerPending: true })
+      vi.advanceTimersByTime(STEP_MS)
+      const settled = await api.getMission(mission.id)
+      expect(settled).toMatchObject({ status: 'waiting', explorerPending: false })
+      expect(kinds(settled)?.slice(-2)).toEqual(['conclusion', 'explorer'])
+    })
+
+    it('is dropped when the mission is marked done first', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      await api.buildExplorer(mission.id)
+      await api.markDone(mission.id)
+      vi.advanceTimersByTime(STEP_MS * 2)
+      const done = await api.getMission(mission.id)
+      expect(done).toMatchObject({ status: 'done', explorerPending: false })
+      expect(done?.explorer).toBeUndefined()
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('does not mistake a delivered explorer for a played beat when carrying a seeded mission on', async () => {
+      const played = makeMission('working')
+      const mission = { ...played, events: [...played.events, { id: 'explorer', at: played.updatedAt, kind: 'explorer' as const }] }
+      const api = seeded(mission)
+      vi.advanceTimersByTime(STEP_MS * SCRIPT.length)
+      expect(kinds(await api.getMission(mission.id))?.filter((k) => k !== 'explorer')).toEqual(['user_message', ...SCRIPT.map((b) => b.kind)])
+    })
+
+    it('rejects an unknown mission', async () => {
+      await expect(seeded().buildExplorer('nope')).rejects.toThrow('Mission not found')
+    })
+  })
+
+  it('creates missions with no report or explorer, and none pending', async () => {
     const mission = await createMockApi({ seed: empty }).createMission({ hypothesis: 'A leads B', datasetIds: [] })
     expect(mission.reportPending).toBe(false)
     expect(mission.report).toBeUndefined()
+    expect(mission.explorerPending).toBe(false)
+    expect(mission.explorer).toBeUndefined()
   })
 
   it.each(['', '   ', '\n\t'])('rejects blank hypothesis %j', async (hypothesis) => {

@@ -8,7 +8,9 @@ interface Folded {
   rest: MissionEvent[]
 }
 
-/** Once a mission is done, everything between the opening question and the conclusion folds away, except a report: that is what people come back for. */
+const isDelivery = (event: MissionEvent) => event.kind === 'report' || event.kind === 'explorer'
+
+/** Once a mission is done, everything between the opening question and the conclusion folds away, except a report or an explorer: those are what people come back for. */
 export function foldWork({ status, events }: Pick<Mission, 'status' | 'events'>): Folded {
   const conclusion = events.findLastIndex((e) => e.kind === 'conclusion')
   if (status !== 'done' || conclusion < 0) return { opening: [], work: [], rest: events }
@@ -16,7 +18,7 @@ export function foldWork({ status, events }: Pick<Mission, 'status' | 'events'>)
   const before = events.slice(start, conclusion)
   return {
     opening: events.slice(0, start),
-    work: before.filter((e) => e.kind !== 'report'),
-    rest: [events[conclusion], ...before.filter((e) => e.kind === 'report'), ...events.slice(conclusion + 1)],
+    work: before.filter((e) => !isDelivery(e)),
+    rest: [events[conclusion], ...before.filter(isDelivery), ...events.slice(conclusion + 1)],
   }
 }

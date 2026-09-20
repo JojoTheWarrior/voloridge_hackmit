@@ -3,16 +3,10 @@ import { useStickToBottom } from '../../hooks/useStickToBottom'
 import type { Mission } from '../../types'
 import { EventList } from './EventList'
 import { foldWork } from './foldWork'
-import { MissionHeader } from './MissionHeader'
 import { ReplyComposer } from './ReplyComposer'
 import { WorkLog } from './WorkLog'
 
-interface MissionThreadProps {
-  mission: Mission
-  reconnecting: boolean
-}
-
-export function MissionThread({ mission, reconnecting }: MissionThreadProps) {
+export function MissionThread({ mission }: { mission: Mission }) {
   const api = useApi()
   const { ref, onScroll, stick } = useStickToBottom<HTMLDivElement>(mission.events.length)
   const { opening, work, rest } = foldWork(mission)
@@ -25,13 +19,11 @@ export function MissionThread({ mission, reconnecting }: MissionThreadProps) {
 
   return (
     <div className="flex h-full flex-col">
-      <MissionHeader mission={mission} reconnecting={reconnecting} />
-
       <div ref={ref} onScroll={onScroll} role="log" aria-label="Mission thread" className="min-h-0 flex-1 overflow-y-auto">
         <article className="mx-auto flex w-full max-w-[720px] flex-col gap-6 px-6 pt-10 pb-8">
           <EventList events={opening} live={live} />
           <WorkLog events={work} />
-          <EventList events={rest} live={live} missionId={mission.id} report={mission.report} />
+          <EventList events={rest} live={live} missionId={mission.id} report={mission.report} explorer={mission.explorer} />
         </article>
       </div>
 

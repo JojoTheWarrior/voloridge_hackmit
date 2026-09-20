@@ -6,7 +6,7 @@ import zipfile
 
 import pytest
 
-from server.app import EXPLORER_CSP, create_app
+from server.app import create_app, explorer_csp
 from server.brief import EXPLORER_OPENING, REPORT_REQUEST, build_explorer_request
 from server.devin import Attachment, AttachmentRejected, DevinUnavailable, FakeDevin, SessionRef
 from server.poller import Poller
@@ -642,16 +642,36 @@ def test_the_entry_is_served_sandboxed(client, built):
     assert response.headers["Access-Control-Allow-Origin"] == "*"
     assert response.headers["X-Content-Type-Options"] == "nosniff"
     assert response.headers["Cache-Control"] == "no-store"
-    assert response.headers["Content-Security-Policy"] == EXPLORER_CSP
+    assert response.headers["Content-Security-Policy"] == explorer_csp("http://localhost")
 
 
-def test_the_policy_is_the_contracts_word_for_word():
-    assert EXPLORER_CSP == (
-        "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox; default-src 'self' data: blob:; "
-        "script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' "
-        "'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' "
-        "data: https://fonts.gstatic.com; img-src * data: blob:; connect-src *; worker-src blob:; child-src blob:")
-    assert "allow-same-origin" not in EXPLORER_CSP
+def test_the_policy_names_the_servers_own_origin_because_self_matches_nothing_when_sandboxed():
+    """A document sandboxed without allow-same-origin has an opaque origin, and Chrome then matches
+    'self' against nothing, which would block the explorer's own kit and data files."""
+    policy = explorer_csp("http://localhost:5173")
+    assert policy == (
+        "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox; "
+        "default-src http://localhost:5173 data: blob:; "
+        "script-src http://localhost:5173 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; "
+        "style-src http://localhost:5173 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net "
+        "https://fonts.googleapis.com; font-src http://localhost:5173 data: https://fonts.gstatic.com; "
+        "img-src * data: blob:; connect-src *; worker-src blob:; child-src blob:")
+    assert "'self'" not in policy and "allow-same-origin" not in policy
+
+
+def test_the_policy_follows_the_host_the_browser_used(client, built):
+    response = client.get(f"/api/missions/{built}/explorer/2/index.html", headers={"Host": "127.0.0.1:8030"})
+    assert "script-src http://127.0.0.1:8030 " in response.headers["Content-Security-Policy"]
+
+
+@pytest.mark.parametrize("host", ["evil.test; script-src *", "a b", "x'y", "h\\st", ""])
+def test_a_malformed_host_never_reaches_the_policy(client, built, host):
+    response = client.get(f"/api/missions/{built}/explorer/2/index.html", headers={"Host": host})
+    policy = response.headers.get("Content-Security-Policy", "")
+    assert response.status_code in (200, 400)
+    assert "script-src *" not in policy and "evil.test;" not in policy
+    if response.status_code == 200:
+        assert policy.startswith("sandbox allow-scripts ")
 
 
 @pytest.mark.parametrize("path, content_type, sandboxed", [
@@ -1007,3 +1027,26 @@ def test_explorer_end_to_end_with_the_fake_and_the_poller(store, kit):
     before = client.get(f"/api/missions/{mission_id}").get_json()
     _tick(poller, clock, 2)
     assert client.get(f"/api/missions/{mission_id}").get_json() == before
+
+
+def test_behind_a_proxy_the_policy_names_the_address_the_browser_used(client, built):
+    """The Vite dev proxy (and any reverse proxy) rewrites Host to the backend's own address."""
+    response = client.get(
+        f"/api/missions/{built}/explorer/2/index.html",
+        headers={"Host": "127.0.0.1:8030", "X-Forwarded-Host": "localhost:5173", "X-Forwarded-Proto": "http"})
+    policy = response.headers["Content-Security-Policy"]
+    assert "script-src http://localhost:5173 " in policy and "127.0.0.1:8030" not in policy
+
+
+def test_a_forwarded_https_host_is_honoured(client, built):
+    response = client.get(
+        f"/api/missions/{built}/explorer/2/index.html",
+        headers={"X-Forwarded-Host": "kingdom.example", "X-Forwarded-Proto": "https"})
+    assert "script-src https://kingdom.example " in response.headers["Content-Security-Policy"]
+
+
+@pytest.mark.parametrize("forwarded", ["evil.test; script-src *", "a, b", "x y"])
+def test_a_malformed_forwarded_host_falls_back_to_the_real_one(client, built, forwarded):
+    response = client.get(f"/api/missions/{built}/explorer/2/index.html", headers={"X-Forwarded-Host": forwarded})
+    policy = response.headers["Content-Security-Policy"]
+    assert "script-src http://localhost " in policy and "evil.test" not in policy

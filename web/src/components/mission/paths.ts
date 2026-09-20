@@ -5,3 +5,7 @@ export function missionPath(missionId: string): string {
 export function reportPath(missionId: string): string {
   return `${missionPath(missionId)}/report`
 }
+
+export function explorerPath(missionId: string): string {
+  return `${missionPath(missionId)}/explorer`
+}

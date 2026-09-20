@@ -3,7 +3,8 @@ import { useRef } from 'react'
 import { useApi } from '../../api/context'
 import type { Mission, MissionStatus } from '../../types'
 import { StatusDot } from '../StatusDot'
-import { ReportControl } from './ReportControl'
+import { MissionTabs } from './MissionTabs'
+import { OUTLINE_PILL } from './pill'
 
 const STATUS_TEXT: Record<MissionStatus, string> = {
   working: 'Devin is working',
@@ -35,14 +36,18 @@ export function MissionHeader({ mission, reconnecting }: MissionHeaderProps) {
   }
 
   return (
-    <header className="flex h-12 shrink-0 items-center gap-2.5 border-b border-line-soft bg-paper px-4 text-[13px] sm:px-6">
-      <StatusDot status={mission.status} />
-      <h1 className="truncate font-medium">{mission.title}</h1>
-      {/* On phones the dot carries the status so the title keeps the room; an outage is always spelled out. */}
-      <span className={`shrink-0 text-muted ${reconnecting ? '' : 'max-sm:hidden'}`}>
-        {reconnecting ? 'Reconnecting' : STATUS_TEXT[mission.status]}
-      </span>
-      <div className="ml-auto flex shrink-0 items-center gap-3 pl-2 sm:gap-4 sm:pl-3">
+    // One row from tablet up; on phones the tabs take a second row so the title keeps the first.
+    <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 border-b border-line-soft bg-paper px-4 text-[13px] sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-5 sm:px-6 xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] print:hidden">
+      <div className="flex h-12 min-w-0 items-center gap-2.5">
+        <StatusDot status={mission.status} />
+        <h1 className="truncate font-medium">{mission.title}</h1>
+        {/* On phones the dot carries the status so the title keeps the room; an outage is always spelled out. */}
+        <span className={`shrink-0 text-muted ${reconnecting ? '' : 'max-sm:hidden'}`}>
+          {reconnecting ? 'Reconnecting' : STATUS_TEXT[mission.status]}
+        </span>
+      </div>
+      <MissionTabs mission={mission} className="max-sm:order-last max-sm:col-span-2 max-sm:-mx-1.5 max-sm:pb-2" />
+      <div className="flex shrink-0 items-center justify-end gap-3 sm:gap-4">
         {mission.sessionUrl && (
           <a
             href={mission.sessionUrl}
@@ -55,13 +60,8 @@ export function MissionHeader({ mission, reconnecting }: MissionHeaderProps) {
             <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
           </a>
         )}
-        <ReportControl mission={mission} />
         {mission.status !== 'done' && (
-          <button
-            type="button"
-            onClick={markDone}
-            className="rounded-full border border-line px-3 py-1 transition-colors duration-150 hover:border-faint"
-          >
+          <button type="button" onClick={markDone} className={OUTLINE_PILL}>
             Mark done
           </button>
         )}

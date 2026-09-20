@@ -76,4 +76,28 @@ describe('foldWork', () => {
     mission.events.splice(2, 0, { id: 'report', at, kind: 'report' })
     expect(foldWork(mission).rest).toEqual(mission.events)
   })
+
+  it('keeps an explorer in view just as it keeps a report, in the order they arrived', () => {
+    const mission = makeMission('done')
+    mission.events.push({ id: 'report', at, kind: 'report' }, { id: 'explorer', at, kind: 'explorer' })
+    const { work, rest } = foldWork(mission)
+    expect(kinds(rest)).toEqual(['conclusion', 'report', 'explorer'])
+    expect(kinds(work)).not.toContain('explorer')
+  })
+
+  it('lifts an explorer built before the conclusion out of the fold, to just after the conclusion', () => {
+    const mission = makeMission('done')
+    const conclusion = mission.events.pop()!
+    mission.events.push({ id: 'explorer', at, kind: 'explorer' }, { id: 'report', at, kind: 'report' }, conclusion, { id: 'u2', at, kind: 'user_message', text: 'Thanks' })
+    const { opening, work, rest } = foldWork(mission)
+    expect(kinds(rest)).toEqual(['conclusion', 'explorer', 'report', 'user_message'])
+    expect(kinds(work)).not.toContain('explorer')
+    expect(opening.length + work.length + rest.length).toBe(mission.events.length)
+  })
+
+  it('leaves an explorer where it is while nothing is folded', () => {
+    const mission = makeMission('waiting')
+    mission.events.splice(2, 0, { id: 'explorer', at, kind: 'explorer' })
+    expect(foldWork(mission).rest).toEqual(mission.events)
+  })
 })

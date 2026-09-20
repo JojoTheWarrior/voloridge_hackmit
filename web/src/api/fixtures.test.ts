@@ -41,8 +41,8 @@ describe('seeds', () => {
     }
   })
 
-  it('start with no report pending', () => {
-    missions.forEach((m) => expect(m.reportPending).toBe(false))
+  it('start with no report or explorer pending', () => {
+    missions.forEach((m) => expect(m).toMatchObject({ reportPending: false, explorerPending: false }))
   })
 
   describe('the one finished report', () => {
@@ -50,11 +50,13 @@ describe('seeds', () => {
     const [mission] = reported
     const report = mission?.report
 
-    it('belongs to a done mission and closes its thread', () => {
+    it('belongs to a done mission and follows its conclusion', () => {
       expect(reported.map((m) => m.status)).toEqual(['done'])
       expect(missions.flatMap((m) => m.events).filter((e) => e.kind === 'report')).toHaveLength(1)
-      expect(mission.events.at(-1)).toEqual({ id: 'report', at: report?.generatedAt, kind: 'report' })
-      expect(Date.parse(report!.generatedAt)).toBeGreaterThan(Date.parse(mission.events.at(-2)!.at))
+      const index = mission.events.findIndex((e) => e.kind === 'report')
+      expect(mission.events[index]).toEqual({ id: 'report', at: report?.generatedAt, kind: 'report' })
+      expect(mission.events[index - 1].kind).toBe('conclusion')
+      expect(Date.parse(report!.generatedAt)).toBeGreaterThan(Date.parse(mission.events[index - 1].at))
     })
 
     it('features artifacts from its own thread and repeats the numbers of its conclusion', () => {
@@ -80,6 +82,27 @@ describe('seeds', () => {
       expect(report?.keyArtifactIds.length).toBeLessThanOrEqual(3)
       expect(report?.caveats.length).toBeLessThanOrEqual(4)
       expect(report?.nextQuestions.length).toBeLessThanOrEqual(3)
+    })
+  })
+
+  describe('the one ready explorer', () => {
+    const explored = missions.filter((m) => m.explorer)
+    const [mission] = explored
+    const explorer = mission?.explorer
+
+    it('belongs to a done mission and closes its thread, after the report', () => {
+      expect(explored.map((m) => m.status)).toEqual(['done'])
+      expect(missions.flatMap((m) => m.events).filter((e) => e.kind === 'explorer')).toHaveLength(1)
+      expect(mission.events.at(-1)).toEqual({ id: 'explorer', at: explorer?.builtAt, kind: 'explorer' })
+      expect(mission.events.at(-2)?.kind).toBe('report')
+      expect(Date.parse(explorer!.builtAt)).toBeGreaterThan(Date.parse(mission.events.at(-2)!.at))
+      expect(mission.updatedAt).toBe(explorer?.builtAt)
+    })
+
+    it('points at the first build of its own mission', () => {
+      expect(explorer).toMatchObject({ version: 1, src: `/api/missions/${mission.id}/explorer/1/index.html` })
+      expect(explorer?.title).not.toBe('')
+      expect(explorer?.description).not.toBe('')
     })
   })
 

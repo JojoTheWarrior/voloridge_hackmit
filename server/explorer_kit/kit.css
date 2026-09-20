@@ -1,1 +1,246 @@
-/* Placeholder: the kit agent replaces this file. */
+/* Kingdom explorer kit: the product's design system as plain CSS.
+   One ink, two grays, hairlines. No colour, no shadows, no gradients. Geist 400/500, numbers in Geist Mono. */
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap");
+
+:root {
+  color-scheme: light;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --color-paper: #ffffff;
+  --color-ink: #0a0a0a;
+  --color-muted: #8c8c8c;
+  --color-faint: #bdbdbd;
+  --color-line: #e5e5e5;
+  --color-line-soft: #efefef;
+  --color-fill: #f4f4f4;
+  --color-side: #fafafa;
+  --color-hover: #f0f0f0;
+  --color-series-3: #d0d0d0;
+  --color-series-4: #dcdcdc;
+  --color-scrim: rgb(10 10 10 / 0.2);
+  --k-panel: 360px;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #0a0a0a;
+  --color-ink: #ededed;
+  --color-muted: #8f8f8f;
+  --color-faint: #5e5e5e;
+  --color-line: #2b2b2b;
+  --color-line-soft: #1e1e1e;
+  --color-fill: #1a1a1a;
+  --color-side: #101010;
+  --color-hover: #202020;
+  --color-series-3: #474747;
+  --color-series-4: #3a3a3a;
+  --color-scrim: rgb(0 0 0 / 0.6);
+}
+
+/* Base */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: 400 14px/1.5 var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, p, dl, dd, ol, ul, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+h1, h2, h3 { font-weight: 500; letter-spacing: -0.015em; }
+b, strong { font-weight: 500; }
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
+img { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+a, button, input { transition: color 150ms, background-color 150ms, border-color 150ms, opacity 150ms; }
+
+.k-mono { font-family: var(--font-mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.k-muted { color: var(--color-muted); }
+.k-label { font-size: 12px; color: var(--color-muted); }
+.k-title { font-size: 18px; line-height: 1.3; letter-spacing: -0.02em; }
+.k-prose { font-size: 14px; line-height: 1.6; }
+.k-truncate { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.k-spread { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.k-stack { display: grid; gap: 16px; }
+[hidden] { display: none !important; }
+
+/* App frame: header, stage (map or canvas), side panel. The page itself never scrolls. */
+.k-app {
+  display: grid;
+  grid-template: "header header" 48px "stage panel" minmax(0, 1fr) / minmax(0, 1fr) var(--k-panel);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+.k-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--color-line-soft);
+  font-size: 13px;
+}
+.k-header h1 { font-size: 13px; letter-spacing: 0; white-space: nowrap; }
+.k-header p { flex: 1; color: var(--color-muted); }
+.k-stage { grid-area: stage; position: relative; min-width: 0; min-height: 0; background: var(--color-fill); }
+/* Doubled class: MapLibre's own stylesheet loads later and would set position back to relative. */
+.k-map.k-map { position: absolute; inset: 0; }
+.k-map > .k-state { height: 100%; }
+.k-panel {
+  grid-area: panel;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-left: 1px solid var(--color-line-soft);
+  background: var(--color-paper);
+}
+.k-section { padding: 20px; border-bottom: 1px solid var(--color-line-soft); }
+.k-section:last-child { border-bottom: 0; }
+.k-sheet-handle { display: none; }
+
+/* Things that float over the stage */
+.k-overlay { position: absolute; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.k-overlay.k-tl { top: 12px; left: 12px; }
+.k-overlay.k-bl { bottom: 12px; left: 12px; }
+.k-card { border: 1px solid var(--color-line); border-radius: 12px; background: var(--color-paper); padding: 20px; }
+.k-card.k-tight { border-radius: 10px; padding: 10px 12px; }
+
+/* Buttons: outline pill by default; at most one filled pill per view. */
+.k-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.k-btn:hover { border-color: var(--color-faint); }
+.k-btn.k-primary { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-paper); padding: 6px 16px; }
+.k-btn.k-primary:hover { opacity: 0.85; }
+.k-icon-btn { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; color: var(--color-muted); }
+.k-icon-btn:hover { background: var(--color-fill); color: var(--color-ink); }
+.k-icon-btn svg, .k-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Segmented toggle: <div class="k-seg" role="group"><button aria-pressed="true">… */
+.k-seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--color-line); border-radius: 999px; background: var(--color-paper); }
+.k-seg button { border-radius: 999px; padding: 3px 12px; font-size: 13px; color: var(--color-muted); }
+.k-seg button:hover { color: var(--color-ink); }
+.k-seg button[aria-pressed="true"] { background: var(--color-hover); color: var(--color-ink); }
+
+/* Range slider. kit.js keeps --k-pos in step with the value so the track fills with ink. */
+.k-range { --k-pos: 0%; appearance: none; -webkit-appearance: none; display: block; width: 100%; height: 20px; margin: 0; background: none; cursor: pointer; }
+.k-range::-webkit-slider-runnable-track { height: 2px; border-radius: 2px; background: linear-gradient(to right, var(--color-ink) var(--k-pos), var(--color-line) var(--k-pos)); }
+.k-range::-moz-range-track { height: 2px; border-radius: 2px; background: var(--color-line); }
+.k-range::-moz-range-progress { height: 2px; border-radius: 2px; background: var(--color-ink); }
+.k-range::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -6px; border: 0; border-radius: 50%; background: var(--color-ink); }
+.k-range::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: var(--color-ink); }
+.k-range:focus-visible { outline: none; }
+.k-range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+.k-range:focus-visible::-moz-range-thumb { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+
+/* Meter: a 2px line filled to --k-pos. The quiet way to show one score. */
+.k-meter { --k-pos: 0%; height: 2px; border-radius: 2px; background: linear-gradient(to right, var(--color-ink) var(--k-pos), var(--color-line) var(--k-pos)); }
+
+/* Ranked list: <ol class="k-list"><li><button class="k-rank">… */
+.k-list { display: grid; gap: 1px; margin: 0 -10px; }
+.k-rank { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; border-radius: 6px; font-size: 13px; }
+.k-rank:hover { background: var(--color-fill); }
+.k-rank[aria-current="true"] { background: var(--color-hover); }
+.k-rank > :first-child { font: 400 11px var(--font-mono); color: var(--color-faint); }
+.k-rank > :last-child { font: 400 13px var(--font-mono); letter-spacing: -0.02em; }
+.k-rank small { display: block; font-size: 12px; color: var(--color-muted); }
+.k-rank span, .k-rank small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Stats: label over a mono value. .k-hero is the one big number of a detail view. */
+.k-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px; }
+.k-stat dt { font-size: 12px; color: var(--color-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.k-stat dd { margin-top: 2px; font: 400 18px/1.3 var(--font-mono); letter-spacing: -0.03em; }
+.k-hero { font: 400 44px/1 var(--font-mono); letter-spacing: -0.05em; }
+
+/* Key/value rows */
+.k-kv > div { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--color-line-soft); font-size: 13px; }
+.k-kv > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.k-kv > div:first-child { padding-top: 0; }
+.k-kv dt { color: var(--color-muted); white-space: nowrap; }
+.k-kv dd { text-align: right; }
+
+/* Evidence frame: the picture that proves the row. Give it an aspect ratio so nothing jumps. */
+.k-evidence > div { aspect-ratio: 3 / 2; overflow: hidden; border-radius: 6px; background: var(--color-fill); display: grid; place-items: center; font-size: 11px; color: var(--color-muted); }
+.k-evidence img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 150ms; }
+.k-evidence img.k-loaded { opacity: 1; }
+.k-evidence figcaption { padding-top: 8px; font-size: 12px; line-height: 1.5; color: var(--color-muted); }
+
+.k-badge { display: inline-flex; align-items: center; border: 1px solid var(--color-line); border-radius: 999px; padding: 1px 8px; font-size: 11px; line-height: 18px; color: var(--color-muted); white-space: nowrap; }
+.k-callout { border-radius: 8px; background: var(--color-fill); padding: 12px 14px; font-size: 13px; line-height: 1.55; }
+.k-callout .k-label { display: block; padding-bottom: 2px; }
+
+/* Legend: likelihood is ink, never hue. Each <i style="--s:0.5"> is one step from faint to full. */
+.k-legend { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--color-muted); }
+.k-ramp { display: flex; align-items: center; gap: 5px; }
+.k-ramp i { width: calc(5px + 9px * var(--s)); aspect-ratio: 1; border-radius: 50%; background: var(--color-ink); opacity: calc(0.14 + 0.76 * var(--s)); }
+.k-ramp.k-bars { gap: 2px; }
+.k-ramp.k-bars i { width: 16px; height: 8px; aspect-ratio: auto; border-radius: 1px; }
+
+/* Empty, loading and error states */
+.k-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 180px; padding: 32px 24px; text-align: center; }
+.k-state h2 { font-size: 15px; }
+.k-state p { max-width: 260px; font-size: 13px; color: var(--color-muted); }
+.k-state .k-btn { margin-top: 10px; }
+.k-spinner { width: 14px; height: 14px; border: 1.5px solid var(--color-line); border-top-color: var(--color-ink); border-radius: 50%; animation: k-spin 700ms linear infinite; }
+@keyframes k-spin { to { transform: rotate(360deg); } }
+@keyframes k-fade-in { from { opacity: 0; } }
+.k-fade-in { animation: k-fade-in 150ms ease-out; }
+
+.k-tooltip { position: absolute; z-index: 3; top: 0; left: 0; pointer-events: none; max-width: 240px; border-radius: 6px; background: var(--color-ink); color: var(--color-paper); padding: 4px 8px; font-size: 12px; line-height: 1.4; white-space: nowrap; }
+
+/* MapLibre, restyled to match. Every rule starts with .maplibregl-map so it outranks MapLibre's stylesheet, which loads later. */
+.maplibregl-map.maplibregl-map { font: inherit; }
+.maplibregl-map .maplibregl-canvas:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -2px; }
+.maplibregl-map .maplibregl-ctrl-top-right .maplibregl-ctrl { margin: 12px 12px 0 0; }
+.maplibregl-map .maplibregl-ctrl-group, .maplibregl-map .maplibregl-ctrl-group:not(:empty) { overflow: hidden; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); box-shadow: none; }
+.maplibregl-map .maplibregl-ctrl-group button { width: 30px; height: 30px; }
+.maplibregl-map .maplibregl-ctrl-group button + button { border-top: 1px solid var(--color-line-soft); }
+.maplibregl-map .maplibregl-ctrl-group button:not(:disabled):hover { background: var(--color-fill); }
+.maplibregl-map .maplibregl-ctrl-group button:focus-visible { outline-offset: -2px; box-shadow: none; }
+.maplibregl-map .maplibregl-ctrl-icon { opacity: 0.8; }
+[data-theme="dark"] .maplibregl-map .maplibregl-ctrl-icon { filter: invert(1); }
+.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib { margin: 0 8px 8px 0; border-radius: 999px; background: color-mix(in srgb, var(--color-paper) 82%, transparent); color: var(--color-muted); font-size: 10px; line-height: 16px; }
+.maplibregl-map .maplibregl-ctrl-attrib a { color: inherit; }
+.maplibregl-map .maplibregl-ctrl-attrib a:hover { color: var(--color-ink); text-decoration: none; }
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact { min-height: 24px; padding: 4px 28px 4px 10px; }
+.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) { padding: 0; background: var(--color-paper); }
+.maplibregl-map .maplibregl-ctrl-attrib-button { border-radius: 50%; background-color: transparent; opacity: 0.55; }
+[data-theme="dark"] .maplibregl-map .maplibregl-ctrl-attrib-button { filter: invert(1); }
+.maplibregl-map .maplibregl-popup-content { border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); color: var(--color-ink); padding: 12px 14px; box-shadow: none; font-size: 13px; }
+.maplibregl-map .maplibregl-popup-tip { display: none; }
+.maplibregl-map .maplibregl-popup-close-button { top: 4px; right: 6px; color: var(--color-muted); font-size: 16px; }
+.maplibregl-map .maplibregl-popup-close-button:hover { background: none; color: var(--color-ink); }
+
+/* Narrow: the panel becomes a bottom sheet. The handle toggles data-open on .k-app. */
+@media (max-width: 640px) {
+  .k-app { grid-template: "header" auto "stage" minmax(0, 1fr) "panel" 46% / minmax(0, 1fr); transition: grid-template-rows 150ms; }
+  .k-app[data-open="true"] { grid-template-rows: auto minmax(0, 1fr) 78%; }
+  .k-header { flex-wrap: wrap; gap: 0 8px; padding: 9px 16px; }
+  .k-header h1 { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .k-header p { order: 3; flex-basis: 100%; font-size: 12px; }
+  .k-panel { border-left: 0; border-top: 1px solid var(--color-line); }
+  .k-section { padding: 16px; }
+  /* Open credits would run under the legend in .k-bl, so they open above it. */
+  .maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show { margin-bottom: 56px; }
+  .k-sheet-handle { position: sticky; top: 0; z-index: 1; display: block; width: 100%; height: 18px; background: var(--color-paper); }
+  .k-sheet-handle::before { content: ""; display: block; width: 32px; height: 3px; margin: 0 auto; border-radius: 3px; background: var(--color-line); }
+  .k-sheet-handle:hover::before { background: var(--color-faint); }
+  .k-sheet-handle + .k-section { padding-top: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}

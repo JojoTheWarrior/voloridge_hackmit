@@ -20,21 +20,23 @@
   --color-scrim: rgb(10 10 10 / 0.2);
 }
 
-/* Dark is the same palette turned over: one ink, two grays, hairlines. Still no color. */
-[data-theme="dark"] {
-  color-scheme: dark;
-  --color-paper: #0a0a0a;
-  --color-ink: #ededed;
-  --color-muted: #8f8f8f;
-  --color-faint: #5e5e5e;
-  --color-line: #2b2b2b;
-  --color-line-soft: #1e1e1e;
-  --color-fill: #1a1a1a;
-  --color-side: #101010;
-  --color-hover: #202020;
-  --color-series-3: #474747;
-  --color-series-4: #3a3a3a;
-  --color-scrim: rgb(0 0 0 / 0.6);
+/* Dark is the same palette turned over: one ink, two grays, hairlines. Still no color. Screen only, so a report always prints light. */
+@media screen {
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --color-paper: #0a0a0a;
+    --color-ink: #ededed;
+    --color-muted: #8f8f8f;
+    --color-faint: #5e5e5e;
+    --color-line: #2b2b2b;
+    --color-line-soft: #1e1e1e;
+    --color-fill: #1a1a1a;
+    --color-side: #101010;
+    --color-hover: #202020;
+    --color-series-3: #474747;
+    --color-series-4: #3a3a3a;
+    --color-scrim: rgb(0 0 0 / 0.6);
+  }
 }
 
 body {
@@ -51,3 +53,13 @@ body {
 
 .fade-in { animation: fade-in 150ms ease-out; }
 .slide-in { animation: slide-in 150ms ease-out; }
+
+@media print {
+  @page { margin: 18mm 16mm; }
+
+  html {
+    color-scheme: light;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

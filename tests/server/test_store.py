@@ -725,3 +725,12 @@ def test_a_database_from_any_earlier_release_is_migrated_in_place(tmp_path, sche
     assert reopened.get_mission("m_old") == store.get_mission("m_old")
     columns = [row[1] for row in sqlite3.connect(path).execute("pragma table_info(missions)")]
     assert len(columns) == len(set(columns)) and {"report", "explorer", "explorer_seen_version"} <= set(columns)
+
+
+def test_explorer_dir_is_absolute_even_for_a_relative_database_path(tmp_path, monkeypatch):
+    """Flask resolves relative paths against the package folder, not the working directory."""
+    monkeypatch.chdir(tmp_path)
+    relative = Store("state/kingdom.db")
+    folder = relative.explorer_dir("m_1", 3)
+    assert folder.is_absolute()
+    assert folder == tmp_path / "state" / "explorers" / "m_1" / "3"

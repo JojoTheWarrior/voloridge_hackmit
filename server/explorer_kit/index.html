@@ -1,1 +1,249 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Explorer</title><link rel="stylesheet" href="kit/kit.css"></head><body><p>Placeholder explorer.</p><script src="kit/kit.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asbestos-cement roofs in Kharkiv</title>
+  <link rel="stylesheet" href="kit/kit.css">
+  <script src="kit/kit.js"></script>
+</head>
+<body class="k-app">
+  <header class="k-header">
+    <h1 id="title">Explorer</h1>
+    <p id="description" class="k-truncate"></p>
+    <!-- The sample data is invented, so the example says so. A real explorer has no such badge, because it has no such data. -->
+    <span id="demo" class="k-badge" hidden>Demo data</span>
+  </header>
+
+  <main class="k-stage">
+    <div id="map" class="k-map" role="region" aria-label="Map of scored buildings"></div>
+    <div class="k-overlay k-tl">
+      <div class="k-seg" role="group" aria-label="Map layer">
+        <button type="button" data-view="buildings" aria-pressed="true">Buildings</button>
+        <button type="button" data-view="heatmap" aria-pressed="false">Heatmap</button>
+        <button type="button" data-view="satellite" aria-pressed="false">Satellite</button>
+      </div>
+    </div>
+    <div class="k-overlay k-bl">
+      <div class="k-card k-tight k-legend" aria-label="Legend: darker and larger means more likely">
+        <span id="legend-low">Less likely</span>
+        <span id="ramp" class="k-ramp"><i style="--s:0"></i><i style="--s:.25"></i><i style="--s:.5"></i><i style="--s:.75"></i><i style="--s:1"></i></span>
+        <span id="legend-high">More likely</span>
+      </div>
+    </div>
+  </main>
+
+  <aside class="k-panel" aria-label="Details">
+    <button type="button" id="handle" class="k-sheet-handle" aria-label="Expand panel" aria-expanded="false"></button>
+
+    <section class="k-section">
+      <div class="k-spread">
+        <label for="threshold" class="k-label">Likelihood at least</label>
+        <output id="threshold-value" for="threshold" class="k-mono" style="font-size:13px">50%</output>
+      </div>
+      <input id="threshold" class="k-range" type="range" min="0" max="100" step="5" value="50" style="margin:6px 0 4px">
+      <p id="count" class="k-label" aria-live="polite">&nbsp;</p>
+    </section>
+
+    <section id="detail" class="k-section" aria-live="polite"></section>
+
+    <section class="k-section">
+      <div class="k-spread" style="padding-bottom:10px">
+        <h2 style="font-size:13px;letter-spacing:0">Highest in view</h2>
+        <span id="in-view" class="k-label"></span>
+      </div>
+      <ol id="list" class="k-list"></ol>
+      <div id="list-empty" hidden></div>
+    </section>
+  </aside>
+
+  <script>
+    const { el, fmt } = Kingdom
+    const $ = (id) => document.getElementById(id)
+    const LIST_LENGTH = 25
+    const ARROW = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>'
+    const CLOSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
+
+    let buildings = []
+    let byId = new Map()
+    let map, points, heat
+    let view = 'buildings'
+    let selectedId = decodeURIComponent(location.hash.slice(1)) || null
+
+    const threshold = () => Number($('threshold').value) / 100
+    const passing = () => buildings.filter((building) => building.score >= threshold())
+    const plural = (count, noun) => `${fmt.num(count)} ${noun}${count === 1 ? '' : 's'}`
+
+    function icon(svg) {
+      const holder = el('span', { style: 'display:contents' })
+      holder.innerHTML = svg // A constant from this file, never data.
+      return holder
+    }
+
+    /* ---- Rendering: every function below redraws one region from the current state. ---- */
+
+    function renderDetail() {
+      const building = byId.get(selectedId)
+      // Moving the slider redraws everything; leave an unchanged detail alone so its image does not reload.
+      if (building && $('detail').dataset.shown === building.id) return
+      $('detail').dataset.shown = building ? building.id : ''
+      if (!building) {
+        const shown = passing()
+        const median = shown.map((b) => b.score).sort((a, b) => a - b)[Math.floor(shown.length / 2)]
+        $('detail').replaceChildren(
+          el('dl', { class: 'k-stats' },
+            stat('Scored', fmt.num(buildings.length)),
+            stat('Shown', fmt.num(shown.length)),
+            stat('Median shown', fmt.pct(median))),
+          shown.length > 0 && el('p', { class: 'k-label', style: 'padding-top:14px' }, 'Select a building on the map or in the list to see the evidence.'))
+        return
+      }
+      const mapsUrl = `https://www.openstreetmap.org/?mlat=${building.lat}&mlon=${building.lon}#map=19/${building.lat}/${building.lon}`
+      $('detail').replaceChildren(
+        el('div', { class: 'k-stack k-fade-in' },
+          el('div', { class: 'k-spread', style: 'align-items:center;margin-bottom:-6px' },
+            el('span', { class: 'k-label' }, 'Selected building'),
+            el('button', { type: 'button', class: 'k-icon-btn', 'aria-label': 'Clear selection', onclick: () => select(null) }, icon(CLOSE))),
+          Kingdom.evidence(building.image, `Roof of ${building.address}`, `Placeholder image. A real explorer shows the roof tile from ${fmt.date(building.imagery_date)} here.`),
+          el('div', null,
+            el('h2', { class: 'k-title' }, building.address),
+            el('p', { class: 'k-muted', style: 'font-size:13px' }, `${building.district} district · ${building.use}`)),
+          el('div', null,
+            el('div', { class: 'k-hero' }, fmt.pct(building.score)),
+            el('p', { class: 'k-label', style: 'padding:6px 0 10px' }, 'Likelihood the roof is asbestos cement'),
+            el('div', { class: 'k-meter', style: `--k-pos:${building.score * 100}%`, role: 'presentation' })),
+          el('p', { class: 'k-prose' }, building.reason),
+          el('dl', { class: 'k-kv' },
+            fact('Year built', String(building.year_built), true),
+            fact('Roof area', `${fmt.num(building.roof_area_m2)} m²`, true),
+            fact('Roof type', building.roof),
+            fact('Condition', building.condition),
+            fact('Imagery', fmt.date(building.imagery_date), true),
+            fact('Coordinates', `${building.lat.toFixed(5)}, ${building.lon.toFixed(5)}`, true)),
+          el('div', { class: 'k-callout' }, el('span', { class: 'k-label' }, 'Who can act'), building.who_can_act),
+          el('div', null,
+            el('a', { class: 'k-btn', href: mapsUrl, target: '_blank', rel: 'noopener' }, 'Open in OpenStreetMap', icon(ARROW)))))
+    }
+
+    const stat = (label, value) => el('div', { class: 'k-stat' }, el('dt', null, label), el('dd', null, value))
+    const fact = (label, value, mono) => el('div', null, el('dt', null, label), el('dd', { class: mono ? 'k-mono' : null }, value))
+
+    function renderList() {
+      const shown = passing()
+      const visible = map ? map.inView(shown) : shown
+      const top = [...visible].sort((a, b) => b.score - a.score).slice(0, LIST_LENGTH)
+
+      $('count').textContent = `${plural(shown.length, 'building')} of ${fmt.num(buildings.length)}`
+      $('in-view').textContent = visible.length > top.length ? `Top ${top.length} of ${fmt.num(visible.length)}` : plural(visible.length, 'building')
+      Kingdom.rankedList($('list'), top, {
+        title: (building) => building.address,
+        sub: (building) => `${building.use} · ${building.year_built}`,
+        value: (building) => fmt.pct(building.score),
+        selectedId,
+        onSelect: (building) => select(building.id, { fly: true }),
+      })
+
+      $('list-empty').hidden = top.length > 0
+      if (top.length > 0) return
+      const nothingPasses = shown.length === 0
+      Kingdom.state($('list-empty'), {
+        title: nothingPasses ? 'No buildings this likely' : 'Nothing in this part of the map',
+        text: nothingPasses ? 'Lower the threshold to bring buildings back.' : 'Pan or zoom out, or go back to the full extent.',
+        action: nothingPasses
+          ? el('button', { type: 'button', class: 'k-btn', onclick: () => setThreshold(50) }, 'Reset to 50%')
+          : el('button', { type: 'button', class: 'k-btn', onclick: () => map.fit(shown, { animate: true }) }, 'Show all'),
+      })
+    }
+
+    function renderMap() {
+      document.querySelectorAll('.k-seg button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.view === view)))
+      $('ramp').classList.toggle('k-bars', view === 'heatmap')
+      $('legend-low').textContent = view === 'heatmap' ? 'Few likely roofs' : 'Less likely'
+      $('legend-high').textContent = view === 'heatmap' ? 'Many' : 'More likely'
+      if (!map) return
+      const shown = passing()
+      points.setData(shown)
+      heat.setData(shown)
+      points.setVisible(view !== 'heatmap')
+      heat.setVisible(view === 'heatmap')
+      points.select(selectedId)
+      map.setBasemap(view === 'satellite' ? 'satellite' : 'map')
+    }
+
+    function render() {
+      renderMap()
+      renderDetail()
+      renderList()
+    }
+
+    /* ---- Actions ---- */
+
+    function select(id, { fly = false } = {}) {
+      const building = byId.get(id)
+      selectedId = building ? id : null
+      // The frame's own URL remembers the selection, so a reload (or the explorer opened directly) comes back to it.
+      history.replaceState(null, '', selectedId ? `#${encodeURIComponent(selectedId)}` : location.pathname + location.search)
+      if (building) {
+        if (building.score < threshold()) setThreshold(thresholdFor(building))
+        if (view === 'heatmap') view = 'buildings'
+        if (fly) map?.flyTo(building)
+        document.querySelector('.k-panel').scrollTo({ top: 0 })
+      }
+      render()
+    }
+
+    // The highest slider stop that still shows this building.
+    const thresholdFor = (building) => Math.min(95, Math.floor(building.score * 20) * 5)
+
+    function setThreshold(percent) {
+      $('threshold').value = percent
+      $('threshold').dispatchEvent(new Event('input', { bubbles: true }))
+    }
+
+    /* ---- Wiring ---- */
+
+    $('threshold').addEventListener('input', () => {
+      $('threshold-value').textContent = `${$('threshold').value}%`
+      if (selectedId && byId.get(selectedId).score < threshold()) return select(null)
+      render()
+    })
+    document.querySelector('.k-seg').addEventListener('click', (event) => {
+      if (!event.target.dataset.view) return
+      view = event.target.dataset.view
+      render()
+    })
+    addEventListener('keydown', (event) => event.key === 'Escape' && selectedId && select(null))
+    addEventListener('hashchange', () => select(decodeURIComponent(location.hash.slice(1)), { fly: true }))
+    $('handle').addEventListener('click', () => {
+      const open = document.body.dataset.open !== 'true'
+      document.body.dataset.open = String(open)
+      $('handle').setAttribute('aria-expanded', String(open))
+      $('handle').setAttribute('aria-label', open ? 'Collapse panel' : 'Expand panel')
+    })
+
+    async function start() {
+      Kingdom.state($('detail'), { kind: 'loading', text: 'Loading buildings' })
+      const data = await Kingdom.loadData('data.json', { target: $('detail') })
+      buildings = data.buildings
+      byId = new Map(buildings.map((building) => [building.id, building]))
+      document.title = $('title').textContent = data.title
+      $('description').textContent = data.description
+      $('demo').hidden = data.demo !== true
+      if (!byId.has(selectedId)) selectedId = null
+      if (selectedId) setThreshold(Math.min(Number($('threshold').value), thresholdFor(byId.get(selectedId))))
+      render()
+
+      // The panel is already useful if the map cannot start (no WebGL, no network).
+      map = await Kingdom.map($('map'), { center: [36.2304, 49.9935], zoom: 11.5 })
+      const label = (building) => `${building.address} · ${fmt.pct(building.score)}`
+      heat = map.heat([])
+      points = map.points([], { tooltip: label, onSelect: (building) => select(building.id) })
+      map.fit(buildings)
+      if (selectedId) map.gl.jumpTo({ center: [byId.get(selectedId).lon, byId.get(selectedId).lat], zoom: 15.5 })
+      map.onMove(renderList)
+      render()
+    }
+    start().catch((error) => console.error(error))
+  </script>
+</body>
+</html>

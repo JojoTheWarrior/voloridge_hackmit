@@ -17,8 +17,8 @@ export function AppShell() {
   }, [menuOpen])
 
   return (
-    <div className="flex h-dvh">
-      <aside className="hidden md:block">
+    <div className="flex h-dvh print:block print:h-auto">
+      <aside className="hidden md:block print:hidden">
         <Sidebar />
       </aside>
 
@@ -37,7 +37,7 @@ export function AppShell() {
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line-soft px-4 md:hidden">
+        <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line-soft px-4 md:hidden print:hidden">
           <button type="button" aria-label="Open menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} className="-ml-1 p-1">
             <Menu size={18} strokeWidth={1.75} aria-hidden="true" />
           </button>
@@ -46,7 +46,7 @@ export function AppShell() {
             <span aria-hidden="true">kingdom</span>
           </Link>
         </header>
-        <main className="min-h-0 flex-1 overflow-y-auto">
+        <main className="min-h-0 flex-1 overflow-y-auto print:overflow-visible">
           <Outlet />
         </main>
       </div>
