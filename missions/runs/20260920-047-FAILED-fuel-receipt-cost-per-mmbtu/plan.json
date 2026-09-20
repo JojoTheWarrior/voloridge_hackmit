@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "utility.fuel_cost.oil_per_mmbtu",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily Brent spot price (finance.fred.DCOILBRENTEU) as the driver and monthly US delivered oil fuel cost per MMBtu (utility.fuel_cost.oil_per_mmbtu) as the response, comparing monthly percent changes and allowing up to a 30\u2011day lead for Brent to capture pass-through from market prices into plant fuel receipts."
+}
