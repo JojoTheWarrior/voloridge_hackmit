@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T03:46:09.003286+00:00",
+  "git_commit": "f28ac024699656d4276a4eefb79c4a08254d15b4",
+  "folder": "20260920-163-FAILED-r2-fertilizer-ag-crossref-weekly",
+  "mission_id": "R2-0046",
+  "hypothesis": "R2 | [fertilizer-ag] Crossref weekly fertilizer count 26w z-score > 1 leads CF log returns by 10 days (-) as research attention lags the price peak; fade with short CF 8d [research.ammonia.crossref_pubs -> finance.CF.log_return]",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.ammonia.crossref_pubs": "2025-03..current week",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
