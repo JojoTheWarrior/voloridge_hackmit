@@ -1,0 +1,21 @@
+{
+  "chart_type": "spread",
+  "indicators": [
+    "finance.spread.brent_wti"
+  ],
+  "external": [],
+  "needs_custom_code": false,
+  "custom_code_notes": "",
+  "title": "Brent\u2013WTI Crude Oil Spread",
+  "notes": "Uses the precomputed finance.spread.brent_wti series (Brent minus WTI) over the configured analysis window.",
+  "rationale": "The prompt explicitly asks for the Brent\u2013WTI spread, and the catalogue already includes a dedicated spread series finance.spread.brent_wti, which should be plotted as a spread chart rather than recomputing from Brent and WTI components.",
+  "series": [
+    {
+      "file": "spread-brent-wti.csv",
+      "label": "finance.spread.brent_wti",
+      "indicator": "finance.spread.brent_wti"
+    }
+  ],
+  "source_notes": [],
+  "codegen": "template"
+}
