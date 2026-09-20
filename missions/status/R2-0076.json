@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/b6a61e92017849dabe9b2d7322559664",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:02:39Z",
-  "updated_at": "2026-09-20T04:03:01Z",
-  "finished_at": null,
-  "elapsed_s": 22,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:03:54Z",
+  "finished_at": "2026-09-20T04:03:54Z",
+  "elapsed_s": 75,
+  "message": "Supported contemporaneously (r=-0.48, n=389, lag 0) but the 1d-lag short-FDX rule is weak: 51 trades, hit 49%, sharpe -0.25 overall; war-period OOS hit 70%, avg +0.20%/trade. Actionability 5.4.",
   "run_folder": "missions/runs/20260920-184-finance-vix-close_x_finance-fdx-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 5.4,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] VIX daily log return spike predicts a next-day mean-reversion bounce in FedEx after panic selling (+); trade long FDX 1d at 1d lag [finance.^VIX.log_return -> finance.FDX.log_return] (parent: R2-0076)"
 }
