@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0134",
+  "title": "[gas-lng] Henry Hub natural gas log return 20d z-score > 1 leads utility ETF ret",
+  "hypothesis": "R2 | [gas-lng] Henry Hub natural gas log return 20d z-score > 1 leads utility ETF returns by 3 days (+) as gas price spikes pass through to regulated power revenue rather than squeezing margins; trade long XLU 3d [finance.NG=F.log_return -> finance.XLU.log_return] (parent: R2-0032)",
+  "parent_mission_id": "R2-0032",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:54:28Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
