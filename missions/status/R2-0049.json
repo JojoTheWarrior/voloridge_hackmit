@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:47:08Z",
-  "updated_at": "2026-09-20T04:13:08Z",
+  "updated_at": "2026-09-20T04:16:00Z",
   "finished_at": "2026-09-20T03:48:54Z",
-  "elapsed_s": 1560,
+  "elapsed_s": 1732,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-165-weather-oklahoma-city-temp-anomaly_x_finance-zw-f-log-return",
   "scores": {
