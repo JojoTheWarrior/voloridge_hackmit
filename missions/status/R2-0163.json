@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": null,
   "started_at": "2026-09-20T13:13:23Z",
-  "updated_at": "2026-09-20T13:13:32Z",
+  "updated_at": "2026-09-20T13:16:15Z",
   "finished_at": "2026-09-20T13:13:32Z",
-  "elapsed_s": 9,
-  "message": "committing run folder",
+  "elapsed_s": 172,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-257-FAILED-r2-fuel-airspace-losers-null",
   "scores": {
     "validity": null,
