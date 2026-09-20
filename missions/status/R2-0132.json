@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/b4085c81c5f64df0bbf17e9da648e6db",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:54:34Z",
-  "updated_at": "2026-09-20T12:54:39Z",
-  "finished_at": null,
-  "elapsed_s": 5,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:55:15Z",
+  "finished_at": "2026-09-20T12:55:15Z",
+  "elapsed_s": 41,
+  "message": "Not supported: TTF/HH ratio z>1 vs LNG r=+0.14 at lag 0 (n=389), sign opposite to hypothesis; short-LNG rule loses pre-war (29 trades, -0.2%/trade), only war-period OOS positive (15 trades). Actionability 6.94 is not backed by validity (0).",
   "run_folder": "missions/runs/20260920-234-finance-ratio-ttf-henryhub_x_finance-lng-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.94,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Reversal control: TTF/HH ratio 20d z-score > 1.0 leads LNG returns positively (+) as a widening arb boosts US exporter momentum over 3 days; trade long LNG 3d [finance.ratio.ttf_henryhub -> finance.LNG.log_return] (parent: R2-0132)"
 }
