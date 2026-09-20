@@ -1,4 +1,3 @@
-R2 | [fertilizer-ag] Doha CAMS NO2 20d z-score < -1.5 leads NTR log returns by 4 days (+) since falling Qatari industrial activity proxies urea export loss; long NTR 6d [airquality.doha.cams_no2 -> finance.NTR.log_return]
 R2 | [fertilizer-ag] GDELT helium GKG share 20d z-score > 1 leads NTR log returns by 3 days (+) because Qatari helium outages co-occur with ammonia plant halts; long NTR 5d [gdelt.gkg.helium_share -> finance.NTR.log_return]
 R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1.5 leads YAR.OL returns by 2 days (-) as European gas input cost crushes ammonia margins; trade short YAR.OL 5d [finance.ratio.ttf_henryhub -> finance.YAR.OL.log_return]
 R2 | [fertilizer-ag] MOS 5d cumulative return > 12 pct leads MOS log returns by 2 days (-) as post-spike fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.log_return -> finance.MOS.log_return]
