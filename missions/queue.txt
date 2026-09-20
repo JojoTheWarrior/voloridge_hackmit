@@ -1,4 +1,3 @@
-R2 | [gas-lng] Doha CAMS SO2 day-over-day drop below -30 pct signals LNG train outage and leads Cheniere returns by 2 days (+); trade long LNG 5d [airquality.doha.cams_so2 -> finance.LNG.log_return]
 R2 | [gas-lng] Crossref energy_security weekly counts 8-week z-score > 1 lead BASF returns by 5 days (-) via European gas input cost fear; trade short BAS.DE 5d [research.oil_price.crossref_pubs -> finance.BAS.DE.log_return]
 R2 | [gas-lng] Crossref lng weekly counts 8-week z-score > 1 lead Cheniere returns by 7 days (+) as US export capacity attention builds; trade long LNG 7d [research.lng.crossref_pubs -> finance.LNG.log_return]
 R2 | [gas-lng] US peak demand 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [utility.us.demand_peak_mwh -> finance.XLU.log_return]
