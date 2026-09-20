@@ -50,3 +50,4 @@
 | `20260920-046-FAILED-eia-860m-generator-retirements-additions` | EIA-860m generator retirements/additions in 2026 shifted toward gas and storage relative to 2025. | failed | 0 | None | None | None | None | None |
 | `20260920-047-FAILED-fuel-receipt-cost-per-mmbtu` | Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month. | failed | 0 | None | None | None | None | None |
 | `20260920-048-FAILED-fuel-receipt-cost-per-mmbtu` | Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month. | failed | 0 | None | None | None | None | None |
+| `20260920-049-gdelt-gkg-lng-share_x_research-rare-earth-crossref-pubs` | OpenAlex publication counts on "helium" rose after Qatar's Ras Laffan LNG complex was struck. | ok | 29 | 0.23010761412759506 | 0.001996007984031936 | 6.04 | 4.46 | 5.64 |
