@@ -62,6 +62,17 @@ def run_detail(monitor: Monitor, folder: str) -> dict | None:
     return read_run_details(target, status)
 
 
+def snapshot_html(monitor: Monitor) -> str:
+    """Self-contained HTML with state and per-run details embedded."""
+    state = dict(monitor.state())
+    state["run_details"] = {
+        r["folder"]: d
+        for r in state.get("runs", [])
+        if r.get("folder") and (d := run_detail(monitor, r["folder"])) is not None
+    }
+    return index_html(state)
+
+
 def create_app(monitor: Monitor) -> Flask:
     app = Flask(__name__)
 
@@ -94,7 +105,7 @@ def create_app(monitor: Monitor) -> Flask:
 
     @app.get("/snapshot")
     def snapshot():
-        return index_html(monitor.state())
+        return snapshot_html(monitor)
 
     return app
 

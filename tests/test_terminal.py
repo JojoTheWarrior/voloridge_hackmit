@@ -384,6 +384,18 @@ def test_api_run_and_traversal(tmp_path):
     assert client.get("/api/run/not-a-run").status_code == 404
 
 
+def test_run_details_fall_back_to_status_scores(tmp_path):
+    from warsignal.mission.monitor import read_run_details
+    _missions(tmp_path)
+    run_dir = _fixture_run(tmp_path / "missions")
+    (run_dir / "judge.json").write_text(json.dumps({"scores": {"validity": 8.0}}))
+    status = {"scores": {"actionability": 2, "validity": 9}}
+    d = read_run_details(run_dir, status)
+    assert d["scores"]["validity"] == 8.0  # judge.json wins
+    assert d["scores"]["actionability"] == 2  # status fills the gap
+    assert read_run_details(run_dir, None)["scores"]["actionability"] is None
+
+
 def test_run_files(tmp_path):
     client, _ = _app(tmp_path)
     assert client.get("/runs/20260921-001-a_x_b/viz.png").status_code == 200
@@ -398,6 +410,7 @@ def test_index_and_snapshot_routes(tmp_path):
     # snapshot is self-contained: CSS/JS inlined, no /static/ references
     assert "/static/" not in snap
     assert "<style>" in snap
+    assert '"run_details"' in snap and '"20260921-001-a_x_b":' in snap
 
 
 def test_index_html_embeds_state(tmp_path):

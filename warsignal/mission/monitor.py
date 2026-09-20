@@ -234,7 +234,8 @@ def read_run_details(run_dir: Path, status: Optional[dict] = None) -> dict:
     trade = _read_json(run_dir / "trade_idea.json")
     if not trade and status:
         trade = status.get("trade_idea")
-    scores = {key: _num(scores_in.get(key)) for key in _SCORE_KEYS}
+    status_scores = (status or {}).get("scores") if isinstance((status or {}).get("scores"), dict) else {}
+    scores = {key: _pick_num(scores_in.get(key), status_scores.get(key)) for key in _SCORE_KEYS}
     scores["supported_prob"] = _pick_num(scores_in.get("supported_prob"), judge.get("supported_prob"))
     scores["judge_model"] = _pick_str(scores_in.get("judge_model"), judge.get("model")) or None
     try:
