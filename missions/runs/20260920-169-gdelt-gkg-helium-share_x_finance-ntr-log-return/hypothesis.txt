@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT helium GKG share 20d z-score > 1 leads NTR log returns by 3 days (+) because Qatari helium outages co-occur with ammonia plant halts; long NTR 5d [gdelt.gkg.helium_share -> finance.NTR.log_return]
