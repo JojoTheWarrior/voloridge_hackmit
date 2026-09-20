@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT Qatar GKG share 20d z-score > 1 leads MOS log returns by 5 days (-) as a reversal control: Qatar attention spikes precede fertilizer-equity mean reversion, not urea-disruption gains; trade short MOS 5d [gdelt.gkg.qatar_share -> finance.MOS.log_return] (parent: R2-0040)
