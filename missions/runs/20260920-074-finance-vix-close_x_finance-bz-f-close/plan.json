@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.^VIX.close",
+  "indicator_b": "finance.BZ=F.close",
+  "transform_a": "log_return",
+  "transform_b": "log_return",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily log-returns of VIX and front-month Brent futures during the war window, with an event-study focus around the Hormuz closure, to test whether short-horizon co-movement (positive correlation in returns within ~1 trading week) spikes in that period."
+}
