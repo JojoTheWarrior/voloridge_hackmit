@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:15:23.633123+00:00",
+  "git_commit": "74ab05bcb3b1f240a67df409a038f7bd004e2ba8",
+  "folder": "20260920-198-finance-tnx-close_x_finance-gld-log-return",
   "mission_id": "R2-0097",
-  "title": "10y yield z-score leads GLD lower",
   "hypothesis": "R2 | [risk-macro-em] 10-year yield 20d z-score > 1 leads gold ETF returns lower by 2-3 days (-) via real-rate drag even in wartime; trade short GLD 3d [finance.^TNX.close -> finance.GLD.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/b9cc7afd3db743cf9e9d6fe04117dcc7",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:15:06Z",
-  "updated_at": "2026-09-20T04:15:25Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-198-finance-tnx-close_x_finance-gld-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.39
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.16736457698644971,
+  "perm_p": 0.043912175648702596,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.39,
   "trade_idea": {
     "instrument": "GLD",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.39,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.^TNX.close": "configured analysis window",
+    "finance.GLD.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

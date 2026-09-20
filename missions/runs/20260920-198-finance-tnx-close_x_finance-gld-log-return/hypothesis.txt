@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] 10-year yield 20d z-score > 1 leads gold ETF returns lower by 2-3 days (-) via real-rate drag even in wartime; trade short GLD 3d [finance.^TNX.close -> finance.GLD.log_return]
