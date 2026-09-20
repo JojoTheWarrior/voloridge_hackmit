@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:13:54Z",
-  "updated_at": "2026-09-20T04:14:32Z",
+  "updated_at": "2026-09-20T04:16:50Z",
   "finished_at": "2026-09-20T04:14:32Z",
-  "elapsed_s": 38,
-  "message": "Self-referential signal (GLD log_return -> GLD log_return) degenerated to a single-series pre/post test: post-boundary mean daily GLD return -0.0038 (Welch p=0.033, n=390), but no trade rule was computable; heuristic scores 0, actionability 0. Not tradeable as specified.",
+  "elapsed_s": 176,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-197-finance-gld-log-return_prepost",
   "scores": {
     "validity": 0,
