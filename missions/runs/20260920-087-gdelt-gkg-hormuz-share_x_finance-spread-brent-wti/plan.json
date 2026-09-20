@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.hormuz_share",
+  "indicator_b": "finance.spread.brent_wti",
+  "transform_a": "zscore",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GKG Hormuz news share as a z-scored proxy for global Hormuz-related news volume and relate it during the active war window to the daily Brent-WTI spread level, allowing a few days for news to be incorporated into oil pricing, with the hypothesis that more Hormuz news widens the spread."
+}

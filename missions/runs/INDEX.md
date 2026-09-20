@@ -88,3 +88,4 @@
 | `20260920-084-finance-mos-log-return_x_finance-zc-f-log-return` | Wheat and corn futures moved with fertilizer stocks after March 20 2026. | ok | 140 | 0.046183208636114914 | 0.8542914171656687 | 0.18 | 1.26 | 1.92 |
 | `20260920-085-finance-ttf-f-log-return_x_finance-ng-f-log-return` | TTF gas and Henry Hub correlation increased after Qatar LNG shutdown. | ok | 391 | 0.12440302398959983 | 0.12574850299401197 | 4.08 | 4.64 | 2.02 |
 | `20260920-086-finance-fred-dcoilbrenteu_x_finance-hyg-close` | High-yield credit (HYG) drawdowns coincide with oil-price spikes during the war. | ok | 137 | -0.4777183802129654 | 0.001996007984031936 | 7.8 | 3.74 | 3.08 |
+| `20260920-087-gdelt-gkg-hormuz-share_x_finance-spread-brent-wti` | Brent-WTI spread widened when Hormuz news volume rose. | ok | 140 | 0.21951036323518971 | 0.001996007984031936 | 7.72 | 4.46 | 3.64 |
