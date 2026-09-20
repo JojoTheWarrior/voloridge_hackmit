@@ -58,3 +58,4 @@
 | `20260920-054-research-drone-crossref-share_x_gdelt-gkg-drone-share` | OpenAlex "drone" publications track GDELT drone-attack event counts. | ok | 81 | -0.010392567398088302 | 0.9760479041916168 | 0.04 | 2.24 | 0.76 |
 | `20260920-055-gdelt-irn-conflict-events_x_research-missile-crossref-pubs` | OpenAlex "missile defense" publication counts increased during the war relative to the 2025 baseline. | ok | 81 | -0.0462049829098654 | 0.7644710578842315 | 0.08 | 3.72 | 5.88 |
 | `20260920-056-gdelt-gkg-hormuz-share_x_research-hormuz-crossref-share` | OpenAlex "Strait of Hormuz" publications spike in the months after the closure. | ok | 81 | -0.005018970118859707 | 0.013972055888223553 | 5.76 | 3.82 | 5.56 |
+| `20260920-057-research-ammonia-crossref-share_x_finance-mos-log-return` | OpenAlex "fertilizer" research volume correlates with fertilizer equity returns (MOS, CF, NTR). | ok | 53 | -0.21000515856608917 | 0.36327345309381237 | 2.0 | 3.54 | 5.7 |
