@@ -105,6 +105,9 @@ a report after findings arrive, follow an "Ask next" link to prepare a reply,
 or export the report through the browser's print dialog. Explorers are versioned
 static sites, served in an opaque-origin sandbox. The Leaflet kit supports maps,
 scored points, heatmaps, satellite imagery, and live light/dark theme changes.
+Explorer requests stay below Devin's 30,000-character message limit by bundling
+large kits losslessly with a Python extraction script; synthetic sample rows
+are omitted, and all guide/style/helper code is preserved.
 Dataset cards and a table are available from the view toggle on Datasets.
 
 Use the sidebar pin to collect your best missions, then select **Pinned only**

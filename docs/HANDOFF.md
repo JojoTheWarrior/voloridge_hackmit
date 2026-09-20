@@ -136,10 +136,12 @@ regardless of the mission question. The local live database is untouched.
    is fixed at session creation. The one live mission (`m_f064f4d0`, "Houston
    heat vs gas prices", in `.kingdom/kingdom.db`) predates the `report` and
    `explorer` fields, so they may only work on **new** missions.
-2. **The explorer request is ~79 KB** (guide + full kit text; example data is
-   cut to 20,000 chars by `MAX_KIT_DATA_CHARS` in `server/brief.py`). Whether
-   Devin's message endpoint accepts that is unknown. Fallback: have Devin fetch
-   the kit from this repo on GitHub instead of inlining it.
+2. **Explorer message limit fixed.** Devin rejects messages of 30,000 characters
+   or more. Oversized requests now bundle the full guide, CSS and JS losslessly
+   as LZMA/base64 with a Python extraction script; unused synthetic sample rows
+   are omitted. The current request is 27,339 characters. Long change requests
+   can omit the worked HTML example while retaining all styling/helpers. A
+   29,900 UTF-16-unit guard prevents oversized requests from reaching the API.
 3. **A real explorer needs place-level results.** The Houston mission has
    nothing to map. The natural first case is one of the fix-list findings in
    `research/` (see the table at the top of `research/IDEAS.md`), brought in

@@ -241,8 +241,11 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
         if not mission.session_id:
             store.append_event(mission_id, "error", {"text": NO_SESSION_EXPLORER})
             return jsonify({}), 202
-        message = build_explorer_request(
-            instructions, read_kit(kit_dir), next_version=mission.explorer_seen_version + 1)
+        try:
+            message = build_explorer_request(
+                instructions, read_kit(kit_dir), next_version=mission.explorer_seen_version + 1)
+        except ValueError as exc:
+            raise Invalid("text", str(exc)) from exc
         try:
             client.send_message(mission.session_id, message)
         except DevinUnavailable as exc:

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import base64
+import json
+import lzma
 import re
 
 from server.artifacts import (
@@ -23,6 +26,7 @@ KIT_GUIDE = "GUIDE.md"
 # The worked example's data only shows a shape, and Devin must not reuse it, so a long file is cut short.
 KIT_DATA_SUFFIXES = (".json", ".geojson", ".csv")
 MAX_KIT_DATA_CHARS = 20_000
+MAX_EXPLORER_MESSAGE_CHARS = 29_900
 
 ROLE = """\
 You are a research analyst whose mission is to discover a defensible insight that changes what \
@@ -348,7 +352,37 @@ def build_explorer_request(
     if next_version:
         numbering = f"This build is number {next_version}, so name it `explorer-v{next_version}.zip`. "
     sections.append(EXPLORER_DELIVERY.format(numbering=numbering))
-    return "\n\n".join(sections)
+    message = "\n\n".join(sections)
+    if len(message.encode("utf-16-le")) // 2 <= MAX_EXPLORER_MESSAGE_CHARS:
+        return message
+    # Preserve the complete design kit without spending the message budget on its source text.
+    # The sample rows are synthetic and must never be used in an actual explorer.
+    packed = {path: text for path, text in kit.items() if path != "data.json"}
+    for omit_example in (False, True):
+        if omit_example:
+            packed.pop("index.html", None)
+        payload = base64.b64encode(lzma.compress(json.dumps(packed).encode())).decode()
+        unpack = f'''The complete design guide, stylesheet and helpers are bundled below losslessly.
+Synthetic example data is omitted. Build data.json from this mission's real results.
+Run this Python script in an empty explorer directory, then READ GUIDE.md and the
+kit source files before building. If index.html is included, adapt its structure.
+Keep the supplied kit unchanged and follow all delivery instructions below.
+
+```python
+import base64, json, lzma
+from pathlib import Path
+payload = "{payload}"
+for name, content in json.loads(lzma.decompress(base64.b64decode(payload))).items():
+    path = Path(name)
+    assert not path.is_absolute() and ".." not in path.parts
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+```
+'''
+        message = "\n\n".join([sections[0], sections[1], unpack, sections[-1]])
+        if len(message.encode("utf-16-le")) // 2 <= MAX_EXPLORER_MESSAGE_CHARS:
+            return message
+    raise ValueError("The explorer kit is too large to send. Reduce its size and try again.")
 
 
 def is_explorer_request(text: str) -> bool:

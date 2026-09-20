@@ -1,7 +1,10 @@
 """Tests for server.brief."""
 from __future__ import annotations
 
+import base64
 import json
+import lzma
+import re
 
 import pytest
 
@@ -335,10 +338,25 @@ def test_long_example_data_is_cut_short_but_code_never_is():
     rows = "[" + ", ".join(str(i) for i in range(20_000)) + "]"
     script = "// line\n" * 10_000
     request = build_explorer_request(None, {"data.json": rows, "kit/kit.js": script, "kit/kit.css": "body {}"})
-    assert script.rstrip() in request
-    assert rows not in request and rows[:MAX_KIT_DATA_CHARS] in request
-    assert f"{len(rows) - MAX_KIT_DATA_CHARS} more characters left out" in request
-    assert len(request) < len(script) + MAX_KIT_DATA_CHARS + 10_000
+    payload = re.search(r'payload = "([^"]+)"', request)[1]
+    restored = json.loads(lzma.decompress(base64.b64decode(payload)))
+    assert restored["kit/kit.js"] == script
+    assert "data.json" not in restored
+    assert len(request) < 30_000
+
+
+@pytest.mark.parametrize("instructions", [None, "x" * 2000, "🛰" * 2000])
+def test_real_explorer_kit_fits_devin_message_limit_losslessly(instructions):
+    from server.explorer import read_kit
+
+    kit = read_kit()
+    request = build_explorer_request(instructions, kit, next_version=2)
+    assert len(request.encode("utf-16-le")) // 2 < 30_000
+    payload = re.search(r'payload = "([^"]+)"', request)[1]
+    restored = json.loads(lzma.decompress(base64.b64decode(payload)))
+    for path in ("GUIDE.md", "kit/kit.css", "kit/kit.js"):
+        assert restored[path] == kit[path]
+    assert read_explorer_request(request) == (instructions, 2)
 
 
 def test_example_data_at_the_limit_is_embedded_whole():
