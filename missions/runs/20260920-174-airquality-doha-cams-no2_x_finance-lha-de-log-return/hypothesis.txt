@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Doha CAMS NO2 5d mean falling more than 15 pct vs 20d mean flags Gulf flight-cancellation waves (-); trade short LHA.DE 4d at 3d lag [airquality.doha.cams_no2 -> finance.LHA.DE.log_return]
