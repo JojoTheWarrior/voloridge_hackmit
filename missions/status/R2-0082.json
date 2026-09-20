@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/6aadaa20d17f4c16a6529e38900071dc",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:06:08Z",
-  "updated_at": "2026-09-20T04:06:27Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:07:09Z",
+  "finished_at": "2026-09-20T04:07:09Z",
+  "elapsed_s": 61,
+  "message": "Null: contemporaneous r=0.008 (p=0.88), best lag -3 r=0.106, perm_p=0.59; auto trade rule long DXY 1d hit 42% sharpe -1.24 (OOS n=17 hit 59%) - tone does not lead USD",
   "run_folder": "missions/runs/20260920-188-gdelt-usa-tone_x_finance-dx-y-nyb-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.7,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Reversal check: DX-Y.NYB daily log return leads US GDELT tone by 1-3 days (+), i.e. dollar moves drive US news tone rather than tone leading USD; null control for R2-0082 [finance.DX-Y.NYB.log_return -> gdelt.usa.tone] (parent: R2-0082)"
 }
