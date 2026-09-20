@@ -18,6 +18,13 @@ def main():
     graph.add_argument("--charts-port", type=int, default=8011)
     viz = sub.add_parser("viz"); viz.add_argument("mission_id"); viz.add_argument("--headless", action="store_true")
     viz.add_argument("--codegen", action="store_true"); viz.add_argument("--allow-exec", action="store_true")
+    terminal = sub.add_parser("terminal")
+    terminal.add_argument("--port", type=int, default=8020)
+    terminal.add_argument("--host", default="127.0.0.1")
+    terminal.add_argument("--pull-interval", type=float, default=60.0)
+    terminal.add_argument("--no-pull", action="store_true")
+    terminal.add_argument("--root", default=None)
+    terminal.add_argument("--snapshot", default=None, metavar="PATH")
     sub.add_parser("kingdom", add_help=False)
     args, extra = parser.parse_known_args()
     if args.command == "kingdom":
@@ -104,6 +111,22 @@ def main():
             create_app(service).run(host="127.0.0.1", port=args.port)
         finally:
             charts.terminate()
+    elif args.command == "terminal":
+        from pathlib import Path
+        from terminal.app import create_app, start_refresh_thread
+        from warsignal.config import ROOT
+        from warsignal.mission.monitor import Monitor
+        monitor = Monitor(
+            Path(args.root) if args.root else ROOT,
+            pull_interval=args.pull_interval,
+            pull=not args.no_pull,
+        )
+        if args.snapshot:
+            from terminal.snapshot import write_snapshot
+            print(write_snapshot(monitor, Path(args.snapshot)))
+            return
+        start_refresh_thread(monitor)
+        create_app(monitor).run(host=args.host, port=args.port)
     else:
         print("not yet implemented")
 

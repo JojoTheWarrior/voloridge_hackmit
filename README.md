@@ -58,6 +58,27 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py graph [--port 8010] [--charts-port 8011]` | NL prompt → pygame chart web UI + launcher |
 | `python main.py selftest` | Check keys, judge availability, and indicator loading |
 | `python main.py kingdom [--scale N] [--scene S] [--screenshot out.png]` | Pixel-art mission dashboard (see [Kingdom](#kingdom)) |
+| `python main.py terminal [--port 8020] [--no-pull] [--snapshot out.html]` | Bloomberg-style mission monitor web UI (see [Terminal](#terminal)) |
+
+## Terminal
+
+Terminal is a Bloomberg-style web monitor (dark monospace, dense tables,
+keyboard navigation — no frameworks, no game art) over the same `missions/`
+data: active agents, the hypothesis queue, run history with scores, a
+validity leaderboard, and a status-change log. It `git pull --rebase
+--autostash`es every `--pull-interval` seconds (default 60; `--no-pull`
+disables) so it tracks GitHub main.
+
+![terminal](terminal/screenshot.png)
+
+```bash
+python main.py terminal                       # http://127.0.0.1:8020
+python main.py terminal --no-pull --snapshot snap.html   # static HTML export
+```
+
+Keys: `1`-`5` switch panes, `j`/`k`/arrows move, `Enter` opens the run detail
+pane, `/` filters, `r` forces a refresh, `Esc` closes. Details and the
+`/api/state` shape live in `terminal/README.md`.
 
 ## Kingdom
 
