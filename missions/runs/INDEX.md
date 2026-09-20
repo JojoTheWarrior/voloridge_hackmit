@@ -17,3 +17,4 @@
 | `20260920-013-airquality-dubai-cams-no2_x_finance-fred-dcoilbrenteu` | Air-quality levels in Gulf cities move opposite to Brent crude in the war window because production shutdowns reduce emissions. | ok | 142 | -0.022482335203219978 | 0.14171656686626746 | 3.32 | 3.94 | 5.22 |
 | `20260920-014-finance-fred-dcoilbrenteu_x_airquality-kuwait-cams-pm25` | Kuwait PM2.5 dropped when Gulf oil output fell 6.7 mb/d in mid-March 2026. | ok | 137 | -0.33354196944492887 | 0.4750499001996008 | 2.02 | 4.66 | 7.52 |
 | `20260920-015-gdelt-iran-israel-dyad-events_x_airquality-tel-aviv-cams-pm25` | Tel Aviv air-quality readings deteriorate on days with Iranian missile strikes on Israel. | ok | 202 | -0.14212203469991447 | 0.5029940119760479 | 0.88 | 3.64 | 6.04 |
+| `20260920-016-FAILED-us-gulf-coast-houston-air` | US Gulf Coast (Houston) air quality worsened as US refineries ran harder to replace lost Gulf supply. | failed | 0 | None | None | None | None | None |

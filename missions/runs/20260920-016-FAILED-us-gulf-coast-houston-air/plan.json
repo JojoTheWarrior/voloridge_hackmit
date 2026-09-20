@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.ERCO.demand_mwh",
+  "indicator_b": "airquality.houston.pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use ERCOT regional electricity demand as a proxy for Gulf Coast industrial/refining load and Houston ground-sensor PM2.5 anomalies vs same-week-2025 baseline during the active war window to test whether higher regional power/refinery activity coincides with worse local air quality."
+}

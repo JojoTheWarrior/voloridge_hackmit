@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:49:41.008645+00:00",
+  "git_commit": "752ae161520f5ae691b970156ceaf863e2dc8b1c",
+  "folder": "20260920-016-FAILED-us-gulf-coast-houston-air",
+  "mission_id": "M20260920-d7d6bc",
+  "hypothesis": "US Gulf Coast (Houston) air quality worsened as US refineries ran harder to replace lost Gulf supply.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "utility.ERCO.demand_mwh": "configured analysis window",
+    "airquality.houston.pm25": "downloaded observations"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
