@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/629cc21f9ea54da3aac645dda1d51e67",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:53:39Z",
-  "updated_at": "2026-09-20T03:53:44Z",
+  "updated_at": "2026-09-20T03:54:00Z",
   "finished_at": null,
-  "elapsed_s": 5,
+  "elapsed_s": 21,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-172-gdelt-gkg-hormuz-share_x_finance-jets-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 1.2,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] GDELT Hormuz GKG share 20d z-score > 1 leads the JETS/SPY relative ratio lower by 3 days (-), stripping market beta from the airline move; trade short JETS vs long SPY 3d [gdelt.gkg.hormuz_share -> finance.ratio.jets_spy] (parent: R2-0058)"
 }
