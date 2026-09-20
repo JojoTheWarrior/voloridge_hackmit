@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0172",
+  "title": "[fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 is also a n",
+  "hypothesis": "R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 is also a null for UAL returns (null control, 0 sign); trade long UAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.UAL.log_return] (parent: R2-0072)",
+  "parent_mission_id": "R2-0072",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:17:53Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
