@@ -121,7 +121,11 @@ it does not alter results.
 The planner returns the JSON contract represented by `MissionPlan`:
 indicator names, transforms, lag limit, window, event category, null-control
 flag, expected sign, and rationale. AI plans are checked against the registry,
-for duplicate indicators, and for requested-city/source mismatches. The
+for duplicate indicators, and for requested-city/source mismatches. A
+single-series plan may repeat the same indicator (or set `mode` to `single`)
+for a pre/post or event-category change; it writes one raw series and reports
+pre/post means, Welch p, and effect size instead of correlation and lag fields.
+The
 heuristic planner uses catalogue keyword overlap and prefers different sources
 for different domains.
 

@@ -179,3 +179,90 @@ def run_all(plan, a, b, timeline):
         lag["best_r"] is not None and np.isfinite(lag["best_r"]) and np.sign(lag["best_r"]) == expected
     )
     return result
+
+
+def _single_boundary(plan, timeline):
+    if plan.event_category and timeline is not None:
+        dates = pd.to_datetime(
+            timeline.loc[timeline["category"] == plan.event_category, "date"],
+            errors="coerce",
+        ).dropna()
+        if len(dates):
+            return dates.min()
+    return pd.Timestamp(WAR_START)
+
+
+def _single_summary(pre, post):
+    pre = pd.Series(pre, dtype="float64").dropna()
+    post = pd.Series(post, dtype="float64").dropna()
+    mean_diff = float(post.mean() - pre.mean()) if len(pre) and len(post) else None
+    welch_t = welch_p = cohens_d = None
+    if len(pre) and len(post):
+        test = stats.ttest_ind(pre, post, equal_var=False, nan_policy="omit")
+        welch_t, welch_p = float(test.statistic), float(test.pvalue)
+        pooled_n = len(pre) + len(post) - 2
+        if pooled_n > 0:
+            pooled = math.sqrt(
+                ((len(pre) - 1) * pre.var(ddof=1) + (len(post) - 1) * post.var(ddof=1))
+                / pooled_n
+            )
+            if pooled:
+                cohens_d = float(mean_diff / pooled)
+    return {
+        "pre": {"n": int(len(pre)), "mean": float(pre.mean()) if len(pre) else None,
+                "std": float(pre.std(ddof=1)) if len(pre) > 1 else None},
+        "post": {"n": int(len(post)), "mean": float(post.mean()) if len(post) else None,
+                 "std": float(post.std(ddof=1)) if len(post) > 1 else None},
+        "mean_diff": mean_diff,
+        "welch_t": welch_t,
+        "welch_p": welch_p,
+        "cohens_d": cohens_d,
+    }
+
+
+def run_single(plan, a, timeline):
+    transformed = apply_window(transform(a, plan.transform_a), plan.window).dropna()
+    boundary = _single_boundary(plan, timeline)
+    pre = transformed[transformed.index < boundary]
+    post = transformed[transformed.index >= boundary]
+    pre_post = _single_summary(pre, post)
+    observed = pre_post["mean_diff"]
+    perm_p = float("nan")
+    if observed is not None and len(pre) and len(post):
+        values = transformed.to_numpy()
+        rng = np.random.default_rng(0)
+        null = []
+        for _ in range(500):
+            shifted = np.roll(values, int(rng.integers(1, len(values))))
+            null.append(float(shifted[len(pre):].mean() - shifted[:len(pre)].mean()))
+        perm_p = float((1 + sum(abs(value) >= abs(observed) for value in null)) / (1 + len(null)))
+    event_dates = []
+    if plan.event_category and timeline is not None:
+        event_dates = timeline.loc[timeline["category"] == plan.event_category, "date"].tolist()
+    step = _step(transformed)
+    if step > pd.Timedelta(days=20):
+        lag_unit = "months"
+    elif step > pd.Timedelta(days=3):
+        lag_unit = "weeks"
+    else:
+        lag_unit = "days"
+    result = {
+        "mode": "single",
+        "n_obs": int(len(transformed)),
+        "coverage_start": transformed.index.min().date().isoformat() if len(transformed) else None,
+        "coverage_end": transformed.index.max().date().isoformat() if len(transformed) else None,
+        "correlation": None,
+        "lagged": {"lags": [], "best_lag": None, "best_r": None},
+        "n_lags_tested": 0,
+        "perm_p": perm_p,
+        "bonferroni_p": perm_p,
+        "pre_post": pre_post,
+        "event_study": event_study(transformed, event_dates) if event_dates else None,
+        "event_study_b": None,
+        "window": plan.window,
+        "lag_unit": lag_unit,
+        "sign_matches_expectation": plan.expected_sign == 0 or (
+            observed is not None and np.sign(observed) == plan.expected_sign
+        ),
+    }
+    return result

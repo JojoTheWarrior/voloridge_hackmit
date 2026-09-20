@@ -31,7 +31,11 @@ object with keys:
       (set when the hypothesis is about reactions around a class of timeline events -> event study)
   is_null_control: boolean (true if the hypothesis is explicitly a null / control mission)
   expected_sign: -1, 0 or 1 (sign of the relationship the hypothesis predicts)
+  mode: "pair" | "single" (use "single" or repeat indicator_a in indicator_b when
+      the hypothesis concerns one series changing over time or around events)
   rationale: one sentence on why these indicators and transforms.
+For mode "single", indicator_a and indicator_b may be identical and window should
+usually be "compare_pre_post" or event_category should be set.
 If the hypothesis mentions a place, prefer that city's series. If it needs an indicator that does not
 exist, pick the closest available one and say so in rationale. Never invent names."""
 
@@ -41,7 +45,9 @@ You receive the MISSION hypothesis, the plan and the computed statistics (JSON).
 note in Markdown (max ~250 words): 1) Verdict in one sentence (supported / weakly supported / not
 supported / inconclusive, with the key number). 2) What the data shows (n, correlation, best lag, pre vs
 post-war change, event-study effect, permutation p-value). 3) Confounders and caveats specific to these
-two series. 4) One follow-up mission idea. Never claim causation. Do not restate the hypothesis verbatim."""
+two series. For a single-mode plan, report the pre/post means, mean difference,
+Welch p-value and effect size instead of inventing a correlation or lag. 4) One
+follow-up mission idea. Never claim causation. Do not restate the hypothesis verbatim."""
 
 # Jev "state" is the compact JSON statistics dict (plus the hypothesis and plan). Jev Score questions
 # return an index into the ordered `criteria` list (0..5); the client rescales to 0-10 (x2).

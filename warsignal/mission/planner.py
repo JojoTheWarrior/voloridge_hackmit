@@ -54,7 +54,9 @@ def _requested_cities(hypothesis):
 
 def _validate_plan(hypothesis, plan):
     if plan.indicator_a == plan.indicator_b:
-        raise PlanValidationError("indicator_a and indicator_b must differ")
+        plan.mode = "single"
+    if plan.mode not in {"pair", "single"}:
+        raise PlanValidationError(f"invalid mission mode: {plan.mode}")
     missing = [name for name in (plan.indicator_a, plan.indicator_b) if name not in REGISTRY]
     if missing:
         raise PlanValidationError(f"invalid indicator names: {missing}")
@@ -86,6 +88,14 @@ def _keyword_scores(text):
             scores[name] = 0.0
             continue
         lower_name = name.lower()
+        weather_terms = (
+            "temperature", "wind", "rain", "precip", "pm25", "pm2.5", "no2",
+            "air quality", "pollution", "dust",
+        )
+        if spec.source in {"weather", "airquality"} and not _requested_cities(text):
+            if not any(term in text for term in weather_terms):
+                scores[name] = 0.0
+                continue
         score = 0.0
         for source, terms, prefixes in _DOMAIN_RULES:
             hits = sum(1 for term in terms if term in text)
@@ -117,6 +127,16 @@ def _keyword_scores(text):
 def heuristic_plan(hypothesis):
     text = hypothesis.lower()
     scores = _keyword_scores(text)
+    single_tone = "tone" in text and not any(
+        marker in text for marker in (" vs ", " versus ", " correlate", " leads ", " related to ")
+    )
+    if single_tone and "gdelt.irn.tone" in REGISTRY:
+        return MissionPlan(
+            "gdelt.irn.tone", "gdelt.irn.tone", "level", "level", 0,
+            "compare_pre_post", None, False,
+            -1 if any(term in text for term in ("negative", "lower", "more negative")) else 0,
+            "Single-series tone change compared across the war boundary.", "single",
+        )
     ordered = sorted(scores, key=lambda name: (scores[name], name), reverse=True)
     if not ordered:
         return MissionPlan("", "")
@@ -158,6 +178,7 @@ def plan_mission(hypothesis, use_ai=True):
             return plan, result.get("_meta", {}).get("model", env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
         except Exception as exc:
             last_error = exc
+            print(f"[planner] ai plan rejected: {exc}", flush=True)
             prompt += f"\nPlanner error: {exc}. Use exact registered indicator names."
     fallback = heuristic_plan(hypothesis)
     return _validate_plan(hypothesis, _semantic_adjust(hypothesis, fallback)), "heuristic"
@@ -169,12 +190,6 @@ def _semantic_adjust(hypothesis, plan):
         plan.indicator_a = "finance.BZ=F.log_return"
         plan.indicator_b = "finance.^GSPC.log_return"
         plan.transform_a = plan.transform_b = "level"
-    if "gdelt" in lower and "brent" in lower:
-        plan.indicator_a = "gdelt.irn.events" if "gdelt.irn.events" in REGISTRY else plan.indicator_a
-        plan.indicator_b = "finance.BZ=F.log_return"
-        plan.transform_a = "level"
-        plan.transform_b = "log_return" if "return" in lower else "level"
-        plan.max_lag_days = 3
     if "after" in lower and ("before" in lower or "became" in lower or "changed" in lower):
         plan.window = "compare_pre_post"
     return plan

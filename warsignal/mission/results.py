@@ -18,11 +18,27 @@ def append_result(result: MissionResult, csv_path=ROOT / "missions" / "results.c
     with path.open("a+", newline="", encoding="utf-8") as handle:
         fcntl.flock(handle, fcntl.LOCK_EX)
         handle.seek(0)
-        empty = not handle.read(1)
-        handle.seek(0, 2)
-        writer = csv.DictWriter(handle, fieldnames=list(row))
-        if empty:
+        existing = list(csv.DictReader(handle))
+        fieldnames = list(existing[0]) if existing else []
+        for name in row:
+            if name not in fieldnames:
+                fieldnames.append(name)
+        if not existing and not fieldnames:
+            fieldnames = list(row)
+        if not existing:
+            handle.seek(0)
+            handle.truncate()
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
             writer.writeheader()
+        elif fieldnames != list(existing[0]):
+            handle.seek(0)
+            handle.truncate()
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(existing)
+        else:
+            handle.seek(0, 2)
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writerow(row)
         fcntl.flock(handle, fcntl.LOCK_UN)
 

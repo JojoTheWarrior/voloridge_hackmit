@@ -18,6 +18,7 @@ class MissionPlan:
     is_null_control: bool = False
     expected_sign: int = 0
     rationale: str = ""
+    mode: str = "pair"
 
 
 @dataclass
@@ -47,6 +48,7 @@ class MissionResult:
         return {
             "mission_id": self.mission_id, "created_at": self.created_at, "status": self.status,
             "hypothesis": self.hypothesis, "indicator_a": self.plan.indicator_a, "indicator_b": self.plan.indicator_b,
+            "mode": self.plan.mode,
             "transform_a": self.plan.transform_a, "transform_b": self.plan.transform_b, "window": self.plan.window,
             "event_category": self.plan.event_category, "is_null_control": self.plan.is_null_control,
             "expected_sign": self.plan.expected_sign, "data_sources": "|".join(self.data_sources),
@@ -57,6 +59,8 @@ class MissionResult:
             "pre_r": (pp.get("pre") or {}).get("pearson_r"), "post_r": (pp.get("post") or {}).get("pearson_r"),
             "r_change": pp.get("r_change"), "fisher_z_p": pp.get("fisher_z_p"), "event_n": event.get("n_events"),
             "event_mean_change": event.get("mean_change"), "event_p": event.get("p"),
+            "pre_mean": (pp.get("pre") or {}).get("mean"), "post_mean": (pp.get("post") or {}).get("mean"),
+            "mean_diff": pp.get("mean_diff"), "welch_p": pp.get("welch_p"), "cohens_d": pp.get("cohens_d"),
             "sign_matches": self.stats.get("sign_matches_expectation"),
             "validity": self.scores.get("validity"), "interestingness": self.scores.get("interestingness"),
             "unexpectedness": self.scores.get("unexpectedness"), "supported_prob": self.scores.get("supported_prob"),
