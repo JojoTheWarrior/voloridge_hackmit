@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:42:32.551623+00:00",
+  "git_commit": "45a816572b0154571dfe0066d102ddaf2c418571",
+  "folder": "20260920-159-finance-ttf-f-abs-return_x_finance-ttf-f-log-return",
   "mission_id": "R2-0037",
-  "title": "TTF panic spike fade (short 3d)",
   "hypothesis": "R2 | [gas-lng] REVERSAL: TTF absolute return 20d z-score > 2.5 (panic spike) is faded over the next 3 days (-); trade short TTF=F 3d after the spike day [finance.TTF=F.abs_return -> finance.TTF=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/17913f724119437c89163b4dd5dc70b5",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:41:25Z",
-  "updated_at": "2026-09-20T03:42:34Z",
-  "finished_at": null,
-  "elapsed_s": 69,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-159-finance-ttf-f-abs-return_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.19
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.2265516306766731,
+  "perm_p": 0.029940119760479042,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.19,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.TTF=F.abs_return": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
