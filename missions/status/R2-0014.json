@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:52Z",
-  "updated_at": "2026-09-20T03:26:06Z",
+  "updated_at": "2026-09-20T03:26:36Z",
   "finished_at": "2026-09-20T03:26:06Z",
-  "elapsed_s": 74,
+  "elapsed_s": 104,
   "message": "Not supported: Kuwait SO2 z>1 vs gasoline crack r=-0.001 (n=389), best lag -4d r=-0.17; trade hit rate 47%, sharpe -0.16, validity 0",
   "run_folder": "missions/runs/20260920-139-airquality-kuwait-cams-so2_x_finance-spread-gasoline-crack",
   "scores": {
