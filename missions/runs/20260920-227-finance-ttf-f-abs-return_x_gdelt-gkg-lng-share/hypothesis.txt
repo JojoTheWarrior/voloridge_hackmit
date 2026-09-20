@@ -1,0 +1,1 @@
+R2 | [gas-lng] Reversal control: TTF abs return 20d z-score > 1.5 leads GDELT LNG GKG share by 1-2 days (+) - news follows price not vice versa; trade long LNG 2d [finance.TTF=F.abs_return -> gdelt.gkg.lng_share] (parent: R2-0021)

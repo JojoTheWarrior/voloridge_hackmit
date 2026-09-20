@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:48:43.261963+00:00",
+  "git_commit": "ec1f06d36cde11b53c10204cec262aa3b72ba239",
+  "folder": "20260920-227-finance-ttf-f-abs-return_x_gdelt-gkg-lng-share",
   "mission_id": "R2-0119",
-  "title": "TTF abs-return z-score leads LNG GKG share (reversal)",
   "hypothesis": "R2 | [gas-lng] Reversal control: TTF abs return 20d z-score > 1.5 leads GDELT LNG GKG share by 1-2 days (+) - news follows price not vice versa; trade long LNG 2d [finance.TTF=F.abs_return -> gdelt.gkg.lng_share] (parent: R2-0021)",
-  "parent_mission_id": "R2-0021",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/ad8f84f757c241c697498953e6575ea9",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:48:40Z",
-  "updated_at": "2026-09-20T12:48:44Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-227-finance-ttf-f-abs-return_x_gdelt-gkg-lng-share",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 8.5
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.48971418608839434,
+  "perm_p": 0.0499001996007984,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 8.5,
   "trade_idea": {
     "instrument": "gdelt.gkg.lng_share",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 8.5,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.TTF=F.abs_return": "configured analysis window",
+    "gdelt.gkg.lng_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
