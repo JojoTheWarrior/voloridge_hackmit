@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-09-20T03:51:51.023785+00:00",
+  "git_commit": "2351df0b2385f2f83ad2ac578a7d26765916ad56",
+  "folder": "20260920-170-finance-mos-log-return_prepost",
+  "mission_id": "R2-0056",
+  "hypothesis": "R2 | [fertilizer-ag] MOS 5d cumulative return > 12 pct leads MOS log returns by 2 days (-) as post-spike fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.log_return -> finance.MOS.log_return]",
+  "status": "ok",
+  "n_obs": 390,
+  "r": null,
+  "perm_p": 0.7425149700598802,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.0,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

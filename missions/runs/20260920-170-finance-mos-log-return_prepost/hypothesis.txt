@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] MOS 5d cumulative return > 12 pct leads MOS log returns by 2 days (-) as post-spike fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.log_return -> finance.MOS.log_return]
