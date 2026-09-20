@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/e77d1535c9f749d9bff5241d17c6797c",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:59:09Z",
-  "updated_at": "2026-09-20T03:59:29Z",
-  "finished_at": null,
-  "elapsed_s": 20,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:00:56Z",
+  "finished_at": "2026-09-20T04:00:36Z",
+  "elapsed_s": 107,
+  "message": "Noise: qatar GKG share vs LHA.DE r=-0.10 at lag 0, perm p=0.53; short rule hit 51% (n=37), OOS 43% (n=7), actionability 6.8 heuristic",
   "run_folder": "missions/runs/20260920-181-gdelt-gkg-qatar-share_x_finance-lha-de-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.81,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] GDELT qatar GKG share 20d z-score > 1 flags Gulf hub disruption that penalizes IAG Gulf/Middle East routes (-); trade short IAG.L 3d at 1d lag; cross-check of the weak LHA.DE result [gdelt.gkg.qatar_share -> finance.IAG.L.log_return] (parent: R2-0069)"
 }
