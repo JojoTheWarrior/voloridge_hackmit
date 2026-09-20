@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:49:49.162542+00:00",
+  "git_commit": "afce66609b2d7f963762b4991ccf6c516a7aa784",
+  "folder": "20260920-017-airquality-houston-pm25_x_weather-houston-temp-mean",
+  "mission_id": "M20260920-b3d724",
+  "hypothesis": "US Gulf Coast (Houston) air quality worsened as US refineries ran harder to replace lost Gulf supply.",
+  "status": "ok",
+  "n_obs": 561,
+  "r": 0.17405724670285,
+  "perm_p": 0.013972055888223553,
+  "validity": 6.271134601364711,
+  "interestingness": 2.6962289868114,
+  "unexpectedness": 2.87028623351425,
+  "indicator_coverage": {
+    "airquality.houston.pm25": "downloaded observations",
+    "weather.houston.temp_mean": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
