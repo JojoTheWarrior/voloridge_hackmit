@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/eb41aea760454b9d83c5e8964c7b225f",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:58:09Z",
-  "updated_at": "2026-09-20T03:58:18Z",
+  "updated_at": "2026-09-20T03:58:46Z",
   "finished_at": null,
-  "elapsed_s": 9,
+  "elapsed_s": 37,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-180-gdelt-gkg-oil-share_x_finance-ccl-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 4.91,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1 precedes airline fuel-cost derating more sharply than cruise lines (-); trade short JETS 3d at 3d lag as a higher-fuel-beta comparison to the weak CCL result [gdelt.gkg.oil_share -> finance.JETS.log_return] (parent: R2-0067)"
 }
