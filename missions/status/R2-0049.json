@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:47:08Z",
-  "updated_at": "2026-09-20T03:48:54Z",
+  "updated_at": "2026-09-20T03:50:06Z",
   "finished_at": "2026-09-20T03:48:54Z",
-  "elapsed_s": 106,
-  "message": "Not supported: OKC temp anomaly vs ZW=F log return r=0.002 (n=387), best lag -6d r=-0.078; validity 0. Trade rule (zscore>1, long 1d) actionability 7.96 but unsupported by correlation.",
+  "elapsed_s": 178,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-165-weather-oklahoma-city-temp-anomaly_x_finance-zw-f-log-return",
   "scores": {
     "validity": 0,
