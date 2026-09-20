@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/ae2689adcd5a4288a3efecccab89c72e",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:43Z",
-  "updated_at": "2026-09-20T03:24:56Z",
+  "updated_at": "2026-09-20T03:25:23Z",
   "finished_at": null,
-  "elapsed_s": 13,
+  "elapsed_s": 40,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-139-weather-muscat-wind-max_x_finance-bz-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 7.34,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Muscat max wind 20d z-score above 1 (rough Gulf of Oman seas) leads Brent intraday range higher by 2 days (+); trade long BZ=F volatility 3d [weather.muscat.wind_max -> finance.BZ=F.range_pct] (parent: R2-0011)"
 }
