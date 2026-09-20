@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/6b2cac8a5f2d4c22bb6bf9dd4ca7c3d2",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 1.0,
   "signal": null,
   "started_at": "2026-09-20T03:55:58Z",
-  "updated_at": "2026-09-20T03:56:51Z",
+  "updated_at": "2026-09-20T03:57:25Z",
   "finished_at": "2026-09-20T03:56:05Z",
-  "elapsed_s": 53,
+  "elapsed_s": 87,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-177-FAILED-r2-fuel-airspace-losers-crossref",
   "scores": {
@@ -24,5 +24,5 @@
     "actionability": null
   },
   "trade_idea": null,
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] GDELT GKG drone mention share 20d z-score > 1 precedes airline underperformance vs SPY (-); trade short JETS vs SPY 5d at 3d lag [gdelt.gkg.drone_share -> finance.ratio.jets_spy] (parent: R2-0064)"
 }
