@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:50:40.329256+00:00",
+  "git_commit": "462df94c209dee7c210ed499173dd3e02e45868d",
+  "folder": "20260920-023-weather-bandar-abbas-wind-max_x_finance-bz-f-range-pct",
+  "mission_id": "M20260920-3e9d5e",
+  "hypothesis": "Wind speed at Bandar Abbas correlates with Brent intraday range during the blockade phase.",
+  "status": "ok",
+  "n_obs": 137,
+  "r": -0.0988070048718774,
+  "perm_p": 0.16167664670658682,
+  "validity": 3.14,
+  "interestingness": 3.72,
+  "unexpectedness": 4.26,
+  "indicator_coverage": {
+    "weather.bandar_abbas.wind_max": "configured analysis window",
+    "finance.BZ=F.range_pct": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

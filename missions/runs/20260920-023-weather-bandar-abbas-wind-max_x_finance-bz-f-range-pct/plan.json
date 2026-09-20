@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.bandar_abbas.wind_max",
+  "indicator_b": "finance.BZ=F.range_pct",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Bandar Abbas daily maximum wind (as a proxy for local wind speed conditions) against Brent futures intraday range during the war window, focusing on the Hormuz blockade phase, with wind as an anomaly vs 2025 seasonality and range in levels, allowing a few days for any weather-related volatility effects to transmit."
+}
