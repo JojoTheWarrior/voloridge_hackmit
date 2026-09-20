@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/bd71bce907f943829ead59ddf134dc14",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:57:55Z",
-  "updated_at": "2026-09-20T12:58:06Z",
-  "finished_at": null,
-  "elapsed_s": 11,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:58:43Z",
+  "finished_at": "2026-09-20T12:58:43Z",
+  "elapsed_s": 48,
+  "message": "Supported in-sample (r=0.23, n=391) but trade edge is war-regime only: 1d long after TTF abs-return z>1 gives hit 0.53, avg +0.59%, sharpe 0.91 (n=49); pre-war excess negative, war OOS +2.1%/trade (n=15). Heuristic judge scores 0; actionability 6.41.",
   "run_folder": "missions/runs/20260920-238-finance-ttf-f-abs-return_x_finance-ttf-f-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.41,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] SIGNED MOMENTUM (refines R2-0136): the TTF vol-spike continuation edge exists only in the war regime (pre-war excess return negative), so test whether it is really 1-day signed momentum: TTF log-return 20d z-score > 1 (large UP day) is followed by a positive next-day return (+); trade long TTF=F for 1d after the up day, control against unsigned spikes [finance.TTF=F.log_return -> finance.TTF=F.log_return] (parent: R2-0136)"
 }
