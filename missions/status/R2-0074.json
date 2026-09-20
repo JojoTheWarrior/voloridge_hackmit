@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/4b862f9a4140457e88f5428d66a1d6f3",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:01:29Z",
-  "updated_at": "2026-09-20T04:01:48Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:02:50Z",
+  "finished_at": "2026-09-20T04:02:50Z",
+  "elapsed_s": 81,
+  "message": "NOISE: gasoline crack vs JETS r=0.05 n=389 perm p=0.74; z>1 long-JETS-5d rule 31 trades hit 55% avg +0.38% but excess vs buy-hold -0.05%, actionability 3.99",
   "run_folder": "missions/runs/20260920-183-finance-spread-gasoline-crack_x_finance-jets-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 3.99,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 (fuel-cost spike) hurts airlines relative to the market rather than helping them (-); trade short JETS/SPY ratio 3d at 1d lag [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0074)"
 }
