@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/675d1491013b4b0789fe90c9653b8f5e",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:14:15Z",
-  "updated_at": "2026-09-20T13:14:30Z",
+  "updated_at": "2026-09-20T13:14:50Z",
   "finished_at": null,
-  "elapsed_s": 15,
+  "elapsed_s": 35,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-258-gdelt-gkg-oil-share_x_finance-jets-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.59,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Reversal test: shorting JETS on oil GKG share z>1 lost money (sharpe -0.65) and best lag was -7d, so oil-news spikes may be already priced; trade long JETS 3d after oil_share 20d z>1 as a contrarian fade of oil-headline overreaction [gdelt.gkg.oil_share -> finance.JETS.log_return] (parent: R2-0166)"
 }
