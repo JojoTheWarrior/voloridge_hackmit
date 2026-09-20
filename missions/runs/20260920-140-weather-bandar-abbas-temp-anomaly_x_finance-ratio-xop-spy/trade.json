@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 10,
+    "target_kind": "level"
+  },
+  "all": {
+    "n_trades": 21,
+    "hit_rate": 0.5714285714285714,
+    "avg_return": 0.012096082585659227,
+    "baseline_avg_return": 0.0050433605217182894,
+    "excess_return": 0.007052722063940938,
+    "sharpe_like": 1.0856909697148256,
+    "max_drawdown": -0.15109948045446753,
+    "total_return": 0.25345294991329226
+  },
+  "fit_pre_war": {
+    "n_trades": 15,
+    "hit_rate": 0.6,
+    "avg_return": 0.012573270672604076,
+    "baseline_avg_return": 0.003760058134890639,
+    "excess_return": 0.008813212537713437,
+    "sharpe_like": 0.9657647762090158,
+    "max_drawdown": -0.15109948045446753,
+    "total_return": 0.18389407365953514
+  },
+  "test_war": {
+    "n_trades": 6,
+    "hit_rate": 0.5,
+    "avg_return": 0.010903112368297108,
+    "baseline_avg_return": 0.007461891943047322,
+    "excess_return": 0.003441220425249786,
+    "sharpe_like": 0.5078497830434684,
+    "max_drawdown": -0.08108309679801318,
+    "total_return": 0.058754307333208855
+  },
+  "n_signal_days": 382,
+  "trade_idea": {
+    "instrument": "ratio:xop_spy",
+    "direction": "long",
+    "entry_rule": "weather.bandar_abbas.temp_anomaly rolling_zscore_20d > 1 at close -> long ratio:xop_spy next session",
+    "exit_rule": "close after 10 trading days (no overlapping entries)",
+    "holding_days": 10,
+    "hit_rate": 0.5714285714285714,
+    "avg_return": 0.012096082585659227,
+    "excess_return": 0.007052722063940938,
+    "n_trades": 21,
+    "sharpe_like": 1.0856909697148256,
+    "max_drawdown": -0.15109948045446753,
+    "oos_n_trades": 6,
+    "oos_avg_return": 0.010903112368297108,
+    "oos_hit_rate": 0.5,
+    "actionability": 6.37,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

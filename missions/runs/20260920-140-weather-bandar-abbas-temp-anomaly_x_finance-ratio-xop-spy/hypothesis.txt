@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Bandar Abbas temp anomaly 20d z-score > 1.5 (heat stress on loading ops) leads XOP-to-SPY ratio by 5 days (+); trade long XOP 5d [weather.bandar_abbas.temp_anomaly -> finance.ratio.xop_spy]
