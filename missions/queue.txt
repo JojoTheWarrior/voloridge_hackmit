@@ -1,4 +1,3 @@
-R2 | [oil-shipping] Iran GDELT Goldstein 20d z-score above +1 (de-escalation) leads XLE log returns by 1 day (+); trade long XLE 1d [gdelt.irn.goldstein -> finance.XLE.log_return] (parent: R2-0005)
 R2 | [oil-shipping] Iran conflict event 20d z-score > 1 leads DHT log returns by 1 day (+), null control: same rule on XLE should show weaker edge; trade long DHT 6d [gdelt.irn.conflict_events -> finance.DHT.log_return] (parent: R2-0004)
 R2 | [oil-shipping] Oman GDELT event count 20d z-score > 1.5 marks Gulf tension (not diplomacy) and leads Brent higher by 2 days (+); trade long BZ=F 3d [gdelt.omn.events -> finance.BZ=F.log_return] (parent: R2-0006)
 R2 | [oil-shipping] GDELT oil GKG share 10d z-score > 1 leads Brent-WTI spread NARROWING by 1 day (-); reversal control of R2-0003, trade short BZ=F long CL=F 1d [gdelt.gkg.oil_share -> finance.spread.brent_wti] (parent: R2-0003)
