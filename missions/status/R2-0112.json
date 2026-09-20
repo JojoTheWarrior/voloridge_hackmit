@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/c867b3b6df9e4de382c4fd8480b6a49b",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:44:03Z",
-  "updated_at": "2026-09-20T12:44:21Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:44:45Z",
+  "finished_at": "2026-09-20T12:44:45Z",
+  "elapsed_s": 42,
+  "message": "Not supported: short-STNG-on-high-wind rule loses (23 trades, hit 35%, sharpe -2.25, war-test excess -2.7%); best lag 8d r=-0.08, perm not significant; actionability 0.",
   "run_folder": "missions/runs/20260920-221-weather-bandar-abbas-wind-max_x_finance-stng-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Reversal of R2-0112: Bandar Abbas max wind 20d z-score > 1 (rough seas delay Hormuz tanker transits, tightening product-tanker supply) leads STNG log returns by 5 days (+); trade long STNG 5d [weather.bandar_abbas.wind_max -> finance.STNG.log_return] (parent: R2-0112)"
 }
