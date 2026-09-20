@@ -1,4 +1,3 @@
-R2 | [gas-lng] REVERSAL: TTF log return 20d z-score > 2.5 (panic spike) is faded over the next 3 days (-); trade short TTF=F 3d after the spike day [finance.TTF=F.log_return -> finance.TTF=F.log_return]
 R2 | [gas-lng] NULL CONTROL: Tokyo temperature anomaly 20d z-score > 1 should show no lead on TTF log returns at lags 0-10 days (expected zero); trade none [weather.tokyo.temp_anomaly -> finance.TTF=F.log_return]
 R2 | [fertilizer-ag] GDELT fertilizer GKG share 20d z-score > 1.5 leads CF log returns by 2 days (+); trade long CF 5d [gdelt.gkg.fertilizer_share -> finance.CF.log_return]
 R2 | [fertilizer-ag] GDELT Qatar GKG share day-over-day pct change > 30 pct leads NTR log returns by 3 days (+) via Gulf urea export disruption; trade long NTR 5d [gdelt.gkg.qatar_share -> finance.NTR.log_return]
