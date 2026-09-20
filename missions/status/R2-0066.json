@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:57:04Z",
-  "updated_at": "2026-09-20T04:00:00Z",
+  "updated_at": "2026-09-20T04:00:11Z",
   "finished_at": "2026-09-20T03:59:54Z",
-  "elapsed_s": 176,
-  "message": "heartbeat",
+  "elapsed_s": 187,
+  "message": "Not a rule: short FDX on tanker-news z>1 loses pre-war (17 trades, hit 24%, excess -0.8%/trade) and only marginally works in war OOS (11 trades, hit 64%, +0.25%); r=-0.07 at lag 0, perm p=0.90, actionability 2.07.",
   "run_folder": "missions/runs/20260920-178-gdelt-gkg-tanker-share_x_finance-fdx-log-return",
   "scores": {
     "validity": 0,
