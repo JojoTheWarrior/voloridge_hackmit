@@ -1,0 +1,1 @@
+R2 | [gas-lng] Crossref hormuz share of all publications (control-normalized) 8-week z-score > 1 leads TTF gas futures returns by 7 days (+) as chokepoint attention prices European supply risk; trade long TTF=F 7d [research.hormuz.crossref_share -> finance.TTF=F.log_return] (parent: R2-0031)

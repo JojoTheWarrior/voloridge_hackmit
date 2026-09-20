@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Null control: Tokyo daily precipitation 20d z-score > 1 has no relation to tanker equity returns at 0-5 day lags (0); no trade [weather.tokyo.precip -> finance.FRO.log_return] (parent: R2-0020)

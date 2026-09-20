@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:11:10.503625+00:00",
+  "git_commit": "608d37b135106d3716a92cb3272fce9fd675b034",
+  "folder": "20260920-255-gdelt-gkg-ceasefire-share_x_finance-jets-log-return",
+  "mission_id": "R2-0159",
+  "hypothesis": "R2 | [fuel-airspace-losers] GDELT ceasefire GKG share 20d z-score > 1 leads JETS log returns by 3 days (+) as ceasefire news lifts the whole airline basket, not just UAL; long JETS 3d [gdelt.gkg.ceasefire_share -> finance.JETS.log_return] (parent: R2-0059)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.06340156284685255,
+  "perm_p": 0.1656686626746507,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 4.04,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.ceasefire_share rolling_zscore_20d > 1 at close -> long JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5172413793103449,
+    "avg_return": 0.003189725860780858,
+    "excess_return": 0.002275458910221693,
+    "n_trades": 29,
+    "sharpe_like": 1.0478383179811994,
+    "max_drawdown": -0.06304806598690538,
+    "oos_n_trades": 14,
+    "oos_avg_return": -0.0008318504897657905,
+    "oos_hit_rate": 0.2857142857142857,
+    "actionability": 4.04,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.ceasefire_share": "configured analysis window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

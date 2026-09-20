@@ -1,0 +1,1 @@
+R2 | [gas-lng] Houston temperature anomaly 20d z-score > 1.5 leads Henry Hub absolute returns (volatility, not direction) by 3 days (+); trade long NG=F straddle proxy 3d [weather.houston.temp_anomaly -> finance.NG=F.abs_return] (parent: R2-0035)

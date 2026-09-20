@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1 leads CF Industries returns by 2 days (+) as a wide EU-US gas spread hands US ammonia producers a cost advantage (mirror of null YAR.OL short result); trade long CF 3d [finance.ratio.ttf_henryhub -> finance.CF.log_return] (parent: R2-0055)

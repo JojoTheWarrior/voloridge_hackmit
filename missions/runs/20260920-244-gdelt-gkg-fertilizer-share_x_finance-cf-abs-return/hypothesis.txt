@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT fertilizer attention share 20d z-score > 1 leads CF absolute returns by 5 days (+) as attention spikes predict volatility rather than direction; long CF straddle proxy 5d [gdelt.gkg.fertilizer_share -> finance.CF.abs_return] (parent: R2-0046)

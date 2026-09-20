@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:09:36.482630+00:00",
+  "git_commit": "326a346adf7431e1489661f33753397c6830b83c",
+  "folder": "20260920-253-weather-tokyo-precip_x_finance-zc-f-log-return",
+  "mission_id": "R2-0156",
+  "hypothesis": "R2 | [fertilizer-ag] Tokyo daily precipitation 20d z-score is unrelated to ZC=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.precip -> finance.ZC=F.log_return] (parent: R2-0057)",
+  "status": "ok",
+  "n_obs": 387,
+  "r": -0.05354488207278363,
+  "perm_p": 0.10578842315369262,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.33,
+  "trade_idea": {
+    "instrument": "ZC=F",
+    "direction": "long",
+    "entry_rule": "weather.tokyo.precip rolling_zscore_20d > 1 at close -> long ZC=F next session",
+    "exit_rule": "close after 6 trading days (no overlapping entries)",
+    "holding_days": 6,
+    "hit_rate": 0.5,
+    "avg_return": 0.003051733551650407,
+    "excess_return": 0.00025378622538520506,
+    "n_trades": 24,
+    "sharpe_like": 0.45005170698703484,
+    "max_drawdown": -0.15803039955953946,
+    "oos_n_trades": 8,
+    "oos_avg_return": 0.009594126768758426,
+    "oos_hit_rate": 0.5,
+    "actionability": 5.33,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.tokyo.precip": "configured analysis window",
+    "finance.ZC=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

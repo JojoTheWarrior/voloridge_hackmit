@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "level"
+  },
+  "all": {
+    "n_trades": 48,
+    "hit_rate": 0.5416666666666666,
+    "avg_return": 0.0009887200749406331,
+    "baseline_avg_return": -3.994599756776494e-05,
+    "excess_return": 0.001028666072508398,
+    "sharpe_like": 0.4329894580256326,
+    "max_drawdown": -0.07240930554746428,
+    "total_return": 0.04231627648956171
+  },
+  "fit_pre_war": {
+    "n_trades": 31,
+    "hit_rate": 0.5483870967741935,
+    "avg_return": 0.002529845372984722,
+    "baseline_avg_return": -0.0003290984873207895,
+    "excess_return": 0.0028589438603055114,
+    "sharpe_like": 0.8666348786871465,
+    "max_drawdown": -0.042438830200620115,
+    "total_return": 0.0771064267659789
+  },
+  "test_war": {
+    "n_trades": 17,
+    "hit_rate": 0.5294117647058824,
+    "avg_return": -0.0018215672332574113,
+    "baseline_avg_return": 0.0004613903335867597,
+    "excess_return": -0.002282957566844171,
+    "sharpe_like": -0.5149251793506329,
+    "max_drawdown": -0.0724093055474645,
+    "total_return": -0.03229964041796274
+  },
+  "n_signal_days": 381,
+  "trade_idea": {
+    "instrument": "ratio:jets_spy",
+    "direction": "short",
+    "entry_rule": "finance.RB=F.log_return rolling_zscore_20d > 1 at close -> short ratio:jets_spy next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5416666666666666,
+    "avg_return": 0.0009887200749406331,
+    "excess_return": 0.001028666072508398,
+    "n_trades": 48,
+    "sharpe_like": 0.4329894580256326,
+    "max_drawdown": -0.07240930554746428,
+    "oos_n_trades": 17,
+    "oos_avg_return": -0.0018215672332574113,
+    "oos_hit_rate": 0.5294117647058824,
+    "actionability": 4.21,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

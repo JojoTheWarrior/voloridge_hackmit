@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:55:39.195852+00:00",
+  "git_commit": "d9518f8f5b82e259e1592cd00c92bb028f09a6b3",
+  "folder": "20260920-235-finance-ng-f-log-return_x_finance-xlu-log-return",
+  "mission_id": "R2-0134",
+  "hypothesis": "R2 | [gas-lng] Henry Hub natural gas log return 20d z-score > 1 leads utility ETF returns by 3 days (+) as gas price spikes pass through to regulated power revenue rather than squeezing margins; trade long XLU 3d [finance.NG=F.log_return -> finance.XLU.log_return] (parent: R2-0032)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.038089175053728115,
+  "perm_p": 0.7365269461077845,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 4.55,
+  "trade_idea": {
+    "instrument": "XLU",
+    "direction": "long",
+    "entry_rule": "finance.NG=F.log_return rolling_zscore_20d > 1 at close -> long XLU next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5121951219512195,
+    "avg_return": -0.0009337527329825924,
+    "excess_return": -0.001091607157778045,
+    "n_trades": 41,
+    "sharpe_like": -0.6193359110815115,
+    "max_drawdown": -0.08463069485654162,
+    "oos_n_trades": 15,
+    "oos_avg_return": 0.0007077280888627542,
+    "oos_hit_rate": 0.4666666666666667,
+    "actionability": 4.55,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.NG=F.log_return": "configured analysis window",
+    "finance.XLU.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

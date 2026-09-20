@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1 precedes airline fuel-cost derating more sharply than cruise lines (-); trade short JETS 3d at 3d lag as a higher-fuel-beta comparison to the weak CCL result [gdelt.gkg.oil_share -> finance.JETS.log_return] (parent: R2-0067)

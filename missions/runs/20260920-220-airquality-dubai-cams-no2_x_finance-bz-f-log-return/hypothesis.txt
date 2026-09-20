@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Dubai CAMS NO2 20d z-score above 1.0 (Gulf refining/production pickup) leads Brent lower by 3 days (-); trade short BZ=F 3d - sign reversal of R2-0013 whose long rule had negative excess return pre-war and only a war-sample edge [airquality.dubai.cams_no2 -> finance.BZ=F.log_return] (parent: R2-0013)

@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:42:03.898499+00:00",
+  "git_commit": "5888d0a5acf28ab469adb775a5b11f1c3d5a2e92",
+  "folder": "20260920-219-gdelt-gkg-sanctions-share_x_finance-spread-brent-wti",
+  "mission_id": "R2-0107",
+  "hypothesis": "R2 | [oil-shipping] null control: GDELT sanctions GKG share 20d z-score > 1 leads Brent-WTI spread wider by 6 days (+); trade long spread 6d [gdelt.gkg.sanctions_share -> finance.spread.brent_wti] (parent: R2-0008)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.11231786990274643,
+  "perm_p": 0.25149700598802394,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.58,
+  "trade_idea": {
+    "instrument": "spread:brent_wti",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.sanctions_share rolling_zscore_20d > 1 at close -> long spread:brent_wti next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5116279069767442,
+    "avg_return": -0.06302234738372094,
+    "excess_return": -0.06385351542222541,
+    "n_trades": 43,
+    "sharpe_like": -0.6892939407084491,
+    "max_drawdown": -1.4275799886176703,
+    "oos_n_trades": 12,
+    "oos_avg_return": -0.30499903361002606,
+    "oos_hit_rate": 0.4166666666666667,
+    "actionability": 0.58,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.spread.brent_wti": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

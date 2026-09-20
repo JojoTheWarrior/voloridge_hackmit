@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 58,
+    "hit_rate": 0.4482758620689655,
+    "avg_return": -0.0015455614751381643,
+    "baseline_avg_return": 0.00018568376279599487,
+    "excess_return": -0.001731245237934159,
+    "sharpe_like": -0.6291196127504348,
+    "max_drawdown": -0.15249870705345614,
+    "total_return": -0.09509684249870187
+  },
+  "fit_pre_war": {
+    "n_trades": 38,
+    "hit_rate": 0.4473684210526316,
+    "avg_return": -0.003228096681643235,
+    "baseline_avg_return": 0.0005816836046720229,
+    "excess_return": -0.003809780286315258,
+    "sharpe_like": -1.081150937744348,
+    "max_drawdown": -0.11767776783130557,
+    "total_return": -0.12137177297721513
+  },
+  "test_war": {
+    "n_trades": 20,
+    "hit_rate": 0.45,
+    "avg_return": 0.00165125541722147,
+    "baseline_avg_return": -0.0005179994094585298,
+    "excess_return": 0.00216925482668,
+    "sharpe_like": 0.3914431205717952,
+    "max_drawdown": -0.056999960433338104,
+    "total_return": 0.029904491650063703
+  },
+  "n_signal_days": 387,
+  "trade_idea": {
+    "instrument": "LHA",
+    "direction": "long",
+    "entry_rule": "airquality.dubai.cams_no2 rolling_zscore_20d > 1 at close -> long LHA next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4482758620689655,
+    "avg_return": -0.0015455614751381643,
+    "excess_return": -0.001731245237934159,
+    "n_trades": 58,
+    "sharpe_like": -0.6291196127504348,
+    "max_drawdown": -0.15249870705345614,
+    "oos_n_trades": 20,
+    "oos_avg_return": 0.00165125541722147,
+    "oos_hit_rate": 0.45,
+    "actionability": 2.98,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

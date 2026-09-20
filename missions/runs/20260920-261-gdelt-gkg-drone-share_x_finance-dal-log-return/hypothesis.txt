@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Null control: gdelt.gkg.drone_share 20d z-score > 1 should NOT predict DAL selloffs; if short DAL 2d at 2d lag also scores, drone-share is a war proxy not an airspace signal (-) [gdelt.gkg.drone_share -> finance.DAL.log_return] (parent: R2-0063)

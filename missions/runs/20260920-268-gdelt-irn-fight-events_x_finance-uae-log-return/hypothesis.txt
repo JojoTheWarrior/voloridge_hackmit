@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Iran fight-event count 20d z-score > 1 leads UAE ETF returns lower by 1-3 days (-); tighter subset of conflict events, trade short UAE 3d [gdelt.irn.fight_events -> finance.UAE.log_return] (parent: R2-0081)

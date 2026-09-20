@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:44:19.876228+00:00",
+  "git_commit": "99282d8e9ea5fb22bf5e321ea8c8e6d4bf3be17e",
+  "folder": "20260920-221-weather-bandar-abbas-wind-max_x_finance-stng-log-return",
+  "mission_id": "R2-0112",
+  "hypothesis": "R2 | [oil-shipping] Bandar Abbas max wind 20d z-score > 1 (rough seas suppress small-boat harassment, easing tanker risk premium) leads STNG log returns by 3 days (-); trade short STNG 3d [weather.bandar_abbas.wind_max -> finance.STNG.log_return] (parent: R2-0010)",
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.006285517430793598,
+  "perm_p": 0.5848303393213573,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
+  "trade_idea": {
+    "instrument": "STNG",
+    "direction": "short",
+    "entry_rule": "weather.bandar_abbas.wind_max rolling_zscore_20d > 1 at close -> short STNG next session",
+    "exit_rule": "close after 8 trading days (no overlapping entries)",
+    "holding_days": 8,
+    "hit_rate": 0.34782608695652173,
+    "avg_return": -0.027031293959015674,
+    "excess_return": -0.00791201535744487,
+    "n_trades": 23,
+    "sharpe_like": -2.253310991417577,
+    "max_drawdown": -0.4836465747770753,
+    "oos_n_trades": 8,
+    "oos_avg_return": -0.03571862924585455,
+    "oos_hit_rate": 0.375,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.bandar_abbas.wind_max": "configured analysis window",
+    "finance.STNG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

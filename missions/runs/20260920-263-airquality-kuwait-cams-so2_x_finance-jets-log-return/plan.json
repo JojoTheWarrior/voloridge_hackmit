@@ -1,0 +1,13 @@
+{
+  "indicator_a": "airquality.kuwait.cams_so2",
+  "indicator_b": "finance.JETS.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 10,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": -1,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}

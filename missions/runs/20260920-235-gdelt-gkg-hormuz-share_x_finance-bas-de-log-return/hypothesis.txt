@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT hormuz GKG share 20d z-score > 1 leads BASF returns by 3 days (+) as war-period Hormuz spikes were followed by BASF relief rallies (reversal of R2-0034, 0/5 hits short); trade long BAS.DE 3d [gdelt.gkg.hormuz_share -> finance.BAS.DE.log_return] (parent: R2-0034)

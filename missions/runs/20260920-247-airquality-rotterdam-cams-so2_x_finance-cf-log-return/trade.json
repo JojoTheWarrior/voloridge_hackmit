@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 6,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 31,
+    "hit_rate": 0.5806451612903226,
+    "avg_return": 0.0072359736389083235,
+    "baseline_avg_return": 0.01007956763285328,
+    "excess_return": -0.002843593993944956,
+    "sharpe_like": 0.7478836469301084,
+    "max_drawdown": -0.1340908870412556,
+    "total_return": 0.19575257604437013
+  },
+  "fit_pre_war": {
+    "n_trades": 19,
+    "hit_rate": 0.631578947368421,
+    "avg_return": 0.009955843270896615,
+    "baseline_avg_return": 0.009716708544243318,
+    "excess_return": 0.00023913472665329678,
+    "sharpe_like": 0.8193032887575143,
+    "max_drawdown": -0.12776230932260546,
+    "total_return": 0.17547936575176348
+  },
+  "test_war": {
+    "n_trades": 12,
+    "hit_rate": 0.5,
+    "avg_return": 0.0029295133882601965,
+    "baseline_avg_return": 0.010743004026207315,
+    "excess_return": -0.007813490637947118,
+    "sharpe_like": 0.18453404524848335,
+    "max_drawdown": -0.13409088704125605,
+    "total_return": 0.017246759818400514
+  },
+  "n_signal_days": 384,
+  "trade_idea": {
+    "instrument": "CF",
+    "direction": "long",
+    "entry_rule": "airquality.rotterdam.cams_so2 rolling_zscore_20d > 1 at close -> long CF next session",
+    "exit_rule": "close after 6 trading days (no overlapping entries)",
+    "holding_days": 6,
+    "hit_rate": 0.5806451612903226,
+    "avg_return": 0.0072359736389083235,
+    "excess_return": -0.002843593993944956,
+    "n_trades": 31,
+    "sharpe_like": 0.7478836469301084,
+    "max_drawdown": -0.1340908870412556,
+    "oos_n_trades": 12,
+    "oos_avg_return": 0.0029295133882601965,
+    "oos_hit_rate": 0.5,
+    "actionability": 2.52,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

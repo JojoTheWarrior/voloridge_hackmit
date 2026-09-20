@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:42:01.374144+00:00",
+  "git_commit": "31dde447cec02e16ff7a4a09887f775d176ca93e",
+  "folder": "20260920-219-weather-muscat-wind-max_x_finance-bz-f-range-pct",
+  "mission_id": "R2-0108",
+  "hypothesis": "R2 | [oil-shipping] Muscat max wind 20d z-score above 1 (rough Gulf of Oman seas) leads Brent intraday range higher by 2 days (+); trade long BZ=F volatility 3d [weather.muscat.wind_max -> finance.BZ=F.range_pct] (parent: R2-0011)",
+  "status": "ok",
+  "n_obs": 388,
+  "r": 0.0903703777964566,
+  "perm_p": 0.11776447105788423,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 10.0,
+  "trade_idea": {
+    "instrument": "BZ=F",
+    "direction": "long",
+    "entry_rule": "weather.muscat.wind_max rolling_zscore_20d > 1 at close -> long BZ=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 1.0,
+    "avg_return": 0.04111094215206769,
+    "excess_return": 0.002169638184887343,
+    "n_trades": 54,
+    "sharpe_like": 9.606921724684433,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 22,
+    "oos_avg_return": 0.06425509975309575,
+    "oos_hit_rate": 1.0,
+    "actionability": 10.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.muscat.wind_max": "configured analysis window",
+    "finance.BZ=F.range_pct": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

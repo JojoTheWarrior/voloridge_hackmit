@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT Qatar GKG share 20d z-score > 1.5 marks peak attention that fades: LNG log return reverses over the next 3 days (-); trade short LNG 3d [gdelt.gkg.qatar_share -> finance.LNG.log_return] (parent: R2-0022)

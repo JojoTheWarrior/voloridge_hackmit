@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:51:08.433207+00:00",
+  "git_commit": "ce436618aca99cb36a3326b64d7830af5d016d5b",
+  "folder": "20260920-229-weather-houston-temp-max_x_finance-ratio-ttf-henryhub",
+  "mission_id": "R2-0124",
+  "hypothesis": "R2 | [gas-lng] Houston maximum temperature 20d z-score > 1.0 (US cooling demand lifts Henry Hub, the denominator) leads the TTF to Henry Hub ratio by 3 days (-); control for the Doha-heat result, trade short TTF/HH ratio 3d [weather.houston.temp_max -> finance.ratio.ttf_henryhub] (parent: R2-0027)",
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.03454276175369487,
+  "perm_p": 0.2714570858283433,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.31,
+  "trade_idea": {
+    "instrument": "ratio:ttf_henryhub",
+    "direction": "short",
+    "entry_rule": "weather.houston.temp_max rolling_zscore_20d > 1 at close -> short ratio:ttf_henryhub next session",
+    "exit_rule": "close after 3 trading days (no overlapping entries)",
+    "holding_days": 3,
+    "hit_rate": 0.4,
+    "avg_return": -0.02635954938247834,
+    "excess_return": -0.012079717214372133,
+    "n_trades": 35,
+    "sharpe_like": -1.6207316416114323,
+    "max_drawdown": -0.7301018189440067,
+    "oos_n_trades": 12,
+    "oos_avg_return": -0.002678712820643229,
+    "oos_hit_rate": 0.5,
+    "actionability": 2.31,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.houston.temp_max": "configured analysis window",
+    "finance.ratio.ttf_henryhub": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

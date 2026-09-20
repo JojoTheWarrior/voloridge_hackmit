@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:01:18.171353+00:00",
+  "git_commit": "668ea0868d106426ec6a518a25e749149d363926",
+  "folder": "20260920-242-gdelt-irn-conflict-events_x_finance-mos-abs-return",
+  "mission_id": "R2-0143",
+  "hypothesis": "R2 | [fertilizer-ag] Iran conflict event count 20d z-score > 2 leads MOS absolute returns by 3 days (+) as Gulf escalation raises fertilizer volatility regardless of direction; trade long MOS straddle-proxy 5d [gdelt.irn.conflict_events -> finance.MOS.abs_return] (parent: R2-0044)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.20657672747210698,
+  "perm_p": 0.027944111776447105,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 10.0,
+  "trade_idea": {
+    "instrument": "MOS",
+    "direction": "long",
+    "entry_rule": "gdelt.irn.conflict_events rolling_zscore_20d > 1 at close -> long MOS next session",
+    "exit_rule": "close after 7 trading days (no overlapping entries)",
+    "holding_days": 7,
+    "hit_rate": 1.0,
+    "avg_return": 0.15656037600359993,
+    "excess_return": 0.009469751132846399,
+    "n_trades": 26,
+    "sharpe_like": 12.98192217947284,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 8,
+    "oos_avg_return": 0.17960105083707126,
+    "oos_hit_rate": 1.0,
+    "actionability": 10.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.conflict_events": "configured analysis window",
+    "finance.MOS.abs_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:54:20.771381+00:00",
+  "git_commit": "b6e01e36830ba5f672f6da4e122aca3ed1b3e032",
+  "folder": "20260920-233-research-hormuz-crossref-share_x_finance-ttf-f-log-return",
+  "mission_id": "R2-0131",
+  "hypothesis": "R2 | [gas-lng] Crossref hormuz share of all publications (control-normalized) 8-week z-score > 1 leads TTF gas futures returns by 7 days (+) as chokepoint attention prices European supply risk; trade long TTF=F 7d [research.hormuz.crossref_share -> finance.TTF=F.log_return] (parent: R2-0031)",
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.024053236493362797,
+  "perm_p": 0.017964071856287425,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.58,
+  "trade_idea": {
+    "instrument": "TTF=F",
+    "direction": "long",
+    "entry_rule": "research.hormuz.crossref_share rolling_zscore_20d > 1 at close -> long TTF=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.375,
+    "avg_return": -0.006538401262503879,
+    "excess_return": -0.0064387521718400524,
+    "n_trades": 8,
+    "sharpe_like": -0.784375542010758,
+    "max_drawdown": -0.08679834083028026,
+    "oos_n_trades": 2,
+    "oos_avg_return": 0.0021493261566613575,
+    "oos_hit_rate": 0.5,
+    "actionability": 0.58,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_share": "2025-03..current week",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

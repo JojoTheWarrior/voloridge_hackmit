@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:17:48.365226+00:00",
+  "git_commit": "5058db21c2d81ba22f80cfbf6661d9bd4492405b",
+  "folder": "20260920-263-airquality-kuwait-cams-so2_x_finance-jets-log-return",
+  "mission_id": "R2-0170",
+  "hypothesis": "R2 | [fuel-airspace-losers] Null control: Kuwait CAMS SO2 20d z-score > 1 (refinery activity, not outage) should NOT predict airline ETF moves (-); trade short JETS 2d at 1d lag [airquality.kuwait.cams_so2 -> finance.JETS.log_return] (parent: R2-0071)",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.035582146202643716,
+  "perm_p": 0.7764471057884231,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.6,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "short",
+    "entry_rule": "airquality.kuwait.cams_so2 rolling_zscore_20d > 1 at close -> short JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5102040816326531,
+    "avg_return": -0.0053520241303136075,
+    "excess_return": -0.004437757179754442,
+    "n_trades": 49,
+    "sharpe_like": -1.1303091671506507,
+    "max_drawdown": -0.3455005276394001,
+    "oos_n_trades": 18,
+    "oos_avg_return": -0.002650041093314558,
+    "oos_hit_rate": 0.5555555555555556,
+    "actionability": 0.6,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.kuwait.cams_so2": "2025-03..2026-09 archive window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

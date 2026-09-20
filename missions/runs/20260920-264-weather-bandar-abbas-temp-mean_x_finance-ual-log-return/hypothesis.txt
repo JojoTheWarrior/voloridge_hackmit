@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 is also a null for UAL returns (null control, 0 sign); trade long UAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.UAL.log_return] (parent: R2-0072)

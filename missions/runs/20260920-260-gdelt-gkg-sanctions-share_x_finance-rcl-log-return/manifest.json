@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:15:57.533469+00:00",
+  "git_commit": "6c6eb44e2d735a9f210712cb7205023dbb5019c0",
+  "folder": "20260920-260-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
+  "mission_id": "R2-0167",
+  "hypothesis": "R2 | [fuel-airspace-losers] Reversal test: GDELT sanctions GKG share 20d z-score > 1 marks peak-fear, after which cruise operators rebound (+); trade long RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return] (parent: R2-0068)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.0603254081370455,
+  "perm_p": 0.17564870259481039,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.14,
+  "trade_idea": {
+    "instrument": "RCL",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.sanctions_share rolling_zscore_20d > 1 at close -> long RCL next session",
+    "exit_rule": "close after 5 trading days (no overlapping entries)",
+    "holding_days": 5,
+    "hit_rate": 0.5769230769230769,
+    "avg_return": 0.004970370482478474,
+    "excess_return": 0.0005687362986085765,
+    "n_trades": 26,
+    "sharpe_like": 0.42621004732641476,
+    "max_drawdown": -0.20063117199631197,
+    "oos_n_trades": 8,
+    "oos_avg_return": -0.016869601348424676,
+    "oos_hit_rate": 0.5,
+    "actionability": 3.14,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.RCL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

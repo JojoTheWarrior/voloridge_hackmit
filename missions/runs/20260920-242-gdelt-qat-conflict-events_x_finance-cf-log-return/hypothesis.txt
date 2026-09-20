@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Null control: Qatar GDELT conflict-event count 20d z-score > 1 leads CF Industries log returns by 3 days (+) if the NTR backtest reflects a real Qatari urea/ammonia supply shock rather than war-regime beta; trade long CF 3d [gdelt.qat.conflict_events -> finance.CF.log_return] (parent: R2-0043)

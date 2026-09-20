@@ -1,0 +1,13 @@
+{
+  "indicator_a": "weather.rotterdam.wind_max",
+  "indicator_b": "finance.TTF=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 10,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}

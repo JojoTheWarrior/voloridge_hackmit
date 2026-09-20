@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 51,
+    "hit_rate": 0.5098039215686274,
+    "avg_return": 0.0006855121813921402,
+    "baseline_avg_return": 0.0013661747773547161,
+    "excess_return": -0.0006806625959625759,
+    "sharpe_like": 0.2528401799623833,
+    "max_drawdown": -0.08120644217700457,
+    "total_return": 0.025731166516528292
+  },
+  "fit_pre_war": {
+    "n_trades": 28,
+    "hit_rate": 0.6785714285714286,
+    "avg_return": 0.002919178030521457,
+    "baseline_avg_return": 0.0021560950528252383,
+    "excess_return": 0.0007630829776962187,
+    "sharpe_like": 0.8401925775121661,
+    "max_drawdown": -0.08120644217700457,
+    "total_return": 0.07988586407850384
+  },
+  "test_war": {
+    "n_trades": 23,
+    "hit_rate": 0.30434782608695654,
+    "avg_return": -0.002033733200156593,
+    "baseline_avg_return": -3.3992254394990558e-06,
+    "excess_return": -0.002030333974717094,
+    "sharpe_like": -0.4838553590350545,
+    "max_drawdown": -0.07441414163312754,
+    "total_return": -0.05014853825148213
+  },
+  "n_signal_days": 381,
+  "trade_idea": {
+    "instrument": "FDX",
+    "direction": "long",
+    "entry_rule": "finance.^VIX.log_return rolling_zscore_20d > 1 at close -> long FDX next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5098039215686274,
+    "avg_return": 0.0006855121813921402,
+    "excess_return": -0.0006806625959625759,
+    "n_trades": 51,
+    "sharpe_like": 0.2528401799623833,
+    "max_drawdown": -0.08120644217700457,
+    "oos_n_trades": 23,
+    "oos_avg_return": -0.002033733200156593,
+    "oos_hit_rate": 0.30434782608695654,
+    "actionability": 1.77,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Reversal of R2-0016: Crossref weekly Hormuz publication spikes coincide with rising, not falling, Brent; z-score > 1 leads BZ=F up by 1 week (+); trade long BZ=F 5d [research.hormuz.crossref_pubs -> finance.BZ=F.log_return] (parent: R2-0016)

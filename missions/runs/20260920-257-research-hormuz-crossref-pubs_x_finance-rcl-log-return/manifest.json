@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:13:30.154284+00:00",
+  "git_commit": "832f22fde9758ea9632fad9645b306e04fffad5c",
+  "folder": "20260920-257-research-hormuz-crossref-pubs_x_finance-rcl-log-return",
+  "mission_id": "R2-0165",
+  "hypothesis": "R2 | [fuel-airspace-losers] Crossref hormuz weekly counts z-score > 1 mark strait-escalation regimes that compress cruise demand (-); trade short RCL 10d at 5d lag [research.hormuz.crossref_pubs -> finance.RCL.log_return] (parent: R2-0065)",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.08919145642875266,
+  "perm_p": 0.5049900199600799,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.05,
+  "trade_idea": {
+    "instrument": "RCL",
+    "direction": "short",
+    "entry_rule": "research.hormuz.crossref_pubs rolling_zscore_20d > 1 at close -> short RCL next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.42857142857142855,
+    "avg_return": -0.004909452453834133,
+    "excess_return": -0.007560128735029573,
+    "n_trades": 7,
+    "sharpe_like": -1.025227662156567,
+    "max_drawdown": -0.044028328569437614,
+    "oos_n_trades": 2,
+    "oos_avg_return": 0.002628825675863755,
+    "oos_hit_rate": 0.5,
+    "actionability": 1.05,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_pubs": "2025-03..current week",
+    "finance.RCL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

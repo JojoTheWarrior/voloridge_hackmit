@@ -1,0 +1,1 @@
+R2 | [gas-lng] Null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) leads TTF=F log returns by 2 days (-); trade short TTF=F 2d, expect no edge if R2-0024 rule was noise [gdelt.qat.tone -> finance.TTF=F.log_return] (parent: R2-0024)

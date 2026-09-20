@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Reversal control: Brent price over-extension (20d z-score of BZ=F close > 1) is momentum not mean-reversion: Brent log return continues higher over the next 3 days (+); trade long BZ=F 3d [finance.BZ=F.close -> finance.BZ=F.log_return] (parent: R2-0018)

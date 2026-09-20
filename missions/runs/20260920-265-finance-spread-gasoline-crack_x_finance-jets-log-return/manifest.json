@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:20:05.895161+00:00",
+  "git_commit": "291b78661c726f88e0741f053af5c6b2a62ac138",
+  "folder": "20260920-265-finance-spread-gasoline-crack_x_finance-jets-log-return",
+  "mission_id": "R2-0174",
+  "hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score < -1 (fuel-cost collapse after a spike) is the true fade-rally trigger for airlines (+); trade long JETS 5d at 1d lag [finance.spread.gasoline_crack -> finance.JETS.log_return] (parent: R2-0074)",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.0532714993348745,
+  "perm_p": 0.32934131736526945,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 6.92,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "long",
+    "entry_rule": "finance.spread.gasoline_crack rolling_zscore_20d > 1 at close -> long JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4583333333333333,
+    "avg_return": 0.003249298017918787,
+    "excess_return": 0.0023375678802842422,
+    "n_trades": 48,
+    "sharpe_like": 1.2496265727562235,
+    "max_drawdown": -0.07221331851848078,
+    "oos_n_trades": 20,
+    "oos_avg_return": 0.002488840761641453,
+    "oos_hit_rate": 0.45,
+    "actionability": 6.92,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.spread.gasoline_crack": "configured analysis window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

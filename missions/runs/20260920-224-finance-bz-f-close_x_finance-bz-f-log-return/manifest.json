@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:46:40.313500+00:00",
+  "git_commit": "e9edd7771b00b8fed057194f437e10af54055cc7",
+  "folder": "20260920-224-finance-bz-f-close_x_finance-bz-f-log-return",
+  "mission_id": "R2-0116",
+  "hypothesis": "R2 | [oil-shipping] Reversal control: Brent price over-extension (20d z-score of BZ=F close > 1) is momentum not mean-reversion: Brent log return continues higher over the next 3 days (+); trade long BZ=F 3d [finance.BZ=F.close -> finance.BZ=F.log_return] (parent: R2-0018)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 1.0,
+  "perm_p": 0.05389221556886228,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 3.15,
+  "trade_idea": {
+    "instrument": "BZ=F",
+    "direction": "long",
+    "entry_rule": "finance.BZ=F.close rolling_zscore_20d > 1 at close -> long BZ=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.52,
+    "avg_return": 0.00304386438295712,
+    "excess_return": 0.001583726746394833,
+    "n_trades": 50,
+    "sharpe_like": 0.6798670350051252,
+    "max_drawdown": -0.15715177533570146,
+    "oos_n_trades": 16,
+    "oos_avg_return": 0.0021847842260677985,
+    "oos_hit_rate": 0.5625,
+    "actionability": 3.15,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.BZ=F.close": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

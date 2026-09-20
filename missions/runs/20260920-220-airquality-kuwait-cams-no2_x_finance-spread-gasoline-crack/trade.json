@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "diff"
+  },
+  "all": {
+    "n_trades": 53,
+    "hit_rate": 0.4716981132075472,
+    "avg_return": 0.32405703922487655,
+    "baseline_avg_return": -0.06754337409874062,
+    "excess_return": 0.39160041332361717,
+    "sharpe_like": 1.2398272200614917,
+    "max_drawdown": -1.5932124488119812,
+    "total_return": -0.9189814289895861
+  },
+  "fit_pre_war": {
+    "n_trades": 33,
+    "hit_rate": 0.45454545454545453,
+    "avg_return": -0.06274018143162582,
+    "baseline_avg_return": -0.02634226015912808,
+    "excess_return": -0.036397921272497746,
+    "sharpe_like": -0.5147774424444699,
+    "max_drawdown": -1.0865641034620799,
+    "total_return": -1.002693746937327
+  },
+  "test_war": {
+    "n_trades": 20,
+    "hit_rate": 0.5,
+    "avg_return": 0.9622724533081055,
+    "baseline_avg_return": -0.14046045344510524,
+    "excess_return": 1.1027329067532108,
+    "sharpe_like": 1.5090923799056057,
+    "max_drawdown": -1.1912705528268785,
+    "total_return": -31.07653387471072
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "spread:gasoline_crack",
+    "direction": "short",
+    "entry_rule": "airquality.kuwait.cams_no2 rolling_zscore_20d > 1 at close -> short spread:gasoline_crack next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4716981132075472,
+    "avg_return": 0.32405703922487655,
+    "excess_return": 0.39160041332361717,
+    "n_trades": 53,
+    "sharpe_like": 1.2398272200614917,
+    "max_drawdown": -1.5932124488119812,
+    "oos_n_trades": 20,
+    "oos_avg_return": 0.9622724533081055,
+    "oos_hit_rate": 0.5,
+    "actionability": 6.04,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

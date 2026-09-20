@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T13:26:49.801766+00:00",
+  "git_commit": "ab134b5e0c813dae201fc2761f3c6637a4c0e222",
+  "folder": "20260920-272-FAILED-r2-risk-macro-em-gdelt",
+  "mission_id": "R2-0186",
+  "hypothesis": "R2 | [risk-macro-em] GDELT military_buildup daily event count 20d z-score > 1 leads defense ETF returns by 3-5 days (+); trade long ITA 5d [events.military_buildup.count -> finance.ITA.log_return] (parent: R2-0085)",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "events.military_buildup.count": "configured analysis window",
+    "finance.ITA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

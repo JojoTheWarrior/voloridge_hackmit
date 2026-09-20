@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Reversal control: Iran GDELT Goldstein 20d z-score > 1 (de-escalation) leads defense ETF returns by 1-3 days (-); trade short ITA 1d [gdelt.irn.goldstein -> finance.ITA.log_return] (parent: R2-0080)

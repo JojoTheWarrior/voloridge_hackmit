@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Rotterdam CAMS SO2 20d z-score > 1 leads CF Industries returns by 2 days (+) as a cross-market check of the Yara result; trade long CF 2d [airquality.rotterdam.cams_so2 -> finance.CF.log_return]

@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:51:01.667786+00:00",
+  "git_commit": "82820fdd13a79094b7eba2d5b67d4da72b643768",
+  "folder": "20260920-229-weather-london-temp-anomaly_x_finance-ttf-f-log-return",
+  "mission_id": "R2-0125",
+  "hypothesis": "R2 | [gas-lng] London temp_anomaly 20d z-score > 1 leads TTF=F log returns by 5 days (-) as a null control on the temp_min result; trade short TTF=F 5d on warm anomaly [weather.london.temp_anomaly -> finance.TTF=F.log_return] (parent: R2-0026)",
+  "status": "ok",
+  "n_obs": 388,
+  "r": 0.006624931180774231,
+  "perm_p": 0.06986027944111776,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.49,
+  "trade_idea": {
+    "instrument": "TTF=F",
+    "direction": "short",
+    "entry_rule": "weather.london.temp_anomaly rolling_zscore_20d > 1 at close -> short TTF=F next session",
+    "exit_rule": "close after 3 trading days (no overlapping entries)",
+    "holding_days": 3,
+    "hit_rate": 0.4166666666666667,
+    "avg_return": -0.008078259903902723,
+    "excess_return": -0.0006512774044819588,
+    "n_trades": 36,
+    "sharpe_like": -0.46932044459865513,
+    "max_drawdown": -0.5380678232873455,
+    "oos_n_trades": 11,
+    "oos_avg_return": 0.005976054978401499,
+    "oos_hit_rate": 0.5454545454545454,
+    "actionability": 2.49,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.london.temp_anomaly": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

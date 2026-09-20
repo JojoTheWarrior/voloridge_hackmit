@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:28:02.303205+00:00",
+  "git_commit": "dd685b4c33416ae850bd2ebeb1e123d165b7ef7c",
+  "folder": "20260920-274-gdelt-gkg-tanker-share_x_finance-ewj-log-return",
+  "mission_id": "R2-0188",
+  "hypothesis": "R2 | [risk-macro-em] Reversal control: GDELT tanker GKG share 20d z-score > 1 is followed by EWJ rebounding higher within 3 days (+) as shipping-headline fear fades; trade long EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return] (parent: R2-0089)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.008032941002348167,
+  "perm_p": 0.6387225548902196,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.24,
+  "trade_idea": {
+    "instrument": "EWJ",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.tanker_share rolling_zscore_20d > 1 at close -> long EWJ next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.6428571428571429,
+    "avg_return": 0.0021280921658166085,
+    "excess_return": 0.001133362313490421,
+    "n_trades": 28,
+    "sharpe_like": 1.0041687804644164,
+    "max_drawdown": -0.039381094792827365,
+    "oos_n_trades": 11,
+    "oos_avg_return": -0.00041290843888895016,
+    "oos_hit_rate": 0.5454545454545454,
+    "actionability": 5.24,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.tanker_share": "configured analysis window",
+    "finance.EWJ.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

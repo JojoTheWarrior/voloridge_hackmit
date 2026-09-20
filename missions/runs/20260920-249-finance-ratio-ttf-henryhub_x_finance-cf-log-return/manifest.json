@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:06:50.899292+00:00",
+  "git_commit": "318b7b18365401daaf734d6c70938b19547bb1f6",
+  "folder": "20260920-249-finance-ratio-ttf-henryhub_x_finance-cf-log-return",
+  "mission_id": "R2-0153",
+  "hypothesis": "R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1 leads CF Industries returns by 2 days (+) as a wide EU-US gas spread hands US ammonia producers a cost advantage (mirror of null YAR.OL short result); trade long CF 3d [finance.ratio.ttf_henryhub -> finance.CF.log_return] (parent: R2-0055)",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.13259754167655427,
+  "perm_p": 0.16766467065868262,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.71,
+  "trade_idea": {
+    "instrument": "CF",
+    "direction": "long",
+    "entry_rule": "finance.ratio.ttf_henryhub rolling_zscore_20d > 1 at close -> long CF next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5227272727272727,
+    "avg_return": -0.001212931796203967,
+    "excess_return": -0.002836871490850724,
+    "n_trades": 44,
+    "sharpe_like": -0.35594117235269146,
+    "max_drawdown": -0.16922189067265903,
+    "oos_n_trades": 15,
+    "oos_avg_return": -0.002112152769646395,
+    "oos_hit_rate": 0.4666666666666667,
+    "actionability": 0.71,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.ratio.ttf_henryhub": "configured analysis window",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

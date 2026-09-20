@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT sanctions GKG share 20d z-score > 1.5 leads GLD log returns higher by 1-3 days (+), safe-haven bid rather than EM selloff; trade long GLD 3d [gdelt.gkg.sanctions_share -> finance.GLD.log_return] (parent: R2-0078)

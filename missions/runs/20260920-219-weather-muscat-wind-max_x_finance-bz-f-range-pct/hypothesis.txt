@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Muscat max wind 20d z-score above 1 (rough Gulf of Oman seas) leads Brent intraday range higher by 2 days (+); trade long BZ=F volatility 3d [weather.muscat.wind_max -> finance.BZ=F.range_pct] (parent: R2-0011)

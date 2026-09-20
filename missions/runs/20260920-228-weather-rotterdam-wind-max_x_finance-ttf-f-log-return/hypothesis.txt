@@ -1,0 +1,1 @@
+R2 | [gas-lng] Rotterdam daily max wind 20d z-score > 1 (North Sea wind surge, more wind power, less gas burn) leads TTF log returns by 2 days (+wind, -price); trade TTF=F 2d [weather.rotterdam.wind_max -> finance.TTF=F.log_return] (parent: R2-0025)

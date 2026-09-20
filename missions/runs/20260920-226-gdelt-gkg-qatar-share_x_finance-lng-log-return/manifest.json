@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:48:35.608409+00:00",
+  "git_commit": "1ec674ceb821f4c2000c48dc7e1648a05694c156",
+  "folder": "20260920-226-gdelt-gkg-qatar-share_x_finance-lng-log-return",
+  "mission_id": "R2-0120",
+  "hypothesis": "R2 | [gas-lng] GDELT Qatar GKG share 20d z-score > 1.5 marks peak attention that fades: LNG log return reverses over the next 3 days (-); trade short LNG 3d [gdelt.gkg.qatar_share -> finance.LNG.log_return] (parent: R2-0022)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.12491499394398034,
+  "perm_p": 0.18762475049900199,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.94,
+  "trade_idea": {
+    "instrument": "LNG",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.qatar_share rolling_zscore_20d > 1 at close -> short LNG next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4594594594594595,
+    "avg_return": -0.0016831132092643675,
+    "excess_return": -0.0009194762498944017,
+    "n_trades": 37,
+    "sharpe_like": -0.8830085339030344,
+    "max_drawdown": -0.07801787534599613,
+    "oos_n_trades": 7,
+    "oos_avg_return": 0.001634004200447173,
+    "oos_hit_rate": 0.5714285714285714,
+    "actionability": 3.94,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.qatar_share": "configured analysis window",
+    "finance.LNG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

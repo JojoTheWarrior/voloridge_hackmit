@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:00:13.022674+00:00",
+  "git_commit": "c5849937bfe04779d1af7e90d861ec4a913d2b5a",
+  "folder": "20260920-241-gdelt-gkg-oman-share_x_finance-spy-log-return",
+  "mission_id": "R2-0141",
+  "hypothesis": "R2 | [fertilizer-ag] Null control: GDELT Oman GKG share 20d z-score > 1 leads SPY log returns by 5 days (+); if SPY shows a similar edge the ZW=F result is a generic risk-on effect, not a grain-freight channel; trade long SPY 5d [gdelt.gkg.oman_share -> finance.SPY.log_return] (parent: R2-0042)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.05519281445441093,
+  "perm_p": 0.8882235528942116,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 9.84,
+  "trade_idea": {
+    "instrument": "SPY",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.oman_share rolling_zscore_20d > 1 at close -> long SPY next session",
+    "exit_rule": "close after 8 trading days (no overlapping entries)",
+    "holding_days": 8,
+    "hit_rate": 0.7727272727272727,
+    "avg_return": 0.01226704059171308,
+    "excess_return": 0.005462120908566462,
+    "n_trades": 22,
+    "sharpe_like": 2.81462920119196,
+    "max_drawdown": -0.03412873268391825,
+    "oos_n_trades": 6,
+    "oos_avg_return": 0.018905386352053744,
+    "oos_hit_rate": 0.8333333333333334,
+    "actionability": 9.84,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.oman_share": "configured analysis window",
+    "finance.SPY.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

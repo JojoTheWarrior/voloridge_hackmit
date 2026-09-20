@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:07:53.171107+00:00",
+  "git_commit": "71f1df042e9988c3daf4fb908f72bfe62c08fdf9",
+  "folder": "20260920-250-gdelt-gkg-helium-share_x_finance-ntr-log-return",
+  "mission_id": "R2-0154",
+  "hypothesis": "R2 | [fertilizer-ag] GDELT helium GKG share 20d z-score > 1 leads NTR log returns by 1 day (-) as a reversal control: in-sample the long rule lost (hit 20%, 5 trades) and best lag was -1, so test short NTR 3d [gdelt.gkg.helium_share -> finance.NTR.log_return] (parent: R2-0054)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.08468332809613766,
+  "perm_p": 0.05389221556886228,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 7.39,
+  "trade_idea": {
+    "instrument": "NTR",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.helium_share rolling_zscore_20d > 1 at close -> short NTR next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.8,
+    "avg_return": 0.009465587238669549,
+    "excess_return": 0.011208378401238504,
+    "n_trades": 5,
+    "sharpe_like": 2.678805252495255,
+    "max_drawdown": -0.001281451425158675,
+    "oos_n_trades": 1,
+    "oos_avg_return": 0.012985512694570489,
+    "oos_hit_rate": 1.0,
+    "actionability": 7.39,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.helium_share": "configured analysis window",
+    "finance.NTR.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

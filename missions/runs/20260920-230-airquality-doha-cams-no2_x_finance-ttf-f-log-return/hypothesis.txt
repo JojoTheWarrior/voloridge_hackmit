@@ -1,0 +1,1 @@
+R2 | [gas-lng] Doha CAMS NO2 20d z-score > 1 (reversal control: Ras Laffan activity proxy was a losing short in the war test) leads TTF log returns by 3 days (+); trade long TTF=F 3d [airquality.doha.cams_no2 -> finance.TTF=F.log_return] (parent: R2-0028)

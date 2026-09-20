@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 59,
+    "hit_rate": 0.4915254237288136,
+    "avg_return": 0.0007586063939305442,
+    "baseline_avg_return": -0.000569306589757425,
+    "excess_return": 0.0013279129836879693,
+    "sharpe_like": 0.5413007159363411,
+    "max_drawdown": -0.05610824941565096,
+    "total_return": 0.04221230995506331
+  },
+  "fit_pre_war": {
+    "n_trades": 41,
+    "hit_rate": 0.4146341463414634,
+    "avg_return": -0.0003178038322184039,
+    "baseline_avg_return": -0.0008873218403210097,
+    "excess_return": 0.0005695180081026058,
+    "sharpe_like": -0.22635732670095138,
+    "max_drawdown": -0.05610824941565096,
+    "total_return": -0.014570227355246046
+  },
+  "test_war": {
+    "n_trades": 18,
+    "hit_rate": 0.6666666666666666,
+    "avg_return": 0.0032104296868253703,
+    "baseline_avg_return": -8.776112145351067e-06,
+    "excess_return": 0.0032192057989707213,
+    "sharpe_like": 0.9958041592532072,
+    "max_drawdown": -0.031987456640914624,
+    "total_return": 0.05762210447317151
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "UAE",
+    "direction": "short",
+    "entry_rule": "gdelt.irn.fight_events rolling_zscore_20d > 1 at close -> short UAE next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4915254237288136,
+    "avg_return": 0.0007586063939305442,
+    "excess_return": 0.0013279129836879693,
+    "n_trades": 59,
+    "sharpe_like": 0.5413007159363411,
+    "max_drawdown": -0.05610824941565096,
+    "oos_n_trades": 18,
+    "oos_avg_return": 0.0032104296868253703,
+    "oos_hit_rate": 0.6666666666666666,
+    "actionability": 6.78,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

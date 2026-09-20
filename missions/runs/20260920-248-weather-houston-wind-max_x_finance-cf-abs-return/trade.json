@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 4,
+    "target_kind": "return"
+  },
+  "all": {
+    "n_trades": 34,
+    "hit_rate": 1.0,
+    "avg_return": 0.07775800188148439,
+    "baseline_avg_return": 0.07622761968775638,
+    "excess_return": 0.0015303821937280165,
+    "sharpe_like": 9.245518925052922,
+    "max_drawdown": 0.0,
+    "total_return": 11.344628438358892
+  },
+  "fit_pre_war": {
+    "n_trades": 19,
+    "hit_rate": 1.0,
+    "avg_return": 0.06479788199805671,
+    "baseline_avg_return": 0.06236025565244775,
+    "excess_return": 0.0024376263456089564,
+    "sharpe_like": 7.952998961283478,
+    "max_drawdown": 0.0,
+    "total_return": 2.2626696232916843
+  },
+  "test_war": {
+    "n_trades": 15,
+    "hit_rate": 1.0,
+    "avg_return": 0.09417415373382614,
+    "baseline_avg_return": 0.10120926813371676,
+    "excess_return": -0.00703511439989063,
+    "sharpe_like": 6.281672421982317,
+    "max_drawdown": 0.0,
+    "total_return": 2.783597441258697
+  },
+  "n_signal_days": 382,
+  "trade_idea": {
+    "instrument": "CF",
+    "direction": "long",
+    "entry_rule": "weather.houston.wind_max rolling_zscore_20d > 1 at close -> long CF next session",
+    "exit_rule": "close after 4 trading days (no overlapping entries)",
+    "holding_days": 4,
+    "hit_rate": 1.0,
+    "avg_return": 0.07775800188148439,
+    "excess_return": 0.0015303821937280165,
+    "n_trades": 34,
+    "sharpe_like": 9.245518925052922,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 15,
+    "oos_avg_return": 0.09417415373382614,
+    "oos_hit_rate": 1.0,
+    "actionability": 7.28,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

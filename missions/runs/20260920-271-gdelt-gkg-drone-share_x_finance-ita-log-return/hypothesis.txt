@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Reversal control: GDELT drone GKG share 20d z-score > 1 leads defense ETF returns lower by 4-6 days (-) as drone-heavy news signals cheap asymmetric warfare rather than big-ticket orders; trade short ITA 6d [gdelt.gkg.drone_share -> finance.ITA.log_return]

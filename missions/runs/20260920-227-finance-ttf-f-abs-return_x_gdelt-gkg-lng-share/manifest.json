@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:48:43.261963+00:00",
+  "git_commit": "ec1f06d36cde11b53c10204cec262aa3b72ba239",
+  "folder": "20260920-227-finance-ttf-f-abs-return_x_gdelt-gkg-lng-share",
+  "mission_id": "R2-0119",
+  "hypothesis": "R2 | [gas-lng] Reversal control: TTF abs return 20d z-score > 1.5 leads GDELT LNG GKG share by 1-2 days (+) - news follows price not vice versa; trade long LNG 2d [finance.TTF=F.abs_return -> gdelt.gkg.lng_share] (parent: R2-0021)",
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.48971418608839434,
+  "perm_p": 0.0499001996007984,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 8.5,
+  "trade_idea": {
+    "instrument": "gdelt.gkg.lng_share",
+    "direction": "long",
+    "entry_rule": "finance.TTF=F.abs_return rolling_zscore_20d > 1 at close -> long gdelt.gkg.lng_share next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.8775510204081632,
+    "avg_return": 1.5490580997329926,
+    "excess_return": -0.0542320375961578,
+    "n_trades": 49,
+    "sharpe_like": 5.238328887368267,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 15,
+    "oos_avg_return": 3.4038367127871423,
+    "oos_hit_rate": 1.0,
+    "actionability": 8.5,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.TTF=F.abs_return": "configured analysis window",
+    "gdelt.gkg.lng_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

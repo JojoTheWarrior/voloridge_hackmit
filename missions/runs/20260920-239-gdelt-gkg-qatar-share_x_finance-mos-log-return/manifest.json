@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:58:58.774382+00:00",
+  "git_commit": "42b142477bcebf4c4946261dfd620c7350754687",
+  "folder": "20260920-239-gdelt-gkg-qatar-share_x_finance-mos-log-return",
+  "mission_id": "R2-0140",
+  "hypothesis": "R2 | [fertilizer-ag] GDELT Qatar GKG share 20d z-score > 1 leads MOS log returns by 5 days (-) as a reversal control: Qatar attention spikes precede fertilizer-equity mean reversion, not urea-disruption gains; trade short MOS 5d [gdelt.gkg.qatar_share -> finance.MOS.log_return] (parent: R2-0040)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.06369818594017815,
+  "perm_p": 0.09780439121756487,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
+  "trade_idea": {
+    "instrument": "MOS",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.qatar_share rolling_zscore_20d > 1 at close -> short MOS next session",
+    "exit_rule": "close after 9 trading days (no overlapping entries)",
+    "holding_days": 9,
+    "hit_rate": 0.38095238095238093,
+    "avg_return": -0.011999384867108557,
+    "excess_return": -0.009983798096895466,
+    "n_trades": 21,
+    "sharpe_like": -0.801739590685749,
+    "max_drawdown": -0.23161035667208507,
+    "oos_n_trades": 5,
+    "oos_avg_return": -0.028972449175304373,
+    "oos_hit_rate": 0.4,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.qatar_share": "configured analysis window",
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

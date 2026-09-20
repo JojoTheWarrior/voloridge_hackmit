@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Kuwait CAMS NO2 10d z-score > 1 (refinery combustion ramp) leads gasoline crack narrower by 4 days (-); trade short RB=F 4d [airquality.kuwait.cams_no2 -> finance.spread.gasoline_crack] (parent: R2-0014)

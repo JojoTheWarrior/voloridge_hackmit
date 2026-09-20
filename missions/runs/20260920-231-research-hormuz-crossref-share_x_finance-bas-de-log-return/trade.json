@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 9,
+    "hit_rate": 0.2222222222222222,
+    "avg_return": -0.005798293070757719,
+    "baseline_avg_return": -0.0021990496064159164,
+    "excess_return": -0.0035992434643418022,
+    "sharpe_like": -1.0356872386206835,
+    "max_drawdown": -0.05179191716705178,
+    "total_return": -0.052227901941788724
+  },
+  "fit_pre_war": {
+    "n_trades": 7,
+    "hit_rate": 0.2857142857142857,
+    "avg_return": -0.006673844547787839,
+    "baseline_avg_return": -0.0033206559986157617,
+    "excess_return": -0.0033531885491720776,
+    "sharpe_like": -0.9328020579613069,
+    "max_drawdown": -0.04658296481845314,
+    "total_return": -0.04702134466232888
+  },
+  "test_war": {
+    "n_trades": 2,
+    "hit_rate": 0.0,
+    "avg_return": -0.0027338629011522952,
+    "baseline_avg_return": -0.00047658264696615445,
+    "excess_return": -0.002257280254186141,
+    "sharpe_like": -2.1597743926994277,
+    "max_drawdown": -0.0009437379670169666,
+    "total_return": -0.005463456343222095
+  },
+  "n_signal_days": 71,
+  "trade_idea": {
+    "instrument": "BAS",
+    "direction": "short",
+    "entry_rule": "research.hormuz.crossref_share rolling_zscore_20d > 1 at close -> short BAS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.2222222222222222,
+    "avg_return": -0.005798293070757719,
+    "excess_return": -0.0035992434643418022,
+    "n_trades": 9,
+    "sharpe_like": -1.0356872386206835,
+    "max_drawdown": -0.05179191716705178,
+    "oos_n_trades": 2,
+    "oos_avg_return": -0.0027338629011522952,
+    "oos_hit_rate": 0.0,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

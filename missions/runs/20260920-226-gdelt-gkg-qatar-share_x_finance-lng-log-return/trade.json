@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 37,
+    "hit_rate": 0.4594594594594595,
+    "avg_return": -0.0016831132092643675,
+    "baseline_avg_return": -0.0007636369593699658,
+    "excess_return": -0.0009194762498944017,
+    "sharpe_like": -0.8830085339030344,
+    "max_drawdown": -0.07801787534599613,
+    "total_return": -0.06276774765670534
+  },
+  "fit_pre_war": {
+    "n_trades": 30,
+    "hit_rate": 0.43333333333333335,
+    "avg_return": -0.0024571072715303937,
+    "baseline_avg_return": -0.0007711584549580786,
+    "excess_return": -0.001685948816572315,
+    "sharpe_like": -1.275556105766274,
+    "max_drawdown": -0.06845154711935664,
+    "total_return": -0.07270413021291089
+  },
+  "test_war": {
+    "n_trades": 7,
+    "hit_rate": 0.5714285714285714,
+    "avg_return": 0.001634004200447173,
+    "baseline_avg_return": -0.0007503796470024289,
+    "excess_return": 0.002384383847449602,
+    "sharpe_like": 0.29152816149096944,
+    "max_drawdown": -0.022841141056986758,
+    "total_return": 0.01071543924646945
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "LNG",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.qatar_share rolling_zscore_20d > 1 at close -> short LNG next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4594594594594595,
+    "avg_return": -0.0016831132092643675,
+    "excess_return": -0.0009194762498944017,
+    "n_trades": 37,
+    "sharpe_like": -0.8830085339030344,
+    "max_drawdown": -0.07801787534599613,
+    "oos_n_trades": 7,
+    "oos_avg_return": 0.001634004200447173,
+    "oos_hit_rate": 0.5714285714285714,
+    "actionability": 3.94,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

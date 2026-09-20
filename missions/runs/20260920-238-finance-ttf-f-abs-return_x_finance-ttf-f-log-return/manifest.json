@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:58:05.349029+00:00",
+  "git_commit": "71196b44269f1d76c55498e6e610fdbda6eb637a",
+  "folder": "20260920-238-finance-ttf-f-abs-return_x_finance-ttf-f-log-return",
+  "mission_id": "R2-0136",
+  "hypothesis": "R2 | [gas-lng] MOMENTUM (reverse of R2-0037): TTF absolute return 20d z-score > 1 (volatility spike) is followed by continuation, not a fade, over the next 3 days (+); trade long TTF=F 1-3d after the spike day [finance.TTF=F.abs_return -> finance.TTF=F.log_return] (parent: R2-0037)",
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.2265516306766731,
+  "perm_p": 0.029940119760479042,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 6.41,
+  "trade_idea": {
+    "instrument": "TTF=F",
+    "direction": "long",
+    "entry_rule": "finance.TTF=F.abs_return rolling_zscore_20d > 1 at close -> long TTF=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5306122448979592,
+    "avg_return": 0.005894501250310526,
+    "excess_return": 0.0033998340859925655,
+    "n_trades": 49,
+    "sharpe_like": 0.9100084187451783,
+    "max_drawdown": -0.17571838227861647,
+    "oos_n_trades": 15,
+    "oos_avg_return": 0.02105417455774871,
+    "oos_hit_rate": 0.6,
+    "actionability": 6.41,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.TTF=F.abs_return": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

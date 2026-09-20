@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:09:18.147014+00:00",
+  "git_commit": "1937057e1e5c6af36a2e4f306dc57c9894b1311d",
+  "folder": "20260920-252-finance-mos-close_x_finance-mos-log-return",
+  "mission_id": "R2-0157",
+  "hypothesis": "R2 | [fertilizer-ag] MOS close 20d z-score > 1 leads MOS log returns by 2 days (+) as fertilizer momentum persists rather than mean-reverts (reversal of R2-0056 short rule); trade long MOS 3d [finance.MOS.close -> finance.MOS.log_return] (parent: R2-0056)",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.9999999999999998,
+  "perm_p": 0.041916167664670656,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 8.12,
+  "trade_idea": {
+    "instrument": "MOS",
+    "direction": "long",
+    "entry_rule": "finance.MOS.close rolling_zscore_20d > 1 at close -> long MOS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5609756097560976,
+    "avg_return": 0.007225940757063084,
+    "excess_return": 0.0070714299988597715,
+    "n_trades": 41,
+    "sharpe_like": 1.6273985831603268,
+    "max_drawdown": -0.07680008949349548,
+    "oos_n_trades": 18,
+    "oos_avg_return": 0.013414525489342152,
+    "oos_hit_rate": 0.6111111111111112,
+    "actionability": 8.12,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.MOS.close": "configured analysis window",
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

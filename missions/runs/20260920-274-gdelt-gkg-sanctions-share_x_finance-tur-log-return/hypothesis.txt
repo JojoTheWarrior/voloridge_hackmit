@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT GKG sanctions-share 20d z-score > 1 leads Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [gdelt.gkg.sanctions_share -> finance.TUR.log_return] (parent: R2-0086)

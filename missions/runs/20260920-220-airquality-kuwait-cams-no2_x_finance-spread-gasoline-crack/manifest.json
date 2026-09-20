@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T12:42:29.699669+00:00",
+  "git_commit": "ae12775ed4d637af2401edf46f41fbc74835cd15",
+  "folder": "20260920-220-airquality-kuwait-cams-no2_x_finance-spread-gasoline-crack",
+  "mission_id": "R2-0111",
+  "hypothesis": "R2 | [oil-shipping] Kuwait CAMS NO2 10d z-score > 1 (refinery combustion ramp) leads gasoline crack narrower by 4 days (-); trade short RB=F 4d [airquality.kuwait.cams_no2 -> finance.spread.gasoline_crack] (parent: R2-0014)",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.009726130775985553,
+  "perm_p": 0.08982035928143713,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.04,
+  "trade_idea": {
+    "instrument": "spread:gasoline_crack",
+    "direction": "short",
+    "entry_rule": "airquality.kuwait.cams_no2 rolling_zscore_20d > 1 at close -> short spread:gasoline_crack next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4716981132075472,
+    "avg_return": 0.32405703922487655,
+    "excess_return": 0.39160041332361717,
+    "n_trades": 53,
+    "sharpe_like": 1.2398272200614917,
+    "max_drawdown": -1.5932124488119812,
+    "oos_n_trades": 20,
+    "oos_avg_return": 0.9622724533081055,
+    "oos_hit_rate": 0.5,
+    "actionability": 6.04,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.kuwait.cams_no2": "2025-03..2026-09 archive window",
+    "finance.spread.gasoline_crack": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

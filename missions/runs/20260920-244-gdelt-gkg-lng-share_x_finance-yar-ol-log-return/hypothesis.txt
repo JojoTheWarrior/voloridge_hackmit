@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT daily LNG news share z-score > 1 leads YAR.OL returns by 6 days (+) as a daily-frequency gas-input-anxiety substitute for the sparse Crossref series; long YAR.OL 6d [gdelt.gkg.lng_share -> finance.YAR.OL.log_return] (parent: R2-0048)

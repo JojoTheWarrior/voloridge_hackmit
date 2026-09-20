@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] RB=F gasoline daily log returns 20d z-score > 1 lead JETS/SPY ratio lower by 1-3 days (-); stationary-returns control of R2-0077 whose level rule fit pre-war (hit 56%) but lost out-of-sample in the war test; trade short JETS vs SPY 3d [finance.RB=F.log_return -> finance.ratio.jets_spy] (parent: R2-0077)

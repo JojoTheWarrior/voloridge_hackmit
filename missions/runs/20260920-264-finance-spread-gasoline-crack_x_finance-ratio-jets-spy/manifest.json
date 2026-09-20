@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:19:00.820973+00:00",
+  "git_commit": "cba557047cdec7ed6b33c675e0cd3858ab6ca9bd",
+  "folder": "20260920-264-finance-spread-gasoline-crack_x_finance-ratio-jets-spy",
+  "mission_id": "R2-0173",
+  "hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 weighs on the airline basket relative to the market rather than single names; trade short JETS/SPY ratio 3d at 1d lag [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0073)",
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.03683000400928406,
+  "perm_p": 0.023952095808383235,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.5,
+  "trade_idea": {
+    "instrument": "ratio:jets_spy",
+    "direction": "short",
+    "entry_rule": "finance.spread.gasoline_crack rolling_zscore_20d > 1 at close -> short ratio:jets_spy next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5,
+    "avg_return": -0.0020081198251989513,
+    "excess_return": -0.001996253144342273,
+    "n_trades": 48,
+    "sharpe_like": -0.8971394426090874,
+    "max_drawdown": -0.15207665826696004,
+    "oos_n_trades": 20,
+    "oos_avg_return": -0.001083682873591274,
+    "oos_hit_rate": 0.55,
+    "actionability": 0.5,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.spread.gasoline_crack": "configured analysis window",
+    "finance.ratio.jets_spy": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

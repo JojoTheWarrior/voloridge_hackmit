@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:01:21.366714+00:00",
+  "git_commit": "0f04b2c29c64eef4e7230114dd6f6c4415a11ddb",
+  "folder": "20260920-242-gdelt-qat-conflict-events_x_finance-cf-log-return",
+  "mission_id": "R2-0142",
+  "hypothesis": "R2 | [fertilizer-ag] Null control: Qatar GDELT conflict-event count 20d z-score > 1 leads CF Industries log returns by 3 days (+) if the NTR backtest reflects a real Qatari urea/ammonia supply shock rather than war-regime beta; trade long CF 3d [gdelt.qat.conflict_events -> finance.CF.log_return] (parent: R2-0043)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.12600527674011902,
+  "perm_p": 0.03992015968063872,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 9.79,
+  "trade_idea": {
+    "instrument": "CF",
+    "direction": "long",
+    "entry_rule": "gdelt.qat.conflict_events rolling_zscore_20d > 1 at close -> long CF next session",
+    "exit_rule": "close after 3 trading days (no overlapping entries)",
+    "holding_days": 3,
+    "hit_rate": 0.6944444444444444,
+    "avg_return": 0.013148299070610372,
+    "excess_return": 0.008118166780634508,
+    "n_trades": 36,
+    "sharpe_like": 2.2834651414607046,
+    "max_drawdown": -0.10809476674504293,
+    "oos_n_trades": 12,
+    "oos_avg_return": 0.010493182957391342,
+    "oos_hit_rate": 0.5833333333333334,
+    "actionability": 9.79,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.qat.conflict_events": "configured analysis window",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

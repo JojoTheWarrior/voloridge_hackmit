@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 49,
+    "hit_rate": 0.5102040816326531,
+    "avg_return": -0.0053520241303136075,
+    "baseline_avg_return": -0.0009142669505591653,
+    "excess_return": -0.004437757179754442,
+    "sharpe_like": -1.1303091671506507,
+    "max_drawdown": -0.3455005276394001,
+    "total_return": -0.2532779320394003
+  },
+  "fit_pre_war": {
+    "n_trades": 31,
+    "hit_rate": 0.4838709677419355,
+    "avg_return": -0.006920917506635637,
+    "baseline_avg_return": -0.0012217747596681154,
+    "excess_return": -0.005699142746967522,
+    "sharpe_like": -1.0569563127053656,
+    "max_drawdown": -0.2537179596046555,
+    "total_return": -0.21178547036278128
+  },
+  "test_war": {
+    "n_trades": 18,
+    "hit_rate": 0.5555555555555556,
+    "avg_return": -0.002650041093314558,
+    "baseline_avg_return": -0.0003722567834246849,
+    "excess_return": -0.002277784309889873,
+    "sharpe_like": -0.428025300900408,
+    "max_drawdown": -0.12498944857426753,
+    "total_return": -0.05264107691051567
+  },
+  "n_signal_days": 384,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "short",
+    "entry_rule": "airquality.kuwait.cams_so2 rolling_zscore_20d > 1 at close -> short JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5102040816326531,
+    "avg_return": -0.0053520241303136075,
+    "excess_return": -0.004437757179754442,
+    "n_trades": 49,
+    "sharpe_like": -1.1303091671506507,
+    "max_drawdown": -0.3455005276394001,
+    "oos_n_trades": 18,
+    "oos_avg_return": -0.002650041093314558,
+    "oos_hit_rate": 0.5555555555555556,
+    "actionability": 0.6,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

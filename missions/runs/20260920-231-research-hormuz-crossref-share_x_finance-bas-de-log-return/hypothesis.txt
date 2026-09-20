@@ -1,0 +1,1 @@
+R2 | [gas-lng] Null control: Crossref Hormuz publication share (not raw counts) 20d z-score > 1 leads BAS.DE returns by 5 days (-); if share also fails the crossref->BASF gas-fear channel is dead [research.hormuz.crossref_share -> finance.BAS.DE.log_return] (parent: R2-0030)

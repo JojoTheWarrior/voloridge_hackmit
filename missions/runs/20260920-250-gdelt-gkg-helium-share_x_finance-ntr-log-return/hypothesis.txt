@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT helium GKG share 20d z-score > 1 leads NTR log returns by 1 day (-) as a reversal control: in-sample the long rule lost (hit 20%, 5 trades) and best lag was -1, so test short NTR 3d [gdelt.gkg.helium_share -> finance.NTR.log_return] (parent: R2-0054)

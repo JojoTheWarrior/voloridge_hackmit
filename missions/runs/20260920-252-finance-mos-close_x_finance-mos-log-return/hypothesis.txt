@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] MOS close 20d z-score > 1 leads MOS log returns by 2 days (+) as fertilizer momentum persists rather than mean-reverts (reversal of R2-0056 short rule); trade long MOS 3d [finance.MOS.close -> finance.MOS.log_return] (parent: R2-0056)

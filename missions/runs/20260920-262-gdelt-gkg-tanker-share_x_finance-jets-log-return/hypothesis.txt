@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT tanker GKG share 20d z-score > 1 signals jet-fuel cost shock that hits airlines harder than parcel freight (-); trade short JETS 3d at 3d lag [gdelt.gkg.tanker_share -> finance.JETS.log_return] (parent: R2-0066)

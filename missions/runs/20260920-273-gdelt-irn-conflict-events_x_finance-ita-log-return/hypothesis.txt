@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT Iran conflict daily event count 20d z-score > 1 leads defense ETF returns by 3-5 days (+); trade long ITA 5d [gdelt.irn.conflict_events -> finance.ITA.log_return] (parent: R2-0085)

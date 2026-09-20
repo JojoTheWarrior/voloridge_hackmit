@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Null control: Iran conflict-event 20d z-score > 1.5 should NOT move the broad airline ETF JETS if the AAL effect is Gulf-route specific (-); trade short JETS 3d at 1d lag [gdelt.irn.conflict_events -> finance.JETS.log_return] (parent: R2-0062)

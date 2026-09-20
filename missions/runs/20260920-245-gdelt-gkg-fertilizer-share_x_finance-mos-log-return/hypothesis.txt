@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT fertilizer news share 20d z-score > 1 leads MOS log returns by 5 days (-) as fertilizer headlines mark local price exhaustion; fade with short MOS 5d [gdelt.gkg.fertilizer_share -> finance.MOS.log_return] (parent: R2-0047)

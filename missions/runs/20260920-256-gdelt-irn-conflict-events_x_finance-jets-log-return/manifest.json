@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T13:12:12.873348+00:00",
+  "git_commit": "8bf3220c23b21a75d3807327497ab1d1c3db32ca",
+  "folder": "20260920-256-gdelt-irn-conflict-events_x_finance-jets-log-return",
+  "mission_id": "R2-0162",
+  "hypothesis": "R2 | [fuel-airspace-losers] Null control: Iran conflict-event 20d z-score > 1.5 should NOT move the broad airline ETF JETS if the AAL effect is Gulf-route specific (-); trade short JETS 3d at 1d lag [gdelt.irn.conflict_events -> finance.JETS.log_return] (parent: R2-0062)",
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.10319330604356841,
+  "perm_p": 0.03992015968063872,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.66,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "short",
+    "entry_rule": "gdelt.irn.conflict_events rolling_zscore_20d > 1 at close -> short JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5161290322580645,
+    "avg_return": -0.002110538762829474,
+    "excess_return": -0.0011962718122703088,
+    "n_trades": 62,
+    "sharpe_like": -0.5569356129496584,
+    "max_drawdown": -0.2531530640056293,
+    "oos_n_trades": 21,
+    "oos_avg_return": 0.002544566859949458,
+    "oos_hit_rate": 0.5714285714285714,
+    "actionability": 3.66,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.conflict_events": "configured analysis window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

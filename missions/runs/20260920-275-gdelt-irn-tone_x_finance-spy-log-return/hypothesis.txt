@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Iran GDELT tone 20d z-score < -1 (unusually negative coverage) leads S&P returns higher by 1-3 days (+); buy the fear long SPY 3d [gdelt.irn.tone -> finance.SPY.log_return] (parent: R2-0092)
