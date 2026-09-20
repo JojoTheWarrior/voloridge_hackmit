@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.nyc_jfk.temp_anomaly",
+  "indicator_b": "finance.fred.DHHNGSP",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use JFK daily temperature anomaly as a proxy for Northeast cold snaps and Henry Hub natural gas log returns during the war window to test whether colder-than-normal days are associated with larger positive price reactions around Hormuz-related news shocks, i.e. more negative temp anomalies coinciding with stronger gas price spikes."
+}

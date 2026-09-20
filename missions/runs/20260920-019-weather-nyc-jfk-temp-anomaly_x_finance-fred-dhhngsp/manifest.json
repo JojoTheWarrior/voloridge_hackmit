@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:50:03.121006+00:00",
+  "git_commit": "242b968465fe19cc1b6351f7fbb27994b1027e05",
+  "folder": "20260920-019-weather-nyc-jfk-temp-anomaly_x_finance-fred-dhhngsp",
+  "mission_id": "M20260920-f6c46e",
+  "hypothesis": "Cold snaps in the US Northeast (JFK station) amplify the natural gas price response to Hormuz news.",
+  "status": "ok",
+  "n_obs": 132,
+  "r": 0.019408996367924484,
+  "perm_p": 0.1437125748502994,
+  "validity": 3.84,
+  "interestingness": 3.98,
+  "unexpectedness": 2.7,
+  "indicator_coverage": {
+    "weather.nyc_jfk.temp_anomaly": "configured analysis window",
+    "finance.fred.DHHNGSP": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
