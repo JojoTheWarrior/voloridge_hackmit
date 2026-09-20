@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/28173aa2d7f341ef967bb9da2d9061d7",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:51:43Z",
-  "updated_at": "2026-09-20T03:52:11Z",
-  "finished_at": null,
-  "elapsed_s": 28,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:52:37Z",
+  "finished_at": "2026-09-20T03:52:32Z",
+  "elapsed_s": 54,
+  "message": "Not supported: shorting MOS after a 20d z>1 price spike loses (41 trades, hit 44%, avg -0.72%/trade; OOS war hit 39%, avg -1.34%) - spikes continue rather than mean-revert; actionability 0.",
   "run_folder": "missions/runs/20260920-171-finance-mos-close_x_finance-mos-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] MOS close 20d z-score > 1 leads MOS log returns by 2 days (+) as fertilizer momentum persists rather than mean-reverts (reversal of R2-0056 short rule); trade long MOS 3d [finance.MOS.close -> finance.MOS.log_return] (parent: R2-0056)"
 }
