@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:54:26.202825+00:00",
+  "git_commit": "0b879080fea0d0cbd532f92e416cdb2f7e1b63b6",
+  "folder": "20260920-052-gdelt-gkg-tanker-share_x_research-desalination-crossref-share",
+  "mission_id": "M20260920-b18039",
+  "hypothesis": "OpenAlex \"desalination\" research output rose after Iranian strikes threatened Gulf desalination plants.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.16612114720565607,
+  "perm_p": 0.29141716566866266,
+  "validity": 2.02,
+  "interestingness": 3.76,
+  "unexpectedness": 6.06,
+  "indicator_coverage": {
+    "gdelt.gkg.tanker_share": "configured analysis window",
+    "research.desalination.crossref_share": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
