@@ -12,6 +12,8 @@ export interface Api {
   markDone(id: string): Promise<void>
   /** Asks Devin to compile the mission's report; a second request while one is pending does nothing. */
   generateReport(id: string): Promise<void>
+  /** Asks Devin to build, or with `instructions` to change, the mission's explorer. No-op while one is pending. */
+  buildExplorer(id: string, instructions?: string): Promise<void>
   listDatasets(): Promise<Dataset[]>
   linkDataset(input: { name: string; url: string }): Promise<Dataset>
   /** Calls `listener` after any change; returns an unsubscribe function. */

@@ -79,6 +79,8 @@ export type MissionEvent = EventBase &
     | { kind: 'error'; text: string }
     /** Marks where in the thread a final report was delivered; the report itself is `Mission.report`. */
     | { kind: 'report' }
+    /** Marks where an explorer build was delivered; the explorer itself is `Mission.explorer`. */
+    | { kind: 'explorer' }
   )
 
 export interface ReportStep {
@@ -102,6 +104,18 @@ export interface Report {
   generatedAt: string
 }
 
+/** A small interactive site Devin built for one mission, shown in a sandboxed frame. */
+export interface Explorer {
+  /** Goes up with every build; it is part of `src`, so a rebuild is never served from cache. */
+  version: number
+  title: string
+  /** One or two sentences on what can be explored and how. */
+  description: string
+  /** Ready-to-use URL of the entry document, e.g. `/api/missions/m_1/explorer/2/index.html`. */
+  src: string
+  builtAt: string
+}
+
 export interface MissionSummary {
   id: string
   title: string
@@ -120,6 +134,9 @@ export interface Mission extends MissionSummary {
   report?: Report
   /** True from the moment a report is requested until it arrives or the request fails. */
   reportPending: boolean
+  explorer?: Explorer
+  /** True from the moment a build is requested until it arrives or fails. A previous build stays usable meanwhile. */
+  explorerPending: boolean
   events: MissionEvent[]
 }
 
