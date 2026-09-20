@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/eb21038bf46846ff82a57ede349b2ac2",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:52:16Z",
-  "updated_at": "2026-09-20T12:52:43Z",
-  "finished_at": null,
-  "elapsed_s": 27,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:53:48Z",
+  "finished_at": "2026-09-20T12:53:48Z",
+  "elapsed_s": 92,
+  "message": "Null control confirms channel dead: hormuz crossref_share z>1 -> short BAS.DE fails (r=0.06 n=81, hit 22%, 9 trades, excess -0.36%, OOS 0/2; validity 0, actionability 0). Crossref->BASF gas-fear channel not supported.",
   "run_folder": "missions/runs/20260920-231-research-hormuz-crossref-share_x_finance-bas-de-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Crossref channel dead for BASF; test news instead: GDELT LNG coverage share 20d z-score > 1 leads BAS.DE returns by 3 days (-) [gdelt.gkg.lng_share -> finance.BAS.DE.log_return] (parent: R2-0127)"
 }
