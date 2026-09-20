@@ -27,6 +27,7 @@ from .ui import (
     INK,
     OUTLINE,
     RED,
+    SHADOW,
     TEXT,
     TEXT_DIM,
     TEXT_FAINT,
@@ -37,6 +38,8 @@ from .ui import (
     TextPanel,
     ThumbnailCache,
     clip_lines,
+    copy_to_clipboard,
+    draw_clipboard_icon,
     draw_cursor_hand,
     draw_panel,
     draw_sprite_or_box,
@@ -44,12 +47,19 @@ from .ui import (
     fmt_elapsed,
     fmt_num,
     lerp_color,
+    scaled_region,
     signal_color,
 )
 
 MAIN, CURRENT, QUEUE, COMPLETED, DETAIL = "main", "current", "queue", "completed", "detail"
+NOTE, ZOOM = "note", "zoom"
 MENUS = (CURRENT, QUEUE, COMPLETED)
 PANEL = pygame.Rect(50, 35, 380, 200)
+CHART = pygame.Rect(PANEL.x + 12, PANEL.y + 30, 232, 130)
+ZOOM_VIEW = pygame.Rect(4, 4, LOGICAL_W - 8, LOGICAL_H - 22)
+COPY_BUTTON = pygame.Rect(PANEL.right - 12 - 84, PANEL.y + 10, 84, 12)
+NOTE_BUTTON = pygame.Rect(PANEL.right - 12 - 84, PANEL.bottom - 24, 84, 12)
+COPIED_SECONDS = 1.5
 SLIDE_SECONDS = 0.2
 MISSION_SECONDS = 300.0  # missions take ~3-5 minutes
 LH = 9  # line height of the 8px font
@@ -69,7 +79,12 @@ class CastleScene(Scene):
         inner = PANEL.inflate(-24, -24)
         self.list_view = pygame.Rect(inner.x, inner.y + 18, inner.w - 8, inner.h - 18)
         self.scroll = ScrollList(self.list_view, step=LH)
-        self.note_panel = TextPanel(pygame.Rect(PANEL.x + 176, PANEL.y + 14, 192, 172))
+        self.note_panel = TextPanel(pygame.Rect(PANEL.x + 12, PANEL.y + 30, PANEL.w - 24, PANEL.h - 42))
+        self.copied_until = -1.0
+        self.zoom = 1.0
+        self.zoom_center = (0.5, 0.5)
+        self._drag: Optional[tuple[int, int]] = None
+        self._zoom_cache: Optional[tuple[tuple, pygame.Surface]] = None
         self._row_tops: list[tuple[int, int]] = []  # (top, height) per row in content coords
         bw, bh = 200, 26
         bx = LOGICAL_W // 2 - bw // 2
@@ -99,6 +114,8 @@ class CastleScene(Scene):
             self.open_menu(COMPLETED, -1)
             self.selected = self._detail_index
             self.scroll.scroll_to(self._detail_scroll)
+        elif self.menu in (NOTE, ZOOM):
+            self.open_menu(DETAIL, -1)
         else:
             self.open_menu(MAIN, -1)
 
@@ -107,7 +124,23 @@ class CastleScene(Scene):
         self._detail_scroll = self.scroll.offset
         self.detail = mission
         self.note_panel.set_text(mission.note_text() or "(no note written for this mission)")
+        self.zoom, self.zoom_center, self._zoom_cache = 1.0, (0.5, 0.5), None
         self.open_menu(DETAIL, 1)
+
+    def copy_command(self) -> str:
+        """Copy a shell command that opens this mission's note in VS Code."""
+        m = self.detail
+        if m is None:
+            return ""
+        target = m.note_path if m.note_path is not None else m.path
+        try:
+            rel = target.resolve().relative_to(self.app.root.resolve())
+        except ValueError:
+            rel = target
+        command = f'code "{rel.as_posix()}"'
+        copy_to_clipboard(command)
+        self.copied_until = self.t + COPIED_SECONDS
+        return command
 
     # -- events ------------------------------------------------------------
     def handle_event(self, event):
@@ -122,6 +155,8 @@ class CastleScene(Scene):
             QUEUE: self._event_list,
             COMPLETED: self._event_completed,
             DETAIL: self._event_detail,
+            NOTE: self._event_note,
+            ZOOM: self._event_zoom,
         }[self.menu]
         handler(event)
 
@@ -172,10 +207,66 @@ class CastleScene(Scene):
         self.scroll.handle_event(event)
 
     def _event_detail(self, event):
-        if event.type == pygame.KEYDOWN and event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
+        if event.type == pygame.KEYDOWN:
+            if event.key in (pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_z):
+                self.open_menu(ZOOM)
+            elif event.key == pygame.K_n:
+                self.open_menu(NOTE)
+            elif event.key == pygame.K_c:
+                self.copy_command()
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if COPY_BUTTON.collidepoint(event.lpos):
+                self.copy_command()
+            elif CHART.collidepoint(event.lpos):
+                self.open_menu(ZOOM)
+            elif NOTE_BUTTON.collidepoint(event.lpos):
+                self.open_menu(NOTE)
+
+    def _event_note(self, event):
+        if event.type == pygame.KEYDOWN and event.key in (pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_n):
             self.back()
             return
         self.note_panel.handle_event(event)
+
+    def _event_zoom(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key in (pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_z):
+                self.back()
+            elif event.key in (pygame.K_PLUS, pygame.K_EQUALS, pygame.K_KP_PLUS, pygame.K_UP):
+                self._zoom_by(1.25)
+            elif event.key in (pygame.K_MINUS, pygame.K_KP_MINUS, pygame.K_DOWN):
+                self._zoom_by(0.8)
+            elif event.key == pygame.K_0:
+                self.zoom, self.zoom_center = 1.0, (0.5, 0.5)
+        elif event.type == pygame.MOUSEWHEEL:
+            self._zoom_by(1.25 if event.y > 0 else 0.8)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                self._drag = event.lpos
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            self._drag = None
+        elif event.type == pygame.MOUSEMOTION and self._drag is not None:
+            img = self.thumbs.source(self.detail.viz_path) if self.detail else None
+            if img is not None:
+                fit = min(ZOOM_VIEW.w / img.get_width(), ZOOM_VIEW.h / img.get_height()) * self.zoom
+                dx = (event.lpos[0] - self._drag[0]) / (img.get_width() * fit)
+                dy = (event.lpos[1] - self._drag[1]) / (img.get_height() * fit)
+                cx, cy = self.zoom_center
+                self.zoom_center = (min(1.0, max(0.0, cx - dx)), min(1.0, max(0.0, cy - dy)))
+            self._drag = event.lpos
+
+    def _zoom_by(self, factor: float, toward: Optional[tuple[int, int]] = None):
+        new_zoom = min(8.0, max(1.0, self.zoom * factor))
+        if toward is not None and new_zoom > self.zoom:
+            # move the centre a little toward the pointer so zooming feels anchored
+            fx = (toward[0] - ZOOM_VIEW.x) / ZOOM_VIEW.w
+            fy = (toward[1] - ZOOM_VIEW.y) / ZOOM_VIEW.h
+            cx, cy = self.zoom_center
+            k = 0.35
+            self.zoom_center = (cx + (fx - cx) * k, cy + (fy - cy) * k)
+        self.zoom = new_zoom
+        if self.zoom == 1.0:
+            self.zoom_center = (0.5, 0.5)
 
     def _row_at(self, pos) -> Optional[int]:
         if not self.list_view.collidepoint(pos):
@@ -223,8 +314,12 @@ class CastleScene(Scene):
             self._draw_queue(surface, t, dx)
         elif self.menu == COMPLETED:
             self._draw_completed(surface, t, dx)
-        else:
+        elif self.menu == DETAIL:
             self._draw_detail(surface, t, dx)
+        elif self.menu == NOTE:
+            self._draw_note(surface, t, dx)
+        else:
+            self._draw_zoom(surface, t, dx)
 
     def _draw_background(self, surface, t):
         assets = self.app.assets
@@ -462,41 +557,94 @@ class CastleScene(Scene):
                 draw_cursor_hand(surface, assets, view.x - 3, hy, t)
 
     # -- detail --------------------------------------------------------------
+    def _small_button(self, surface, rect: pygame.Rect, label: str, icon_done: Optional[bool] = None, hot=False):
+        pygame.draw.rect(surface, OUTLINE, rect)
+        pygame.draw.rect(surface, lerp_color(WOOD_DARK, GOLD, 0.35 if hot else 0.15), rect.inflate(-2, -2))
+        x = rect.x + 4
+        if icon_done is not None:
+            draw_clipboard_icon(surface, x, rect.y + 1, icon_done)
+            x += 12
+        draw_text(surface, label, (x, rect.y + 2), GOLD_LIGHT if not hot else GREEN, kind="small")
+
     def _draw_detail(self, surface, t, dx):
         assets = self.app.assets
         m = self.detail
         panel = PANEL.move(dx, 0)
         draw_panel(surface, assets, panel)
-        self._footer(surface, "Wheel/arrows: scroll note   Esc: back", dx)
+        self._footer(surface, "Enter: zoom chart   N: note   C: copy   Esc: back", dx)
         if m is None:
             return
-        left = pygame.Rect(panel.x + 12, panel.y + 12, 156, panel.h - 24)
         tint = RED if m.failed else GREEN
-        draw_text(surface, m.status.upper(), (left.x, left.y), tint, kind="title", shadow=OUTLINE)
-        draw_text(surface, m.mission_id or m.folder[:12], (left.right, left.y + 4), TEXT_FAINT, kind="small", align="right")
-        y = left.y + 18
-        pygame.draw.line(surface, GOLD, (left.x, y), (left.right, y))
-        y += 4
+        x0, y0 = panel.x + 12, panel.y + 10
+        draw_text(surface, m.status.upper(), (x0, y0), tint, kind="title", shadow=OUTLINE)
+        sw = text_size(m.status.upper(), "title")[0]
+        ident = m.mission_id or m.folder
+        draw_text(surface, clip_lines(ident, COPY_BUTTON.x - 8 - (x0 + sw + 8), 1, "small")[0],
+                  (x0 + sw + 8, y0 + 4), TEXT_FAINT, kind="small")
+        copied = t < self.copied_until
+        self._small_button(surface, COPY_BUTTON.move(dx, 0), "copied!" if copied else "copy cmd", copied, copied)
+        pygame.draw.line(surface, GOLD, (x0, y0 + 16), (panel.right - 12, y0 + 16))
+
+        # the chart is the centrepiece: smooth (unquantized) and click-to-zoom
+        chart = CHART.move(dx, 0)
+        pygame.draw.rect(surface, OUTLINE, chart.inflate(4, 4))
+        img = self.thumbs.source(m.viz_path)
+        if img is not None:
+            surface.blit(scaled_region(img, chart.size, 1.0, (0.5, 0.5)), chart.topleft)
+        else:
+            pygame.draw.rect(surface, SHADOW, chart)
+            draw_text(surface, "no chart", chart.center, TEXT_FAINT, kind="small", align="center")
+
+        # compact stats column on the right
+        sx = chart.right + 12
+        sw_col = panel.right - 12 - sx
         stats = [
             ("n", str(m.n_obs) if m.n_obs is not None else "-"),
             ("r", fmt_num(m.r, 3)),
             ("perm p", fmt_num(m.perm_p, 3)),
             ("validity", fmt_num(m.validity, 1)),
             ("interest", fmt_num(m.interestingness, 1)),
-            ("unexpected", fmt_num(m.unexpectedness, 1)),
+            ("unexpect", fmt_num(m.unexpectedness, 1)),
         ]
-        col = left.w // 2
-        for i, (k, v) in enumerate(stats):
-            cx = left.x + (i % 2) * col
-            cy = y + (i // 2) * LH
-            draw_text(surface, k, (cx, cy), TEXT_DIM, kind="small")
-            draw_text(surface, v, (cx + col - 6, cy), GOLD_LIGHT, kind="small", align="right")
-        y += 3 * LH + 4
-        thumb_w, thumb_h = 160, 90
-        ty = left.bottom - thumb_h - 2
-        hyp_lines = clip_lines(m.hypothesis or "(no hypothesis)", left.w, max(1, (ty - 4 - y) // LH))
-        for line in hyp_lines:
-            draw_text(surface, line, (left.x, y), TEXT)
-            y += LH
-        draw_thumbnail(surface, self.thumbs.get(m.viz_path, (thumb_w, thumb_h)), left.x - 2, ty, (thumb_w, thumb_h))
+        y = chart.y
+        for k, v in stats:
+            draw_text(surface, k, (sx, y), TEXT_DIM, kind="small")
+            draw_text(surface, v, (sx + sw_col, y), GOLD_LIGHT, kind="small", align="right")
+            y += LH + 2
+        sig = m.signal()
+        pygame.draw.rect(surface, OUTLINE, (sx, y + 2, sw_col, 6))
+        pygame.draw.rect(surface, signal_color(sig), (sx + 1, y + 3, max(0, int((sw_col - 2) * (sig or 0))), 4))
+        draw_text(surface, "signal", (sx, y + 11), TEXT_FAINT, kind="small")
+        self._small_button(surface, NOTE_BUTTON.move(dx, 0), "read note")
+
+        # hypothesis under the chart, two lines max
+        hy = chart.bottom + 6
+        for line in clip_lines(m.hypothesis or "(no hypothesis)", chart.w, 2):
+            draw_text(surface, line, (chart.x, hy), TEXT)
+            hy += LH
+
+    def _draw_note(self, surface, t, dx):
+        assets = self.app.assets
+        panel = PANEL.move(dx, 0)
+        draw_panel(surface, assets, panel)
+        self._footer(surface, "Wheel/arrows: scroll   Esc: back", dx)
+        m = self.detail
+        if m is None:
+            return
+        draw_text(surface, "MISSION NOTE", (panel.x + 12, panel.y + 10), GOLD_LIGHT, kind="title", shadow=OUTLINE)
         self.note_panel.draw(surface, assets, INK, dx, 0)
+
+    def _draw_zoom(self, surface, t, dx):
+        m = self.detail
+        pygame.draw.rect(surface, OUTLINE, ZOOM_VIEW.inflate(4, 4))
+        img = self.thumbs.source(m.viz_path) if m is not None else None
+        if img is None:
+            pygame.draw.rect(surface, SHADOW, ZOOM_VIEW)
+            draw_text(surface, "no chart for this mission", ZOOM_VIEW.center, TEXT_FAINT, align="center")
+        else:
+            key = (round(self.zoom, 3), round(self.zoom_center[0], 3), round(self.zoom_center[1], 3), id(img))
+            if self._zoom_cache is None or self._zoom_cache[0] != key:
+                self._zoom_cache = (key, scaled_region(img, ZOOM_VIEW.size, self.zoom, self.zoom_center))
+            surface.blit(self._zoom_cache[1], ZOOM_VIEW.topleft)
+        draw_text(surface, f"x{self.zoom:.2f}   Wheel/+/-: zoom   Drag: pan   0: reset   Esc: back",
+                  (LOGICAL_W // 2, LOGICAL_H - 12), TEXT_DIM, kind="small", shadow=OUTLINE, align="center")
