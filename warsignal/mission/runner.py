@@ -122,7 +122,7 @@ def compute_trade(plan, stats, a, b):
     holding = int(best_lag) if best_lag and best_lag > 0 else 1
     signal = apply_window(transform(a, plan.transform_a), plan.window)
     target = apply_window(b, plan.window)
-    kind = target_kind_from_indicator(plan.indicator_b, plan.transform_b)
+    kind = target_kind_from_indicator(plan.indicator_b)  # ``b`` is the raw series, not the transformed one
     sign = plan.expected_sign or (1 if ((stats.get("lagged") or {}).get("best_r") or 0) >= 0 else -1)
     metrics = evaluate_rule(signal, target, expected_sign=sign, holding_days=holding, target_kind=kind)
     metrics["trade_idea"] = trade_idea_from_metrics(
