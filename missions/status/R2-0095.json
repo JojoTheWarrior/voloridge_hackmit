@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:13:54Z",
-  "updated_at": "2026-09-20T04:25:26Z",
+  "updated_at": "2026-09-20T04:28:18Z",
   "finished_at": "2026-09-20T04:14:32Z",
-  "elapsed_s": 692,
+  "elapsed_s": 864,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-197-finance-gld-log-return_prepost",
   "scores": {
