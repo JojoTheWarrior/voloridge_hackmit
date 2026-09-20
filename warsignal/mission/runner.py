@@ -54,7 +54,7 @@ def _judge_state(hypothesis, plan, stats):
     return state
 
 
-def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False):
+def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False):
     mission_id = mission_id or f"M{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(3)}"
     created = datetime.now(timezone.utc).isoformat()
     try:
@@ -107,4 +107,16 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False):
     payload = result.__dict__.copy()
     payload["plan"] = result.plan.__dict__
     json_path.write_text(json.dumps(payload, default=_json_default, indent=2), encoding="utf-8")
+    if viz or show:
+        from warsignal.viz.agent import design_viz
+        from warsignal.viz.pygame_viz import render
+
+        spec = design_viz(result)
+        viz_path = reports / f"{mission_id}.png"
+        render(spec, json_path, viz_path, interactive=False)
+        result.artifacts["viz_path"] = str(viz_path)
+        payload["artifacts"] = result.artifacts
+        json_path.write_text(json.dumps(payload, default=_json_default, indent=2), encoding="utf-8")
+        if show:
+            render(spec, json_path, viz_path, interactive=True)
     return result

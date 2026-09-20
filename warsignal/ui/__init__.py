@@ -1,0 +1,1 @@
+"""WarSignal web interface."""

@@ -21,13 +21,13 @@ def requeue_failed_missions():
     return requeue_failed()
 
 
-def run_queue(n=None, use_ai=True, stop_on_error=False):
+def run_queue(n=None, use_ai=True, stop_on_error=False, viz=False):
     results = []
     while n is None or len(results) < n:
         line = pop_next()
         if line is None:
             break
-        result = run_mission(line, use_ai=use_ai)
+        result = run_mission(line, use_ai=use_ai, viz=viz)
         append_result(result)
         if result.status == "ok":
             mark_done(line)
