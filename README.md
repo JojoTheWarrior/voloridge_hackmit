@@ -31,6 +31,20 @@ logs the fallback and uses OpenAI; select a backend explicitly with
 `--brain devin`, `--brain openai`, or `--brain heuristic` on `mission` and
 `queue`. The heuristic option disables LLM calls.
 
+### Run a mission as a Devin agent
+
+Use `--detach` to create one Devin child session and return immediately; the
+child clones the repository, runs the mission, updates `missions/status/`, and
+publishes its run folder:
+
+```bash
+python main.py mission "Iran news leads Brent returns" --detach
+python main.py queue --detach --n 5
+```
+
+The local queued status file is written atomically and is intentionally left
+uncommitted for the child agent. File locking works on both POSIX and Windows.
+
 ### Mission protocol
 
 Every mission writes a self-contained, reproducible folder under

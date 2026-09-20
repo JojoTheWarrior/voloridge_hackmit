@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import fcntl
 import importlib.metadata
 import json
 import platform
@@ -16,6 +15,7 @@ import pandas as pd
 
 from warsignal.indicators import REGISTRY
 from warsignal.util import to_jsonable
+from warsignal.util_lock import file_lock
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -37,25 +37,24 @@ def _failed_slug(hypothesis: str) -> str:
 def _next_folder(result) -> Path:
     RUNS.mkdir(parents=True, exist_ok=True)
     with LOCK.open("a+", encoding="utf-8") as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
-        numbers = [
-            int(match.group(1))
-            for path in RUNS.iterdir()
-            if (match := re.match(r"^\d{8}-(\d{3})-", path.name))
-        ]
-        number = max(numbers, default=0) + 1
-        date = datetime.now(timezone.utc).strftime("%Y%m%d")
-        if result.status == "ok":
-            suffix = (
-                f"{_slug(result.plan.indicator_a)}_prepost"
-                if result.plan.mode == "single"
-                else f"{_slug(result.plan.indicator_a)}_x_{_slug(result.plan.indicator_b)}"
-            )
-        else:
-            suffix = _failed_slug(result.hypothesis)
-        folder = RUNS / f"{date}-{number:03d}-{suffix}"
-        folder.mkdir()
-        fcntl.flock(handle, fcntl.LOCK_UN)
+        with file_lock(handle):
+            numbers = [
+                int(match.group(1))
+                for path in RUNS.iterdir()
+                if (match := re.match(r"^\d{8}-(\d{3})-", path.name))
+            ]
+            number = max(numbers, default=0) + 1
+            date = datetime.now(timezone.utc).strftime("%Y%m%d")
+            if result.status == "ok":
+                suffix = (
+                    f"{_slug(result.plan.indicator_a)}_prepost"
+                    if result.plan.mode == "single"
+                    else f"{_slug(result.plan.indicator_a)}_x_{_slug(result.plan.indicator_b)}"
+                )
+            else:
+                suffix = _failed_slug(result.hypothesis)
+            folder = RUNS / f"{date}-{number:03d}-{suffix}"
+            folder.mkdir()
     return folder
 
 

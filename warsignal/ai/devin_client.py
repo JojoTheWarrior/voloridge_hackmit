@@ -23,15 +23,10 @@ class DevinBrain:
     def headers(self):
         return {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
-    def ask_json(self, system, user, schema, *, title, tags, timeout_s=900, poll_s=8, max_acu=2):
-        prompt = (
-            f"{system}\n\n{user}\n\n"
-            "You are a WarSignal mission brain. Do not clone repos or run code; "
-            "reason from the text above only and reply ONLY via provide_structured_output "
-            "matching the schema, then stop."
-        )
-        schema = dict(schema)
-        schema.setdefault("$schema", "http://json-schema.org/draft-07/schema#")
+    def create_session(self, prompt, *, title, tags, schema=None, max_acu=2):
+        schema = dict(schema) if schema is not None else None
+        if schema is not None:
+            schema.setdefault("$schema", "http://json-schema.org/draft-07/schema#")
         body = {
             "prompt": prompt,
             "title": title,
@@ -65,11 +60,24 @@ class DevinBrain:
             raise BrainUnavailable("Devin session creation failed")
         try:
             created = response.json()
-            session_id = created["session_id"]
-            session_url = created["url"]
+            return created["session_id"], created["url"]
         except (ValueError, KeyError, TypeError) as exc:
             raise BrainUnavailable(f"invalid Devin session response: {exc}") from exc
 
+    def ask_json(self, system, user, schema, *, title, tags, timeout_s=900, poll_s=8, max_acu=2):
+        prompt = (
+            f"{system}\n\n{user}\n\n"
+            "You are a WarSignal mission brain. Do not clone repos or run code; "
+            "reason from the text above only and reply ONLY via provide_structured_output "
+            "matching the schema, then stop."
+        )
+        session_id, session_url = self.create_session(
+            prompt,
+            title=title,
+            tags=tags,
+            schema=schema,
+            max_acu=max_acu,
+        )
         required = schema.get("required", []) if isinstance(schema, dict) else []
         deadline = time.monotonic() + timeout_s
         while time.monotonic() <= deadline:

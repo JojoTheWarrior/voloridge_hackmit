@@ -6,14 +6,14 @@ import argparse
 def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
-    mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true"); mission.add_argument("--dry-run", action="store_true"); mission.add_argument("--publish", action="store_true"); mission.add_argument("--brain", choices=("devin", "openai", "heuristic"))
+    mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true"); mission.add_argument("--dry-run", action="store_true"); mission.add_argument("--publish", action="store_true"); mission.add_argument("--brain", choices=("devin", "openai", "heuristic")); mission.add_argument("--detach", action="store_true")
     mission.add_argument("--mission-id"); mission.add_argument("--status", action="store_true", help="write missions/status/<mission-id>.json at each stage")
     status = sub.add_parser("status", help="update a Round 2 mission status file (SCHEMA.md)"); status.add_argument("mission_id")
     status.add_argument("--hypothesis"); status.add_argument("--title"); status.add_argument("--parent"); status.add_argument("--session-url")
     status.add_argument("--state", choices=("queued", "running", "done", "failed")); status.add_argument("--stage"); status.add_argument("--message")
     status.add_argument("--followup", help="append one R2 follow-up hypothesis to missions/queue.txt")
     status.add_argument("--push", action="store_true", help="commit only the status file (+queue if --followup) and push")
-    queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true"); queue.add_argument("--max-retries", type=int, default=1); queue.add_argument("--publish", action="store_true"); queue.add_argument("--brain", choices=("devin", "openai", "heuristic"))
+    queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true"); queue.add_argument("--max-retries", type=int, default=1); queue.add_argument("--publish", action="store_true"); queue.add_argument("--brain", choices=("devin", "openai", "heuristic")); queue.add_argument("--detach", action="store_true")
     queue.add_argument("--reset", action="store_true"); queue.add_argument("--requeue-failed", action="store_true")
     indicators = sub.add_parser("indicators"); indicators.add_argument("--source")
     fetch = sub.add_parser("fetch"); fetch.add_argument("--quick", action="store_true"); fetch.add_argument("--all", action="store_true")
@@ -34,6 +34,20 @@ def main():
     if extra:
         parser.error(f"unrecognized arguments: {' '.join(extra)}")
     if args.command == "mission":
+        if args.detach:
+            from warsignal.ai.devin_client import BrainUnavailable
+            from warsignal.mission.detach import spawn_mission_agent
+
+            try:
+                _, url = spawn_mission_agent(
+                    args.hypothesis,
+                    brain_backend=args.brain or ("heuristic" if args.no_ai else None),
+                )
+            except BrainUnavailable as exc:
+                print(f"mission detach unavailable: {exc}")
+                return
+            print(f"mission started: {url}")
+            return
         from warsignal.mission.planner import plan_mission
         if args.dry_run:
             import json
@@ -67,6 +81,26 @@ def main():
             st.publish_status(args.mission_id, extra_paths=extra)
         print(json.dumps(st.read_status(args.mission_id) or current, indent=2))
     elif args.command == "queue":
+        if args.detach:
+            from warsignal.ai.devin_client import BrainUnavailable
+            from warsignal.mission.detach import spawn_mission_agent
+            from warsignal.mission.queue import pop_next
+
+            count = args.n if args.n is not None else 1
+            for _ in range(count):
+                hypothesis = pop_next()
+                if hypothesis is None:
+                    break
+                try:
+                    _, url = spawn_mission_agent(
+                        hypothesis,
+                        brain_backend=args.brain or ("heuristic" if args.no_ai else None),
+                    )
+                except BrainUnavailable as exc:
+                    print(f"mission detach unavailable: {exc}")
+                    break
+                print(f"mission started: {url}")
+            return
         from warsignal.mission.harness import requeue_failed_missions, reset_queue, run_queue
         if args.reset:
             reset_queue()

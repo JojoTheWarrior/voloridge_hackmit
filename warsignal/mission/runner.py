@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import math
 import shutil
-import secrets
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -19,6 +18,7 @@ from warsignal.config import START, END
 from warsignal.indicators import get_series
 from warsignal.util import to_jsonable
 from .model import MissionResult
+from .ids import new_mission_id
 from .planner import heuristic_plan, plan_mission
 from .publish import publish_run, write_run_folder
 from .status import apply_result, status_path, update_status
@@ -133,7 +133,7 @@ def compute_trade(plan, stats, a, b):
 
 def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False, publish=False, brain_backend=None,
                 status=False):
-    mission_id = mission_id or f"M{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(3)}"
+    mission_id = mission_id or new_mission_id()
     created = datetime.now(timezone.utc).isoformat()
     raw_a = raw_b = transformed_a = transformed_b = None
     judge = {}
