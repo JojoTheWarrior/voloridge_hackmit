@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0101",
+  "title": "[oil-shipping] Hormuz event count 20d z-score > 1.5 leads FRO absolute returns (",
+  "hypothesis": "R2 | [oil-shipping] Hormuz event count 20d z-score > 1.5 leads FRO absolute returns (volatility) by 1 day (+); trade long FRO straddle proxy 2d [events.hormuz.count -> finance.FRO.abs_return] (parent: R2-0001)",
+  "parent_mission_id": "R2-0001",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:15:31Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
