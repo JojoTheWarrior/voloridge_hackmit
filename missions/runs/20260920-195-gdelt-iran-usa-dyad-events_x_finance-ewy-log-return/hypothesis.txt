@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Iran-USA dyad events 20d z-score > 1 lead Korea ETF returns lower by 2-4 days (-) on oil-import and risk beta; trade short EWY 4d [gdelt.iran_usa_dyad_events -> finance.EWY.log_return]

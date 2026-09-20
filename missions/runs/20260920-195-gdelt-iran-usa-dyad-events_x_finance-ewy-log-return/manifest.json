@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:11:54.212204+00:00",
+  "git_commit": "070676d30e723e96ab3ed718bade23aa7b082d15",
+  "folder": "20260920-195-gdelt-iran-usa-dyad-events_x_finance-ewy-log-return",
   "mission_id": "R2-0091",
-  "title": "Iran-USA dyad events lead EWY returns lower",
   "hypothesis": "R2 | [risk-macro-em] Iran-USA dyad events 20d z-score > 1 lead Korea ETF returns lower by 2-4 days (-) on oil-import and risk beta; trade short EWY 4d [gdelt.iran_usa_dyad_events -> finance.EWY.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/4f3de81cf69c4aaea9a12909fb941bcf",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:11:45Z",
-  "updated_at": "2026-09-20T04:11:56Z",
-  "finished_at": null,
-  "elapsed_s": 11,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-195-gdelt-iran-usa-dyad-events_x_finance-ewy-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.25
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.02461575226746831,
+  "perm_p": 0.5768463073852296,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.25,
   "trade_idea": {
     "instrument": "EWY",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 2.25,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.iran_usa_dyad_events": "configured analysis window",
+    "finance.EWY.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

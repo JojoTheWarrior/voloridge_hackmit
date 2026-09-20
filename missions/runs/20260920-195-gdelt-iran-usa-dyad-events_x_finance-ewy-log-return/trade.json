@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 56,
+    "hit_rate": 0.375,
+    "avg_return": -0.005352531918648611,
+    "baseline_avg_return": -0.003625455587661055,
+    "excess_return": -0.001727076330987556,
+    "sharpe_like": -1.1046389908563863,
+    "max_drawdown": -0.37801721887274387,
+    "total_return": -0.28671010493750404
+  },
+  "fit_pre_war": {
+    "n_trades": 39,
+    "hit_rate": 0.28205128205128205,
+    "avg_return": -0.00800867893674308,
+    "baseline_avg_return": -0.004277408467731999,
+    "excess_return": -0.0037312704690110818,
+    "sharpe_like": -2.715496740009095,
+    "max_drawdown": -0.3274443006377584,
+    "total_return": -0.2740733590846023
+  },
+  "test_war": {
+    "n_trades": 17,
+    "hit_rate": 0.5882352941176471,
+    "avg_return": 0.0007409818287445828,
+    "baseline_avg_return": -0.0024763300076798937,
+    "excess_return": 0.0032173118364244766,
+    "sharpe_like": 0.05164413716919312,
+    "max_drawdown": -0.2572348238335258,
+    "total_return": -0.017407744998815144
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "EWY",
+    "direction": "short",
+    "entry_rule": "gdelt.iran_usa_dyad_events rolling_zscore_20d > 1 at close -> short EWY next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.375,
+    "avg_return": -0.005352531918648611,
+    "excess_return": -0.001727076330987556,
+    "n_trades": 56,
+    "sharpe_like": -1.1046389908563863,
+    "max_drawdown": -0.37801721887274387,
+    "oos_n_trades": 17,
+    "oos_avg_return": 0.0007409818287445828,
+    "oos_hit_rate": 0.5882352941176471,
+    "actionability": 2.25,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
