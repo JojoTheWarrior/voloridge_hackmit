@@ -80,3 +80,4 @@
 | `20260920-076-finance-fred-dcoilbrenteu_x_finance-jets-log-return` | Airline stocks (JETS, UAL, DAL) moved inversely to Brent more strongly during the war than before. | ok | 386 | -0.3477563129722114 | 0.01996007984031936 | 6.4 | 4.84 | 1.38 |
 | `20260920-077-gdelt-gkg-hormuz-share_x_finance-mos-log-return` | Fertilizer stocks (MOS, CF, NTR) rose with Hormuz-related news volume. | ok | 140 | 0.01252988629854001 | 0.001996007984031936 | 5.88 | 3.62 | 7.2 |
 | `20260920-078-gdelt-are-conflict-events_x_finance-hg-f-log-return` | Copper and aluminum futures responded to the March 28 strike on Emirates Global Aluminium. | ok | 140 | -0.11215927692535835 | 0.2435129740518962 | 2.0 | 3.34 | 5.14 |
+| `20260920-079-finance-fred-dcoilbrenteu_x_finance-fred-dgs10` | The 10-year Treasury yield rose with Brent during the war, breaking the usual flight-to-safety pattern. | ok | 142 | 0.5240728479826706 | 0.015968063872255488 | 6.02 | 3.86 | 6.28 |
