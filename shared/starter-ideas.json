@@ -1,0 +1,74 @@
+{
+  "sessionId": "f5ffecb1edec44bcb3965203e36367c9",
+  "url": "https://app.devin.ai/sessions/f5ffecb1edec44bcb3965203e36367c9",
+  "suggestions": [
+    {
+      "text": "Did Texas gas plants' Sentinel-2 cooling plumes track reported PUDL generation during the July 2023 heat wave?",
+      "datasetIds": [
+        "pudl",
+        "sentinel-2",
+        "open-meteo"
+      ]
+    },
+    {
+      "text": "How did Lake Mead's reservoir area trend versus Hoover Dam reported generation and Colorado basin precipitation since 2018?",
+      "datasetIds": [
+        "global-water-watch",
+        "pudl",
+        "open-meteo"
+      ]
+    },
+    {
+      "text": "Which OSM-mapped clinics in northern Nigeria sit in low VIIRS brightness areas and should be screened for on-site power verification?",
+      "datasetIds": [
+        "openstreetmap",
+        "viirs"
+      ]
+    },
+    {
+      "text": "Can Sentinel-2 plume presence at Ohio River coal plants be scored against PUDL hourly output as an activity proxy?",
+      "datasetIds": [
+        "sentinel-2",
+        "pudl"
+      ]
+    },
+    {
+      "text": "In California's Sierra Nevada, how do 2020-2024 reservoir areas compare with snow-season precipitation baselines?",
+      "datasetIds": [
+        "global-water-watch",
+        "open-meteo",
+        "sentinel-2"
+      ]
+    },
+    {
+      "text": "For rural Bihar clinics, does VIIRS brightness rank facilities for electrification field checks, and how often would it mislead?",
+      "datasetIds": [
+        "viirs",
+        "openstreetmap"
+      ]
+    },
+    {
+      "text": "Do Zambezi basin reservoir area declines line up with upstream rainfall deficits, and what would confirm a hydro shortfall?",
+      "datasetIds": [
+        "global-water-watch",
+        "open-meteo"
+      ]
+    },
+    {
+      "text": "In Malawi, do clinic-area night light dips coincide with reservoir area lows, and what measurements would test the link?",
+      "datasetIds": [
+        "viirs",
+        "global-water-watch",
+        "openstreetmap"
+      ]
+    },
+    {
+      "text": "For Puerto Rico after a 2022 storm, how do PUDL plant records, VIIRS brightness and rainfall compare for recovery screening?",
+      "datasetIds": [
+        "pudl",
+        "viirs",
+        "open-meteo"
+      ]
+    }
+  ]
+}

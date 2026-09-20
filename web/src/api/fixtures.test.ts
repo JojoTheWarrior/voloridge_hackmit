@@ -6,9 +6,9 @@ const conclusionOf = (mission: Mission) => mission.events.find((e) => e.kind ===
 describe('seeds', () => {
   const missions = seedMissions()
 
-  it('have unique ids and only reference known datasets', () => {
+  it('have unique ids and reference current or historical datasets', () => {
     expect(new Set(missions.map((m) => m.id)).size).toBe(missions.length)
-    const known = new Set(seedDatasets().map((d) => d.id))
+    const known = new Set([...seedDatasets().map((d) => d.id), 'gdelt', 'yahoo', 'cams'])
     missions.flatMap((m) => m.datasetIds).forEach((id) => expect(known).toContain(id))
   })
 
@@ -112,10 +112,12 @@ describe('seeds', () => {
 
   it('tags each seed dataset with its kind', () => {
     expect(Object.fromEntries(seedDatasets().map((d) => [d.id, d.kind]))).toEqual({
-      gdelt: 'events',
-      yahoo: 'markets',
+      pudl: 'energy',
+      'sentinel-2': 'satellite',
+      'global-water-watch': 'water',
+      viirs: 'nightlights',
+      openstreetmap: 'places',
       'open-meteo': 'weather',
-      cams: 'air',
     })
   })
 })

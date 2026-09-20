@@ -843,7 +843,7 @@ def test_attachment_proxy_unknown_mission_or_no_session(client, devin):
 
 def test_list_datasets_is_seeded(client):
     datasets = client.get("/api/datasets").get_json()
-    assert [d["id"] for d in datasets] == ["gdelt", "yahoo", "open-meteo", "cams"]
+    assert [d["id"] for d in datasets] == ["pudl", "sentinel-2", "global-water-watch", "viirs", "openstreetmap", "open-meteo"]
 
 
 def test_link_dataset(client):
@@ -870,7 +870,7 @@ def test_link_dataset_validation(client, body, field, message):
     response = client.post("/api/datasets", json=body)
     assert response.status_code == 422
     assert response.get_json() == {"field": field, "message": message}
-    assert len(client.get("/api/datasets").get_json()) == 4
+    assert len(client.get("/api/datasets").get_json()) == 6
 
 
 def test_http_urls_are_accepted(client):

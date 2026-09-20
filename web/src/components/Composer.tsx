@@ -10,11 +10,14 @@ interface ComposerProps {
   onSubmit: (hypothesis: string, datasetIds: string[]) => void
   inputRef: Ref<HTMLTextAreaElement>
   busy?: boolean
+  initialDatasetIds?: string[]
 }
 
-export function Composer({ datasets, value, onChange, onSubmit, inputRef, busy = false }: ComposerProps) {
+export function Composer({ datasets, value, onChange, onSubmit, inputRef, busy = false, initialDatasetIds }: ComposerProps) {
   // Tracking what is switched off keeps newly linked datasets on by default.
-  const [deselected, setDeselected] = useState<Set<string>>(new Set())
+  const [deselected, setDeselected] = useState<Set<string>>(() => new Set(
+    initialDatasetIds ? datasets.filter((d) => !initialDatasetIds.includes(d.id)).map((d) => d.id) : [],
+  ))
   const selected = new Set(datasets.filter((d) => !deselected.has(d.id)).map((d) => d.id))
   const empty = value.trim() === ''
 

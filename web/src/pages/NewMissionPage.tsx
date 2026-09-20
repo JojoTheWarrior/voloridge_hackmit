@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import { Paperclip, X } from 'lucide-react'
+import { ArrowUpRight, Paperclip, RefreshCw, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '../api/context'
-import { EXAMPLE_PROMPTS } from '../examples'
+import { STARTER_DATASETS, STARTER_IDEAS } from '../examples'
 import { Composer } from '../components/Composer'
 import { ResearchDialog, type ResearchAttachment } from '../components/ResearchDialog'
 import { ValidationError } from '../api/index'
@@ -19,6 +19,9 @@ export function NewMissionPage() {
   const [error, setError] = useState('')
   const [research, setResearch] = useState<ResearchAttachment>()
   const [researchOpen, setResearchOpen] = useState(false)
+  const [ideaPage, setIdeaPage] = useState(0)
+  const [suggestion, setSuggestion] = useState<{ key: number; datasetIds: string[] }>()
+  const ideas = STARTER_IDEAS.slice(ideaPage * 3, ideaPage * 3 + 3)
 
   async function start(hypothesis: string, datasetIds: string[]) {
     if (submitting.current) return
@@ -42,7 +45,7 @@ export function NewMissionPage() {
         <h1 className="mb-7 text-center text-[32px] leading-tight font-medium tracking-[-0.03em]">
           What should we look into?
         </h1>
-        <Composer datasets={datasets} value={prompt} onChange={setPrompt} onSubmit={start} inputRef={inputRef} busy={busy} />
+        <Composer key={suggestion?.key ?? 0} datasets={datasets} value={prompt} onChange={setPrompt} onSubmit={start} inputRef={inputRef} busy={busy} initialDatasetIds={suggestion?.datasetIds} />
         {error && <p role="alert" className="mt-3 px-1 text-[13px]">{error}</p>}
         <div className="mt-3 flex min-w-0 items-center gap-1 text-[13px] text-muted">
           <button type="button" disabled={busy} onClick={() => setResearchOpen(true)} className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left hover:bg-fill hover:text-ink">
@@ -58,23 +61,33 @@ export function NewMissionPage() {
         }} />}
 
         <div className="mt-9">
-          <div className="px-1 pb-2 text-xs text-muted">Try one</div>
+          <div className="flex items-center justify-between px-1 pb-2 text-xs text-muted">
+            <span>Connections to explore</span>
+            <button type="button" disabled={busy} onClick={() => setIdeaPage((page) => (page + 1) % Math.ceil(STARTER_IDEAS.length / 3))}
+              className="flex items-center gap-1.5 rounded-md px-1.5 py-1 transition-colors hover:bg-fill hover:text-ink disabled:opacity-50">
+              <RefreshCw size={12} aria-hidden="true" /> More ideas
+            </button>
+          </div>
           <div className="flex flex-col gap-1.5">
-            {EXAMPLE_PROMPTS.map((example) => (
+            {ideas.map((idea) => (
               <button
-                key={example}
+                key={idea.text}
                 type="button"
-                disabled={busy}
+                aria-label={idea.text}
+                disabled={busy || datasets.length === 0}
                 onClick={() => {
-                  setPrompt(example)
+                  setPrompt(idea.text)
+                  setSuggestion((previous) => ({ key: (previous?.key ?? 0) + 1, datasetIds: idea.datasetIds }))
                   inputRef.current?.focus()
                 }}
-                className="rounded-lg border border-line-soft px-3.5 py-2.5 text-left text-[13px] text-muted transition-colors duration-150 hover:border-line hover:text-ink disabled:pointer-events-none disabled:opacity-50"
+                className="group rounded-xl border border-line-soft px-3.5 py-3 text-left transition-colors duration-150 hover:border-line hover:bg-fill disabled:pointer-events-none disabled:opacity-50"
               >
-                {example}
+                <span className="flex items-start justify-between gap-3 text-[13px] leading-relaxed text-ink"><span>{idea.text}</span><ArrowUpRight size={14} aria-hidden="true" className="mt-0.5 shrink-0 text-muted" /></span>
+                <span className="mt-2 block text-[11px] text-muted">{idea.datasetIds.map((id) => STARTER_DATASETS.find((dataset) => dataset.id === id)?.name).filter(Boolean).join(' · ')}</span>
               </button>
             ))}
           </div>
+          <p className="mt-2 px-1 text-[11px] text-muted">Suggested by Devin. Choose one to make it your own.</p>
         </div>
       </div>
     </div>

@@ -43,12 +43,12 @@ describe('DatasetsPage', () => {
   it('lists linked datasets with their source host', async () => {
     renderPage()
     await screen.findByRole('table')
-    expect(rows()).toHaveLength(4)
+    expect(rows()).toHaveLength(6)
     const first = within(rows()[0])
-    expect(first.getByText('GDELT events')).toBeInTheDocument()
-    expect(first.getByText('42')).toBeInTheDocument()
-    const link = first.getByRole('link', { name: 'gdeltproject.org' })
-    expect(link).toHaveAttribute('href', 'https://www.gdeltproject.org')
+    expect(first.getByText('PUDL power generation')).toBeInTheDocument()
+    expect(first.getAllByText('—')).toHaveLength(2)
+    const link = first.getByRole('link', { name: 'data.catalyst.coop' })
+    expect(link).toHaveAttribute('href', 'https://data.catalyst.coop/')
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noreferrer')
   })
@@ -61,7 +61,7 @@ describe('DatasetsPage', () => {
     await user.click(within(dialog).getByRole('button', { name: 'Link dataset' }))
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(rows()).toHaveLength(5)
+    expect(rows()).toHaveLength(7)
     expect(within(rows()[0]).getByText('FRED')).toBeInTheDocument()
     expect(within(rows()[0]).getByRole('link', { name: 'fred.stlouisfed.org' })).toBeInTheDocument()
     expect(within(rows()[0]).getByText('just now')).toBeInTheDocument()
@@ -73,7 +73,7 @@ describe('DatasetsPage', () => {
     await user.type(within(dialog).getByLabelText('Name'), 'FRED')
     await user.type(within(dialog).getByLabelText('URL'), 'https://fred.stlouisfed.org{Enter}')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(rows()).toHaveLength(5)
+    expect(rows()).toHaveLength(7)
   })
 
   it('asks for a name', async () => {
@@ -83,7 +83,7 @@ describe('DatasetsPage', () => {
     await user.click(within(dialog).getByRole('button', { name: 'Link dataset' }))
     expect(within(dialog).getByText('Enter a name')).toBeInTheDocument()
     expect(within(dialog).getByLabelText('Name')).toBeInvalid()
-    expect(rows()).toHaveLength(4)
+    expect(rows()).toHaveLength(6)
   })
 
   it.each(['ftp://x.com', 'not a url'])('rejects the url %j and clears the error on edit', async (url) => {
@@ -108,7 +108,7 @@ describe('DatasetsPage', () => {
 
     dialog = await openDialog(user)
     expect(within(dialog).getByLabelText('Name')).toHaveValue('')
-    expect(rows()).toHaveLength(4)
+    expect(rows()).toHaveLength(6)
   })
 
   it('invites you to link the first dataset when there are none', async () => {
@@ -126,7 +126,7 @@ describe('DatasetsPage', () => {
   it('shows a dash for a dataset with no range yet', async () => {
     renderPage([{ id: 'x', name: 'Fresh', url: 'https://fresh.dev', kind: 'other', seriesCount: 0, dateRange: '', syncedAt: new Date().toISOString() }])
     await screen.findByRole('table')
-    expect(within(rows()[0]).getByText('—')).toBeInTheDocument()
+    expect(within(rows()[0]).getAllByText('—')).toHaveLength(2)
   })
 })
 
@@ -146,18 +146,17 @@ describe('DatasetsPage view toggle', () => {
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     expect(cardToggle()).toHaveAttribute('aria-pressed', 'true')
     expect(listToggle()).toHaveAttribute('aria-pressed', 'false')
-    expect(cards()).toHaveLength(4)
+    expect(cards()).toHaveLength(6)
 
     const first = within(cards()[0])
-    expect(first.getByText('GDELT events')).toBeInTheDocument()
-    expect(first.getByText('42')).toHaveClass('font-mono')
-    expect(first.getByText('Mar 2025 – Sep 2026')).toBeInTheDocument()
-    expect(first.getByText('synced 2h ago')).toBeInTheDocument()
-    const link = first.getByRole('link', { name: 'gdeltproject.org' })
-    expect(link).toHaveAttribute('href', 'https://www.gdeltproject.org')
+    expect(first.getByText('PUDL power generation')).toBeInTheDocument()
+    expect(first.getByText('Linked source')).toBeInTheDocument()
+    expect(first.getByText('added 2h ago')).toBeInTheDocument()
+    const link = first.getByRole('link', { name: 'data.catalyst.coop' })
+    expect(link).toHaveAttribute('href', 'https://data.catalyst.coop/')
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('rel', 'noreferrer')
-    expect(within(cards()[3]).getByText('synced 1d ago')).toBeInTheDocument()
+    expect(within(cards()[3]).getByText('added 2h ago')).toBeInTheDocument()
   })
 
   it('gives every card a decorative thumbnail', async () => {
@@ -170,7 +169,7 @@ describe('DatasetsPage view toggle', () => {
     const { user } = renderPage()
     await user.click(await screen.findByRole('button', { name: 'Card view' }))
     await user.click(listToggle())
-    expect(rows()).toHaveLength(4)
+    expect(rows()).toHaveLength(6)
     expect(screen.queryByRole('list', { name: 'Datasets' })).not.toBeInTheDocument()
     expect(listToggle()).toHaveAttribute('aria-pressed', 'true')
   })
@@ -214,9 +213,9 @@ describe('DatasetsPage view toggle', () => {
       const { user } = renderPage()
       expect(await screen.findByRole('table')).toBeInTheDocument()
       await user.click(cardToggle())
-      expect(cards()).toHaveLength(4)
+      expect(cards()).toHaveLength(6)
       await user.click(listToggle())
-      expect(rows()).toHaveLength(4)
+      expect(rows()).toHaveLength(6)
     })
   })
 
@@ -236,13 +235,12 @@ describe('DatasetsPage view toggle', () => {
     await user.type(within(dialog).getByLabelText('Name'), 'FRED')
     await user.type(within(dialog).getByLabelText('URL'), 'https://fred.stlouisfed.org/series/DCOILBRENTEU{Enter}')
 
-    expect(cards()).toHaveLength(5)
+    expect(cards()).toHaveLength(7)
     const first = within(cards()[0])
     expect(first.getByText('FRED')).toBeInTheDocument()
     expect(first.getByRole('link', { name: 'fred.stlouisfed.org' })).toBeInTheDocument()
-    expect(first.getByText('0')).toBeInTheDocument()
-    expect(first.getByText('—')).toBeInTheDocument()
-    expect(first.getByText('synced just now')).toBeInTheDocument()
+    expect(first.getByText('Linked source')).toBeInTheDocument()
+    expect(first.getByText('added just now')).toBeInTheDocument()
     expect((await api.listDatasets())[0].kind).toBe('other')
   })
 })

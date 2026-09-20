@@ -55,12 +55,15 @@ create table if not exists datasets (
 );
 """
 
-SEED_DATASETS = (
+LEGACY_DATASETS = (
     ("gdelt", "GDELT events", "https://www.gdeltproject.org", "events", 42, "Mar 2025 – Sep 2026"),
     ("yahoo", "Yahoo Finance", "https://finance.yahoo.com", "markets", 31, "Jan 2024 – Sep 2026"),
     ("open-meteo", "Open-Meteo weather", "https://open-meteo.com", "weather", 18, "Jan 2024 – Sep 2026"),
     ("cams", "CAMS air quality", "https://atmosphere.copernicus.eu", "air", 12, "Jun 2024 – Sep 2026"),
 )
+
+STARTER_DATASETS = json.loads((Path(__file__).resolve().parents[1] / "shared/starter-datasets.json").read_text())
+SEED_DATASETS = tuple((d["id"], d["name"], d["url"], d["kind"], 0, "") for d in STARTER_DATASETS)
 
 # Columns added since the first release. `create table if not exists` leaves an existing
 # table alone, so these are added one by one to whatever database is already on disk.
@@ -294,11 +297,13 @@ class Store:
 
     def list_datasets(self) -> list[dict]:
         with self._lock:
-            rows = self._db.execute("select * from datasets order by seq desc").fetchall()
+            rows = self._db.execute("select * from datasets where archived = 0 order by seq desc").fetchall()
         return [_dataset(row) for row in rows]
 
     def get_datasets(self, dataset_ids: Iterable[str]) -> list[dict]:
-        by_id = {dataset["id"]: dataset for dataset in self.list_datasets()}
+        # Old missions can still resolve their original sources after the starter catalog changes.
+        with self._lock:
+            by_id = {row["id"]: _dataset(row) for row in self._db.execute("select * from datasets")}
         return [by_id[i] for i in dict.fromkeys(dataset_ids) if i in by_id]
 
     def add_dataset(self, name: str, url: str) -> dict:
@@ -314,6 +319,9 @@ class Store:
     # ---------- internals ----------
 
     def _migrate(self) -> None:
+        dataset_columns = {row["name"] for row in self._db.execute("pragma table_info(datasets)")}
+        if "archived" not in dataset_columns:
+            self._db.execute("alter table datasets add column archived integer not null default 0")
         existing = {row["name"] for row in self._db.execute("pragma table_info(missions)")}
         for name, definition in ADDED_MISSION_COLUMNS:
             if name not in existing:
@@ -334,13 +342,27 @@ class Store:
         self._update(mission.id, **fields)
 
     def _seed_datasets(self) -> None:
-        if self._db.execute("select 1 from datasets limit 1").fetchone():
-            return
         now = self._now()
+        # Preserve the original source records for mission history, but retire untouched
+        # old defaults from the picker. Never remove or replace a user-linked source.
+        for seed in LEGACY_DATASETS:
+            self._db.execute(
+                "insert or ignore into datasets (id, name, url, kind, series_count, date_range, synced_at, archived) "
+                "values (?, ?, ?, ?, ?, ?, ?, 1)", (*seed, now),
+            )
+            if seed[0] != "open-meteo":
+                self._db.execute("update datasets set archived = 1 where id = ? and name = ? and url = ?", seed[:3])
+        # Weather remains a starter; remove its former illustrative series/range metadata.
+        weather = next(seed for seed in SEED_DATASETS if seed[0] == "open-meteo")
+        self._db.execute(
+            "update datasets set name = ?, url = ?, kind = ?, series_count = 0, date_range = '', archived = 0 "
+            "where id = 'open-meteo' and name = 'Open-Meteo weather'",
+            weather[1:4],
+        )
         # Listed newest first, so insert the seeds backwards to show them in this order.
         for seed in reversed(SEED_DATASETS):
             self._db.execute(
-                "insert into datasets (id, name, url, kind, series_count, date_range, synced_at) "
+                "insert or ignore into datasets (id, name, url, kind, series_count, date_range, synced_at) "
                 "values (?, ?, ?, ?, ?, ?, ?)",
                 (*seed, now),
             )

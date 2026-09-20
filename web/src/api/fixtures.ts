@@ -1,17 +1,15 @@
-import type { Dataset, Explorer, Mission, MissionStatus } from '../types'
+import { STARTER_DATASETS } from '../examples'
+import type { DatasetKind, Dataset, Explorer, Mission, MissionStatus } from '../types'
 import { explorerSrc } from './explorer'
 import type { FindingsShape } from './findings'
 import { SCRIPT, threadAt } from './script'
 import { HOUSTON_REPORT, type ReportText } from './seedReport'
 
 export function seedDatasets(now: number = Date.now()): Dataset[] {
-  const hoursAgo = (h: number) => new Date(now - h * 3_600_000).toISOString()
-  return [
-    { id: 'gdelt', kind: 'events', name: 'GDELT events', url: 'https://www.gdeltproject.org', seriesCount: 42, dateRange: 'Mar 2025 – Sep 2026', syncedAt: hoursAgo(2) },
-    { id: 'yahoo', kind: 'markets', name: 'Yahoo Finance', url: 'https://finance.yahoo.com', seriesCount: 31, dateRange: 'Jan 2024 – Sep 2026', syncedAt: hoursAgo(2) },
-    { id: 'open-meteo', kind: 'weather', name: 'Open-Meteo weather', url: 'https://open-meteo.com', seriesCount: 18, dateRange: 'Jan 2024 – Sep 2026', syncedAt: hoursAgo(26) },
-    { id: 'cams', kind: 'air', name: 'CAMS air quality', url: 'https://atmosphere.copernicus.eu', seriesCount: 12, dateRange: 'Jun 2024 – Sep 2026', syncedAt: hoursAgo(30) },
-  ]
+  return STARTER_DATASETS.map((dataset) => ({
+    id: dataset.id, name: dataset.name, url: dataset.url, kind: dataset.kind as DatasetKind,
+    seriesCount: 0, dateRange: '', syncedAt: new Date(now - 2 * 3_600_000).toISOString(),
+  }))
 }
 
 interface Seed {

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pudl",
+    "name": "PUDL power generation",
+    "url": "https://data.catalyst.coop/",
+    "description": "US power plant generation, plant locations, cooling equipment, emissions; EIA and EPA public records.",
+    "kind": "energy"
+  },
+  {
+    "id": "sentinel-2",
+    "name": "Sentinel-2 imagery",
+    "url": "https://earth-search.aws.element84.com/v1",
+    "description": "Daytime satellite imagery; cloud masking essential. Can inspect cooling plumes, reservoirs, land cover.",
+    "kind": "satellite"
+  },
+  {
+    "id": "global-water-watch",
+    "name": "Global Water Watch",
+    "url": "https://api.globalwaterwatch.earth/",
+    "description": "Satellite reservoir surface area histories. Area is not water volume, generation or an early warning by itself.",
+    "kind": "water"
+  },
+  {
+    "id": "viirs",
+    "name": "VIIRS night lights",
+    "url": "https://eogdata.mines.edu/products/vnl/",
+    "description": "Satellite nighttime light composites. Area-level brightness is not proof of clinic power, and onsite solar may be invisible. Provider registration may be required.",
+    "kind": "nightlights"
+  },
+  {
+    "id": "openstreetmap",
+    "name": "OpenStreetMap places",
+    "url": "https://www.openstreetmap.org/",
+    "description": "Mapped clinics, settlements, roads and other places. Coverage varies; not a complete facility register.",
+    "kind": "places"
+  },
+  {
+    "id": "open-meteo",
+    "name": "Open-Meteo weather",
+    "url": "https://open-meteo.com/en/docs/historical-weather-api",
+    "description": "Historical temperature, precipitation, wind and other weather variables.",
+    "kind": "weather"
+  }
+]

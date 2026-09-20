@@ -1,6 +1,6 @@
 export type MissionStatus = 'working' | 'waiting' | 'done' | 'failed'
 export type StepState = 'active' | 'done'
-export type DatasetKind = 'events' | 'markets' | 'weather' | 'air' | 'other'
+export type DatasetKind = 'events' | 'markets' | 'weather' | 'air' | 'other' | 'energy' | 'satellite' | 'water' | 'nightlights' | 'places'
 
 export interface Stat {
   label: string

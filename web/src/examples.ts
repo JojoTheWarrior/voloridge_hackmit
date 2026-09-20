@@ -1,5 +1,6 @@
-export const EXAMPLE_PROMPTS = [
-  'Does wind speed in Tehran predict PM2.5 in Dubai two days later?',
-  'Do protest events in Iran move gold futures?',
-  'Does a Houston heat anomaly lead Henry Hub gas prices?',
-]
+import ideas from '../../shared/starter-ideas.json'
+import datasets from '../../shared/starter-datasets.json'
+
+export const STARTER_IDEAS = ideas.suggestions
+export const EXAMPLE_PROMPTS = STARTER_IDEAS.slice(0, 3).map((idea) => idea.text)
+export const STARTER_DATASETS = datasets

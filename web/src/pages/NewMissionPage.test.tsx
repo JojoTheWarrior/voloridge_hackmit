@@ -2,7 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Route, Routes, useParams } from 'react-router-dom'
 import { seedDatasets } from '../api/fixtures'
-import { EXAMPLE_PROMPTS } from '../examples'
+import { EXAMPLE_PROMPTS, STARTER_IDEAS } from '../examples'
 import { createMockApi } from '../api/mock'
 import { renderWithApp } from '../test/render'
 import { NewMissionPage } from './NewMissionPage'
@@ -81,28 +81,36 @@ describe('NewMissionPage', () => {
 
   it('fills the prompt from an example and focuses it', async () => {
     const { createMission, user } = renderPage()
+    await screen.findByRole('button', { name: 'PUDL power generation' })
     await user.click(screen.getByRole('button', { name: EXAMPLE_PROMPTS[1] }))
     expect(prompt()).toHaveValue(EXAMPLE_PROMPTS[1])
     expect(prompt()).toHaveFocus()
     expect(createMission).not.toHaveBeenCalled()
+    expect(screen.getAllByRole('button', { pressed: true }).map((button) => button.textContent)).toEqual(['PUDL power generation', 'Global Water Watch', 'Open-Meteo weather'])
+    await user.click(screen.getByRole('button', { name: 'More ideas' }))
+    expect(screen.getByRole('button', { name: STARTER_IDEAS[3].text })).toBeInTheDocument()
+    expect(prompt()).toHaveValue(EXAMPLE_PROMPTS[1])
+    await user.click(screen.getByRole('button', { name: 'Start mission' }))
+    await waitFor(() => expect(createMission).toHaveBeenCalled())
+    expect(createMission.mock.calls[0][0].datasetIds).toEqual(['pudl', 'global-water-watch', 'open-meteo'])
   })
 
   it('selects every dataset by default and drops the ones toggled off', async () => {
     const { createMission, user } = renderPage()
     const chips = await screen.findAllByRole('button', { pressed: true })
-    expect(chips).toHaveLength(4)
+    expect(chips).toHaveLength(6)
 
-    await user.click(screen.getByRole('button', { name: 'Yahoo Finance' }))
-    expect(screen.getByRole('button', { name: 'Yahoo Finance' })).toHaveAttribute('aria-pressed', 'false')
+    await user.click(screen.getByRole('button', { name: 'Sentinel-2 imagery' }))
+    expect(screen.getByRole('button', { name: 'Sentinel-2 imagery' })).toHaveAttribute('aria-pressed', 'false')
 
     await user.type(prompt(), 'A leads B{Enter}')
     await waitFor(() => expect(createMission).toHaveBeenCalled())
-    expect(createMission.mock.calls[0][0].datasetIds).toEqual(['gdelt', 'open-meteo', 'cams'])
+    expect(createMission.mock.calls[0][0].datasetIds).toEqual(['pudl', 'global-water-watch', 'viirs', 'openstreetmap', 'open-meteo'])
   })
 
   it('re-selects a dataset toggled twice', async () => {
     const { user } = renderPage()
-    const chip = await screen.findByRole('button', { name: 'GDELT events' })
+    const chip = await screen.findByRole('button', { name: 'PUDL power generation' })
     await user.click(chip)
     await user.click(chip)
     expect(chip).toHaveAttribute('aria-pressed', 'true')

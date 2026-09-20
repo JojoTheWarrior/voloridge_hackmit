@@ -111,7 +111,32 @@ function other(rand: Rand): ReactNode {
   )
 }
 
-const DRAW: Record<DatasetKind, (rand: Rand) => ReactNode> = { events, markets, weather, air, other }
+function satellite(rand: Rand): ReactNode {
+  return range(8).flatMap((row) => range(20).map((col) => (
+    <rect key={`${row}-${col}`} x={col * 17 - 8} y={row * 17 - 8} width={15} height={15}
+      fill={rand() > 0.7 ? FAINT : LINE} opacity={0.3 + rand() * 0.6} />
+  )))
+}
+
+function water(rand: Rand): ReactNode {
+  const phase = rand() * 2
+  return range(7).map((ring) => (
+    <path key={ring} d={toPath(range(81).map((i): Point => {
+      const angle = i / 80 * Math.PI * 2
+      const ripple = 1 + 0.16 * Math.sin(angle * 3 + phase)
+      return [160 + (25 + ring * 15) * ripple * Math.cos(angle), 60 + (10 + ring * 6) * ripple * Math.sin(angle)]
+    }))} stroke={ring < 2 ? INK : ring < 4 ? FAINT : LINE} {...STROKE} />
+  ))
+}
+
+function places(rand: Rand): ReactNode {
+  return <>{[35, 80].map((y) => <path key={y} d={`M0 ${y}L320 ${y + 15}`} stroke={LINE} {...STROKE} />)}
+    {range(12).map((i) => <circle key={i} cx={18 + rand() * 284} cy={20 + rand() * 80} r={i % 3 === 0 ? 4 : 2} fill={i % 3 === 0 ? INK : FAINT} />)}</>
+}
+
+const DRAW: Record<DatasetKind, (rand: Rand) => ReactNode> = {
+  events, markets, weather, air, other, energy: markets, satellite, water, nightlights: air, places,
+}
 
 /** Decorative hint at what a dataset holds. Seeded from the id, so it never changes between renders. */
 export function DatasetThumbnail({ id, kind }: { id: string; kind: DatasetKind }) {

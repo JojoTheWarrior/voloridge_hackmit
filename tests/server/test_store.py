@@ -134,7 +134,7 @@ def test_restart_reloads_everything(tmp_path):
     second = Store(path, now=Clock())
     assert [m.id for m in second.live_missions()] == [mission.id]
     assert [e["text"] for e in second.list_events(mission.id)] == ["hello"]
-    assert len(second.list_datasets()) == 5
+    assert len(second.list_datasets()) == 7
 
 
 # ---------- events ----------
@@ -266,10 +266,26 @@ def test_concurrent_writers_do_not_lose_events(store):
 def test_datasets_are_seeded_once(tmp_path):
     path = tmp_path / "k.db"
     seeded = Store(path).list_datasets()
-    assert [d["id"] for d in seeded] == ["gdelt", "yahoo", "open-meteo", "cams"]
-    assert [d["kind"] for d in seeded] == ["events", "markets", "weather", "air"]
+    assert [d["id"] for d in seeded] == ["pudl", "sentinel-2", "global-water-watch", "viirs", "openstreetmap", "open-meteo"]
+    assert [d["kind"] for d in seeded] == ["energy", "satellite", "water", "nightlights", "places", "weather"]
     assert set(seeded[0]) == {"id", "name", "url", "kind", "seriesCount", "dateRange", "syncedAt"}
-    assert len(Store(path).list_datasets()) == 4
+    assert len(Store(path).list_datasets()) == 6
+
+
+def test_starter_upgrade_preserves_custom_sources_and_historical_references(tmp_path):
+    from server.store import LEGACY_DATASETS, SCHEMA
+    path = tmp_path / "old.db"
+    with sqlite3.connect(path) as db:
+        db.executescript(SCHEMA)
+        for seed in LEGACY_DATASETS:
+            db.execute("insert into datasets (id, name, url, kind, series_count, date_range, synced_at) values (?, ?, ?, ?, ?, ?, ?)", (*seed, "2026-01-01T00:00:00Z"))
+        db.execute("insert into datasets (id, name, url, kind, series_count, date_range, synced_at) values ('custom', 'My source', 'https://example.org/data', 'other', 0, '', '2026-01-01T00:00:00Z')")
+    store = Store(path)
+    assert len(store.list_datasets()) == 7
+    assert store.get_datasets(['gdelt', 'custom'])[1]['name'] == 'My source'
+    assert store.get_datasets(['gdelt'])[0]['url'] == 'https://www.gdeltproject.org'
+    assert not {'gdelt', 'yahoo', 'cams'} & {d['id'] for d in store.list_datasets()}
+    assert len(Store(path).list_datasets()) == 7
 
 
 def test_added_dataset_comes_first(store):
@@ -279,7 +295,7 @@ def test_added_dataset_comes_first(store):
         "kind": "other", "seriesCount": 0, "dateRange": "", "syncedAt": added["syncedAt"],
     }
     assert added["id"].startswith("d_")
-    assert [d["id"] for d in store.list_datasets()][:2] == [added["id"], "gdelt"]
+    assert [d["id"] for d in store.list_datasets()][:2] == [added["id"], "pudl"]
 
 
 def test_get_datasets_by_ids_keeps_request_order_and_skips_unknown(store):
