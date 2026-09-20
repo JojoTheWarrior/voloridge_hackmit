@@ -42,3 +42,4 @@
 | `20260920-038-FAILED-petroleum-fired-generation-in-the` | Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices. | failed | 0 | None | None | None | None | None |
 | `20260920-039-finance-ng-f-log-return_x_finance-xlu-log-return` | US utility ETF (XLU) returns are more correlated with natural gas prices during the war than before. | ok | 390 | 0.038089175053728115 | 0.5389221556886228 | 0.1 | 1.58 | 5.4 |
 | `20260920-040-gdelt-gkg-cyber-share_x_utility-us-demand-peak-mwh` | Hourly US demand volatility increased in the weeks after the cyberattacks on US water systems were reported (Aug 2026). | ok | 554 | 0.04280686326366124 | 0.09181636726546906 | 3.9 | 4.26 | 7.38 |
+| `20260920-041-FAILED-texas-ercot-demand-anomalies-correlate` | Texas (ERCOT) demand anomalies correlate with Houston temperature more tightly than the national aggregate does. | failed | 0 | None | None | None | None | None |

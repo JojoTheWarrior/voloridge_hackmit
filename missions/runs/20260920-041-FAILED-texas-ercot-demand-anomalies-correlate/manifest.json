@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:53:05.837838+00:00",
+  "git_commit": "c2fa3a36741b3ba8e20807c44c5ec6f67ccf274f",
+  "folder": "20260920-041-FAILED-texas-ercot-demand-anomalies-correlate",
+  "mission_id": "M20260920-18f024",
+  "hypothesis": "Texas (ERCOT) demand anomalies correlate with Houston temperature more tightly than the national aggregate does.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "weather.houston.temp_anomaly": "configured analysis window",
+    "utility.ERCO.demand_mwh": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

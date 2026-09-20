@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.houston.temp_anomaly",
+  "indicator_b": "utility.ERCO.demand_mwh",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 3,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Houston temperature anomalies as the local weather driver and ERCOT demand anomalies (from the same-weekday 2025 baseline, constructed from utility.ERCO.demand_mwh) as the response to test that ERCOT load responds more tightly to Houston temperatures than the national US demand anomaly (from utility.us.demand_anomaly) does."
+}
