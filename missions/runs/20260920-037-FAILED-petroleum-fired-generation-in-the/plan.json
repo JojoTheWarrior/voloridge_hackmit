@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DHHNGSP",
+  "indicator_b": "utility.generation.oil_mwh",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "To understand why US oil-fired generation rose despite record Brent prices, we test whether relatively cheaper US natural gas (Henry Hub spot price level) is negatively associated with monthly oil-fired generation during the war window, on the hypothesis that gas\u2013oil fuel-switching and system constraints, rather than spot oil prices alone, drove the unexpected increase."
+}
