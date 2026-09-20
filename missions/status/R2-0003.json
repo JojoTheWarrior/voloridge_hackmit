@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/e5f6e5eeb1754ebf90dec4fe627796e9",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "done",
+  "stage": "done",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:16:50Z",
-  "updated_at": "2026-09-20T03:17:08Z",
+  "updated_at": "2026-09-20T03:18:18Z",
   "finished_at": "2026-09-20T03:16:01Z",
-  "elapsed_s": 18,
-  "message": "committing run folder",
+  "elapsed_s": 88,
+  "message": "Not supported: oil GKG share z>1 has no lead on Brent-WTI spread (r=-0.003, n=390; best lag -4d r=-0.057); long-spread rule hit 42%, sharpe -1.36, actionability 0",
   "run_folder": "missions/runs/20260920-135-gdelt-gkg-oil-share_x_finance-spread-brent-wti",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] GDELT oil GKG share 10d z-score > 1 leads Brent-WTI spread NARROWING by 1 day (-); reversal control of R2-0003, trade short BZ=F long CL=F 1d [gdelt.gkg.oil_share -> finance.spread.brent_wti] (parent: R2-0003)"
 }
