@@ -1,0 +1,21 @@
+{
+  "chart_type": "reel",
+  "indicators": [
+    "finance.BZ=F.close"
+  ],
+  "external": [],
+  "needs_custom_code": false,
+  "custom_code_notes": "",
+  "title": "Brent Crude Futures (BZ=F) Daily Close",
+  "notes": "Use vertical (9:16) layout and animate the time axis to suit Instagram Reels. Focus on the 2025-01-02..2026-09-18 window where BZ=F coverage is available. Optionally highlight major price spikes with labels tied to Iran/Hormuz events for narrative context.",
+  "rationale": "User explicitly requested an Instagram-style reel of Brent prices. The best in-catalogue proxy is Brent crude futures daily close (finance.BZ=F.close), which directly represents Brent pricing and has suitable recent coverage. A reel chart type fits the requested social-video format, with a single animated time-series line.",
+  "series": [
+    {
+      "file": "bz-f-close.csv",
+      "label": "BZ=F close",
+      "indicator": "finance.BZ=F.close"
+    }
+  ],
+  "source_notes": [],
+  "codegen": "template"
+}
