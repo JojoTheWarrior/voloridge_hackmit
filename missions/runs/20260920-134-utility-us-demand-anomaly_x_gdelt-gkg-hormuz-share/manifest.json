@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-09-20T02:48:11.471762+00:00",
+  "git_commit": "a99f5d28325286c2f54bd848d6e2a93c675abe0a",
+  "folder": "20260920-134-utility-us-demand-anomaly_x_gdelt-gkg-hormuz-share",
+  "mission_id": "M20260920-a1ce90",
+  "hypothesis": "Weather-driven US electricity demand spikes coincide with larger natural-gas price sensitivity to Hormuz news.",
+  "status": "ok",
+  "n_obs": 554,
+  "r": 0.016645615387576577,
+  "perm_p": 0.4311377245508982,
+  "validity": 1.7,
+  "interestingness": 2.7,
+  "unexpectedness": 0.54,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/011abf45981a45e7a6a220a5e6ce105d"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/45eca9d7dd09477fb0f050378d69b496"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/ab07e5e7fa194e51a7fa6a0d6ae9e969"
+    }
+  ],
+  "indicator_coverage": {
+    "utility.us.demand_anomaly": "configured analysis window",
+    "gdelt.gkg.hormuz_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

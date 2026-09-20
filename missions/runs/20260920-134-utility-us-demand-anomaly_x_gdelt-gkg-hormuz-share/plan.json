@@ -1,0 +1,13 @@
+{
+  "indicator_a": "utility.us.demand_anomaly",
+  "indicator_b": "gdelt.gkg.hormuz_share",
+  "transform_a": "level",
+  "transform_b": "diff",
+  "max_lag_days": 3,
+  "window": "compare_pre_post",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "No daily natural-gas price series exists in the catalogue (utility.fuel_cost.gas_per_mmbtu is monthly and ends 2026-05), so the closest testable proxy is whether weather-driven US demand anomalies (same-weekday 2025 baseline) coincide with Hormuz news shocks, compared pre/post war and around Hormuz events; caveats: seasonality, the war as common cause, and Hormuz-share is a news-attention proxy not price sensitivity.",
+  "mode": "pair"
+}
