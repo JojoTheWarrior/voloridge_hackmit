@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:53:26.037297+00:00",
+  "git_commit": "ae9f9f9ddf0ddb98e42408787b8e90d257a9911b",
+  "folder": "20260920-044-utility-us-demand-peak-mwh_x_airquality-tokyo-so2",
+  "mission_id": "M20260920-db1d58",
+  "hypothesis": "Regional US demand deviations from seasonal norms correlate with regional PM2.5 during 2026.",
+  "status": "ok",
+  "n_obs": 554,
+  "r": 0.04944998791079877,
+  "perm_p": 0.5868263473053892,
+  "validity": 2.891859728460826,
+  "interestingness": 2.197799951643195,
+  "unexpectedness": 2.2472499395539938,
+  "indicator_coverage": {
+    "utility.us.demand_peak_mwh": "configured analysis window",
+    "airquality.tokyo.so2": "downloaded observations"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
