@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:01:29Z",
-  "updated_at": "2026-09-20T04:02:50Z",
+  "updated_at": "2026-09-20T04:03:22Z",
   "finished_at": "2026-09-20T04:02:50Z",
-  "elapsed_s": 81,
+  "elapsed_s": 113,
   "message": "NOISE: gasoline crack vs JETS r=0.05 n=389 perm p=0.74; z>1 long-JETS-5d rule 31 trades hit 55% avg +0.38% but excess vs buy-hold -0.05%, actionability 3.99",
   "run_folder": "missions/runs/20260920-183-finance-spread-gasoline-crack_x_finance-jets-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.99,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 (fuel-cost spike) hurts airlines relative to the market rather than helping them (-); trade short JETS/SPY ratio 3d at 1d lag [finance.spread.gasoline_crack -> finance.ratio.jets_spy] (parent: R2-0074)"
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score < -1 (fuel-cost collapse after a spike) is the true fade-rally trigger for airlines (+); trade long JETS 5d at 1d lag [finance.spread.gasoline_crack -> finance.JETS.log_return] (parent: R2-0074)"
 }
