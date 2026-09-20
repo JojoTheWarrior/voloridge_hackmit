@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Brent-WTI spread 20d z-score > 2 leads tanker equities higher by 2 days (+) as ton-mile demand reprices; trade long FRO 5d [finance.spread.brent_wti -> finance.FRO.log_return]

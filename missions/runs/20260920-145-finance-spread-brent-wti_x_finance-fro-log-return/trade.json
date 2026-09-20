@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 5,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 22,
+    "hit_rate": 0.5909090909090909,
+    "avg_return": 0.014255411012384563,
+    "baseline_avg_return": 0.017657861949333973,
+    "excess_return": -0.00340245093694941,
+    "sharpe_like": 0.8417570889153232,
+    "max_drawdown": -0.24003165776674773,
+    "total_return": 0.276086687688746
+  },
+  "fit_pre_war": {
+    "n_trades": 12,
+    "hit_rate": 0.5,
+    "avg_return": 0.024608470143925153,
+    "baseline_avg_return": 0.01888628653845139,
+    "excess_return": 0.005722183605473764,
+    "sharpe_like": 1.1350649688043561,
+    "max_drawdown": -0.09042933327265912,
+    "total_return": 0.29783106609012
+  },
+  "test_war": {
+    "n_trades": 10,
+    "hit_rate": 0.7,
+    "avg_return": 0.0018317400545358575,
+    "baseline_avg_return": 0.015473996013125229,
+    "excess_return": -0.013642255958589372,
+    "sharpe_like": 0.07009010114009827,
+    "max_drawdown": -0.23023594440890394,
+    "total_return": -0.016754398141263116
+  },
+  "n_signal_days": 380,
+  "trade_idea": {
+    "instrument": "FRO",
+    "direction": "long",
+    "entry_rule": "finance.spread.brent_wti rolling_zscore_20d > 1 at close -> long FRO next session",
+    "exit_rule": "close after 5 trading days (no overlapping entries)",
+    "holding_days": 5,
+    "hit_rate": 0.5909090909090909,
+    "avg_return": 0.014255411012384563,
+    "excess_return": -0.00340245093694941,
+    "n_trades": 22,
+    "sharpe_like": 0.8417570889153232,
+    "max_drawdown": -0.24003165776674773,
+    "oos_n_trades": 10,
+    "oos_avg_return": 0.0018317400545358575,
+    "oos_hit_rate": 0.7,
+    "actionability": 1.44,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
