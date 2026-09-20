@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:15:57.533469+00:00",
+  "git_commit": "6c6eb44e2d735a9f210712cb7205023dbb5019c0",
+  "folder": "20260920-260-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
   "mission_id": "R2-0167",
-  "title": "Sanctions fear reversal -> long RCL 5d",
   "hypothesis": "R2 | [fuel-airspace-losers] Reversal test: GDELT sanctions GKG share 20d z-score > 1 marks peak-fear, after which cruise operators rebound (+); trade long RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return] (parent: R2-0068)",
-  "parent_mission_id": "R2-0068",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/da2e62b1c773463cab7b0c572917ab7d",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:15:46Z",
-  "updated_at": "2026-09-20T13:15:59Z",
-  "finished_at": null,
-  "elapsed_s": 13,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-260-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.14
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.0603254081370455,
+  "perm_p": 0.17564870259481039,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.14,
   "trade_idea": {
     "instrument": "RCL",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 3.14,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.RCL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Reversal test: GDELT sanctions GKG share 20d z-score > 1 marks peak-fear, after which cruise operators rebound (+); trade long RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return] (parent: R2-0068)
