@@ -1,0 +1,389 @@
+{
+ "sprites": {
+  "arrow_down": {
+   "file": "arrow_down.png",
+   "w": 8,
+   "h": 8,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "arrow_up": {
+   "file": "arrow_up.png",
+   "w": 8,
+   "h": 8,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "banner": {
+   "file": "banner.png",
+   "w": 16,
+   "h": 32,
+   "frames": 4,
+   "anchor": [
+    8,
+    32
+   ],
+   "fps": 4
+  },
+  "bar_frame": {
+   "file": "bar_frame.png",
+   "w": 12,
+   "h": 12,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "bush": {
+   "file": "bush.png",
+   "w": 16,
+   "h": 12,
+   "frames": 1,
+   "anchor": [
+    8,
+    12
+   ],
+   "fps": 0
+  },
+  "button": {
+   "file": "button.png",
+   "w": 24,
+   "h": 24,
+   "frames": 2,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "castle": {
+   "file": "castle.png",
+   "w": 128,
+   "h": 128,
+   "frames": 1,
+   "anchor": [
+    64,
+    112
+   ],
+   "fps": 0
+  },
+  "castle_gate_open": {
+   "file": "castle_gate_open.png",
+   "w": 128,
+   "h": 128,
+   "frames": 1,
+   "anchor": [
+    64,
+    112
+   ],
+   "fps": 0
+  },
+  "cloud": {
+   "file": "cloud.png",
+   "w": 48,
+   "h": 20,
+   "frames": 3,
+   "anchor": [
+    24,
+    10
+   ],
+   "fps": 0
+  },
+  "crest": {
+   "file": "crest.png",
+   "w": 32,
+   "h": 32,
+   "frames": 1,
+   "anchor": [
+    16,
+    16
+   ],
+   "fps": 0
+  },
+  "cursor_hand": {
+   "file": "cursor_hand.png",
+   "w": 8,
+   "h": 8,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "field_crop": {
+   "file": "field_crop.png",
+   "w": 32,
+   "h": 16,
+   "frames": 2,
+   "anchor": [
+    16,
+    8
+   ],
+   "fps": 0
+  },
+  "flag": {
+   "file": "flag.png",
+   "w": 8,
+   "h": 16,
+   "frames": 4,
+   "anchor": [
+    1,
+    16
+   ],
+   "fps": 4
+  },
+  "grass": {
+   "file": "grass.png",
+   "w": 32,
+   "h": 16,
+   "frames": 3,
+   "anchor": [
+    16,
+    8
+   ],
+   "fps": 0
+  },
+  "grass_flowers": {
+   "file": "grass_flowers.png",
+   "w": 32,
+   "h": 16,
+   "frames": 1,
+   "anchor": [
+    16,
+    8
+   ],
+   "fps": 0
+  },
+  "hall_bg": {
+   "file": "hall_bg.png",
+   "w": 480,
+   "h": 270,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "hut": {
+   "file": "hut.png",
+   "w": 32,
+   "h": 32,
+   "frames": 2,
+   "anchor": [
+    16,
+    28
+   ],
+   "fps": 0
+  },
+  "icon_hammer": {
+   "file": "icon_hammer.png",
+   "w": 16,
+   "h": 16,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "icon_scroll": {
+   "file": "icon_scroll.png",
+   "w": 16,
+   "h": 16,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "icon_trophy": {
+   "file": "icon_trophy.png",
+   "w": 16,
+   "h": 16,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "monument": {
+   "file": "monument.png",
+   "w": 16,
+   "h": 24,
+   "frames": 3,
+   "anchor": [
+    8,
+    22
+   ],
+   "fps": 0
+  },
+  "panel": {
+   "file": "panel.png",
+   "w": 24,
+   "h": 24,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "panel_light": {
+   "file": "panel_light.png",
+   "w": 24,
+   "h": 24,
+   "frames": 1,
+   "anchor": [
+    0,
+    0
+   ],
+   "fps": 0
+  },
+  "path": {
+   "file": "path.png",
+   "w": 32,
+   "h": 16,
+   "frames": 1,
+   "anchor": [
+    16,
+    8
+   ],
+   "fps": 0
+  },
+  "pine": {
+   "file": "pine.png",
+   "w": 24,
+   "h": 40,
+   "frames": 1,
+   "anchor": [
+    12,
+    38
+   ],
+   "fps": 0
+  },
+  "rock": {
+   "file": "rock.png",
+   "w": 16,
+   "h": 10,
+   "frames": 1,
+   "anchor": [
+    8,
+    10
+   ],
+   "fps": 0
+  },
+  "shore": {
+   "file": "shore.png",
+   "w": 32,
+   "h": 16,
+   "frames": 4,
+   "anchor": [
+    16,
+    8
+   ],
+   "fps": 0
+  },
+  "smoke": {
+   "file": "smoke.png",
+   "w": 8,
+   "h": 8,
+   "frames": 4,
+   "anchor": [
+    4,
+    8
+   ],
+   "fps": 3
+  },
+  "torch": {
+   "file": "torch.png",
+   "w": 8,
+   "h": 16,
+   "frames": 4,
+   "anchor": [
+    4,
+    16
+   ],
+   "fps": 6
+  },
+  "tree": {
+   "file": "tree.png",
+   "w": 24,
+   "h": 32,
+   "frames": 3,
+   "anchor": [
+    12,
+    30
+   ],
+   "fps": 0
+  },
+  "water": {
+   "file": "water.png",
+   "w": 32,
+   "h": 16,
+   "frames": 4,
+   "anchor": [
+    16,
+    8
+   ],
+   "fps": 2
+  },
+  "windmill": {
+   "file": "windmill.png",
+   "w": 32,
+   "h": 48,
+   "frames": 4,
+   "anchor": [
+    16,
+    46
+   ],
+   "fps": 3
+  },
+  "worker": {
+   "file": "worker.png",
+   "w": 16,
+   "h": 16,
+   "frames": 4,
+   "anchor": [
+    8,
+    16
+   ],
+   "fps": 6
+  },
+  "worker_b": {
+   "file": "worker_b.png",
+   "w": 16,
+   "h": 16,
+   "frames": 4,
+   "anchor": [
+    8,
+    16
+   ],
+   "fps": 6
+  },
+  "workshop": {
+   "file": "workshop.png",
+   "w": 48,
+   "h": 40,
+   "frames": 1,
+   "anchor": [
+    24,
+    34
+   ],
+   "fps": 0
+  }
+ }
+}

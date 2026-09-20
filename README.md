@@ -46,6 +46,24 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py ui [--port 8000]` | Start the Flask hypothesis interface |
 | `python main.py graph [--port 8010] [--charts-port 8011]` | NL prompt → pygame chart web UI + launcher |
 | `python main.py selftest` | Check keys, judge availability, and indicator loading |
+| `python main.py kingdom [--scale N] [--scene S] [--screenshot out.png]` | Pixel-art mission dashboard (see [Kingdom](#kingdom)) |
+
+## Kingdom
+
+Kingdom is a calm 8-bit pixel-art dashboard that turns the `missions/` folder
+into a living fortress: one worker hut per active mission, a monument per
+completed run, and a great hall with menus for current, queued, and completed
+missions (click the castle or press Enter; Esc walks back out).
+
+```bash
+python main.py kingdom                      # windowed, 3x upscale of a 480x270 canvas
+python main.py kingdom --scale 2 --scene completed
+python main.py kingdom --screenshot kingdom.png   # headless render for CI/tests
+pytest tests/test_kingdom_*.py -q
+```
+
+It is read-only, polls `missions/` every ~2 s, and disables audio. Details,
+controls, and the asset pipeline live in `kingdom/README.md`.
 
 ## Architecture
 

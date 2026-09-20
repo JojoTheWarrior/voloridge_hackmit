@@ -18,7 +18,15 @@ def main():
     graph.add_argument("--charts-port", type=int, default=8011)
     viz = sub.add_parser("viz"); viz.add_argument("mission_id"); viz.add_argument("--headless", action="store_true")
     viz.add_argument("--codegen", action="store_true"); viz.add_argument("--allow-exec", action="store_true")
-    args = parser.parse_args()
+    sub.add_parser("kingdom", add_help=False)
+    args, extra = parser.parse_known_args()
+    if args.command == "kingdom":
+        from kingdom.app import main as kingdom_main
+
+        kingdom_main(extra)
+        return
+    if extra:
+        parser.error(f"unrecognized arguments: {' '.join(extra)}")
     if args.command == "mission":
         from warsignal.mission.planner import plan_mission
         if args.dry_run:
