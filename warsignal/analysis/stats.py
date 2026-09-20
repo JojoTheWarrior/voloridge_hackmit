@@ -65,11 +65,11 @@ def lagged_correlation(a, b, max_lag):
     return {"lags": lags, "r": values, "best_lag": int(lag), "best_r": float(value)}
 
 
-def permutation_pvalue(a, b, n_perm=500, seed=0):
+def permutation_pvalue(a, b, n_perm=500, seed=0, max_lag=3):
     frame = align(a, b)
     if len(frame) < 4:
         return float("nan")
-    max_lag = min(3, max(1, len(frame) // 10))
+    max_lag = min(max_lag, max(1, len(frame) // 10))
     def best(x, y):
         values = []
         for lag in range(-max_lag, max_lag + 1):
@@ -98,7 +98,12 @@ def pre_post_comparison(a, b, war_start):
     pre = correlation_summary(a[a.index < pd.Timestamp(war_start)], b[b.index < pd.Timestamp(war_start)])
     post = correlation_summary(a[a.index >= pd.Timestamp(war_start)], b[b.index >= pd.Timestamp(war_start)])
     change = None if pre["pearson_r"] is None or post["pearson_r"] is None else post["pearson_r"] - pre["pearson_r"]
-    return {"pre": pre, "post": post, "r_change": change, "fisher_z_p": None}
+    fisher_p = None
+    if change is not None and pre["n"] > 3 and post["n"] > 3:
+        r1, r2 = np.clip(pre["pearson_r"], -0.9999, 0.9999), np.clip(post["pearson_r"], -0.9999, 0.9999)
+        z = (np.arctanh(r1) - np.arctanh(r2)) / math.sqrt(1 / (pre["n"] - 3) + 1 / (post["n"] - 3))
+        fisher_p = float(2 * stats.norm.sf(abs(z)))
+    return {"pre": pre, "post": post, "r_change": change, "fisher_z_p": fisher_p}
 
 
 def event_study(series, event_dates, window=5):
@@ -119,11 +124,22 @@ def event_study(series, event_dates, window=5):
             "t_stat": float(t.statistic) if t else None, "p": float(t.pvalue) if t else None, "per_event": records}
 
 
+def apply_window(s, window):
+    s = pd.Series(s)
+    start = pd.Timestamp(WAR_START)
+    if window == "pre_war":
+        return s[s.index < start]
+    if window == "war":
+        return s[s.index >= start]
+    return s
+
+
 def run_all(plan, a, b, timeline):
     ta, tb = transform(a, plan.transform_a), transform(b, plan.transform_b)
+    ta, tb = apply_window(ta, plan.window), apply_window(tb, plan.window)
     frame = align(ta, tb)
     lag = lagged_correlation(ta, tb, plan.max_lag_days)
-    perm = permutation_pvalue(ta, tb)
+    perm = permutation_pvalue(ta, tb, max_lag=plan.max_lag_days)
     result = {"n_obs": int(len(frame)), "coverage_start": frame.index.min().date().isoformat() if len(frame) else None,
               "coverage_end": frame.index.max().date().isoformat() if len(frame) else None,
               "correlation": correlation_summary(ta, tb), "lagged": lag,
@@ -137,6 +153,9 @@ def run_all(plan, a, b, timeline):
     if plan.event_category and timeline is not None:
         event_dates = timeline.loc[timeline["category"] == plan.event_category, "date"].tolist()
     result["event_study"] = event_study(ta, event_dates) if event_dates else None
+    result["event_study_b"] = event_study(tb, event_dates) if event_dates else None
+    result["window"] = plan.window
+    result["lag_unit"] = "aligned observations (trading days for market series)"
     expected = plan.expected_sign
     result["sign_matches_expectation"] = expected == 0 or (
         lag["best_r"] is not None and np.isfinite(lag["best_r"]) and np.sign(lag["best_r"]) == expected
