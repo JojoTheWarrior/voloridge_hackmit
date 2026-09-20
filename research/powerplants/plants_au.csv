@@ -1,0 +1,11 @@
+plant_id_eia,plant_name_eia,state,latitude,longitude,cooling,capacity_mw
+AU_LOYYANG,Loy Yang,VIC,-38.2545,146.5790,natural_draft,3280
+AU_YALLOURN,Yallourn,VIC,-38.1775,146.3430,natural_draft,1480
+AU_BAYSWATER,Bayswater,NSW,-32.3955,150.9490,natural_draft,2740
+AU_MTPIPER,Mt Piper,NSW,-33.3585,150.0320,natural_draft,1430
+AU_STANWELL,Stanwell,QLD,-23.5095,150.3180,natural_draft,1460
+AU_TARONG,Tarong,QLD,-26.7810,151.9150,natural_draft,1843
+AU_CALLIDE,Callide,QLD,-24.3450,150.6200,mixed,1540
+AU_MILLMERRAN,Millmerran,QLD,-27.9615,151.2790,air_cooled_control,852
+AU_KOGAN,Kogan Creek,QLD,-26.9165,150.7490,air_cooled_control,750
+AU_ERARING,Eraring,NSW,-33.0620,151.5210,once_through_control,2880

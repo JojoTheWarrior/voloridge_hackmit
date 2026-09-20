@@ -123,6 +123,14 @@ python -m pytest tests/server -m live -s  # one real Devin session, ≤ 1 ACU
 cd web && npm test && npm run build       # UI tests, type-check, build
 ```
 
+## Research
+
+`research/` is a snapshot of the team's idea-by-idea research: every script,
+the running verdicts in `research/IDEAS.md`, reports, `findings.json` files
+for the frontend, result tables and figures. The data behind it (about 21 GB)
+is not in the repo. See `research/README.md` for what each folder is, what was
+left out, and how to refresh the snapshot.
+
 ## Iran Round 2 (tradeable rules)
 
 Round 2 narrows the research to a tradeable universe (oil & tankers, gas/LNG,

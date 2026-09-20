@@ -1,0 +1,1158 @@
+{
+  "created_at": "2026-09-20T06:57:12.893511+00:00",
+  "version": 1,
+  "status": "registered_before_data_analysis_or_tests",
+  "primary_test": "brier_all",
+  "family_size": 83,
+  "family": [
+    {
+      "id": "brier_all",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "logloss_all",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "blend_brier_all",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "brier_NBA",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "NBA"
+    },
+    {
+      "id": "logloss_NBA",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "NBA"
+    },
+    {
+      "id": "blend_brier_NBA",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "NBA"
+    },
+    {
+      "id": "brier_NFL",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "NFL"
+    },
+    {
+      "id": "logloss_NFL",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "NFL"
+    },
+    {
+      "id": "blend_brier_NFL",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "NFL"
+    },
+    {
+      "id": "brier_soccer",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "soccer"
+    },
+    {
+      "id": "logloss_soccer",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "soccer"
+    },
+    {
+      "id": "blend_brier_soccer",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "soccer"
+    },
+    {
+      "id": "brier_other_sports",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "other_sports"
+    },
+    {
+      "id": "logloss_other_sports",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "other_sports"
+    },
+    {
+      "id": "blend_brier_other_sports",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "other_sports"
+    },
+    {
+      "id": "brier_politics",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "politics"
+    },
+    {
+      "id": "logloss_politics",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "politics"
+    },
+    {
+      "id": "blend_brier_politics",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "politics"
+    },
+    {
+      "id": "brier_crypto_price",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "crypto_price"
+    },
+    {
+      "id": "logloss_crypto_price",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "crypto_price"
+    },
+    {
+      "id": "blend_brier_crypto_price",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "crypto_price"
+    },
+    {
+      "id": "brier_weather",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "weather"
+    },
+    {
+      "id": "logloss_weather",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "weather"
+    },
+    {
+      "id": "blend_brier_weather",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "weather"
+    },
+    {
+      "id": "brier_culture",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "culture"
+    },
+    {
+      "id": "logloss_culture",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "logloss market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "culture"
+    },
+    {
+      "id": "blend_brier_culture",
+      "signal": "category realised-PnL times open-share exposure consensus, threshold USD10000, >=10 prior resolved markets",
+      "target": "blend_brier market loss minus expert loss",
+      "transform": "paired event-cluster mean loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Past category skill reduces crowd forecast errors",
+      "primary_specification": true,
+      "category": "culture"
+    },
+    {
+      "id": "brier_h6",
+      "signal": "same primary consensus",
+      "target": "brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert information varies over lifecycle",
+      "primary_specification": true,
+      "category": "all",
+      "evaluation_horizon": 6
+    },
+    {
+      "id": "logloss_h6",
+      "signal": "same primary consensus",
+      "target": "logloss improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert information varies over lifecycle",
+      "primary_specification": true,
+      "category": "all",
+      "evaluation_horizon": 6
+    },
+    {
+      "id": "brier_h1",
+      "signal": "same primary consensus",
+      "target": "brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert information varies over lifecycle",
+      "primary_specification": true,
+      "category": "all",
+      "evaluation_horizon": 1
+    },
+    {
+      "id": "logloss_h1",
+      "signal": "same primary consensus",
+      "target": "logloss improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert information varies over lifecycle",
+      "primary_specification": true,
+      "category": "all",
+      "evaluation_horizon": 1
+    },
+    {
+      "id": "brier_hopen_plus_6",
+      "signal": "same primary consensus",
+      "target": "brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert information varies over lifecycle",
+      "primary_specification": true,
+      "category": "all",
+      "evaluation_horizon": "open_plus_6"
+    },
+    {
+      "id": "logloss_hopen_plus_6",
+      "signal": "same primary consensus",
+      "target": "logloss improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert information varies over lifecycle",
+      "primary_specification": true,
+      "category": "all",
+      "evaluation_horizon": "open_plus_6"
+    },
+    {
+      "id": "sports_advantage",
+      "signal": "primary consensus",
+      "target": "sports minus non-sports Brier improvement",
+      "transform": "difference in means",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Emotional sports participation reduces crowd accuracy",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "outcome_divergence",
+      "signal": "expert probability minus market mid",
+      "target": "resolution outcome",
+      "transform": "logistic outcome ~ logit(mid) + divergence; held-out incremental log loss",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert divergence contains incremental information",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "drift_max_horizon",
+      "signal": "expert probability minus market mid",
+      "target": "subsequent mid-price change",
+      "transform": "signed slope; max absolute studentized statistic across 1,6,24h",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Prices incorporate expert information later",
+      "primary_specification": true,
+      "category": "all",
+      "search_horizons_hours": [
+        1,
+        6,
+        24
+      ]
+    },
+    {
+      "id": "weight_equal",
+      "signal": "equal weighted qualified wallet consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Different aggregation of past skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "weight_pnl",
+      "signal": "pnl weighted qualified wallet consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Different aggregation of past skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "weight_size",
+      "signal": "size weighted qualified wallet consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Different aggregation of past skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "weight_roi_shrunk",
+      "signal": "roi_shrunk weighted qualified wallet consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Different aggregation of past skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "weight_hit_rate_shrunk",
+      "signal": "hit_rate_shrunk weighted qualified wallet consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Different aggregation of past skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "threshold_1000",
+      "signal": "expert qualification 1000",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Skill signal should not depend on one threshold",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "threshold_5000",
+      "signal": "expert qualification 5000",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Skill signal should not depend on one threshold",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "threshold_50000",
+      "signal": "expert qualification 50000",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Skill signal should not depend on one threshold",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "threshold_top25",
+      "signal": "expert qualification top25",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Skill signal should not depend on one threshold",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "threshold_top10percent",
+      "signal": "expert qualification top10percent",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Skill signal should not depend on one threshold",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_minpast5",
+      "signal": "minpast5 primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_minpast20",
+      "signal": "minpast20 primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_overall_pnl",
+      "signal": "overall_pnl primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_exclude_mm",
+      "signal": "exclude_mm primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_exclude_top3",
+      "signal": "exclude_top3 primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_liquidity_low",
+      "signal": "liquidity_low primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_liquidity_mid",
+      "signal": "liquidity_mid primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "robust_liquidity_high",
+      "signal": "liquidity_high primary consensus",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Expert effect should survive composition controls",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "persistence_spearman_all",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "persistence_decile_spread_all",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "persistence_spearman_NBA",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "NBA"
+    },
+    {
+      "id": "persistence_decile_spread_NBA",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "NBA"
+    },
+    {
+      "id": "persistence_spearman_NFL",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "NFL"
+    },
+    {
+      "id": "persistence_decile_spread_NFL",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "NFL"
+    },
+    {
+      "id": "persistence_spearman_soccer",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "soccer"
+    },
+    {
+      "id": "persistence_decile_spread_soccer",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "soccer"
+    },
+    {
+      "id": "persistence_spearman_other_sports",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "other_sports"
+    },
+    {
+      "id": "persistence_decile_spread_other_sports",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "other_sports"
+    },
+    {
+      "id": "persistence_spearman_politics",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "politics"
+    },
+    {
+      "id": "persistence_decile_spread_politics",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "politics"
+    },
+    {
+      "id": "persistence_spearman_crypto_price",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "crypto_price"
+    },
+    {
+      "id": "persistence_decile_spread_crypto_price",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "crypto_price"
+    },
+    {
+      "id": "persistence_spearman_weather",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "weather"
+    },
+    {
+      "id": "persistence_decile_spread_weather",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "weather"
+    },
+    {
+      "id": "persistence_spearman_culture",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "spearman",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "culture"
+    },
+    {
+      "id": "persistence_decile_spread_culture",
+      "signal": "past resolved category PnL",
+      "target": "future resolved category PnL",
+      "transform": "decile_spread",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill rather than hindsight selection",
+      "primary_specification": true,
+      "category": "culture"
+    },
+    {
+      "id": "placebo_00",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4100",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_01",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4101",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_02",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4102",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_03",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4103",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_04",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4104",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_05",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4105",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_06",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4106",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_07",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4107",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_08",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4108",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "placebo_09",
+      "signal": "random wallets matched by early-period exposure/activity deciles; fixed seed 4109",
+      "target": "Brier improvement",
+      "transform": "paired loss difference",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "zero",
+      "mechanism": "Matched random wallets should not mimic skill",
+      "primary_specification": true,
+      "category": "all"
+    },
+    {
+      "id": "economic_primary",
+      "signal": "sign of divergence at 24h",
+      "target": "USD100 quote-depth-adjusted resolution payoff less spread and fees",
+      "transform": "mean net payoff per share, event bootstrap",
+      "horizons_hours": [
+        24
+      ],
+      "expected_sign": "positive",
+      "mechanism": "Forecast improvement must clear observed costs",
+      "primary_specification": true,
+      "category": "all"
+    }
+  ],
+  "time_split": {
+    "train_end": "2025-01-01T00:00:00Z",
+    "test_start": "2025-01-01T00:00:00Z",
+    "test_end": "2026-09-01T00:00:00Z",
+    "embargo_hours": 24,
+    "rule": "Only events resolved in holdout; prior market resolution strictly before signal timestamp. No tuning on holdout. Warmup starts at contract inception; prior categories may update causally in holdout."
+  },
+  "selection": "All mapped resolved binary outcomes with complete lifecycle history, timestamped payout finality and contemporaneous two-sided quotes; no filtering on final volume or today leaderboards. Market event clusters are resampling units. Exclude ambiguous mappings and insufficient history.",
+  "signal": {
+    "primary_horizon_hours": 24,
+    "other_horizons_hours": [
+      6,
+      1
+    ],
+    "open_plus_hours": 6,
+    "threshold_usd": 10000,
+    "min_past_markets": 10,
+    "min_experts": 3,
+    "wallet_view": "YES shares / (YES+NO shares), nonnegative audited balances; per-wallet total dollar exposure from contemporaneous mid",
+    "weights": "positive resolved category PnL times gross outcome share exposure",
+    "blend": "0.5 market + 0.5 expert; fixed",
+    "shrinkage": "ROI numerator / (cost+1000); hit rate (wins+5)/(resolved+10)",
+    "top_selection": "positive PnL, min history, sorted past PnL, among causally observed active category wallets",
+    "probability_clip": 0.001,
+    "market_maker": "prior 30d buy and sell each >=25% gross volume, turnover/gross end exposure >10 and >=100 fills; inventory AR1 <0.8 from prior daily series; no future classification",
+    "largest_wallet_exclusion": "three largest past gross-exposure wallets at each timestamp",
+    "liquidity_buckets": "USD100 executable depth tertiles fixed from train only"
+  },
+  "inference": {
+    "resamples": 10000,
+    "seed": 20260920,
+    "alpha": 0.05,
+    "multiple_testing": "BH over entire registered family; unestimable tests conservatively p=1 internally, displayed p/q null and status blocked",
+    "bootstrap": "paired cluster bootstrap by event; two-sided centered null; percentile 95% CI",
+    "lags": "max-statistic null over registered horizons, no picking best uncorrected lag",
+    "minimum_n_events": 50,
+    "minimum_detectable_effect": "(z(1-alpha/(2*family_size))+z(0.8))*cluster SD/sqrt(n); unavailable without usable clusters",
+    "placebo_fpr": "unadjusted p<.05 fraction and BH survivor fraction over 10 evaluable matched placebos; NA if blocked"
+  },
+  "hard_validity_gates": [
+    "complete wallet discovery independent of future leaderboard rank",
+    "all fills, ERC1155 transfers, splits, merges, redemptions and neg-risk conversions from inception or audited opening state",
+    "deduplicate maker/taker settlement roles by transaction; do not double-count exchange legs",
+    "contract-version-specific fee units and fee recipient cash flows",
+    "on-chain payout finality timestamps, not market scheduled end or mutable closedTime",
+    "historical bid, ask, depth and fee schedule at signal time",
+    "unit tests and independent same-definition as-of PnL reconciliation"
+  ],
+  "blocked_policy": "Preserve every registered test as blocked in results.csv if required data unavailable. Never replace missing observations with synthetic data, zero effects, or current snapshots. Empty typed panel is permitted only with explicit blocked status; this is NOT a statistical null.",
+  "exploratory": [
+    "net expert buying predicts mid changes at 1/6/24h",
+    "dated news: earliest large trades vs past PnL",
+    "lockstep pseudonymous address clusters",
+    "specialists vs generalists",
+    "resolved net profit concentration top 0.1% and 1% by category",
+    "bulk schema and ledger-completeness audits; these do not establish skill"
+  ],
+  "public_readonly": true,
+  "no_identities": true
+}

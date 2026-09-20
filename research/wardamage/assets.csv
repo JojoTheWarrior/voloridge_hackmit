@@ -1,0 +1,51 @@
+name,country,type,lat,lon,coord_source
+Ras Laffan LNG/Industrial City,Qatar,lng,25.905,51.545,curated
+Mesaieed Industrial City,Qatar,refinery_petchem,24.990,51.570,curated
+Dukhan field,Qatar,oilfield,25.420,50.780,curated
+Abqaiq processing,Saudi Arabia,processing,25.928,49.702,firms_cluster
+Khurais CPF,Saudi Arabia,processing,25.250,48.105,firms_cluster
+Ras Tanura refinery/terminal,Saudi Arabia,refinery,26.693,50.102,osm
+Jubail refinery (SASREF/Aramco),Saudi Arabia,refinery,27.047,49.608,osm
+SATORP Jubail,Saudi Arabia,refinery,26.955,49.499,osm
+Riyadh refinery,Saudi Arabia,refinery,24.518,46.871,osm
+Shaybah,Saudi Arabia,oilfield,22.680,54.127,osm
+Prince Sultan Air Base,Saudi Arabia,military,24.062,47.580,curated
+Ruwais refinery,UAE,refinery,24.110,52.730,curated
+Habshan gas complex,UAE,gas_processing,23.850,53.620,curated
+Das Island LNG,UAE,lng,25.150,52.870,curated
+Fujairah oil terminal,UAE,terminal,25.180,56.350,curated
+Jebel Ali port/EGA,UAE,port_smelter,25.020,55.080,curated
+EGA Al Taweelah smelter,UAE,smelter,24.790,54.700,curated
+Mina Al Ahmadi refinery,Kuwait,refinery,29.061,48.131,osm
+Al Zour refinery,Kuwait,refinery,28.713,48.326,osm
+Burgan field,Kuwait,oilfield,28.950,47.950,curated
+BAPCO Sitra refinery,Bahrain,refinery,26.112,50.608,osm
+Basra refinery (Shuaiba),Iraq,refinery,30.454,47.664,osm
+Rumaila field,Iraq,oilfield,30.550,47.330,curated
+Al Basrah Oil Terminal,Iraq,terminal,29.680,48.810,curated
+Kirkuk refinery,Iraq,refinery,35.531,44.334,osm
+Baghdad Dora refinery,Iraq,refinery,33.275,44.434,osm
+Sohar refinery/port,Oman,refinery,24.490,56.620,curated
+Mina Al Fahal,Oman,terminal,23.630,58.520,curated
+Kharg Island terminal,Iran,terminal,29.240,50.320,curated
+South Pars / Asaluyeh gas refineries,Iran,gas_processing,27.505,52.610,osm
+Kangan / Parsian gas,Iran,gas_processing,27.483,52.961,osm
+Abadan refinery,Iran,refinery,30.349,48.280,osm
+Bandar Imam / Mahshahr PSEZ,Iran,petrochemical,30.470,49.090,osm
+Bandar Abbas refinery,Iran,refinery,27.164,56.052,osm
+Persian Gulf Star refinery,Iran,refinery,27.065,55.965,curated
+Lavan refinery,Iran,refinery,26.799,53.342,osm
+Sirri Island,Iran,terminal,25.900,54.530,curated
+Larak Island,Iran,military,26.860,56.360,curated
+Bushehr NPP,Iran,nuclear,28.830,50.890,curated
+Isfahan refinery,Iran,refinery,32.783,51.503,osm
+Tehran refinery (Rey),Iran,refinery,35.540,51.423,osm
+Shahran oil depot Tehran,Iran,depot,35.800,51.290,curated
+Tabriz refinery,Iran,refinery,38.058,46.155,osm
+Shiraz refinery,Iran,refinery,29.734,52.659,osm
+Arak Shazand refinery,Iran,refinery,34.006,49.473,osm
+Kermanshah refinery,Iran,refinery,34.354,47.102,osm
+Natanz enrichment,Iran,nuclear,33.724,51.727,curated
+Ahvaz / Marun fields,Iran,oilfield,31.300,48.900,curated
+Gachsaran field,Iran,oilfield,30.350,50.800,curated
+Tehran-Karaj B1 bridge area,Iran,infrastructure,35.760,51.100,curated

@@ -1,0 +1,574 @@
+{
+  "created_at": "2026-09-20T08:44:17.676540+00:00",
+  "original_prereg_sha256": "05cc3745052423283536e4a78d0e334f217b51cfd33eea25788eaea858d13a71",
+  "authorization": "User explicitly requested approximate NBA fills-only reconstruction, negative-inventory exclusions and actual tests; original completeness gates superseded for this amendment only.",
+  "primary_test": "brier_24h",
+  "family_size": 42,
+  "family": [
+    {
+      "id": "brier_24h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "brier market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 24
+    },
+    {
+      "id": "logloss_24h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "logloss market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 24
+    },
+    {
+      "id": "blend_brier_24h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "blend_brier market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 24
+    },
+    {
+      "id": "brier_6h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "brier market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 6
+    },
+    {
+      "id": "logloss_6h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "logloss market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 6
+    },
+    {
+      "id": "blend_brier_6h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "blend_brier market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 6
+    },
+    {
+      "id": "brier_1h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "brier market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 1
+    },
+    {
+      "id": "logloss_1h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "logloss market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 1
+    },
+    {
+      "id": "blend_brier_1h",
+      "signal": "past resolved NBA fills-only PnL >10000; >=10 prior games; >=3 experts; PnL x net shares weighted holdings",
+      "target": "blend_brier market loss minus expert/blend loss",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Category skill improves predictions",
+      "horizons_hours": [
+        24
+      ],
+      "horizon": 1
+    },
+    {
+      "id": "threshold_1000",
+      "signal": "qualification 1000",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to cutoff",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "threshold_1000"
+    },
+    {
+      "id": "threshold_5000",
+      "signal": "qualification 5000",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to cutoff",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "threshold_5000"
+    },
+    {
+      "id": "threshold_50000",
+      "signal": "qualification 50000",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to cutoff",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "threshold_50000"
+    },
+    {
+      "id": "threshold_top25",
+      "signal": "qualification top25",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to cutoff",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "threshold_top25"
+    },
+    {
+      "id": "threshold_top10percent",
+      "signal": "qualification top10percent",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to cutoff",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "threshold_top10percent"
+    },
+    {
+      "id": "weight_equal",
+      "signal": "equal weighting",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to aggregation",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "weight_equal"
+    },
+    {
+      "id": "weight_pnl",
+      "signal": "pnl weighting",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to aggregation",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "weight_pnl"
+    },
+    {
+      "id": "weight_size",
+      "signal": "size weighting",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to aggregation",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "weight_size"
+    },
+    {
+      "id": "weight_roi_shrunk",
+      "signal": "roi_shrunk weighting",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to aggregation",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "weight_roi_shrunk"
+    },
+    {
+      "id": "weight_hit_rate_shrunk",
+      "signal": "hit_rate_shrunk weighting",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Skill robust to aggregation",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "weight_hit_rate_shrunk"
+    },
+    {
+      "id": "robust_minpast5",
+      "signal": "minpast5",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "minpast5"
+    },
+    {
+      "id": "robust_minpast20",
+      "signal": "minpast20",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "minpast20"
+    },
+    {
+      "id": "robust_include_mm",
+      "signal": "include_mm",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "include_mm"
+    },
+    {
+      "id": "robust_exclude_top3",
+      "signal": "exclude_top3",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "exclude_top3"
+    },
+    {
+      "id": "robust_liquidity_low",
+      "signal": "liquidity_low",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "liquidity_low"
+    },
+    {
+      "id": "robust_liquidity_mid",
+      "signal": "liquidity_mid",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "liquidity_mid"
+    },
+    {
+      "id": "robust_liquidity_high",
+      "signal": "liquidity_high",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "liquidity_high"
+    },
+    {
+      "id": "robust_complete_pair_expost",
+      "signal": "complete_pair_expost",
+      "target": "Brier improvement",
+      "transform": "paired per-game loss difference",
+      "expected_sign": "positive",
+      "mechanism": "Composition and sample sensitivity",
+      "horizons_hours": [
+        24
+      ],
+      "variant": "complete_pair_expost"
+    },
+    {
+      "id": "persistence_rank",
+      "signal": "training category PnL",
+      "target": "test-period category PnL",
+      "transform": "Spearman correlation; permutation of future PnL across wallets",
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill",
+      "horizons_hours": [
+        24
+      ]
+    },
+    {
+      "id": "persistence_decile",
+      "signal": "training category PnL deciles",
+      "target": "test-period PnL",
+      "transform": "top minus bottom decile mean future profit; wallet bootstrap",
+      "expected_sign": "positive",
+      "mechanism": "Persistent skill",
+      "horizons_hours": [
+        24
+      ]
+    },
+    {
+      "id": "placebo_00",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4100
+    },
+    {
+      "id": "placebo_01",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4101
+    },
+    {
+      "id": "placebo_02",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4102
+    },
+    {
+      "id": "placebo_03",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4103
+    },
+    {
+      "id": "placebo_04",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4104
+    },
+    {
+      "id": "placebo_05",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4105
+    },
+    {
+      "id": "placebo_06",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4106
+    },
+    {
+      "id": "placebo_07",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4107
+    },
+    {
+      "id": "placebo_08",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4108
+    },
+    {
+      "id": "placebo_09",
+      "signal": "random wallets matched by past activity and traded notional quintiles",
+      "target": "Brier improvement",
+      "transform": "paired per-game difference",
+      "expected_sign": "zero",
+      "mechanism": "Random matched wallets should not outperform",
+      "horizons_hours": [
+        24
+      ],
+      "seed": 4109
+    },
+    {
+      "id": "outcome_divergence",
+      "signal": "expert-minus-market probability",
+      "target": "resolution outcome",
+      "transform": "train logistic correction of logit market by divergence; heldout logloss improvement",
+      "expected_sign": "positive",
+      "mechanism": "Incremental information",
+      "horizons_hours": [
+        24
+      ]
+    },
+    {
+      "id": "drift_max",
+      "signal": "expert-minus-market probability",
+      "target": "next 1/6/24h price changes",
+      "transform": "studentized signed drift covariance, max-statistic sign flip over horizons",
+      "expected_sign": "positive",
+      "mechanism": "Prices move toward expert view",
+      "horizons_hours": [
+        24
+      ],
+      "horizons_search": [
+        1,
+        6,
+        24
+      ]
+    },
+    {
+      "id": "economic_2c",
+      "signal": "direction of expert-minus-market divergence",
+      "target": "resolution payoff net of last-price entry and 2c all-in cost allowance",
+      "transform": "mean signed outcome-price minus 0.02; bootstrap by game",
+      "expected_sign": "positive",
+      "mechanism": "Approximate gross relationship survives illustrative costs",
+      "horizons_hours": [
+        24
+      ]
+    }
+  ],
+  "scope": "NBA full-game moneyline markets only, exact nba-TEAM-TEAM-YYYY-MM-DD slug; exclude WNBA, NCAA, props, futures, totals and handicaps. Gamma cached vol10k universe implies final-volume selection bias.",
+  "primary_period": {
+    "warmup_start": "2024-04-01",
+    "train_end": "2025-01-01",
+    "holdout_start": "2025-01-02",
+    "holdout_end": "2025-07-01",
+    "note": "Full 2024/25 season coverage; calendar split fixed before performance analysis. No threshold tuning."
+  },
+  "v2_extension": "Extract only mapped NBA tokens in V2 coverage from 2026-04-28 onward. Report separately as a coverage extension, not pooled primary inference because intervening 2025/26 histories are not guaranteed complete. No V2 forecast claims unless all selected games have complete fill coverage.",
+  "extraction": "Pinned HF V1/V2 revisions; remote parquet token predicate and projected columns, cached NBA-only rows. Column chunks may contain non-NBA rows internally; do not download/save full universe files. Bound files by market creation/resolution overlap and record every partition scanned.",
+  "ledger": {
+    "perspective": "maker field only in each OrderFilled, including taker-order maker aggregate rows; never synthesize opposite taker row",
+    "v1_fees": "BUY reduces received shares, SELL reduces collateral proceeds",
+    "v2_fees": "BUY adds collateral cost; SELL reduces collateral proceeds",
+    "net_inventory": "signed shares per wallet/token, strict chronological block/log replay",
+    "negative_policy": "At signal t drop a wallet-market pair if either outcome inventory has ever fallen below -1e-6 up to t. For realised history drop if ever negative through resolution. Never use a future violation to clean an earlier primary signal. Also report full-path ever-negative counts and an explicitly ex-post-cleaned sensitivity (selection leakage disclosed).",
+    "pnl": "cash flows through resolution plus remaining outcome shares at metadata payout, included once only after resolution timestamp < t. No transfers/splits/merges/redemptions/conversions/proxy mapping; histories are sample-period NBA PnL, not lifetime overall PnL.",
+    "resolution": "Gamma closedTime proxy; no payout-finality proof. Use terminal 0/1 prices with tolerance 1e-4. Exclude ambiguous/void outcomes."
+  },
+  "signal": {
+    "primary_threshold": 10000,
+    "min_prior_resolved_games": 10,
+    "min_experts": 3,
+    "probability": "weighted mean of token0 inventory/(token0+token1 inventory); team0 rather than literal YES",
+    "weight": "positive past NBA PnL times total net outcome shares",
+    "blend": 0.5,
+    "market_price": "last observed execution on either outcome, translated to token0 probability, strictly at/before snapshot; report staleness; up to48h allowed, never future interpolation",
+    "market_maker": "as-of t, >=100 fills, buy and sell each >=25% of cumulative dollar volume, dollar turnover/(1+absolute cumulative net cashflow)>10; exclude. Behavior flag only, not known identity/intent.",
+    "liquidity": "traded dollar volume strictly before snapshot; tertile cutpoints fitted on train only",
+    "shrunk_roi": "positive PnL/(gross buy cost+1000)",
+    "shrunk_hit_rate": "(profitable resolved games+5)/(resolved games+10)"
+  },
+  "inference": {
+    "resamples": 10000,
+    "seed": 20260920,
+    "alpha": 0.05,
+    "cluster": "unique game market, one outcome0 forecast per horizon",
+    "BH": "entire amended family; blocked tests conservatively p=1 for adjustment, display missing. Original83 ledger is preserved in archive, superseded by this amended family.",
+    "primary_bootstrap": "paired event bootstrap with centered two-sided null and percentile95% CI",
+    "lag_search": "joint game-level sign flips; max statistic across 1/6/24h",
+    "minimum_n": 20,
+    "MDE": "(z(1-.05/(2*family_size))+z(.8))*event SD/sqrt(n), conservative80% power",
+    "persistence": "training PnL frozen at split; future PnL measured over distinct test games including zero for inactive training wallets; no selecting only future survivors",
+    "placebo": "one matched alternative wallet per expert, without replacement where possible; match past activity and dollar-volume quintiles within current eligible holders; fixed seeds; no PnL qualification for placebo",
+    "forecast_clip": 0.001
+  },
+  "economic": "No order simulation. Observed historical spread only if source available. Otherwise report analytical break-even cost in cents and cost sensitivities 1/2/5/10c, no executable profit claim and no invented USD100 depth.",
+  "sanity": "Deterministically choose8 addresses spanning training-PnL ranks; compare approximate NBA PnL to public NBA/overall leaderboard if served. Report signed/absolute error and noncomparable coverage, do not require match.",
+  "known_limitations": [
+    "Unobserved non-fill lifecycle events",
+    "Causal negative-inventory exclusion cannot detect all missing flows",
+    "Partial category/sample-period PnL is not lifetime skill",
+    "Market-maker behavioral proxy may misclassify",
+    "Last execution is not midpoint or executable quote",
+    "Gamma closedTime is mutable and can lag sporting outcome",
+    "Resolution-aligned snapshots are ex-post evaluation clocks",
+    "Final-volume-filtered Gamma universe has selection bias",
+    "Pre-2024 trade history omitted",
+    "Explicit ex-post-cleaned sensitivity can have selection leakage"
+  ],
+  "nonzero_panel": "Retain all observed game-horizon rows, with missing expert fields if fewer than3 experts; actual tests use the declared eligible subset. Never substitute synthetic probabilities."
+}

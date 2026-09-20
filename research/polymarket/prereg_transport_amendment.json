@@ -1,0 +1,7 @@
+{
+  "recorded_at": "2026-09-20T07:03:41.352125+00:00",
+  "prereg_sha256": "66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26",
+  "change": "Allow documented keyless read-only POST /batch-prices-history, maximum 20 token IDs. No account/order/state writes. Replace missing NOAA PSV downloads with equivalent smaller official Parquet files. Statistical specifications, sample and family unchanged.",
+  "reason": "Reduce API load on shared IP. Explicit date-window GET succeeds where interval=max returns empty. Recorded before any hypothesis test.",
+  "source": "https://docs.polymarket.com/api-spec/clob-openapi.yaml"
+}

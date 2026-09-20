@@ -1,0 +1,7 @@
+truth,scope,n_reservoirs,n_alerts,hit_rate_precision,false_alarm_rate,base_rate_random_month,lift_vs_base,n_events,events_missed,recall,median_lead_months,share_hits_with_positive_lead
+generation shortfall (12-mo gen <= 80% of normal) within 12 months,all storage reservoirs with truth (US+Brazil),471.0,674,0.629080118694362,0.370919881305638,0.4277568134171908,1.4706489738149904,971,819,0.15653964984552005,-3.0,0.35141509433962265
+generation shortfall (12-mo gen <= 80% of normal) within 12 months,US,404.0,572,0.6171328671328671,0.3828671328671329,0.41437862429116074,1.4892970606013747,837,719,0.14097968936678618,-4.0,0.32577903682719545
+generation shortfall (12-mo gen <= 80% of normal) within 12 months,Brazil,67.0,102,0.696078431372549,0.303921568627451,0.5192897851819378,1.3404431422210081,134,100,0.25373134328358204,0.0,0.4788732394366197
+generation shortfall (12-mo gen <= 80% of normal) within 12 months,exploratory: carry-over subset,143.0,266,0.7406015037593985,0.2593984962406015,0.4790307161561162,1.5460417855919626,353,271,0.23229461756373937,-1.0,0.38578680203045684
+Ember national hydro year <= 85% of prior 5-yr mean (onset year or next),43 hydro-dependent countries,,51,0.17647058823529413,0.8235294117647058,0.15049354042676721,1.1726123774805324,52,39,0.25,,
+GDELT power-shortage news spike within 12 months (2017+),5 hydro-dependent countries with GDELT coverage,,6,0.5,0.5,,,45,40,0.11111111111111116,6.0,1.0

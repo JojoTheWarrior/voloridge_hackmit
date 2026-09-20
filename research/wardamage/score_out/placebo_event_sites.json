@@ -1,0 +1,13 @@
+{
+ "n_sites": 57,
+ "n_windows": 2223,
+ "window_fpr": 0.0076,
+ "window_fpr_novel_only": 0.0058,
+ "window_fpr_flare_sites": 0.0158,
+ "window_fpr_nonflare_sites": 0.0008,
+ "n_windows_flare": 1014,
+ "n_windows_nonflare": 1209,
+ "frozen_flagged_days_per_asset_month": 0.09,
+ "frozen_any_novel_days_per_asset_month": 0.215,
+ "frozen_share_sites_with_any_flag": 0.193
+}

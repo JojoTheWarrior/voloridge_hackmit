@@ -1,0 +1,1 @@
+NBA approximation amendment pipeline. Original prereg.json is immutable; amendment_nba_v1.json is the prospective plan for this run. Raw sources are accessed anonymously. Only filtered NBA rows are persisted by extract.py. The original zero-row artifacts are preserved under archive/original_run.
