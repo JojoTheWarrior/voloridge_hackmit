@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0168",
+  "title": "[fuel-airspace-losers] Dubai CAMS dust 20d z-score > 1.5 (direct dust proxy rath",
+  "hypothesis": "R2 | [fuel-airspace-losers] Dubai CAMS dust 20d z-score > 1.5 (direct dust proxy rather than total AOD) marks sandstorm days that disrupt Gulf hub flights (-); trade short IAG.L 2d at 1d lag [airquality.dubai.cams_dust -> finance.IAG.L.log_return] (parent: R2-0070)",
+  "parent_mission_id": "R2-0070",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:14:36Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
