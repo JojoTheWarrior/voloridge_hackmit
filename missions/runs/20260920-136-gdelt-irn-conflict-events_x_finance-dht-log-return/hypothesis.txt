@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Iran-Gulf dyad event count 15d z-score > 2 leads DHT log returns by 2 days (+); trade long DHT 4d [gdelt.irn.conflict_events -> finance.DHT.log_return]

@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:18:27.403319+00:00",
+  "git_commit": "1e975769051cc1f34a72b4c80d8e02dc7dd591e3",
+  "folder": "20260920-136-gdelt-irn-conflict-events_x_finance-dht-log-return",
   "mission_id": "R2-0004",
-  "title": "Iran conflict z>2 -> DHT +2d",
   "hypothesis": "R2 | [oil-shipping] Iran-Gulf dyad event count 15d z-score > 2 leads DHT log returns by 2 days (+); trade long DHT 4d [gdelt.irn.conflict_events -> finance.DHT.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/928d79c5558d4fe9a6da2367d3219810",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:18:10Z",
-  "updated_at": "2026-09-20T03:18:29Z",
-  "finished_at": "2026-09-20T03:17:20Z",
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-136-gdelt-irn-conflict-events_x_finance-dht-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 8.69
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.03323384399985936,
+  "perm_p": 0.4590818363273453,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 8.69,
   "trade_idea": {
     "instrument": "DHT",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 8.69,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.conflict_events": "configured analysis window",
+    "finance.DHT.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
