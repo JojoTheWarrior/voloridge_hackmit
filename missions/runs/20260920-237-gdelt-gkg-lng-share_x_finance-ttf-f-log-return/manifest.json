@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:57:48.632364+00:00",
+  "git_commit": "88e3bb5f171ed81f74a322f49ac540f33e13236d",
+  "folder": "20260920-237-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
   "mission_id": "R2-0137",
-  "title": "LNG news share vs TTF gas returns (null control)",
   "hypothesis": "R2 | [fertilizer-ag] GDELT lng GKG share 20d z-score > 1 leads CF log returns by 3 days (+) but shows no excess over baseline; null control on European gas TTF-F log returns to test whether the LNG-news channel acts through gas at all [gdelt.gkg.lng_share -> finance.TTF=F.log_return] (parent: R2-0041)",
-  "parent_mission_id": "R2-0041",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/fb8faf5865e746059f8eff489fb4d595",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:57:40Z",
-  "updated_at": "2026-09-20T12:57:50Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-237-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.31
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.24710120456775034,
+  "perm_p": 0.033932135728542916,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.31,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 3.31,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.lng_share": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
