@@ -82,6 +82,9 @@ Tailwind) where you link datasets, start missions that look for connections
 between them, and read each mission as a thread ending in a chart, the key
 stats, and a written verdict.
 
+Needs Node 20.19+ or 22.12+ (`node -v`); nothing else — no Python, keys, or
+backend required.
+
 ```bash
 cd web
 npm install
