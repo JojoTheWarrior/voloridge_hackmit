@@ -1,0 +1,1 @@
+OpenAlex "sanctions" publication counts correlate with GDELT sanctions-related event counts.
