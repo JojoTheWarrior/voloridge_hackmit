@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:58:35Z",
-  "updated_at": "2026-09-20T12:59:15Z",
+  "updated_at": "2026-09-20T12:59:37Z",
   "finished_at": "2026-09-20T12:59:15Z",
-  "elapsed_s": 40,
+  "elapsed_s": 62,
   "message": "Supported weakly (r=0.22, n=390, best lag -6d r=0.29) but validity 0; trade hit-rate 1.0 is an abs-return artifact, not a real edge",
   "run_folder": "missions/runs/20260920-239-gdelt-gkg-fertilizer-share_x_finance-cf-abs-return",
   "scores": {
