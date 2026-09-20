@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:10:52Z",
-  "updated_at": "2026-09-20T13:11:42Z",
+  "updated_at": "2026-09-20T13:12:19Z",
   "finished_at": "2026-09-20T13:11:42Z",
-  "elapsed_s": 50,
+  "elapsed_s": 87,
   "message": "Weak support: r=0.06 (p=0.21, perm p=0.17, Bonferroni 1.0), best lag -3d r=0.13 sign as expected; long JETS z>1 1d hold: 29 trades, 52% hit, +23bp excess in-sample but OOS 14 trades 29% hit, -8bp avg. Not tradeable as-is.",
   "run_folder": "missions/runs/20260920-255-gdelt-gkg-ceasefire-share_x_finance-jets-log-return",
   "scores": {
