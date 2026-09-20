@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Crossref weekly Iran publication count 26w z-score > 1 leads YAR.OL returns by 6 days (+) tracking European gas-input anxiety (oil_price crossref topic not cached; iran topic used as proxy); long YAR.OL 6d [research.iran.crossref_pubs -> finance.YAR.OL.log_return]

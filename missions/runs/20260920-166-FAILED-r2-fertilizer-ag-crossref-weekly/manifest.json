@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T03:47:36.066271+00:00",
+  "git_commit": "bfc5a6cdc4fc15159c0788fce753bd1b90b4fd66",
+  "folder": "20260920-166-FAILED-r2-fertilizer-ag-crossref-weekly",
+  "mission_id": "R2-0048",
+  "hypothesis": "R2 | [fertilizer-ag] Crossref weekly Iran publication count 26w z-score > 1 leads YAR.OL returns by 6 days (+) tracking European gas-input anxiety (oil_price crossref topic not cached; iran topic used as proxy); long YAR.OL 6d [research.iran.crossref_pubs -> finance.YAR.OL.log_return]",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.iran.crossref_pubs": "2025-03..current week",
+    "finance.YAR.OL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
