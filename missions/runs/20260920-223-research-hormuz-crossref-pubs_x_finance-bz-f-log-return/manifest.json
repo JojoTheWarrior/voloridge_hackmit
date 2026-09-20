@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:46:01.911052+00:00",
+  "git_commit": "cc9a63e118784318812cb10de043d888bff3a1a3",
+  "folder": "20260920-223-research-hormuz-crossref-pubs_x_finance-bz-f-log-return",
   "mission_id": "R2-0114",
-  "title": "Crossref Hormuz pubs spike leads Brent up (reversal)",
   "hypothesis": "R2 | [oil-shipping] Reversal of R2-0016: Crossref weekly Hormuz publication spikes coincide with rising, not falling, Brent; z-score > 1 leads BZ=F up by 1 week (+); trade long BZ=F 5d [research.hormuz.crossref_pubs -> finance.BZ=F.log_return] (parent: R2-0016)",
-  "parent_mission_id": "R2-0016",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/cfe4e4d49e5a47df8d43ff87b8bfbcf2",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:45:33Z",
-  "updated_at": "2026-09-20T12:46:03Z",
-  "finished_at": null,
-  "elapsed_s": 30,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-223-research-hormuz-crossref-pubs_x_finance-bz-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 5.19
-  },
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.1021135859521833,
+  "perm_p": 0.249500998003992,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.19,
   "trade_idea": {
     "instrument": "BZ=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 5.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_pubs": "2025-03..current week",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

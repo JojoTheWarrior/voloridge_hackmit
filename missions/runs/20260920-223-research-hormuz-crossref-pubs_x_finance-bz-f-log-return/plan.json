@@ -1,0 +1,13 @@
+{
+  "indicator_a": "research.hormuz.crossref_pubs",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}
