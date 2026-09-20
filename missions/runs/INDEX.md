@@ -34,3 +34,4 @@
 | `20260920-030-finance-fred-dcoilbrenteu_x_utility-us-demand-mwh` | US electricity demand growth in 2026 accelerated relative to 2025 during the oil shock months. | ok | 382 | 0.012372654858887912 | 0.5848303393213573 | 0.12 | 4.96 | 6.36 |
 | `20260920-031-FAILED-the-coal-share-of-us` | The coal share of US monthly generation rose when natural gas prices spiked after March 2026. | failed | 0 | None | None | None | None | None |
 | `20260920-032-FAILED-the-coal-share-of-us` | The coal share of US monthly generation rose when natural gas prices spiked after March 2026. | failed | 0 | None | None | None | None | None |
+| `20260920-033-FAILED-us-monthly-fuel-receipt-costs` | US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war. | failed | 0 | None | None | None | None | None |

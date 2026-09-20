@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:52:02.690795+00:00",
+  "git_commit": "4d4b2180c97aea1cc0cb75e9ec38d1d697994bc9",
+  "folder": "20260920-033-FAILED-us-monthly-fuel-receipt-costs",
+  "mission_id": "M20260920-5ceeb4",
+  "hypothesis": "US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "finance.fred.DHHNGSP": "configured analysis window",
+    "utility.fuel_cost.gas_per_mmbtu": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DHHNGSP",
+  "indicator_b": "utility.fuel_cost.gas_per_mmbtu",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Henry Hub spot price (DHHNGSP) and US delivered gas fuel cost (gas_per_mmbtu), both in percent changes, to test whether monthly utility fuel costs historically follow Henry Hub with about a one\u2011month lag and whether that lag structure tightens around the 2026 Iran war period."
+}
