@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT helium GKG share 20d z-score > 1 leads Venture Global log returns by 3 days (+) as Qatar helium/LNG co-production halts; trade long VG 5d [gdelt.gkg.helium_share -> finance.VG.log_return]

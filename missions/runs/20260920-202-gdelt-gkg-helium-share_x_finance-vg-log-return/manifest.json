@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:18:32.351628+00:00",
+  "git_commit": "ba37a657199b5ec3616b9e2fbe20c32fc1dab7e6",
+  "folder": "20260920-202-gdelt-gkg-helium-share_x_finance-vg-log-return",
   "mission_id": "R2-0098",
-  "title": "Helium GKG share -> VG returns",
   "hypothesis": "R2 | [gas-lng] GDELT helium GKG share 20d z-score > 1 leads Venture Global log returns by 3 days (+) as Qatar helium/LNG co-production halts; trade long VG 5d [gdelt.gkg.helium_share -> finance.VG.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/e12275917aa94ad491fe9672249b1637",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:18:19Z",
-  "updated_at": "2026-09-20T04:18:33Z",
-  "finished_at": null,
-  "elapsed_s": 14,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-202-gdelt-gkg-helium-share_x_finance-vg-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 7.6
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.014022575803997735,
+  "perm_p": 0.2554890219560878,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 7.6,
   "trade_idea": {
     "instrument": "VG",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 7.6,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.helium_share": "configured analysis window",
+    "finance.VG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

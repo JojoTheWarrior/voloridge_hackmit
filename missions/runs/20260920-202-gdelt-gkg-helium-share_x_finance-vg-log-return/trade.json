@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 4,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 5,
+    "hit_rate": 1.0,
+    "avg_return": 0.1321110088851012,
+    "baseline_avg_return": 0.06301926727097905,
+    "excess_return": 0.06909174161412214,
+    "sharpe_like": 3.89272235617093,
+    "max_drawdown": 0.0,
+    "total_return": 0.8386376342861506
+  },
+  "fit_pre_war": {
+    "n_trades": 4,
+    "hit_rate": 1.0,
+    "avg_return": 0.12441832553189108,
+    "baseline_avg_return": 0.06617083297084402,
+    "excess_return": 0.05824749256104707,
+    "sharpe_like": 2.9950412016008965,
+    "max_drawdown": 0.0,
+    "total_return": 0.5811045675657995
+  },
+  "test_war": {
+    "n_trades": 1,
+    "hit_rate": 1.0,
+    "avg_return": 0.1628817422979416,
+    "baseline_avg_return": 0.057432400803036604,
+    "excess_return": 0.10544934149490501,
+    "sharpe_like": null,
+    "max_drawdown": 0.0,
+    "total_return": 0.1628817422979416
+  },
+  "n_signal_days": 61,
+  "trade_idea": {
+    "instrument": "VG",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.helium_share rolling_zscore_20d > 1 at close -> long VG next session",
+    "exit_rule": "close after 4 trading days (no overlapping entries)",
+    "holding_days": 4,
+    "hit_rate": 1.0,
+    "avg_return": 0.1321110088851012,
+    "excess_return": 0.06909174161412214,
+    "n_trades": 5,
+    "sharpe_like": 3.89272235617093,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 1,
+    "oos_avg_return": 0.1628817422979416,
+    "oos_hit_rate": 1.0,
+    "actionability": 7.6,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
