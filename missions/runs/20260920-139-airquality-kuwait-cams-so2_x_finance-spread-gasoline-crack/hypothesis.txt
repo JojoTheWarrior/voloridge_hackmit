@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Kuwait CAMS SO2 10d z-score > 1 (sour-crude processing ramp) leads gasoline crack narrower by 3 days (-); trade short RB=F 4d [airquality.kuwait.cams_so2 -> finance.spread.gasoline_crack]

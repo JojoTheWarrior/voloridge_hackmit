@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:25:09.730032+00:00",
+  "git_commit": "b3a1f91a4cecd65998316c128c32c1d583534a5b",
+  "folder": "20260920-139-airquality-kuwait-cams-so2_x_finance-spread-gasoline-crack",
   "mission_id": "R2-0014",
-  "title": "Kuwait SO2 -> gasoline crack",
   "hypothesis": "R2 | [oil-shipping] Kuwait CAMS SO2 10d z-score > 1 (sour-crude processing ramp) leads gasoline crack narrower by 3 days (-); trade short RB=F 4d [airquality.kuwait.cams_so2 -> finance.spread.gasoline_crack]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/764d1e0412c243a2a7da81139cb810c8",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:24:52Z",
-  "updated_at": "2026-09-20T03:25:11Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-139-airquality-kuwait-cams-so2_x_finance-spread-gasoline-crack",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 5.19
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.0012686637945452696,
+  "perm_p": 0.09580838323353294,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.19,
   "trade_idea": {
     "instrument": "spread:gasoline_crack",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 5.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.kuwait.cams_so2": "2025-03..2026-09 archive window",
+    "finance.spread.gasoline_crack": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
