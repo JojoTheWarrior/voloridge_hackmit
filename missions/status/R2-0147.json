@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0147",
+  "title": "[fertilizer-ag] GDELT fertilizer news share 20d z-score > 1 leads MOS log return",
+  "hypothesis": "R2 | [fertilizer-ag] GDELT fertilizer news share 20d z-score > 1 leads MOS log returns by 5 days (-) as fertilizer headlines mark local price exhaustion; fade with short MOS 5d [gdelt.gkg.fertilizer_share -> finance.MOS.log_return] (parent: R2-0047)",
+  "parent_mission_id": "R2-0047",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:02:22Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
