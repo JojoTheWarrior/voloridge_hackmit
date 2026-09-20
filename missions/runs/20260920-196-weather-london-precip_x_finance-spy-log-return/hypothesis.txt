@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] NULL CONTROL: London daily precipitation has no lead-lag relation to S&P returns at 0-5 days (0); no trade, benchmark for false positives [weather.london.precip -> finance.SPY.log_return]

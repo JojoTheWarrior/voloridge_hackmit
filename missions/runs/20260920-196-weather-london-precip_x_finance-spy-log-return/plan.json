@@ -1,0 +1,13 @@
+{
+  "indicator_a": "weather.london.precip",
+  "indicator_b": "finance.SPY.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}
