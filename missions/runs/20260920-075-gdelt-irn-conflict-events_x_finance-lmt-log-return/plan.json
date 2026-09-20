@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.conflict_events",
+  "indicator_b": "finance.LMT.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 1,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily Iran material conflict event counts as a proxy for \u2018high GDELT Iran conflict\u2019 and test whether Lockheed Martin\u2019s daily log returns outperform on or just after such days during the active war period; conflict_events is the closest available Iran-specific conflict intensity measure and log_return is the appropriate return metric."
+}
