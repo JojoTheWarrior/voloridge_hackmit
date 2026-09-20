@@ -10,7 +10,7 @@ from pathlib import Path
 from warsignal.ai.jev_client import JevClient
 from warsignal.ai.prompts import JEV_QUESTIONS, NARRATIVE_SYSTEM
 from warsignal.ai.openai_client import chat_text
-from warsignal.analysis.stats import apply_window, run_all, run_single, transform
+from warsignal.analysis.stats import align, apply_window, run_all, run_single, transform
 from warsignal.config import START, END
 from warsignal.indicators import get_series
 from warsignal.util import to_jsonable
@@ -95,8 +95,9 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
             b = None
         else:
             b = raw_b = get_series(plan.indicator_b, START, END)
-        overlap = a.dropna() if plan.mode == "single" else __import__("pandas").concat([a.rename("a"), b.rename("b")], axis=1).dropna()
-        if len(overlap) < 20:
+        overlap = a.dropna() if plan.mode == "single" else align(a, b)
+        monthly = len(overlap) > 1 and overlap.index.to_series().diff().median() > __import__("pandas").Timedelta(days=20)
+        if len(overlap) < (12 if monthly else 20):
             def coverage(series):
                 valid = series.dropna()
                 if valid.empty:
