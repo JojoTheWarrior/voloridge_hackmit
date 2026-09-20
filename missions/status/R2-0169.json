@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:16:26Z",
-  "updated_at": "2026-09-20T13:30:55Z",
+  "updated_at": "2026-09-20T13:33:47Z",
   "finished_at": "2026-09-20T13:16:53Z",
-  "elapsed_s": 869,
+  "elapsed_s": 1041,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-262-gdelt-gkg-tanker-share_x_finance-jets-log-return",
   "scores": {
