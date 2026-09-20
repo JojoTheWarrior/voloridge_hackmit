@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:34:29.536592+00:00",
+  "git_commit": "93703dd4fc87037db97bed4e55e640bb1cbc4d7c",
+  "folder": "20260920-150-weather-doha-temp-max_x_finance-ratio-ttf-henryhub",
   "mission_id": "R2-0027",
-  "title": "Doha heat leads TTF/Henry Hub ratio",
   "hypothesis": "R2 | [gas-lng] Doha maximum temperature 20d z-score > 1.5 (Gulf cooling demand diverts cargoes) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 4d [weather.doha.temp_max -> finance.ratio.ttf_henryhub]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/255d102f12ec4134a3e75b77dd69d42e",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:34:07Z",
-  "updated_at": "2026-09-20T03:34:31Z",
-  "finished_at": null,
-  "elapsed_s": 24,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-150-weather-doha-temp-max_x_finance-ratio-ttf-henryhub",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 5.35
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.008241284203048618,
+  "perm_p": 0.6447105788423154,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.35,
   "trade_idea": {
     "instrument": "ratio:ttf_henryhub",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 5.35,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.doha.temp_max": "configured analysis window",
+    "finance.ratio.ttf_henryhub": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

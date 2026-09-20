@@ -1,0 +1,1 @@
+R2 | [gas-lng] Doha maximum temperature 20d z-score > 1.5 (Gulf cooling demand diverts cargoes) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 4d [weather.doha.temp_max -> finance.ratio.ttf_henryhub]

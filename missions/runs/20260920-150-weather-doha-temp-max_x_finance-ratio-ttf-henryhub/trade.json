@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 6,
+    "target_kind": "level"
+  },
+  "all": {
+    "n_trades": 34,
+    "hit_rate": 0.6470588235294118,
+    "avg_return": 0.018747010694840572,
+    "baseline_avg_return": 0.027285168289188567,
+    "excess_return": -0.008538157594347996,
+    "sharpe_like": 0.8952205755851643,
+    "max_drawdown": -0.36492757330312975,
+    "total_return": 0.4648412512221991
+  },
+  "fit_pre_war": {
+    "n_trades": 20,
+    "hit_rate": 0.6,
+    "avg_return": -0.0016553142289149835,
+    "baseline_avg_return": 0.02695771936602079,
+    "excess_return": -0.028613033594935774,
+    "sharpe_like": -0.06673709208286589,
+    "max_drawdown": -0.36492757330312975,
+    "total_return": -0.1501151755323833
+  },
+  "test_war": {
+    "n_trades": 14,
+    "hit_rate": 0.7142857142857143,
+    "avg_return": 0.04789318915734851,
+    "baseline_avg_return": 0.02788630586455627,
+    "excess_return": 0.02000688329279224,
+    "sharpe_like": 1.3668340407999255,
+    "max_drawdown": -0.2237432934012994,
+    "total_return": 0.7235761941505447
+  },
+  "n_signal_days": 383,
+  "trade_idea": {
+    "instrument": "ratio:ttf_henryhub",
+    "direction": "long",
+    "entry_rule": "weather.doha.temp_max rolling_zscore_20d > 1 at close -> long ratio:ttf_henryhub next session",
+    "exit_rule": "close after 6 trading days (no overlapping entries)",
+    "holding_days": 6,
+    "hit_rate": 0.6470588235294118,
+    "avg_return": 0.018747010694840572,
+    "excess_return": -0.008538157594347996,
+    "n_trades": 34,
+    "sharpe_like": 0.8952205755851643,
+    "max_drawdown": -0.36492757330312975,
+    "oos_n_trades": 14,
+    "oos_avg_return": 0.04789318915734851,
+    "oos_hit_rate": 0.7142857142857143,
+    "actionability": 5.35,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
