@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:54:36Z",
-  "updated_at": "2026-09-20T03:55:28Z",
+  "updated_at": "2026-09-20T03:55:47Z",
   "finished_at": "2026-09-20T03:55:28Z",
-  "elapsed_s": 52,
+  "elapsed_s": 71,
   "message": "Weak: Doha NO2 z>1 short LHA.DE 2d gives 46 trades, hit 50 pct, avg +0.43 pct, OOS 16 trades hit 56 pct, but validity 0 / permutation null (Bonferroni p=1.0); not tradeable as-is",
   "run_folder": "missions/runs/20260920-174-airquality-doha-cams-no2_x_finance-lha-de-log-return",
   "scores": {
