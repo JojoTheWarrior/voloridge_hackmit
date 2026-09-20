@@ -134,3 +134,25 @@ overlapping observations fails rather than presenting unstable statistics.
 ## Insights
 
 (filled after the 100-mission run)
+
+## Iran Round 2 (2026-09-20)
+
+- Expanded the finance universe to the tradeable Round 2 set (RB=F, XOP, FRO,
+  DHT, STNG, LNG, VG, BAS.DE, YAR.OL, AAL, CCL, RCL, FDX, LHA.DE, IAG.L, SPY,
+  QQQ, GLD, ITA, INDA, EWY, EWJ; 59 tickers, 2025-01-02..2026-09-18) plus
+  derived series (gasoline crack, TTF/Henry Hub, tankers/XLE, JETS/SPY,
+  XOP/SPY, EEM/SPY).
+- Five ideation children (oil-shipping, gas-LNG, fertilizer-ag,
+  fuel-airspace-losers, risk-macro-EM) each returned 20 one-line hypotheses;
+  after registry validation and de-duplication against Round 1 pairs, 97
+  survived and 3 were replaced, giving exactly 100 `R2 |` lines. The stale
+  Round 1 list in `missions/queue.txt` (already run) was overwritten.
+- Added `warsignal/analysis/trade.py` (rubric backtest), `trade_idea` +
+  `actionability` everywhere (manifest, `trade.json`, `note.md`, results.csv,
+  INDEX.md, Jev question + heuristic), `planner.explicit_plan` for the
+  `[a -> b]` tag, `warsignal/mission/status.py` + `python main.py status`
+  for SCHEMA.md progress files, and `--mission-id/--status` on `mission`.
+- Authored `missions/ROUND2_RUBRIC.md` and `missions/ROUND2_AGENT_PROTOCOL.md`.
+- Lesson: the keyword planner mis-routed explicit indicator names (it picked
+  `research.hormuz.crossref_share` for an FRO hypothesis), so Round 2 lines
+  carry the pair explicitly and the planner trusts it.

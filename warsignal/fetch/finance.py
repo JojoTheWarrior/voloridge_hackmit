@@ -9,7 +9,11 @@ import yfinance as yf
 
 from warsignal.fetch.common import manifest, output_dir, parse_date
 
-TICKERS = "BZ=F CL=F NG=F GC=F ^GSPC ^VIX XLE DX-Y.NYB TLT LMT RTX XOM EEM USO TUR KSA UAE EIS TTF=F ZW=F ZC=F HG=F ALI=F SLV JETS UAL DAL NOC GD BA MOS CF NTR XLU FCX ^TNX HYG".split()
+TICKERS = (
+    "BZ=F CL=F NG=F GC=F ^GSPC ^VIX XLE DX-Y.NYB TLT LMT RTX XOM EEM USO TUR KSA UAE EIS TTF=F ZW=F ZC=F HG=F ALI=F SLV JETS UAL DAL NOC GD BA MOS CF NTR XLU FCX ^TNX HYG "
+    # Round 2 tradeable universe
+    "RB=F XOP FRO DHT STNG LNG VG BAS.DE YAR.OL AAL CCL RCL FDX LHA.DE IAG.L SPY QQQ GLD ITA INDA EWY EWJ"
+).split()
 FRED = ["DCOILBRENTEU", "DCOILWTICO", "DHHNGSP", "DGS10"]
 
 def fetch(start=date(2025, 1, 1), end=date.today(), **_) -> list[Path]:

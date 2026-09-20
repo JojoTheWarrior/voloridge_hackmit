@@ -126,6 +126,25 @@ result under a file lock, then marks it done or failed. Do not edit
 running. `--reset` restores `queue_original.txt` and clears in-progress work;
 it does not alter results.
 
+## Round 2 protocol (tradeable rules)
+
+Round 2 lines in `missions/queue.txt` start with `R2 |` and end with an explicit
+`[signal -> target]` indicator tag; `planner.explicit_plan` uses it verbatim
+(`(+)`/`(-)` = expected sign, the largest "N days" = max lag), so the keyword
+planner is bypassed. `runner.compute_trade` then backtests the rubric rule
+(`warsignal/analysis/trade.py`: 20d rolling z-score > 1 → hold the target for the
+best positive lag, non-overlapping trades, pre-war fit / war test split) and
+writes `trade.json`, `trade_idea` and `actionability` (Jev question, heuristic
+fallback `heuristic_actionability`) into the manifest, `results.csv` and
+`INDEX.md`. Mission children follow `missions/ROUND2_AGENT_PROTOCOL.md`: run
+`python main.py mission "<line>" --mission-id R2-00NN --status --viz --publish`,
+which updates `missions/status/R2-00NN.json` (SCHEMA.md) at every stage and
+commits only the run folder, index and status file; `python main.py status ...`
+sets `done`/`failed`, appends the single follow-up (`--followup`, tagged
+`(parent: R2-00NN)`) and pushes with `git pull --rebase --autostash`. The brain
+re-reads `missions/config.json` (`max_agents`) every loop and stops at 200
+Round 2 missions. Rubric: `missions/ROUND2_RUBRIC.md`.
+
 ## Mission pipeline
 
 The planner returns the JSON contract represented by `MissionPlan`:

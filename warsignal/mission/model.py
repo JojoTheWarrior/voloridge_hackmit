@@ -40,6 +40,7 @@ class MissionResult:
     date_end: str | None = None
     n_obs: int = 0
     brain_sessions: list = field(default_factory=list)
+    trade_idea: dict | None = None
 
     def to_row(self):
         corr = self.stats.get("correlation") or {}
@@ -65,6 +66,13 @@ class MissionResult:
             "sign_matches": self.stats.get("sign_matches_expectation"),
             "validity": self.scores.get("validity"), "interestingness": self.scores.get("interestingness"),
             "unexpectedness": self.scores.get("unexpectedness"), "supported_prob": self.scores.get("supported_prob"),
+            "actionability": self.scores.get("actionability"),
+            "trade_instrument": (self.trade_idea or {}).get("instrument"),
+            "trade_direction": (self.trade_idea or {}).get("direction"),
+            "trade_holding_days": (self.trade_idea or {}).get("holding_days"),
+            "trade_n": (self.trade_idea or {}).get("n_trades"), "trade_hit_rate": (self.trade_idea or {}).get("hit_rate"),
+            "trade_avg_return": (self.trade_idea or {}).get("avg_return"),
+            "trade_sharpe_like": (self.trade_idea or {}).get("sharpe_like"),
             "judge": self.judge, "planner_model": self.planner_model,
             "brain_sessions": ";".join(
                 item.get("session_url", "") for item in self.brain_sessions if item.get("session_url")

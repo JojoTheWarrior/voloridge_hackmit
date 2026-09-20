@@ -29,6 +29,15 @@ def _load(ticker, column):
     return rows[column]
 
 
+def _combine(ticker_a, ticker_b, operation):
+    a, b = _load(ticker_a, "close"), _load(ticker_b, "close")
+    if operation == "spread":
+        return a.subtract(b)
+    if operation == "crack":  # RBOB $/gal -> $/bbl minus crude $/bbl
+        return a.multiply(42.0).subtract(b)
+    return a.divide(b)
+
+
 def _register():
     try:
         tickers = _prices().ticker.dropna().unique()
@@ -41,9 +50,15 @@ def _register():
     for name, ticker_a, ticker_b, operation in [
         ("finance.spread.brent_wti", "BZ=F", "CL=F", "spread"),
         ("finance.ratio.gold_oil", "GC=F", "BZ=F", "ratio"),
+        ("finance.spread.gasoline_crack", "RB=F", "CL=F", "crack"),
+        ("finance.ratio.ttf_henryhub", "TTF=F", "NG=F", "ratio"),
+        ("finance.ratio.tankers_xle", "FRO", "XLE", "ratio"),
+        ("finance.ratio.jets_spy", "JETS", "SPY", "ratio"),
+        ("finance.ratio.xop_spy", "XOP", "SPY", "ratio"),
+        ("finance.ratio.eem_spy", "EEM", "SPY", "ratio"),
     ]:
         register(IndicatorSpec(name, "finance", name, "price", "D"),
-                 lambda a=ticker_a, b=ticker_b, op=operation: _load(a, "close").subtract(_load(b, "close")) if op == "spread" else _load(a, "close").divide(_load(b, "close")))
+                 lambda a=ticker_a, b=ticker_b, op=operation: _combine(a, b, op))
     for fred in ("DCOILBRENTEU", "DCOILWTICO", "DHHNGSP", "DGS10"):
         register(IndicatorSpec(f"finance.fred.{fred}", "finance", f"FRED {fred}", "value", "D"),
                  lambda fred=fred: _fred(fred))

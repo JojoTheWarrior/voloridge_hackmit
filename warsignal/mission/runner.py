@@ -11,12 +11,17 @@ from warsignal.ai.jev_client import JevClient
 from warsignal.ai.brain import think_text
 from warsignal.ai.prompts import JEV_QUESTIONS, NARRATIVE_SYSTEM
 from warsignal.analysis.stats import align, apply_window, run_all, run_single, transform
+from warsignal.analysis.trade import (
+    evaluate_rule, heuristic_actionability, instrument_from_indicator, target_kind_from_indicator,
+    trade_idea_from_metrics,
+)
 from warsignal.config import START, END
 from warsignal.indicators import get_series
 from warsignal.util import to_jsonable
 from .model import MissionResult
 from .planner import heuristic_plan, plan_mission
 from .publish import publish_run, write_run_folder
+from .status import apply_result, status_path, update_status
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -109,13 +114,38 @@ def _heuristic_judge(plan, stats):
     }
 
 
-def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False, publish=False, brain_backend=None):
+def compute_trade(plan, stats, a, b):
+    """Round 2 rubric: signal = indicator_a rolling z-score, position in indicator_b for the best lead lag."""
+    if plan.mode == "single" or b is None:
+        return None
+    best_lag = (stats.get("lagged") or {}).get("best_lag")
+    holding = int(best_lag) if best_lag and best_lag > 0 else 1
+    signal = apply_window(transform(a, plan.transform_a), plan.window)
+    target = apply_window(b, plan.window)
+    kind = target_kind_from_indicator(plan.indicator_b, plan.transform_b)
+    sign = plan.expected_sign or (1 if ((stats.get("lagged") or {}).get("best_r") or 0) >= 0 else -1)
+    metrics = evaluate_rule(signal, target, expected_sign=sign, holding_days=holding, target_kind=kind)
+    metrics["trade_idea"] = trade_idea_from_metrics(
+        metrics, instrument_from_indicator(plan.indicator_b), plan.indicator_a,
+    )
+    return metrics
+
+
+def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False, publish=False, brain_backend=None,
+                status=False):
     mission_id = mission_id or f"M{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(3)}"
     created = datetime.now(timezone.utc).isoformat()
     raw_a = raw_b = transformed_a = transformed_b = None
     judge = {}
     brain_sessions = []
+
+    def stage(name, message):
+        if status:
+            update_status(mission_id, hypothesis=hypothesis, state="running", stage=name, message=message,
+                          brain_sessions=brain_sessions or None)
+
     try:
+        stage("planning", "choosing indicators")
         plan, planner_model = plan_mission(
             hypothesis,
             use_ai=use_ai,
@@ -123,6 +153,7 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
             brain_backend=brain_backend,
             brain_sessions=brain_sessions,
         )
+        stage("loading", f"loading {plan.indicator_a} / {plan.indicator_b}")
         a = raw_a = get_series(plan.indicator_a, START, END)
         if plan.mode == "single":
             b = None
@@ -141,11 +172,26 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
                 detail += f", {plan.indicator_b} covers {coverage(b)}"
             raise ValueError(f"insufficient overlap: {detail}")
         from warsignal.indicators.events import load_timeline
+        stage("stats", f"correlation + permutation (n={len(overlap)})")
         stats = run_single(plan, a, load_timeline()) if plan.mode == "single" else run_all(plan, a, b, load_timeline())
+        trade = None
+        try:
+            trade = compute_trade(plan, stats, a, b)
+        except Exception as exc:  # noqa: BLE001 - trade rubric is advisory
+            stats["trade_error"] = str(exc)
+        if trade:
+            stats["trade"] = {key: value for key, value in trade.items() if key not in {"trade_dates", "trade_returns"}}
+        stage("judging", "scoring validity / interest / actionability")
         judge = (
             JevClient().judge(_judge_state(hypothesis, plan, stats), JEV_QUESTIONS)
             if use_ai else _heuristic_judge(plan, stats)
         )
+        if judge.get("scores", {}).get("actionability") is None:
+            judge.setdefault("scores", {})["actionability"] = heuristic_actionability(trade)
+        if trade:
+            trade["trade_idea"]["actionability"] = judge["scores"]["actionability"]
+            stats["trade"]["trade_idea"] = trade["trade_idea"]
+        stage("narrative", "writing narrative")
         result = MissionResult(mission_id, created, hypothesis, plan, stats, judge.get("scores", {}),
                                _narrative(
                                    hypothesis,
@@ -157,7 +203,8 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
                                    brain_sessions,
                                ), judge=judge.get("judge", ""),
                                planner_model=planner_model, data_sources=[plan.indicator_a] if plan.mode == "single" else [plan.indicator_a, plan.indicator_b],
-                               date_start=stats.get("coverage_start"), date_end=stats.get("coverage_end"), n_obs=stats.get("n_obs", 0))
+                               date_start=stats.get("coverage_start"), date_end=stats.get("coverage_end"), n_obs=stats.get("n_obs", 0),
+                               trade_idea=(trade or {}).get("trade_idea"))
         result.scores["supported_prob"] = judge.get("supported_prob")
         result.scores["judge_model"] = judge.get("model", "")
         transformed_a = apply_window(transform(a, plan.transform_a), plan.window)
@@ -200,6 +247,7 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
     payload["plan"] = result.plan.__dict__
     json_path.write_text(json.dumps(payload, default=_json_default, indent=2), encoding="utf-8")
     if viz or show:
+        stage("viz", "rendering viz.png")
         from warsignal.viz.agent import design_viz
         from warsignal.viz.pygame_viz import render
 
@@ -228,6 +276,9 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
     payload = result.__dict__.copy()
     payload["plan"] = result.plan.__dict__
     json_path.write_text(json.dumps(payload, default=_json_default, indent=2), encoding="utf-8")
+    if status:
+        apply_result(mission_id, result)
     if publish:
-        publish_run(folder)
+        stage("publishing", "committing run folder")
+        publish_run(folder, extra_paths=[status_path(mission_id)] if status else ())
     return result

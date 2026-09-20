@@ -7,6 +7,12 @@ def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="command", required=True)
     mission = sub.add_parser("mission"); mission.add_argument("hypothesis"); mission.add_argument("--no-ai", action="store_true"); mission.add_argument("--viz", action="store_true"); mission.add_argument("--show", action="store_true"); mission.add_argument("--dry-run", action="store_true"); mission.add_argument("--publish", action="store_true"); mission.add_argument("--brain", choices=("devin", "openai", "heuristic"))
+    mission.add_argument("--mission-id"); mission.add_argument("--status", action="store_true", help="write missions/status/<mission-id>.json at each stage")
+    status = sub.add_parser("status", help="update a Round 2 mission status file (SCHEMA.md)"); status.add_argument("mission_id")
+    status.add_argument("--hypothesis"); status.add_argument("--title"); status.add_argument("--parent"); status.add_argument("--session-url")
+    status.add_argument("--state", choices=("queued", "running", "done", "failed")); status.add_argument("--stage"); status.add_argument("--message")
+    status.add_argument("--followup", help="append one R2 follow-up hypothesis to missions/queue.txt")
+    status.add_argument("--push", action="store_true", help="commit only the status file (+queue if --followup) and push")
     queue = sub.add_parser("queue"); queue.add_argument("--n", type=int); queue.add_argument("--no-ai", action="store_true"); queue.add_argument("--viz", action="store_true"); queue.add_argument("--max-retries", type=int, default=1); queue.add_argument("--publish", action="store_true"); queue.add_argument("--brain", choices=("devin", "openai", "heuristic"))
     queue.add_argument("--reset", action="store_true"); queue.add_argument("--requeue-failed", action="store_true")
     indicators = sub.add_parser("indicators"); indicators.add_argument("--source")
@@ -37,11 +43,29 @@ def main():
             from warsignal.mission.runner import run_mission
             from warsignal.mission.results import append_result
             result = run_mission(
-                args.hypothesis, use_ai=not args.no_ai, viz=args.viz,
-                show=args.show, publish=args.publish, brain_backend=args.brain,
+                args.hypothesis, mission_id=args.mission_id, use_ai=not args.no_ai, viz=args.viz,
+                show=args.show, publish=args.publish, brain_backend=args.brain, status=args.status,
             )
             append_result(result)
             print(result.narrative_md)
+    elif args.command == "status":
+        import json
+        from warsignal.mission import status as st
+        if st.read_status(args.mission_id) is None:
+            st._atomic_write(st.status_path(args.mission_id), st.new_status(
+                args.mission_id, args.hypothesis or "", title=args.title, parent_mission_id=args.parent,
+                agent_session_url=args.session_url))
+        current = st.update_status(
+            args.mission_id, hypothesis=args.hypothesis, title=args.title, parent_mission_id=args.parent,
+            agent_session_url=args.session_url, state=args.state, stage=args.stage, message=args.message,
+        )
+        extra = []
+        if args.followup:
+            st.append_followup(args.mission_id, args.followup)
+            extra.append(st.QUEUE)
+        if args.push:
+            st.publish_status(args.mission_id, extra_paths=extra)
+        print(json.dumps(st.read_status(args.mission_id) or current, indent=2))
     elif args.command == "queue":
         from warsignal.mission.harness import requeue_failed_missions, reset_queue, run_queue
         if args.reset:

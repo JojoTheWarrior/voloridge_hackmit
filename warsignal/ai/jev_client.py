@@ -63,6 +63,8 @@ def _openai_fallback(state):
     result = chat_json(FALLBACK_JUDGE_SYSTEM, json.dumps(state, default=str),
                        model=env("WARSIGNAL_CHEAP_MODEL", "gpt-5-mini"))
     scores = {key: float((result.get(key) or {}).get("score", 0)) for key in ("validity", "interestingness", "unexpectedness")}
+    if isinstance(result.get("actionability"), dict) and result["actionability"].get("score") is not None:
+        scores["actionability"] = float(result["actionability"]["score"])
     supported = result.get("supported") or {}
     return {"scores": scores, "supported_prob": float(supported.get("probability", 0.0)),
             "judge": "openai-fallback", "model": env("WARSIGNAL_CHEAP_MODEL", "gpt-5-mini"), "raw": result}
@@ -83,6 +85,10 @@ def _normalise_jev(data: dict, model: str) -> dict:
             raise ValueError(f"jev answer missing score for {key}: {item}")
         scores[key] = round(max(0.0, min(10.0, float(raw) * scale)), 2)
         confidence[key] = item.get("confidence")
+    optional = answers.get("actionability") or {}
+    if optional.get("score") is not None:
+        scores["actionability"] = round(max(0.0, min(10.0, float(optional["score"]) * scale)), 2)
+        confidence["actionability"] = optional.get("confidence")
     supported = (answers.get("supported") or {}).get("noul")
     if supported is None:
         raise ValueError("jev answer missing supported.noul")

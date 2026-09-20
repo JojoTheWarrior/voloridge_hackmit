@@ -124,7 +124,37 @@ def _keyword_scores(text):
     return scores
 
 
+_EXPLICIT = re.compile(r"\[\s*([A-Za-z0-9_.^=\-]+)\s*->\s*([A-Za-z0-9_.^=\-]+)\s*\]")
+
+
+def explicit_plan(hypothesis):
+    """Round 2 hypotheses end with ``[signal_indicator -> target_indicator]``; honour it when both exist."""
+    match = _EXPLICIT.search(hypothesis)
+    if not match:
+        return None
+    indicator_a, indicator_b = match.group(1), match.group(2)
+    if indicator_a not in REGISTRY or indicator_b not in REGISTRY:
+        return None
+    text = hypothesis.lower()
+    lags = [int(n) for n in re.findall(r"(\d+)\s*(?:-\s*\d+\s*)?(?:d\b|day|days)", text)]
+    max_lag = max(3, min(10, max(lags))) if lags else 3
+    expected = -1 if "(-)" in text else (1 if "(+)" in text else 0)
+    def _transform(name):
+        parts = name.split(".")
+        if parts[0] == "finance" and (name.endswith(".close") or parts[1] in {"ratio", "fred"}):
+            return "log_return"
+        return "diff" if parts[0] == "finance" and parts[1] == "spread" else "level"
+    transform_a, transform_b = _transform(indicator_a), _transform(indicator_b)
+    null_control = "null control" in text or "null-control" in text
+    return MissionPlan(indicator_a, indicator_b, transform_a, transform_b, max_lag, "full", None,
+                       null_control, expected, "Explicit Round 2 indicator pair from hypothesis tag.",
+                       "single" if indicator_a == indicator_b else "pair")
+
+
 def heuristic_plan(hypothesis):
+    explicit = explicit_plan(hypothesis)
+    if explicit is not None:
+        return explicit
     text = hypothesis.lower()
     scores = _keyword_scores(text)
     single_tone = "tone" in text and not any(
@@ -159,6 +189,9 @@ def heuristic_plan(hypothesis):
 
 
 def plan_mission(hypothesis, use_ai=True, mission_id="planning", brain_backend=None, brain_sessions=None):
+    explicit = explicit_plan(hypothesis)
+    if explicit is not None:
+        return _validate_plan(hypothesis, explicit), "explicit"
     if not use_ai or brain_backend == "heuristic":
         return _validate_plan(hypothesis, _semantic_adjust(hypothesis, heuristic_plan(hypothesis))), "heuristic"
     catalogue = catalogue_text()

@@ -101,6 +101,24 @@ JEV_QUESTIONS = {
             "Shocking: contradicts the hypothesis and intuition with strong statistics",
         ],
     },
+    "actionability": {
+        "type": "score",
+        "instructions": (
+            "Does this result yield a realistic, repeatable, tradeable rule? Use stats.trade (Round 2 rubric: "
+            "signal z-score > threshold -> position in the security for holding_days): n_trades, hit_rate, "
+            "avg_return vs baseline (excess_return), sharpe_like, max_drawdown, and whether the war-period "
+            "out-of-sample block (test_war) keeps a positive edge. A tradeable target (liquid ETF/future/stock), "
+            "a signal available before the close, and >= 5 non-overlapping trades are prerequisites."
+        ),
+        "criteria": [
+            "Not tradeable: no trade metrics, < 5 trades, or the target is not a security",
+            "Barely: a few trades with edge indistinguishable from baseline",
+            "Weak: positive in-sample edge but hit_rate near 0.5 or negative out-of-sample",
+            "Moderate: positive excess return and hit_rate > 0.55 in-sample, mixed out-of-sample",
+            "Good: positive edge in both fit and test blocks, sharpe_like > 1, drawdown controlled",
+            "Desk-ready: >= 15 trades, hit_rate > 0.6, positive out-of-sample edge, plausible mechanism",
+        ],
+    },
     "supported": {
         "type": "noul",
         "instructions": (
@@ -115,7 +133,8 @@ FALLBACK_JUDGE_SYSTEM = PROJECT_BRIEF + """
 
 You are acting as a typed-decision judge (Jev is unavailable). Read the statistics JSON and answer each
 question with a JSON object: {"validity": {"score": int 0-10, "confidence": float 0-1},
-"interestingness": {...}, "unexpectedness": {...}, "supported": {"answer": bool, "probability": float}}.
+"interestingness": {...}, "unexpectedness": {...}, "actionability": {...},
+"supported": {"answer": bool, "probability": float}}.
 Return ONLY the JSON."""
 
 VIZ_SYSTEM = PROJECT_BRIEF + """

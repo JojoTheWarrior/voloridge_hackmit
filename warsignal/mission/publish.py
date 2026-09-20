@@ -86,8 +86,8 @@ def _write_index():
     lines = [
         "# Mission Runs",
         "",
-        "| Folder | Hypothesis | Status | n | r | perm_p | Validity | Interest | Unexpected | Brain |",
-        "|---|---|---:|---:|---:|---:|---:|---:|---:|---|",
+        "| Folder | Hypothesis | Status | n | r | perm_p | Validity | Interest | Unexpected | Actionability | Brain |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|",
     ]
     for row in rows:
         hypothesis = str(row.get("hypothesis", "")).replace("|", "\\|").replace("\n", " ")
@@ -100,7 +100,7 @@ def _write_index():
             f"| `{row['folder']}` | {hypothesis} | {row.get('status', '')} | "
             f"{row.get('n_obs', '')} | {row.get('r', '')} | {row.get('perm_p', '')} | "
             f"{row.get('validity', '')} | {row.get('interestingness', '')} | "
-            f"{row.get('unexpectedness', '')} | {brain} |"
+            f"{row.get('unexpectedness', '')} | {row.get('actionability', '')} | {brain} |"
         )
     (RUNS / "INDEX.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -152,6 +152,18 @@ def write_run_folder(result, raw_a=None, raw_b=None, transformed_a=None, transfo
         f"| Data sources | {source_table} |\n\n"
         f"{result.narrative_md or result.error or ''}\n"
     )
+    if result.trade_idea:
+        idea = result.trade_idea
+        note += (
+            "\n## Trade idea (Round 2 rubric)\n\n"
+            f"- **{idea.get('direction')} {idea.get('instrument')}**, hold {idea.get('holding_days')}d\n"
+            f"- Entry: {idea.get('entry_rule')}\n- Exit: {idea.get('exit_rule')}\n"
+            f"- n_trades={idea.get('n_trades')} hit_rate={idea.get('hit_rate')} avg_return={idea.get('avg_return')} "
+            f"excess={idea.get('excess_return')} sharpe_like={idea.get('sharpe_like')} max_dd={idea.get('max_drawdown')}\n"
+            f"- OOS (war period): n={idea.get('oos_n_trades')} hit={idea.get('oos_hit_rate')} avg={idea.get('oos_avg_return')}\n"
+            f"- Actionability: {idea.get('actionability')}\n- Caveats: {idea.get('caveats')}\n"
+        )
+        (folder / "trade.json").write_text(json.dumps(to_jsonable(result.stats.get("trade") or idea), indent=2) + "\n", encoding="utf-8")
     (folder / "note.md").write_text(note, encoding="utf-8")
     raw_series = [("raw_a.csv", raw_a)]
     if result.plan.mode != "single":
@@ -177,6 +189,8 @@ def write_run_folder(result, raw_a=None, raw_b=None, transformed_a=None, transfo
         "validity": result.scores.get("validity"),
         "interestingness": result.scores.get("interestingness"),
         "unexpectedness": result.scores.get("unexpectedness"),
+        "actionability": result.scores.get("actionability"),
+        "trade_idea": result.trade_idea,
         "brain_sessions": result.brain_sessions,
         "indicator_coverage": {
             result.plan.indicator_a: _coverage(result.plan.indicator_a),
@@ -196,10 +210,11 @@ def write_run_folder(result, raw_a=None, raw_b=None, transformed_a=None, transfo
     return folder
 
 
-def publish_run(folder):
-    """Commit a run folder and index, then push when explicitly requested."""
+def publish_run(folder, extra_paths=()):
+    """Commit a run folder and index (plus ``extra_paths``, e.g. a status file), then push."""
     folder = Path(folder)
-    subprocess.run(["git", "add", str(folder), str(RUNS / "INDEX.md")], cwd=ROOT, check=True)
+    extras = [str(p) for p in extra_paths if Path(p).exists()]
+    subprocess.run(["git", "add", str(folder), str(RUNS / "INDEX.md"), *extras], cwd=ROOT, check=True)
     staged = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT)
     if staged.returncode == 0:
         return False

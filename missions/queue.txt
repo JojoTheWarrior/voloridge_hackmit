@@ -1,97 +1,100 @@
-The share of GDELT events with Israel and Iran as actors spikes before oil-price jumps rather than after them.
-Days with more GDELT "protest" events in Iran (Dec 2025-Jan 2026) coincide with higher gold prices.
-GDELT mentions of "Strait of Hormuz" track the Brent-WTI spread.
-GDELT mentions of "Hormuz" lead tanker-shipping ETF and Brent moves by one day during blockade phases.
-Tehran daily mean temperature is unrelated to Iran conflict-event counts (null-hypothesis control mission).
-Higher Tehran wind speed days coincide with lower Tehran PM2.5 during the war period.
-Persian Gulf city daily maximum temperature correlates with Gulf (Dubai/Doha) air-quality readings more strongly after Hormuz closed than before.
-Dubai PM2.5 fell after Gulf airspace closures on March 1 2026 compared with the same weeks in 2025.
-Doha air quality changed measurably after Qatar halted LNG production on March 2 2026.
-Air-quality levels in Gulf cities move opposite to Brent crude in the war window because production shutdowns reduce emissions.
-Kuwait PM2.5 dropped when Gulf oil output fell 6.7 mb/d in mid-March 2026.
-Tel Aviv air-quality readings deteriorate on days with Iranian missile strikes on Israel.
-US Gulf Coast (Houston) air quality worsened as US refineries ran harder to replace lost Gulf supply.
-Houston daily temperature anomalies correlate with Henry Hub natural gas prices more strongly during the war than before.
-Cold snaps in the US Northeast (JFK station) amplify the natural gas price response to Hormuz news.
-Extreme heat days in Riyadh coincide with higher Saudi equity ETF (KSA) volatility during the war.
-Rainfall in the Gulf region is unrelated to defense-stock returns (null control).
-Wind speed at Bandar Abbas (Hormuz coast) correlates with tanker attack news volume, since calm seas favour small-boat operations.
-Wind speed at Bandar Abbas correlates with Brent intraday range during the blockade phase.
-Sandstorm/visibility-reducing days in Iraq and Kuwait coincide with fewer reported airstrikes in GDELT.
-Cloud cover or low visibility over Tehran reduces the number of strike events reported the next day.
-Tehran precipitation days show lower Iran-related GDELT event counts.
-Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control).
-US hourly electricity demand (EIA-930) anomalies correlate with natural gas price moves during the war.
-US electricity demand growth in 2026 accelerated relative to 2025 during the oil shock months.
-The coal share of US monthly generation rose when natural gas prices spiked after March 2026.
-US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war.
-Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz.
-Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices.
-US utility ETF (XLU) returns are more correlated with natural gas prices during the war than before.
-Hourly US demand volatility increased in the weeks after the cyberattacks on US water systems were reported (Aug 2026).
-Texas (ERCOT) demand anomalies correlate with Houston temperature more tightly than the national aggregate does.
-Regional US demand deviations from seasonal norms correlate with regional PM2.5 during 2026.
-EIA-860m generator retirements/additions in 2026 shifted toward gas and storage relative to 2025.
-Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month.
-OpenAlex publication counts on "helium" rose after Qatar's Ras Laffan LNG complex was struck.
-OpenAlex publications on "tungsten" increased after China export restrictions and the March 2026 price surge.
-OpenAlex "sulfur" and "sulfuric acid" publication counts respond to the Hormuz sulfur supply shock.
-OpenAlex "desalination" research output rose after Iranian strikes threatened Gulf desalination plants.
-OpenAlex "energy security" publications correlate with Brent crude at a one-month lag.
-OpenAlex "drone" publications track GDELT drone-attack event counts.
-OpenAlex "missile defense" publication counts increased during the war relative to the 2025 baseline.
-OpenAlex "Strait of Hormuz" publications spike in the months after the closure.
-OpenAlex "fertilizer" research volume correlates with fertilizer equity returns (MOS, CF, NTR).
-OpenAlex "liquefied natural gas" publication counts track TTF gas prices.
-OpenAlex "photovoltaic" publication share rose as oil prices rose (energy substitution research response).
-OpenAlex "lithium battery" publication counts correlate with copper futures.
-OpenAlex "sanctions" publication counts correlate with GDELT sanctions-related event counts.
-OpenAlex "cyberattack" research increased after Iranian cyberattacks on US water systems were reported.
-OpenAlex "air pollution" publications correlate with observed PM2.5 in Gulf cities.
-Iran-affiliated OpenAlex publication output fell during the war (internet shutdown) relative to 2025.
-Materials Project database growth (documents by last_updated date) correlates with materials-science publication volume in 2025.
-Materials Project entries containing tungsten were updated more often in 2025 than entries containing aluminum (control for supply-shock hypotheses).
-Materials Project thermo-stability updates cluster in months with high OpenAlex materials-science output.
-Materials Project documents containing helium or noble gases are rare and unchanged; use as a null baseline.
-Materials Project build activity in 2025 leads OpenAlex battery-materials publications by 1-2 months.
-Materials Project aluminum-containing entries updated in 2025 predict nothing about 2026 aluminum futures (null control).
-Brent crude daily returns and the S&P 500 became negatively correlated after Feb 28 2026 whereas they were positively correlated in 2025.
-Gold and Brent decoupled during the war: gold fell while oil rose.
-The VIX and Brent implied co-movement peaked in the week of the Hormuz closure.
-Defense stocks (LMT, RTX, NOC, GD) outperformed the S&P 500 on days with high GDELT Iran conflict counts.
-Airline stocks (JETS, UAL, DAL) moved inversely to Brent more strongly during the war than before.
-Fertilizer stocks (MOS, CF, NTR) rose with Hormuz-related news volume.
-Copper and aluminum futures responded to the March 28 strike on Emirates Global Aluminium.
-The 10-year Treasury yield rose with Brent during the war, breaking the usual flight-to-safety pattern.
-The dollar index rose on days of Iranian retaliation events.
-Emerging-market ETF (EEM) returns were more sensitive to Brent during the war than in 2025.
-Turkey ETF (TUR) and Israel ETF (EIS) returns diverged around ceasefire announcements.
-Saudi ETF (KSA) and UAE ETF returns correlate negatively with GDELT Gulf-attack event counts.
-Wheat and corn futures moved with fertilizer stocks after March 20 2026.
-TTF gas and Henry Hub correlation increased after Qatar LNG shutdown.
-High-yield credit (HYG) drawdowns coincide with oil-price spikes during the war.
-Brent-WTI spread widened when Hormuz news volume rose.
-Oil futures fell sharply on days with suspicious pre-announcement trading (Mar 23, Apr 7, Apr 17); test whether GDELT news volume rises abnormally after those days.
-Brent daily returns show larger absolute moves on days with diplomatic events than on days with military events.
-Ceasefire announcements produce larger oil moves than the strikes themselves (event-study comparison).
-Oil-price reaction to Hormuz events decayed over successive closures (market desensitization).
-GDELT news volume about Iran decays faster after diplomatic events than after military events.
-GDELT average tone about Iran predicts next-day S&P 500 returns during the war.
-Global GDELT event counts (all countries) dropped when Iran shut down its internet.
-GDELT protest event counts worldwide rose with fuel-price increases (gasoline shock).
-News volume about "food prices" in GDELT rose after the fertilizer shock and correlates with wheat futures.
-GDELT mentions of "helium" or "semiconductor" rose after the Ras Laffan strike.
-GDELT mentions of Qatar spike on the same days as TTF gas price jumps.
-Middle East city temperature and news-event volume are jointly unrelated to US utility demand (multi-source null control).
-Weather-driven US electricity demand spikes coincide with larger natural-gas price sensitivity to Hormuz news.
-Hot days in Gulf cities during the war coincide with more Iran-related GDELT events (heat-and-conflict hypothesis).
-Days with high PM2.5 in Tehran coincide with more negative GDELT tone about Iran.
-Gulf air quality improvements after airspace closures were larger in Dubai than in Riyadh.
-Air-quality readings in Gulf cities correlate with tanker attack news volume (smoke from struck vessels).
-OpenAlex Iran-related publication counts correlate with GDELT Iran news volume with a one-month lag.
-Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT.
-US electricity demand hourly peaks are unrelated to Brent crude (null control).
-Materials-science publication output correlates with copper prices at zero lag (control mission).
-US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness).
-The number of GDELT events with Oman as an actor rose before the Iran-Oman Hormuz agreement and correlates with Brent declines.
-Iranian internet shutdown days (GDELT source-country Iran article counts near zero) coincide with lower OpenAlex Iran-affiliated publication activity.
+R2 | [oil-shipping] GDELT Hormuz GKG share 20d z-score > 1.5 leads FRO log returns by 2 days (+); trade long FRO 3d [gdelt.gkg.hormuz_share -> finance.FRO.log_return]
+R2 | [oil-shipping] GDELT tanker GKG share day-over-day pct change > 50 pct leads STNG log returns by 1 day (+); trade long STNG 5d [gdelt.gkg.tanker_share -> finance.STNG.log_return]
+R2 | [oil-shipping] GDELT oil GKG share 10d z-score > 1 leads Brent-WTI spread widening by 3 days (+); trade long BZ=F short CL=F 5d [gdelt.gkg.oil_share -> finance.spread.brent_wti]
+R2 | [oil-shipping] Iran-Gulf dyad event count 15d z-score > 2 leads DHT log returns by 2 days (+); trade long DHT 4d [gdelt.irn.conflict_events -> finance.DHT.log_return]
+R2 | [oil-shipping] Iran GDELT tone 10d z-score below -1.5 (sharply negative) leads XLE log returns by 1 day (+); trade long XLE 3d [gdelt.irn.tone -> finance.XLE.log_return]
+R2 | [oil-shipping] Oman GDELT event count 20d z-score > 1.5 signals de-escalation diplomacy and leads Brent lower by 3 days (-); trade short BZ=F 5d [gdelt.omn.events -> finance.BZ=F.log_return]
+R2 | [oil-shipping] GDELT ceasefire GKG share 10d z-score > 1 leads tankers-to-XLE ratio lower by 2 days (-); trade short FRO 4d [gdelt.gkg.ceasefire_share -> finance.ratio.tankers_xle]
+R2 | [oil-shipping] GDELT sanctions GKG share 20d z-score > 1.5 leads gasoline crack spread wider by 4 days (+); trade long RB=F 5d [gdelt.gkg.sanctions_share -> finance.spread.gasoline_crack]
+R2 | [oil-shipping] GDELT drone GKG share day-over-day pct change > 40 pct leads Brent intraday range by 1 day (+); trade long BZ=F straddle proxy via BZ=F 2d [gdelt.gkg.drone_share -> finance.BZ=F.range_pct]
+R2 | [oil-shipping] Bandar Abbas 5d mean max wind below 20th percentile (calm seas favour small-boat attacks) leads STNG log returns by 2 days (+); trade long STNG 5d [weather.bandar_abbas.wind_max -> finance.STNG.log_return]
+R2 | [oil-shipping] Muscat max wind 10d z-score below -1 (calm Gulf of Oman) leads Brent higher by 3 days (+); trade long BZ=F 4d [weather.muscat.wind_max -> finance.BZ=F.log_return]
+R2 | [oil-shipping] Bandar Abbas temp anomaly 20d z-score > 1.5 (heat stress on loading ops) leads XOP-to-SPY ratio by 5 days (+); trade long XOP 5d [weather.bandar_abbas.temp_anomaly -> finance.ratio.xop_spy]
+R2 | [oil-shipping] Dubai CAMS NO2 20d z-score below -1.5 (Gulf refining/production slowdown proxy) leads Brent higher by 4 days (+); trade long BZ=F 7d [airquality.dubai.cams_no2 -> finance.BZ=F.log_return]
+R2 | [oil-shipping] Kuwait CAMS SO2 10d z-score > 1 (sour-crude processing ramp) leads gasoline crack narrower by 3 days (-); trade short RB=F 4d [airquality.kuwait.cams_so2 -> finance.spread.gasoline_crack]
+R2 | [oil-shipping] Bandar Abbas CAMS AOD 5d z-score > 2 (smoke plumes from struck vessels) leads DHT log returns by 1 day (+); trade long DHT 3d [airquality.bandar_abbas.cams_aod -> finance.DHT.log_return]
+R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 8-week z-score > 1.5 mark peak attention and fade: Brent falls over the following 10 days (-); trade short BZ=F 10d [research.hormuz.crossref_pubs -> finance.BZ=F.log_return]
+R2 | [oil-shipping] Crossref weekly oil_price counts 12-week z-score > 2 precede XOP underperformance by 5 days (-) as the shock is already priced; trade short XOP 7d [research.oil_price.crossref_pubs -> finance.XOP.log_return]
+R2 | [oil-shipping] Brent 3d cumulative log return > 8 pct is over-extended and fades: Brent reverses over the next 4 days (-); trade short BZ=F 4d [finance.BZ=F.log_return -> finance.BZ=F.log_return]
+R2 | [oil-shipping] Brent-WTI spread 20d z-score > 2 leads tanker equities higher by 2 days (+) as ton-mile demand reprices; trade long FRO 5d [finance.spread.brent_wti -> finance.FRO.log_return]
+R2 | [oil-shipping] Null control: Tokyo daily mean temperature 20d z-score > 1 has no relation to tanker equity returns at 0-5 day lags (0); no trade [weather.tokyo.temp_mean -> finance.STNG.log_return]
+R2 | [gas-lng] GDELT lng GKG share 20d z-score > 1.5 leads TTF log returns by 1-2 days (+); trade long TTF=F 3d [gdelt.gkg.lng_share -> finance.TTF=F.log_return]
+R2 | [gas-lng] GDELT qatar GKG share day-over-day pct change > 50 pct leads Cheniere returns by 2 days (+); trade long LNG 5d [gdelt.gkg.qatar_share -> finance.LNG.log_return]
+R2 | [gas-lng] Qatar GDELT conflict event count 20d z-score > 1 leads Venture Global returns by 1 day (+); trade long VG 4d [gdelt.qat.conflict_events -> finance.VG.log_return]
+R2 | [gas-lng] Qatar GDELT tone 20d z-score < -1 (worsening Gulf news) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 5d [gdelt.qat.tone -> finance.ratio.ttf_henryhub]
+R2 | [gas-lng] Rotterdam temperature anomaly 10d z-score < -1 (European cold snap) leads TTF log returns by 1 day (-anomaly, +price); trade long TTF=F 5d [weather.rotterdam.temp_anomaly -> finance.TTF=F.log_return]
+R2 | [gas-lng] London minimum temperature 15d z-score < -1.25 leads TTF close by 3 days with negative sign; trade long TTF=F 4d on cold [weather.london.temp_min -> finance.TTF=F.close]
+R2 | [gas-lng] Doha maximum temperature 20d z-score > 1.5 (Gulf cooling demand diverts cargoes) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 4d [weather.doha.temp_max -> finance.ratio.ttf_henryhub]
+R2 | [gas-lng] Doha CAMS NO2 20d z-score > 1 signals Ras Laffan restart and leads TTF log returns by 3 days (-); trade short TTF=F 5d [airquality.doha.cams_no2 -> finance.TTF=F.log_return]
+R2 | [gas-lng] Doha CAMS SO2 day-over-day drop below -30 pct signals LNG train outage and leads Cheniere returns by 2 days (+); trade long LNG 5d [airquality.doha.cams_so2 -> finance.LNG.log_return]
+R2 | [gas-lng] Crossref energy_security weekly counts 8-week z-score > 1 lead BASF returns by 5 days (-) via European gas input cost fear; trade short BAS.DE 5d [research.oil_price.crossref_pubs -> finance.BAS.DE.log_return]
+R2 | [gas-lng] Crossref lng weekly counts 8-week z-score > 1 lead Cheniere returns by 7 days (+) as US export capacity attention builds; trade long LNG 7d [research.lng.crossref_pubs -> finance.LNG.log_return]
+R2 | [gas-lng] US peak demand 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [utility.us.demand_peak_mwh -> finance.XLU.log_return]
+R2 | [gas-lng] GDELT sanctions GKG share 20d z-score > 1.5 leads Yara returns by 2 days (-) via European gas feedstock cost; trade short YAR.OL 4d [gdelt.gkg.sanctions_share -> finance.YAR.OL.log_return]
+R2 | [gas-lng] GDELT hormuz GKG share 20d z-score > 1 leads BASF returns by 2 days (-) as LNG diversion lifts European gas input costs; trade short BAS.DE 5d [gdelt.gkg.hormuz_share -> finance.BAS.DE.log_return]
+R2 | [gas-lng] Houston temperature anomaly 20d z-score > 1.5 (cooling burn) leads Henry Hub log returns by 2 days (+) narrowing the TTF ratio; trade long NG=F 3d [weather.houston.temp_anomaly -> finance.NG=F.log_return]
+R2 | [gas-lng] TTF to Henry Hub ratio 20d z-score > 1.25 leads Cheniere returns by 3 days (+) as export arbitrage widens; trade long LNG 5d [finance.ratio.ttf_henryhub -> finance.LNG.log_return]
+R2 | [gas-lng] REVERSAL: TTF log return 20d z-score > 2.5 (panic spike) is faded over the next 3 days (-); trade short TTF=F 3d after the spike day [finance.TTF=F.log_return -> finance.TTF=F.log_return]
+R2 | [gas-lng] NULL CONTROL: Tokyo temperature anomaly 20d z-score > 1 should show no lead on TTF log returns at lags 0-10 days (expected zero); trade none [weather.tokyo.temp_anomaly -> finance.TTF=F.log_return]
+R2 | [fertilizer-ag] GDELT fertilizer GKG share 20d z-score > 1.5 leads CF log returns by 2 days (+); trade long CF 5d [gdelt.gkg.fertilizer_share -> finance.CF.log_return]
+R2 | [fertilizer-ag] GDELT Qatar GKG share day-over-day pct change > 30 pct leads NTR log returns by 3 days (+) via Gulf urea export disruption; trade long NTR 5d [gdelt.gkg.qatar_share -> finance.NTR.log_return]
+R2 | [fertilizer-ag] GDELT lng GKG share 10d z-score > 1.2 leads CF log returns by 1 day (+) since LNG scarcity forces European ammonia curtailment; trade long CF 4d [gdelt.gkg.lng_share -> finance.CF.log_return]
+R2 | [fertilizer-ag] GDELT Oman GKG share 20d z-score > 1 leads ZW=F log returns by 5 days (+) as Gulf shipping risk lifts grain and fertilizer freight; trade long ZW=F 5d [gdelt.gkg.oman_share -> finance.ZW=F.log_return]
+R2 | [fertilizer-ag] Qatar GDELT conflict-event count 10d z-score > 1.5 leads NTR log returns by 2 days (+) via North Field urea and ammonia export halts; trade long NTR 6d [gdelt.qat.conflict_events -> finance.NTR.log_return]
+R2 | [fertilizer-ag] Iran-Gulf dyad event count 20d z-score > 2 leads MOS log returns by 3 days (+) as buyers hedge Gulf phosphate supply; trade long MOS 5d [gdelt.irn.conflict_events -> finance.MOS.log_return]
+R2 | [fertilizer-ag] GDELT tanker GKG share 10d z-score > 1.5 leads ZC=F log returns by 4 days (+) via freight cost pass-through into corn; trade long ZC=F 4d [gdelt.gkg.tanker_share -> finance.ZC=F.log_return]
+R2 | [fertilizer-ag] Crossref weekly fertilizer count 26w z-score > 1 leads CF log returns by 10 days (-) as research attention lags the price peak; fade with short CF 8d [research.ammonia.crossref_pubs -> finance.CF.log_return]
+R2 | [fertilizer-ag] Crossref weekly sulfur count 26w z-score > 1.5 leads MOS log returns by 7 days (+) since sulfuric acid is the phosphate input bottleneck; trade long MOS 7d [research.ammonia.crossref_pubs -> finance.MOS.log_return]
+R2 | [fertilizer-ag] Crossref weekly energy_security count 26w z-score > 1 leads YAR.OL returns by 6 days (+) tracking European gas-input anxiety; long YAR.OL 6d [research.oil_price.crossref_pubs -> finance.YAR.OL.log_return]
+R2 | [fertilizer-ag] Oklahoma City 30d temperature anomaly > 2 C leads ZW=F log returns by 3 days (+) via US Plains hard red winter wheat stress; trade long ZW=F 6d [weather.oklahoma_city.temp_anomaly -> finance.ZW=F.log_return]
+R2 | [fertilizer-ag] Oklahoma City 20d cumulative precipitation z-score < -1 leads CF log returns by 5 days (-) as drought cuts US nitrogen side-dress demand; short CF 5d [weather.oklahoma_city.precip -> finance.CF.log_return]
+R2 | [fertilizer-ag] Houston daily max wind 10d z-score > 1.5 leads CF log returns by 1 day (+) via Gulf Coast ammonia plant outage risk; trade long CF 3d [weather.houston.wind_max -> finance.CF.log_return]
+R2 | [fertilizer-ag] Rotterdam CAMS SO2 20d z-score < -1 leads YAR.OL returns by 2 days (+) as weak SO2 flags curtailed European ammonia runs; trade long YAR.OL 5d [airquality.rotterdam.cams_so2 -> finance.YAR.OL.log_return]
+R2 | [fertilizer-ag] Doha CAMS NO2 20d z-score < -1.5 leads NTR log returns by 4 days (+) since falling Qatari industrial activity proxies urea export loss; long NTR 6d [airquality.doha.cams_no2 -> finance.NTR.log_return]
+R2 | [fertilizer-ag] GDELT helium GKG share 20d z-score > 1 leads NTR log returns by 3 days (+) because Qatari helium outages co-occur with ammonia plant halts; long NTR 5d [gdelt.gkg.helium_share -> finance.NTR.log_return]
+R2 | [fertilizer-ag] TTF to Henry Hub ratio 20d z-score > 1.5 leads YAR.OL returns by 2 days (-) as European gas input cost crushes ammonia margins; trade short YAR.OL 5d [finance.ratio.ttf_henryhub -> finance.YAR.OL.log_return]
+R2 | [fertilizer-ag] MOS 5d cumulative return > 12 pct leads MOS log returns by 2 days (-) as post-spike fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.log_return -> finance.MOS.log_return]
+R2 | [fertilizer-ag] Tokyo mean temperature 20d z-score is unrelated to ZC=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.temp_mean -> finance.ZC=F.log_return]
+R2 | [fuel-airspace-losers] GDELT Hormuz GKG share 20d z-score > 1 leads JETS log returns lower by 2 days (-); trade short JETS 3d [gdelt.gkg.hormuz_share -> finance.JETS.log_return]
+R2 | [fuel-airspace-losers] GDELT ceasefire GKG share day-over-day pct change > 100 pct triggers an airline relief rally (+); trade long UAL 5d after 1d lag [gdelt.gkg.ceasefire_share -> finance.UAL.log_return]
+R2 | [fuel-airspace-losers] Dubai CAMS NO2 20d z-score < -1 as a Gulf airspace-closure proxy precedes European carrier weakness (-); trade short IAG.L 5d at 2d lag [airquality.dubai.cams_no2 -> finance.IAG.L.log_return]
+R2 | [fuel-airspace-losers] Doha CAMS NO2 5d mean falling more than 15 pct vs 20d mean flags Gulf flight-cancellation waves (-); trade short LHA.DE 4d at 3d lag [airquality.doha.cams_no2 -> finance.LHA.DE.log_return]
+R2 | [fuel-airspace-losers] Iran-Gulf dyad event count 20d z-score > 1.5 hits US network carriers with Gulf-route exposure (-); trade short AAL 3d at 1d lag [gdelt.irn.conflict_events -> finance.AAL.log_return]
+R2 | [fuel-airspace-losers] GDELT drone GKG share 20d z-score > 1 raises airspace-risk premia before airline selloffs (-); trade short DAL 2d at 2d lag [gdelt.gkg.drone_share -> finance.DAL.log_return]
+R2 | [fuel-airspace-losers] Crossref weekly drone publication counts z-score > 1 precede sustained airline underperformance vs SPY (-); trade short JETS vs SPY 10d at 7d lag [research.drone.crossref_pubs -> finance.ratio.jets_spy]
+R2 | [fuel-airspace-losers] Crossref missile_defense weekly counts z-score > 1 mark escalation regimes that compress cruise demand (-); trade short RCL 10d at 5d lag [research.missile.crossref_pubs -> finance.RCL.log_return]
+R2 | [fuel-airspace-losers] GDELT tanker GKG share 20d z-score > 1 raises jet-fuel and bunker cost fears for freight (-); trade short FDX 3d at 3d lag [gdelt.gkg.tanker_share -> finance.FDX.log_return]
+R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1.5 precedes cruise-line fuel-cost derating (-); trade short CCL 4d at 4d lag [gdelt.gkg.oil_share -> finance.CCL.log_return]
+R2 | [fuel-airspace-losers] GDELT sanctions GKG share 20d z-score > 1 signals prolonged supply stress hitting discretionary travel (-); trade short RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return]
+R2 | [fuel-airspace-losers] GDELT qatar GKG share 20d z-score > 1 flags Gulf hub disruption that penalizes Lufthansa Gulf routes (-); trade short LHA.DE 3d at 2d lag [gdelt.gkg.qatar_share -> finance.LHA.DE.log_return]
+R2 | [fuel-airspace-losers] Abu Dhabi CAMS AOD 20d z-score > 1.5 marks dust or smoke episodes that cut Gulf flight volumes (-); trade short IAG.L 2d at 1d lag [airquality.abu_dhabi.cams_aod -> finance.IAG.L.log_return]
+R2 | [fuel-airspace-losers] Kuwait CAMS SO2 20d z-score falling below -1 tracks refinery outages that widen jet-fuel cracks (-); trade short UAL 4d at 3d lag [airquality.kuwait.cams_so2 -> finance.UAL.log_return]
+R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 has no predictive link to airline returns (null control, 0 sign); trade long DAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.DAL.log_return]
+R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 compresses airline margins with a one-day delay (-); trade short UAL 3d at 1d lag [finance.spread.gasoline_crack -> finance.UAL.log_return]
+R2 | [fuel-airspace-losers] Gasoline crack spread 5d pct change < -10 pct after a fuel spike produces a fade rally in airlines (+); trade long JETS 5d at 1d lag [finance.spread.gasoline_crack -> finance.JETS.log_return]
+R2 | [fuel-airspace-losers] Brent daily log return above +3 pct is over-extrapolated into cruise names and partially reverses (+); trade long CCL 4d at 3d lag [finance.BZ=F.log_return -> finance.CCL.log_return]
+R2 | [fuel-airspace-losers] VIX 3-day pct change > 20 pct precedes freight and travel beta drawdowns (-); trade short FDX 2d at 1d lag [finance.^VIX.close -> finance.FDX.log_return]
+R2 | [fuel-airspace-losers] RB=F gasoline futures 10d z-score > 1.5 keeps airlines lagging SPY for over a week (-); trade short JETS vs SPY 8d at 0d lag [finance.RB=F.close -> finance.ratio.jets_spy]
+R2 | [risk-macro-em] GDELT sanctions GKG share 20d z-score > 1.5 leads EEM/SPY ratio lower by 2-4 days (-); trade short EEM 4d [gdelt.gkg.sanctions_share -> finance.ratio.eem_spy]
+R2 | [risk-macro-em] GDELT ceasefire GKG share day-over-day jump > 50 pct leads Saudi ETF returns by 1-3 days (+); trade long KSA 5d [gdelt.gkg.ceasefire_share -> finance.KSA.log_return]
+R2 | [risk-macro-em] Iran GDELT Goldstein 10d z-score < -1 (escalation) leads defense ETF returns by 2-5 days (+); trade long ITA 5d [gdelt.irn.goldstein -> finance.ITA.log_return]
+R2 | [risk-macro-em] Iran-Gulf dyad event count 20d z-score > 1 leads UAE ETF returns lower by 1-2 days (-); trade short UAE 3d [gdelt.irn.conflict_events -> finance.UAE.log_return]
+R2 | [risk-macro-em] US GDELT tone 20d z-score < -1 leads dollar index strength by 1-3 days (+) as risk-off bids USD; trade long DX-Y.NYB 3d [gdelt.usa.tone -> finance.DX-Y.NYB.log_return]
+R2 | [risk-macro-em] GDELT cyber GKG share 20d z-score > 2 leads Nasdaq ETF returns lower by 1-2 days (-); trade short QQQ 2d [gdelt.gkg.cyber_share -> finance.QQQ.log_return]
+R2 | [risk-macro-em] GDELT drone GKG share 20d z-score > 1 leads Northrop returns by 3-5 days (+) on air-defense order expectations; trade long NOC 5d [gdelt.gkg.drone_share -> finance.NOC.log_return]
+R2 | [risk-macro-em] Crossref missile_defense weekly counts 8-week z-score > 1 lead defense ETF returns by 5-10 days (+); trade long ITA 10d [research.missile.crossref_pubs -> finance.ITA.log_return]
+R2 | [risk-macro-em] Crossref sanctions weekly counts 8-week z-score > 1 lead Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [research.sanctions.crossref_pubs -> finance.TUR.log_return]
+R2 | [risk-macro-em] Crossref energy_security weekly counts 8-week z-score > 1 lead India ETF returns lower by 5-10 days (-) via import-cost fear; trade short INDA 10d [research.oil_price.crossref_pubs -> finance.INDA.log_return]
+R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads India ETF returns lower by 2-3 days (-) as crude import bill jumps; trade short INDA 3d [gdelt.gkg.hormuz_share -> finance.INDA.log_return]
+R2 | [risk-macro-em] GDELT tanker GKG share 20d z-score > 1 leads Japan ETF returns lower by 1-2 days (-) on Gulf shipping exposure; trade short EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return]
+R2 | [risk-macro-em] Israel conflict-event count 20d z-score > 1 leads VIX higher by 0-1 days (+); trade long VIX exposure 2d [gdelt.isr.conflict_events -> finance.^VIX.close]
+R2 | [risk-macro-em] Iran-USA dyad events 20d z-score > 1 lead Korea ETF returns lower by 2-4 days (-) on oil-import and risk beta; trade short EWY 4d [gdelt.iran_usa_dyad_events -> finance.EWY.log_return]
+R2 | [risk-macro-em] REVERSAL: Iran GDELT mentions 20d z-score > 2 marks news exhaustion and leads S&P returns higher by 3-5 days (+); fade the panic long SPY 5d [gdelt.irn.mentions -> finance.SPY.log_return]
+R2 | [risk-macro-em] NULL CONTROL: London daily precipitation has no lead-lag relation to S&P returns at 0-5 days (0); no trade, benchmark for false positives [weather.london.precip -> finance.SPY.log_return]
+R2 | [risk-macro-em] Gold-oil ratio 20d z-score > 1 leads EM equity returns lower by 2-3 days (-) as oil-driven risk aversion builds; trade short EEM 3d [finance.ratio.gold_oil -> finance.EEM.log_return]
+R2 | [risk-macro-em] REVERSAL: GLD 3-day cumulative return > 3 pct mean-reverts over the next 5 days (-); fade the gold spike short GLD 5d [finance.GLD.log_return -> finance.GLD.log_return]
+R2 | [risk-macro-em] Brent single-day log return > 3 pct leads India ETF returns lower by 1-2 days (-); trade short INDA 2d [finance.BZ=F.log_return -> finance.INDA.log_return]
+R2 | [risk-macro-em] 10-year yield 20d z-score > 1 leads gold ETF returns lower by 2-3 days (-) via real-rate drag even in wartime; trade short GLD 3d [finance.^TNX.close -> finance.GLD.log_return]
+R2 | [gas-lng] GDELT helium GKG share 20d z-score > 1 leads Venture Global log returns by 3 days (+) as Qatar helium/LNG co-production halts; trade long VG 5d [gdelt.gkg.helium_share -> finance.VG.log_return]
+R2 | [fertilizer-ag] Brent 5d cumulative log return > 5 pct leads corn futures higher by 3 days (+) via ethanol/input-cost channel; trade long ZC=F 5d [finance.BZ=F.log_return -> finance.ZC=F.log_return]
+R2 | [risk-macro-em] GDELT Iran Goldstein 20d z-score below -1.5 (hostile actions) leads gold higher by 1-2 days (+); trade long GLD 3d [gdelt.irn.goldstein -> finance.GLD.log_return]

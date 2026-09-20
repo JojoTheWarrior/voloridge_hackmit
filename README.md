@@ -50,6 +50,8 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py fetch --quick` / `--all` | Fetch configured public datasets |
 | `python main.py indicators [--source X]` | List the indicator catalogue |
 | `python main.py mission "..." [--no-ai] [--brain X] [--dry-run] [--viz] [--show]` | Plan or run one mission |
+| `python main.py mission "R2 \| ..." --mission-id R2-0001 --status --publish` | Round 2: run one mission and keep `missions/status/R2-0001.json` updated |
+| `python main.py status R2-0001 [--state S] [--stage S] [--followup "R2 \| ..."] [--push]` | Round 2: update a mission status file / append a follow-up |
 | `python main.py queue [--n N] [--no-ai] [--brain X] [--viz]` | Run queued hypotheses |
 | `python main.py queue --reset` | Restore `missions/queue.txt` from its backup |
 | `python main.py queue --requeue-failed` | Put failed hypotheses back in the queue |
@@ -58,6 +60,21 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py graph [--port 8010] [--charts-port 8011]` | NL prompt → pygame chart web UI + launcher |
 | `python main.py selftest` | Check keys, judge availability, and indicator loading |
 | `python main.py kingdom [--scale N] [--scene S] [--screenshot out.png]` | Pixel-art mission dashboard (see [Kingdom](#kingdom)) |
+
+## Iran Round 2 (tradeable rules)
+
+Round 2 narrows the research to a tradeable universe (oil & tankers, gas/LNG,
+fertilizer/ag, fuel/airspace losers, risk-macro/EM — all yfinance tickers in
+`warsignal/fetch/finance.py`) and turns every mission into a rule. Hypotheses in
+`missions/queue.txt` are prefixed `R2 |` and end with an explicit
+`[signal_indicator -> target_indicator]` tag that the planner honours. Each run
+adds `trade.json` + a `trade_idea` (entry rule, direction, holding days,
+n_trades, hit rate, excess return vs baseline, Sharpe-like, drawdown, pre-war fit
+vs war-period test) and an `actionability` score (0–10) to `results.csv`,
+`manifest.json` and `missions/runs/INDEX.md`. See `missions/ROUND2_RUBRIC.md`
+(the rule and score), `missions/ROUND2_AGENT_PROTOCOL.md` (what a mission child
+does), `missions/status/SCHEMA.md` (progress files) and, when the round is done,
+`missions/ROUND2_REPORT.md` (best five rules).
 
 ## Kingdom
 
