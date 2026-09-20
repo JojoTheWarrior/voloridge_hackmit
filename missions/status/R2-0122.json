@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:49:35Z",
-  "updated_at": "2026-09-20T12:50:20Z",
+  "updated_at": "2026-09-20T12:52:31Z",
   "finished_at": "2026-09-20T12:50:20Z",
-  "elapsed_s": 45,
-  "message": "supported-weak: r=0.14 (n=390) at lag 0 not lag 1, perm_p=0.19, Bonferroni 1.0; trade long LNG 1d n=50 hit 0.54 sharpe_like 0.72 OOS n=15 hit 0.60; actionability 7.38 but statistically fragile",
+  "elapsed_s": 176,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-228-gdelt-qat-conflict-events_x_finance-lng-log-return",
   "scores": {
     "validity": 0,
