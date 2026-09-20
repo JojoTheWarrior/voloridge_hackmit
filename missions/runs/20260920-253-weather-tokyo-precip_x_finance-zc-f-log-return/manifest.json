@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:09:36.482630+00:00",
+  "git_commit": "326a346adf7431e1489661f33753397c6830b83c",
+  "folder": "20260920-253-weather-tokyo-precip_x_finance-zc-f-log-return",
   "mission_id": "R2-0156",
-  "title": "Tokyo precip vs soybeans null control",
   "hypothesis": "R2 | [fertilizer-ag] Tokyo daily precipitation 20d z-score is unrelated to ZC=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.precip -> finance.ZC=F.log_return] (parent: R2-0057)",
-  "parent_mission_id": "R2-0057",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/618e7880597f4d498cf16d44e56d4073",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:09:03Z",
-  "updated_at": "2026-09-20T13:09:38Z",
-  "finished_at": null,
-  "elapsed_s": 35,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-253-weather-tokyo-precip_x_finance-zc-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 5.33
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": -0.05354488207278363,
+  "perm_p": 0.10578842315369262,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.33,
   "trade_idea": {
     "instrument": "ZC=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 5.33,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.tokyo.precip": "configured analysis window",
+    "finance.ZC=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
