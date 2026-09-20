@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT fertilizer GKG share 20d z-score > 1.5 leads CF log returns by 2 days (+); trade long CF 5d [gdelt.gkg.fertilizer_share -> finance.CF.log_return]
