@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT lng GKG share 20d z-score > 1.5 leads TTF log returns by 1-2 days (+); trade long TTF=F 3d [gdelt.gkg.lng_share -> finance.TTF=F.log_return]

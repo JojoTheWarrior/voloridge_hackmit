@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:29:38.699711+00:00",
+  "git_commit": "401a0e56341cfde63213f12a90fd5ba36c523f41",
+  "folder": "20260920-146-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
   "mission_id": "R2-0021",
-  "title": "GDELT LNG share -> TTF returns",
   "hypothesis": "R2 | [gas-lng] GDELT lng GKG share 20d z-score > 1.5 leads TTF log returns by 1-2 days (+); trade long TTF=F 3d [gdelt.gkg.lng_share -> finance.TTF=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/ac27005a0c90474f97d4fc494830ce5b",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:29:30Z",
-  "updated_at": "2026-09-20T03:29:40Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-146-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.31
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.24710120456775034,
+  "perm_p": 0.033932135728542916,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.31,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 3.31,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.lng_share": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
