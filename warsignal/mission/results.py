@@ -18,7 +18,7 @@ def append_result(result: MissionResult, csv_path=ROOT / "missions" / "results.c
     with path.open("a+", newline="", encoding="utf-8") as handle:
         fcntl.flock(handle, fcntl.LOCK_EX)
         handle.seek(0)
-        existing = list(csv.DictReader(handle))
+        existing = [{k: v for k, v in r.items() if k is not None} for r in csv.DictReader(handle)]
         fieldnames = list(existing[0]) if existing else []
         for name in row:
             if name not in fieldnames:
