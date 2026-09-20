@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/f70dcc440dc14cb49049ffcbde37a461",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:35:59Z",
-  "updated_at": "2026-09-20T03:36:52Z",
+  "updated_at": "2026-09-20T03:37:13Z",
   "finished_at": "2026-09-20T03:36:28Z",
-  "elapsed_s": 53,
+  "elapsed_s": 74,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-152-research-hormuz-crossref-pubs_x_finance-bas-de-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Null control: Crossref Hormuz publication share (not raw counts) 20d z-score > 1 leads BAS.DE returns by 5 days (-); if share also fails the crossref->BASF gas-fear channel is dead [research.hormuz.crossref_share -> finance.BAS.DE.log_return] (parent: R2-0030)"
 }
