@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Abu Dhabi CAMS AOD 20d z-score > 1.5 marks dust or smoke episodes that cut Gulf flight volumes (-); trade short IAG.L 2d at 1d lag [airquality.abu_dhabi.cams_aod -> finance.IAG.L.log_return]
