@@ -1,4 +1,4 @@
-"""Outdoor field scene: isometric grass field, castle, huts, workers, trees, water."""
+"""Outdoor field scene: isometric grass field, castle, huts, trees, water."""
 from __future__ import annotations
 
 import math
@@ -78,11 +78,11 @@ class FieldScene(Scene):
         self._zoom_t = 0.0
         self._visited_castle = False
         self.mouse_lpos = (0, 0)
-        self.huts: list[dict] = []
-        self._hut_count = -1
-        self._flip_cache: dict = {}
+        self.huts = [
+            {"pos": (wx, wy + 8), "index": i, "phase": self.rng.uniform(0, math.tau)}
+            for i, (wx, wy) in enumerate(iso(sx, sy) for sx, sy, _ in self.hut_slots[:2])
+        ]
         self._smoke_cache: dict = {}
-        self._scale_cache: dict = {}
         self._cloud_shadows: dict = {}
         self.clouds = [
             {
@@ -299,37 +299,8 @@ class FieldScene(Scene):
             if cloud["x"] > LOGICAL_W + 80:
                 cloud["x"] = -100
 
-        snap = self.app.data.snapshot()
-        n = len(snap.active)
-        if n != self._hut_count:
-            self._hut_count = n
-            self.huts = []
-            for i in range(min(n, len(self.hut_slots))):
-                sx, sy, _ = self.hut_slots[i]
-                wx, wy = iso(sx, sy)
-                self.huts.append(
-                    {
-                        "pos": (wx, wy + 8),
-                        "spawn": t - i * 0.08,
-                        "index": i,
-                        "phase": self.rng.uniform(0, math.tau),
-                        "workshop": i % 4 == 3,
-                    }
-                )
 
     # -- draw ---------------------------------------------------------------
-    def _flipped(self, frame, flip: bool):
-        key = (id(frame), flip)
-        if key not in self._flip_cache:
-            self._flip_cache[key] = pygame.transform.flip(frame, True, False) if flip else frame
-        return self._flip_cache[key]
-
-    def _scaled(self, frame, w: int, h: int):
-        key = (id(frame), w, h)
-        if key not in self._scale_cache:
-            self._scale_cache[key] = pygame.transform.scale(frame, (max(1, w), max(1, h)))
-        return self._scale_cache[key]
-
     def _smoke(self, frame, step: int, alpha: int):
         key = (id(frame), step, alpha)
         if key not in self._smoke_cache:
@@ -412,21 +383,12 @@ class FieldScene(Scene):
 
         for hut in self.huts:
             hx, hy = self._world_to_screen(*hut["pos"])
-            spr = self._sprite("workshop" if hut["workshop"] else "hut")
-            p = _ease((t - hut["spawn"]) / 0.6)
+            spr = self._sprite("hut")
             phase = hut["phase"]
 
-            def draw_hut(hx=hx, hy=hy, spr=spr, p=p, phase=phase, idx=hut["index"]):
+            def draw_hut(hx=hx, hy=hy, spr=spr, phase=phase, idx=hut["index"]):
                 world = self.world_canvas
-                frame = spr.frames[idx % len(spr.frames)]
-                w, h = int(spr.w * p), int(spr.h * p)
-                if w > 0 and h > 0:
-                    world.blit(self._scaled(frame, w, h), (int(hx - spr.anchor[0] * p), int(hy - spr.anchor[1] * p)))
-                u = t * 0.6 + phase
-                worker = self._sprite("worker" if idx % 2 == 0 else "worker_b")
-                wframe = self._flipped(worker.frame(t, phase), math.cos(u) < 0)
-                wx, wy = hx + 14 * math.sin(u), hy + 6 * math.sin(2 * u) - 4
-                world.blit(wframe, (int(wx) - worker.anchor[0], int(wy) - worker.anchor[1]))
+                world.blit(spr.frames[idx % len(spr.frames)], (int(hx) - spr.anchor[0], int(hy) - spr.anchor[1]))
                 smoke = self._sprite("smoke")
                 off = (t * 8 + phase * 10) % 16
                 sframe = self._smoke(smoke.frame(t, phase), int(off // 4), max(0, 255 - int(off * 14)))
