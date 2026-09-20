@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:02:57.698952+00:00",
+  "git_commit": "c641257ffd768e349d2154fc222befb37082f4bd",
+  "folder": "20260920-110-FAILED-us-natural-gas-fuel-cost",
+  "mission_id": "M20260920-019625",
+  "hypothesis": "US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness).",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "finance.NG=F.close": "configured analysis window",
+    "utility.fuel_cost.oil_per_mmbtu": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
