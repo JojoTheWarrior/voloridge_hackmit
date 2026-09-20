@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Dubai CAMS NO2 20d z-score below -1.5 (Gulf refining/production slowdown proxy) leads Brent higher by 4 days (+); trade long BZ=F 7d [airquality.dubai.cams_no2 -> finance.BZ=F.log_return]

@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:25:22.860094+00:00",
+  "git_commit": "85dd61215b669539355cbaa3900ed35942959678",
+  "folder": "20260920-141-airquality-dubai-cams-no2_x_finance-bz-f-log-return",
   "mission_id": "R2-0013",
-  "title": "Dubai NO2 drop leads Brent higher",
   "hypothesis": "R2 | [oil-shipping] Dubai CAMS NO2 20d z-score below -1.5 (Gulf refining/production slowdown proxy) leads Brent higher by 4 days (+); trade long BZ=F 7d [airquality.dubai.cams_no2 -> finance.BZ=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/45654a2c4f2d4ff4b06117728532acd4",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:25:09Z",
-  "updated_at": "2026-09-20T03:25:24Z",
-  "finished_at": null,
-  "elapsed_s": 15,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-141-airquality-dubai-cams-no2_x_finance-bz-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.81
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.04162070117607827,
+  "perm_p": 0.18363273453093812,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.81,
   "trade_idea": {
     "instrument": "BZ=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 3.81,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.dubai.cams_no2": "2025-03..2026-09 archive window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
