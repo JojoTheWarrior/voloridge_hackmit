@@ -1,0 +1,1 @@
+SHERLOCK | [#1/#8 fertilizer+LNG belt] Houston CAMS NO2 20d z-score > 1 (Gulf Coast ammonia and LNG plant combustion proxy) leads Henry Hub natural gas returns by 3 days (+); trade long NG=F 3d [airquality.houston.cams_no2 -> finance.NG=F.log_return]

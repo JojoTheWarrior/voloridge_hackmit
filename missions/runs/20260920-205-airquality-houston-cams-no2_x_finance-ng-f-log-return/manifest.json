@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:27:49.649401+00:00",
+  "git_commit": "72a619b918ae0876a60ad51372b7a7179c72db0b",
+  "folder": "20260920-205-airquality-houston-cams-no2_x_finance-ng-f-log-return",
+  "mission_id": "S-0001",
+  "hypothesis": "SHERLOCK | [#1/#8 fertilizer+LNG belt] Houston CAMS NO2 20d z-score > 1 (Gulf Coast ammonia and LNG plant combustion proxy) leads Henry Hub natural gas returns by 3 days (+); trade long NG=F 3d [airquality.houston.cams_no2 -> finance.NG=F.log_return]",
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.185823149382957,
+  "perm_p": 0.01996007984031936,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.05,
+  "trade_idea": {
+    "instrument": "NG=F",
+    "direction": "long",
+    "entry_rule": "airquality.houston.cams_no2 rolling_zscore_20d > 1 at close -> long NG=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.45454545454545453,
+    "avg_return": -0.009088210307298923,
+    "excess_return": -0.009440711140485687,
+    "n_trades": 55,
+    "sharpe_like": -0.9241393830985244,
+    "max_drawdown": -0.6014256923741068,
+    "oos_n_trades": 18,
+    "oos_avg_return": -0.010048091661952177,
+    "oos_hit_rate": 0.3333333333333333,
+    "actionability": 0.05,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.houston.cams_no2": "2025-03..2026-09 archive window",
+    "finance.NG=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

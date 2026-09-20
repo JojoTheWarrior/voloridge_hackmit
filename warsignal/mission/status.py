@@ -45,7 +45,7 @@ def new_status(mission_id, hypothesis, title=None, parent_mission_id=None, agent
         "title": title or hypothesis[:80],
         "hypothesis": hypothesis,
         "parent_mission_id": parent_mission_id,
-        "round": "iran-round-2",
+        "round": os.environ.get("WARSIGNAL_ROUND", "iran-round-2"),
         "agent_session_url": agent_session_url,
         "brain_sessions": [],
         "state": "queued",
