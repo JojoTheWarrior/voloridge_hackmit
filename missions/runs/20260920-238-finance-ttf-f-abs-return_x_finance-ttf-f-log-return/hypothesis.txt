@@ -1,0 +1,1 @@
+R2 | [gas-lng] MOMENTUM (reverse of R2-0037): TTF absolute return 20d z-score > 1 (volatility spike) is followed by continuation, not a fade, over the next 3 days (+); trade long TTF=F 1-3d after the spike day [finance.TTF=F.abs_return -> finance.TTF=F.log_return] (parent: R2-0037)
