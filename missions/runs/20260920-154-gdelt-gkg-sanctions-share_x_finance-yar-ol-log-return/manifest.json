@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:37:37.116663+00:00",
+  "git_commit": "87ac5f5489a9ddd17095653a7a4d24167cedd7f2",
+  "folder": "20260920-154-gdelt-gkg-sanctions-share_x_finance-yar-ol-log-return",
   "mission_id": "R2-0033",
-  "title": "Sanctions GKG share leads Yara returns (short)",
   "hypothesis": "R2 | [gas-lng] GDELT sanctions GKG share 20d z-score > 1.5 leads Yara returns by 2 days (-) via European gas feedstock cost; trade short YAR.OL 4d [gdelt.gkg.sanctions_share -> finance.YAR.OL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/536d40622efe4479aa7b48c8ea12b580",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:37:22Z",
-  "updated_at": "2026-09-20T03:37:38Z",
-  "finished_at": null,
-  "elapsed_s": 16,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-154-gdelt-gkg-sanctions-share_x_finance-yar-ol-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 6.26
-  },
+  "status": "ok",
+  "n_obs": 386,
+  "r": -0.027347986767494746,
+  "perm_p": 0.6027944111776448,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.26,
   "trade_idea": {
     "instrument": "YAR",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 6.26,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.YAR.OL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT sanctions GKG share 20d z-score > 1.5 leads Yara returns by 2 days (-) via European gas feedstock cost; trade short YAR.OL 4d [gdelt.gkg.sanctions_share -> finance.YAR.OL.log_return]
