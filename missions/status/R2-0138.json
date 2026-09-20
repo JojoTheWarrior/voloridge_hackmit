@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/e202ce5a4fc44e5186ce385e83c67a93",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:58:35Z",
-  "updated_at": "2026-09-20T12:58:47Z",
-  "finished_at": null,
-  "elapsed_s": 12,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:59:15Z",
+  "finished_at": "2026-09-20T12:59:15Z",
+  "elapsed_s": 40,
+  "message": "Supported weakly (r=0.22, n=390, best lag -6d r=0.29) but validity 0; trade hit-rate 1.0 is an abs-return artifact, not a real edge",
   "run_folder": "missions/runs/20260920-239-gdelt-gkg-fertilizer-share_x_finance-cf-abs-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] NULL CONTROL: the R2-0138 CF abs-return \"hit rate 1.0\" is an artifact of an always-positive target; test whether GDELT fertilizer GKG share 20d z-score > 1.5 predicts the SIGNED CF log return at lag 3 (expect ~0); trade long CF 5d only if hit rate > 0.55 [gdelt.gkg.fertilizer_share -> finance.CF.log_return] (parent: R2-0138)"
 }
