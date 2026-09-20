@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:15:33.109205+00:00",
+  "git_commit": "679965898e317ee801ddf74e4db10168bd6f080c",
+  "folder": "20260920-259-airquality-dubai-cams-dust_x_finance-iag-l-log-return",
   "mission_id": "R2-0168",
-  "title": "Dubai CAMS dust -> short IAG.L",
   "hypothesis": "R2 | [fuel-airspace-losers] Dubai CAMS dust 20d z-score > 1.5 (direct dust proxy rather than total AOD) marks sandstorm days that disrupt Gulf hub flights (-); trade short IAG.L 2d at 1d lag [airquality.dubai.cams_dust -> finance.IAG.L.log_return] (parent: R2-0070)",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/85fe1625934b4804b55b484e16da8b1c",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:15:28Z",
-  "updated_at": "2026-09-20T13:15:34Z",
-  "finished_at": null,
-  "elapsed_s": 6,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-259-airquality-dubai-cams-dust_x_finance-iag-l-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 7.32
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.013199857231455489,
+  "perm_p": 0.5229540918163673,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 7.32,
   "trade_idea": {
     "instrument": "IAG",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 7.32,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.dubai.cams_dust": "2025-03..2026-09 archive window",
+    "finance.IAG.L.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
