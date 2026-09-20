@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:51:08.433207+00:00",
+  "git_commit": "ce436618aca99cb36a3326b64d7830af5d016d5b",
+  "folder": "20260920-229-weather-houston-temp-max_x_finance-ratio-ttf-henryhub",
   "mission_id": "R2-0124",
-  "title": "Houston heat leads TTF/HH ratio",
   "hypothesis": "R2 | [gas-lng] Houston maximum temperature 20d z-score > 1.0 (US cooling demand lifts Henry Hub, the denominator) leads the TTF to Henry Hub ratio by 3 days (-); control for the Doha-heat result, trade short TTF/HH ratio 3d [weather.houston.temp_max -> finance.ratio.ttf_henryhub] (parent: R2-0027)",
-  "parent_mission_id": "R2-0027",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/a7a4602f1d2d4c48a75082e26636dd0f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:50:49Z",
-  "updated_at": "2026-09-20T12:51:10Z",
-  "finished_at": null,
-  "elapsed_s": 21,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-229-weather-houston-temp-max_x_finance-ratio-ttf-henryhub",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.31
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.03454276175369487,
+  "perm_p": 0.2714570858283433,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.31,
   "trade_idea": {
     "instrument": "ratio:ttf_henryhub",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 2.31,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.houston.temp_max": "configured analysis window",
+    "finance.ratio.ttf_henryhub": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
