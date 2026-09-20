@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Oman GDELT event count 20d z-score > 1.5 signals de-escalation diplomacy and leads Brent lower by 3 days (-); trade short BZ=F 5d [gdelt.omn.events -> finance.BZ=F.log_return]
