@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:36:51.481616+00:00",
+  "git_commit": "f2ac7c7b646c1646c0b3ab9bc957fd61b0bb1e40",
+  "folder": "20260920-152-research-hormuz-crossref-pubs_x_finance-bas-de-log-return",
   "mission_id": "R2-0030",
-  "title": "Crossref energy_security z>1 leads BASF returns (-) 5d",
   "hypothesis": "R2 | [gas-lng] Crossref Hormuz weekly counts 8-week z-score > 1 lead BASF returns by 5 days (-) via European gas input cost fear; trade short BAS.DE 5d [research.hormuz.crossref_pubs -> finance.BAS.DE.log_return]",
-  "parent_mission_id": null,
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/f70dcc440dc14cb49049ffcbde37a461",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:35:59Z",
-  "updated_at": "2026-09-20T03:36:52Z",
-  "finished_at": "2026-09-20T03:36:28Z",
-  "elapsed_s": 53,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-152-research-hormuz-crossref-pubs_x_finance-bas-de-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.04614965606202643,
+  "perm_p": 0.5748502994011976,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "BAS",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_pubs": "2025-03..current week",
+    "finance.BAS.DE.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
