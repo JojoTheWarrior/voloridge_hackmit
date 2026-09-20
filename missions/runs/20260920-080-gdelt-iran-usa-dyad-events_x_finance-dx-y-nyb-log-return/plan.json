@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.iran_usa_dyad_events",
+  "indicator_b": "finance.DX-Y.NYB.log_return",
+  "transform_a": "diff",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use day-to-day changes in Iran\u2013USA dyadic conflict/cooperation event counts as a proxy for Iranian retaliation intensity during the war window and test whether dollar index daily log returns tend to be positive in the few days following spikes, consistent with flight-to-safety demand for USD on retaliation days."
+}
