@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.BZ=F.log_return",
+  "indicator_b": "utility.fuel_cost.coal_per_mmbtu",
+  "transform_a": "log_return",
+  "transform_b": "diff",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Test whether monthly increases in delivered U.S. coal fuel cost after March 2026 are associated with contemporaneous and lagged changes in Brent crude futures (a global shipping and energy benchmark affected by the Hormuz closure), even though coal itself is not shipped through Hormuz."
+}

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:52:17.146242+00:00",
+  "git_commit": "b7518e12ca4e45cd18279e9cd213669abf58044e",
+  "folder": "20260920-035-FAILED-delivered-coal-cost-to-us",
+  "mission_id": "M20260920-ed8b73",
+  "hypothesis": "Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "utility.fuel_cost.coal_per_mmbtu": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
