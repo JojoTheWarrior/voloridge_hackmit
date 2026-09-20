@@ -41,5 +41,5 @@
     "actionability": 2.77,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": "R2 | [fertilizer-ag] GDELT lng GKG share 20d z-score > 1 leads CF log returns by 3 days (+) but shows no excess over baseline; null control on European gas TTF-F log returns to test whether the LNG-news channel acts through gas at all [gdelt.gkg.lng_share -> finance.TTF-F.log_return] (parent: R2-0041)"
+  "followup_hypothesis": "R2 | [fertilizer-ag] GDELT lng GKG share 20d z-score > 1 leads CF log returns by 3 days (+) but shows no excess over baseline; null control on European gas TTF-F log returns to test whether the LNG-news channel acts through gas at all [gdelt.gkg.lng_share -> finance.TTF=F.log_return] (parent: R2-0041)"
 }
