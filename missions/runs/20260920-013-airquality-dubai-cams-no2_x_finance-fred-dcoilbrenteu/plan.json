@@ -1,0 +1,12 @@
+{
+  "indicator_a": "airquality.dubai.cams_no2",
+  "indicator_b": "finance.fred.DCOILBRENTEU",
+  "transform_a": "anomaly",
+  "transform_b": "pct_change",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Dubai modeled NO2 anomalies as a proxy for Gulf oil-sector activity and compare them to daily Brent price changes in the 2026-02-28..2026-04-07 war window, expecting production slowdowns to reduce local emissions when Brent spikes, hence a negative short-lag relationship."
+}
