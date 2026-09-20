@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/f06d440254bc4683a7fafd15e64bb823",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:23:19Z",
-  "updated_at": "2026-09-20T13:23:29Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:24:08Z",
+  "finished_at": "2026-09-20T13:24:08Z",
+  "elapsed_s": 49,
+  "message": "Weakly supported: r=-0.18 at lag -1 (n=390) but short-UAE 1d rule hit_rate 49%, sharpe 0.54, validity 0; OOS war-period 18 trades 67% hit. Not actionable.",
   "run_folder": "missions/runs/20260920-268-gdelt-irn-fight-events_x_finance-uae-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.78,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Null control: Iran fight-event 20d z-score > 1 should NOT predict Japan ETF (EWJ) returns at 1-3d lag; if it does, the UAE effect is a global risk-off proxy rather than Gulf-specific [gdelt.irn.fight_events -> finance.EWJ.log_return] (parent: R2-0181)"
 }
