@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT lng GKG share 10d z-score > 1.2 leads CF log returns by 1 day (+) since LNG scarcity forces European ammonia curtailment; trade long CF 4d [gdelt.gkg.lng_share -> finance.CF.log_return]
