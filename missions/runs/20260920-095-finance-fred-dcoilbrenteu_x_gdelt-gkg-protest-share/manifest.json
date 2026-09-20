@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:00:27.724344+00:00",
+  "git_commit": "2b3a9d1123177f2217ceabfdb2f47f1ea115f0cd",
+  "folder": "20260920-095-finance-fred-dcoilbrenteu_x_gdelt-gkg-protest-share",
+  "mission_id": "M20260920-9dabbc",
+  "hypothesis": "GDELT protest event counts worldwide rose with fuel-price increases (gasoline shock).",
+  "status": "ok",
+  "n_obs": 142,
+  "r": 0.12122366402865671,
+  "perm_p": 0.12375249500998003,
+  "validity": 3.88,
+  "interestingness": 3.78,
+  "unexpectedness": 2.82,
+  "indicator_coverage": {
+    "finance.fred.DCOILBRENTEU": "configured analysis window",
+    "gdelt.gkg.protest_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
