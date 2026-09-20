@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/f8d3bf2a4c404104b136765fae6fec28",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:53:44Z",
-  "updated_at": "2026-09-20T03:53:57Z",
-  "finished_at": null,
-  "elapsed_s": 13,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:54:25Z",
+  "finished_at": "2026-09-20T03:54:25Z",
+  "elapsed_s": 41,
+  "message": "Noise: Dubai NO2 vs IAG.L r=-0.11 at lag 0 (perm p=0.53, validity 0); short rule 55 trades, hit 45%, sharpe-like 0.26, OOS +0.16%/trade - not tradeable",
   "run_folder": "missions/runs/20260920-173-airquality-dubai-cams-no2_x_finance-iag-l-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 5.22,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Null control: Dubai CAMS NO2 20d z-score > 1 (activity rebound) precedes Lufthansa strength (+); trade long LHA.DE 3d at 1d lag [airquality.dubai.cams_no2 -> finance.LHA.DE.log_return] (parent: R2-0060)"
 }
