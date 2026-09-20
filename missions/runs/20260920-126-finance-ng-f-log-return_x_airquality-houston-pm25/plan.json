@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.NG=F.log_return",
+  "indicator_b": "airquality.houston.pm25",
+  "transform_a": "log_return",
+  "transform_b": "anomaly",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "The PUDL/EIA-930 regional demand series were not present in the (truncated) catalogue, so Henry Hub gas returns (Gulf-Coast generation-fuel demand proxy) stand in for Texas demand deviations, paired with Houston ground-sensor PM2.5 as a same-calendar-week anomaly over the 2026 war window with a short lag; confounders include weather/seasonality driving both, small n, and the war as a common shock.",
+  "mode": "pair"
+}

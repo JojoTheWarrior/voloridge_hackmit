@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-09-20T02:38:21.617939+00:00",
+  "git_commit": "2db0476ba27c24d1e53517010713e9cb529d2a5a",
+  "folder": "20260920-126-finance-ng-f-log-return_x_airquality-houston-pm25",
+  "mission_id": "M20260920-6c2c2e",
+  "hypothesis": "Regional US demand deviations from seasonal norms correlate with regional PM2.5 during 2026.",
+  "status": "ok",
+  "n_obs": 40,
+  "r": 0.22614872806386285,
+  "perm_p": 0.4930139720558882,
+  "validity": 1.76,
+  "interestingness": 3.8,
+  "unexpectedness": 1.66,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/4b545c43a8b34d309c88842b2e25145a"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/d526a3d5d01447109f87138860aadb1a"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/52c5f7336c624eb2a0decedba4b05c06"
+    }
+  ],
+  "indicator_coverage": {
+    "finance.NG=F.log_return": "configured analysis window",
+    "airquality.houston.pm25": "downloaded observations"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
