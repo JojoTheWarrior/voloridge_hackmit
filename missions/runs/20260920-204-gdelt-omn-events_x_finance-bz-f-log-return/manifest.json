@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:20:06.045662+00:00",
+  "git_commit": "bbadabe89c1dd22e1db0c7066db419286fee0ed1",
+  "folder": "20260920-204-gdelt-omn-events_x_finance-bz-f-log-return",
   "mission_id": "R2-0105",
-  "title": "Oman GDELT events lead Brent",
   "hypothesis": "R2 | [oil-shipping] Oman GDELT event count 20d z-score > 1.5 marks Gulf tension (not diplomacy) and leads Brent higher by 2 days (+); trade long BZ=F 3d [gdelt.omn.events -> finance.BZ=F.log_return] (parent: R2-0006)",
-  "parent_mission_id": "R2-0006",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/b4c71c7b7922427491353e360dc172a7",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:19:48Z",
-  "updated_at": "2026-09-20T04:20:07Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-204-gdelt-omn-events_x_finance-bz-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 6.74
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.14053741238675188,
+  "perm_p": 0.08383233532934131,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.74,
   "trade_idea": {
     "instrument": "BZ=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 6.74,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.omn.events": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

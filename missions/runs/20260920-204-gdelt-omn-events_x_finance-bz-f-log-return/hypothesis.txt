@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Oman GDELT event count 20d z-score > 1.5 marks Gulf tension (not diplomacy) and leads Brent higher by 2 days (+); trade long BZ=F 3d [gdelt.omn.events -> finance.BZ=F.log_return] (parent: R2-0006)
