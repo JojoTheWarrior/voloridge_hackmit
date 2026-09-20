@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Kuwait CAMS SO2 20d z-score falling below -1 tracks refinery outages that widen jet-fuel cracks (-); trade short UAL 4d at 3d lag [airquality.kuwait.cams_so2 -> finance.UAL.log_return]

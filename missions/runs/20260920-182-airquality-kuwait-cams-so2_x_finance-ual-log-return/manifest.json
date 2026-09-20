@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:00:25.673709+00:00",
+  "git_commit": "9ccdcc3b3f42fcb3e1e270526b988d3f15713d45",
+  "folder": "20260920-182-airquality-kuwait-cams-so2_x_finance-ual-log-return",
   "mission_id": "R2-0071",
-  "title": "Kuwait SO2 vs UAL returns",
   "hypothesis": "R2 | [fuel-airspace-losers] Kuwait CAMS SO2 20d z-score falling below -1 tracks refinery outages that widen jet-fuel cracks (-); trade short UAL 4d at 3d lag [airquality.kuwait.cams_so2 -> finance.UAL.log_return]",
-  "parent_mission_id": null,
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/393919d7bed742648f0eeb5d6f4804a0",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:00:17Z",
-  "updated_at": "2026-09-20T04:00:27Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-182-airquality-kuwait-cams-so2_x_finance-ual-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.42
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.07101231710509848,
+  "perm_p": 0.9281437125748503,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.42,
   "trade_idea": {
     "instrument": "UAL",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 1.42,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.kuwait.cams_so2": "2025-03..2026-09 archive window",
+    "finance.UAL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
