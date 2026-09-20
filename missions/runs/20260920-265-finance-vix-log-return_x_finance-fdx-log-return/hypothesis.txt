@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] VIX daily log return spike predicts a next-day mean-reversion bounce in FedEx after panic selling (+); trade long FDX 1d at 1d lag [finance.^VIX.log_return -> finance.FDX.log_return]

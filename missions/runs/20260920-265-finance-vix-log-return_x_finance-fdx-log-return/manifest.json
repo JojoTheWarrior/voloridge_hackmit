@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:20:02.439109+00:00",
+  "git_commit": "480bad84e4edae19006d76c1cbd147d58f0b65cb",
+  "folder": "20260920-265-finance-vix-log-return_x_finance-fdx-log-return",
   "mission_id": "R2-0176",
-  "title": "VIX spike -> FDX next-day bounce",
   "hypothesis": "R2 | [fuel-airspace-losers] VIX daily log return spike predicts a next-day mean-reversion bounce in FedEx after panic selling (+); trade long FDX 1d at 1d lag [finance.^VIX.log_return -> finance.FDX.log_return]",
-  "parent_mission_id": "R2-0076",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/c0497275229346f08f1b2010c687af3f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:19:52Z",
-  "updated_at": "2026-09-20T13:20:03Z",
-  "finished_at": null,
-  "elapsed_s": 11,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-265-finance-vix-log-return_x_finance-fdx-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 1.77
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.48126450023555806,
+  "perm_p": 0.003992015968063872,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 1.77,
   "trade_idea": {
     "instrument": "FDX",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 1.77,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.^VIX.log_return": "configured analysis window",
+    "finance.FDX.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
