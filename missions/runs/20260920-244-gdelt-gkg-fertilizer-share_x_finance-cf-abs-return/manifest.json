@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:02:37.293225+00:00",
+  "git_commit": "e8335584ec7c36c284aacf7d0f01c146abed6973",
+  "folder": "20260920-244-gdelt-gkg-fertilizer-share_x_finance-cf-abs-return",
   "mission_id": "R2-0145",
-  "title": "Fertilizer attention -> CF abs return 5d",
   "hypothesis": "R2 | [fertilizer-ag] GDELT fertilizer attention share 20d z-score > 1 leads CF absolute returns by 5 days (+) as attention spikes predict volatility rather than direction; long CF straddle proxy 5d [gdelt.gkg.fertilizer_share -> finance.CF.abs_return] (parent: R2-0046)",
-  "parent_mission_id": "R2-0046",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/faeab1f1985e44e0bc8dfb3a43da7b47",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:02:29Z",
-  "updated_at": "2026-09-20T13:02:39Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-244-gdelt-gkg-fertilizer-share_x_finance-cf-abs-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 10.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.21815372622398654,
+  "perm_p": 0.11776447105788423,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 10.0,
   "trade_idea": {
     "instrument": "CF",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 10.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.fertilizer_share": "configured analysis window",
+    "finance.CF.abs_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
