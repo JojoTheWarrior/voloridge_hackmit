@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.NG=F.close",
+  "indicator_b": "finance.NG=F.close",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "No EIA-860m/PUDL generator retirement/addition series exists in the visible catalogue, so the closest available proxy for a 2026 shift toward gas-fired capacity is the Henry Hub gas price level (finance.NG=F.close) compared pre- vs post-war; this is a weak proxy and any shift is confounded by the war itself, seasonality and secular trends, so treat as exploratory only.",
+  "mode": "single"
+}
