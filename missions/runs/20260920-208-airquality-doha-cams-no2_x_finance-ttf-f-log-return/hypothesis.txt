@@ -1,0 +1,1 @@
+SHERLOCK | [#8 LNG flares] Doha CAMS NO2 20d z-score > 1 (Ras Laffan LNG train upsets/flaring proxy) leads TTF gas returns by 3 days (+); trade long TTF=F 3d [airquality.doha.cams_no2 -> finance.TTF=F.log_return]
