@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0046",
+  "title": "[fertilizer-ag] Crossref weekly fertilizer count 26w z-score > 1 leads CF log re",
+  "hypothesis": "R2 | [fertilizer-ag] Crossref weekly fertilizer count 26w z-score > 1 leads CF log returns by 10 days (-) as research attention lags the price peak; fade with short CF 8d [research.ammonia.crossref_pubs -> finance.CF.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:45:08Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}

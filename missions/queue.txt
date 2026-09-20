@@ -1,4 +1,3 @@
-R2 | [fertilizer-ag] Crossref weekly fertilizer count 26w z-score > 1 leads CF log returns by 10 days (-) as research attention lags the price peak; fade with short CF 8d [research.ammonia.crossref_pubs -> finance.CF.log_return]
 R2 | [fertilizer-ag] Crossref weekly sulfur count 26w z-score > 1.5 leads MOS log returns by 7 days (+) since sulfuric acid is the phosphate input bottleneck; trade long MOS 7d [research.ammonia.crossref_pubs -> finance.MOS.log_return]
 R2 | [fertilizer-ag] Crossref weekly energy_security count 26w z-score > 1 leads YAR.OL returns by 6 days (+) tracking European gas-input anxiety; long YAR.OL 6d [research.oil_price.crossref_pubs -> finance.YAR.OL.log_return]
 R2 | [fertilizer-ag] Oklahoma City 30d temperature anomaly > 2 C leads ZW=F log returns by 3 days (+) via US Plains hard red winter wheat stress; trade long ZW=F 6d [weather.oklahoma_city.temp_anomaly -> finance.ZW=F.log_return]
