@@ -7,3 +7,4 @@
 | `20260920-003-gdelt-irn-goldstein_x_finance-vix-close` | GDELT Goldstein conflict scale for Iran-involved events correlates with the VIX at a 0-2 day lag. | ok | 391 | -0.0986295515254731 | 0.08582834331337326 | 3.68 | 3.78 | 2.08 |
 | `20260920-004-gdelt-iran-israel-dyad-events_x_finance-fred-dcoilbrenteu` | The share of GDELT events with Israel and Iran as actors spikes before oil-price jumps rather than after them. | ok | 378 | 0.15004092468134797 | 0.021956087824351298 | 6.02 | 4.22 | 5.16 |
 | `20260920-005-gdelt-irn-protest-events_x_finance-gc-f-log-return` | Days with more GDELT "protest" events in Iran (Dec 2025-Jan 2026) coincide with higher gold prices. | ok | 251 | 0.07566633103896542 | 0.25149700598802394 | 1.98 | 3.68 | 2.16 |
+| `20260920-006-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Strait of Hormuz" track the Brent-WTI spread. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.32 | 4.46 | 3.56 |

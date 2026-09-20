@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.events",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT GKG 'hormuz_share' as a proxy for global news mentions of the Strait of Hormuz and test whether spikes in standardised news intensity are associated with wider Brent-WTI spreads during the war period, allowing a short lead as markets react to shipping-risk headlines."
+}
