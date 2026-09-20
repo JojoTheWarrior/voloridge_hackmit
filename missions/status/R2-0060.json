@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:53:44Z",
-  "updated_at": "2026-09-20T03:54:25Z",
+  "updated_at": "2026-09-20T03:54:42Z",
   "finished_at": "2026-09-20T03:54:25Z",
-  "elapsed_s": 41,
+  "elapsed_s": 58,
   "message": "Noise: Dubai NO2 vs IAG.L r=-0.11 at lag 0 (perm p=0.53, validity 0); short rule 55 trades, hit 45%, sharpe-like 0.26, OOS +0.16%/trade - not tradeable",
   "run_folder": "missions/runs/20260920-173-airquality-dubai-cams-no2_x_finance-iag-l-log-return",
   "scores": {
