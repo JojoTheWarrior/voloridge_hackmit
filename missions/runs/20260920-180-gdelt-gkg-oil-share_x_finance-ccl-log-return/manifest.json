@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:58:17.096259+00:00",
+  "git_commit": "826d454e8bcd48bb8ee94310b460e547cde37210",
+  "folder": "20260920-180-gdelt-gkg-oil-share_x_finance-ccl-log-return",
   "mission_id": "R2-0067",
-  "title": "Oil GKG share -> short CCL 4d",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1.5 precedes cruise-line fuel-cost derating (-); trade short CCL 4d at 4d lag [gdelt.gkg.oil_share -> finance.CCL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/eb41aea760454b9d83c5e8964c7b225f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:58:09Z",
-  "updated_at": "2026-09-20T03:58:18Z",
-  "finished_at": null,
-  "elapsed_s": 9,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-180-gdelt-gkg-oil-share_x_finance-ccl-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 4.91
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.04729142880828751,
+  "perm_p": 0.20159680638722555,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 4.91,
   "trade_idea": {
     "instrument": "CCL",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 4.91,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.oil_share": "configured analysis window",
+    "finance.CCL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

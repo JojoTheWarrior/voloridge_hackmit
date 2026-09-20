@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1.5 precedes cruise-line fuel-cost derating (-); trade short CCL 4d at 4d lag [gdelt.gkg.oil_share -> finance.CCL.log_return]

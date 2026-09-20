@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 3,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 40,
+    "hit_rate": 0.45,
+    "avg_return": -0.0013407811391461105,
+    "baseline_avg_return": -0.002308248338743062,
+    "excess_return": 0.0009674671995969514,
+    "sharpe_like": -0.19467793978736136,
+    "max_drawdown": -0.2631027871585747,
+    "total_return": -0.08784585104876452
+  },
+  "fit_pre_war": {
+    "n_trades": 28,
+    "hit_rate": 0.32142857142857145,
+    "avg_return": -0.008823347479161045,
+    "baseline_avg_return": -0.006082186829715684,
+    "excess_return": -0.0027411606494453606,
+    "sharpe_like": -1.2527426887291029,
+    "max_drawdown": -0.2631027871585747,
+    "total_return": -0.23522993773727596
+  },
+  "test_war": {
+    "n_trades": 12,
+    "hit_rate": 0.75,
+    "avg_return": 0.016118540320888736,
+    "baseline_avg_return": 0.004440765750952504,
+    "excess_return": 0.011677774569936232,
+    "sharpe_like": 1.0850760551969612,
+    "max_drawdown": -0.09886197355364845,
+    "total_return": 0.19271686218004724
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "CCL",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.oil_share rolling_zscore_20d > 1 at close -> short CCL next session",
+    "exit_rule": "close after 3 trading days (no overlapping entries)",
+    "holding_days": 3,
+    "hit_rate": 0.45,
+    "avg_return": -0.0013407811391461105,
+    "excess_return": 0.0009674671995969514,
+    "n_trades": 40,
+    "sharpe_like": -0.19467793978736136,
+    "max_drawdown": -0.2631027871585747,
+    "oos_n_trades": 12,
+    "oos_avg_return": 0.016118540320888736,
+    "oos_hit_rate": 0.75,
+    "actionability": 4.91,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
