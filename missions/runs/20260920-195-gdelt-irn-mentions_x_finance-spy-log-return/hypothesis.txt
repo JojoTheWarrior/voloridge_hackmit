@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] REVERSAL: Iran GDELT mentions 20d z-score > 2 marks news exhaustion and leads S&P returns higher by 3-5 days (+); fade the panic long SPY 5d [gdelt.irn.mentions -> finance.SPY.log_return]
