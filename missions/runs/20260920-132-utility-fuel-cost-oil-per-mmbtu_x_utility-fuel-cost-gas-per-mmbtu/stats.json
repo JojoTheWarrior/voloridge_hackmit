@@ -1,0 +1,53 @@
+{
+  "n_obs": 14,
+  "coverage_start": "2025-04-01",
+  "coverage_end": "2026-05-01",
+  "correlation": {
+    "n": 14,
+    "pearson_r": -0.12041051966121964,
+    "pearson_p": 0.6817858691669693,
+    "spearman_r": -0.2879120879120879,
+    "spearman_p": 0.3181928710258003
+  },
+  "lagged": {
+    "lags": [
+      -1,
+      0,
+      1
+    ],
+    "r": [
+      -0.2414229005031187,
+      -0.12041051966121968,
+      -0.5276491189773661
+    ],
+    "best_lag": 1,
+    "best_r": -0.5276491189773661
+  },
+  "perm_p": 0.2215568862275449,
+  "n_lags_tested": 3,
+  "bonferroni_p": 0.6646706586826348,
+  "pre_post": {
+    "pre": {
+      "n": 11,
+      "pearson_r": 0.24140722995298597,
+      "pearson_p": 0.4745314706532059,
+      "spearman_r": -0.018181818181818184,
+      "spearman_p": 0.9576852410216187
+    },
+    "post": {
+      "n": 3,
+      "pearson_r": -0.9970571680992302,
+      "pearson_p": 0.04885223196103265,
+      "spearman_r": -1.0,
+      "spearman_p": 0.0
+    },
+    "r_change": -1.238464398052216,
+    "fisher_z_p": null
+  },
+  "event_study": null,
+  "event_study_b": null,
+  "window": "compare_pre_post",
+  "lag_unit": "months",
+  "max_lag_steps": 1,
+  "sign_matches_expectation": false
+}

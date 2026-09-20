@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-09-20T02:45:27.439783+00:00",
+  "git_commit": "edc5301139bd7f4dc6ebb60fda6c96971bae074b",
+  "folder": "20260920-132-utility-fuel-cost-oil-per-mmbtu_x_utility-fuel-cost-gas-per-mmbtu",
+  "mission_id": "M20260920-1cf78d",
+  "hypothesis": "US monthly fuel receipt costs for natural gas plants track Henry Hub with a one-month lag and the lag shortened during the war.",
+  "status": "ok",
+  "n_obs": 14,
+  "r": -0.12041051966121964,
+  "perm_p": 0.2215568862275449,
+  "validity": 2.02,
+  "interestingness": 1.62,
+  "unexpectedness": 6.32,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/cd6eab01f9b14c6fac93ee26ad5aa809"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/d0f1b186a9ae49b3a16529fa281b87ce"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/1744b5c2740c44898f46b4acfe1a4ed6"
+    }
+  ],
+  "indicator_coverage": {
+    "utility.fuel_cost.oil_per_mmbtu": "configured analysis window",
+    "utility.fuel_cost.gas_per_mmbtu": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

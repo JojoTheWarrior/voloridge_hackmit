@@ -1,0 +1,13 @@
+{
+  "indicator_a": "utility.fuel_cost.oil_per_mmbtu",
+  "indicator_b": "utility.fuel_cost.gas_per_mmbtu",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "No Henry Hub (yfinance/FRED) series exists in the catalogue, so the closest available proxy for the upstream fuel-price shock is the monthly oil delivered fuel cost, tested against gas delivered fuel cost (both freq=M, coverage to 2026-05) as monthly pct_change with up to a 30-day (one-month) lead and a pre/post-war comparison to check whether the lag shortened; caveats: n is very small (~15 months, ~3 war months), both series share the war-driven energy-price trend as a common cause, and the proxy is not Henry Hub.",
+  "mode": "pair"
+}
