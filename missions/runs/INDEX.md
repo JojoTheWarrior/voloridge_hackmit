@@ -97,3 +97,4 @@
 | `20260920-093-gdelt-irn-tone_x_finance-gspc-log-return` | GDELT average tone about Iran predicts next-day S&P 500 returns during the war. | ok | 140 | 0.12543146493088086 | 0.021956087824351298 | 6.02 | 4.06 | 5.32 |
 | `20260920-094-gdelt-irn-events_x_gdelt-total-events` | Global GDELT event counts (all countries) dropped when Iran shut down its internet. | ok | 204 | 0.4579545226214894 | 0.033932135728542916 | 6.0 | 1.26 | 4.6 |
 | `20260920-095-finance-fred-dcoilbrenteu_x_gdelt-gkg-protest-share` | GDELT protest event counts worldwide rose with fuel-price increases (gasoline shock). | ok | 142 | 0.12122366402865671 | 0.12375249500998003 | 3.88 | 3.78 | 2.82 |
+| `20260920-096-gdelt-gkg-food-prices-share_x_finance-zw-f-log-return` | News volume about "food prices" in GDELT rose after the fertilizer shock and correlates with wheat futures. | ok | 82 | -0.04828647486837595 | 0.3213572854291417 | 1.92 | 1.98 | 5.42 |
