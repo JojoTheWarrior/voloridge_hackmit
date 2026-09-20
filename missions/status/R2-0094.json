@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:12:57Z",
-  "updated_at": "2026-09-20T04:13:34Z",
+  "updated_at": "2026-09-20T04:15:53Z",
   "finished_at": "2026-09-20T04:13:34Z",
-  "elapsed_s": 37,
-  "message": "Not supported: gold-oil ratio z>1 is contemporaneously positive with EEM (r=0.32, lag 0, perm p=0.03), no lead; short-EEM rule flat overall (48 trades, hit 56%, sharpe 0.14), pre-war negative, war-period +0.5%/trade. Actionability 6.22.",
+  "elapsed_s": 176,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-196-finance-ratio-gold-oil_x_finance-eem-log-return",
   "scores": {
     "validity": 0,
