@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:03:53Z",
-  "updated_at": "2026-09-20T04:04:39Z",
+  "updated_at": "2026-09-20T04:04:56Z",
   "finished_at": "2026-09-20T04:04:39Z",
-  "elapsed_s": 46,
+  "elapsed_s": 63,
   "message": "Supported in-sample (r=-0.34, n=389, perm p=0.036 but Bonferroni p=0.75); short JETS/SPY on RB=F level z>1 gave 49 trades, hit 55%, +0.11%/trade, but war-period test negative (17 trades, -0.18%/trade); actionability 4.3 - story more than rule.",
   "run_folder": "missions/runs/20260920-185-finance-rb-f-close_x_finance-ratio-jets-spy",
   "scores": {
