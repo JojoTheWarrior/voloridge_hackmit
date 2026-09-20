@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:46:15Z",
-  "updated_at": "2026-09-20T12:47:01Z",
+  "updated_at": "2026-09-20T12:49:12Z",
   "finished_at": "2026-09-20T12:47:01Z",
-  "elapsed_s": 46,
-  "message": "Not supported: Brent-WTI z>1 vs FRO 3d returns r=0.10 (wrong sign), best lag 5d; short rule hit 41%, avg -1.4%, OOS -0.2%; actionability 4.06",
+  "elapsed_s": 177,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-224-finance-spread-brent-wti_x_finance-fro-log-return",
   "scores": {
     "validity": 0,
