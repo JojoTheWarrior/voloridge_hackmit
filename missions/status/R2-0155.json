@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/c344f09c1fb14ba0baba439da92f9e65",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:08:00Z",
-  "updated_at": "2026-09-20T13:08:04Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:08:28Z",
+  "finished_at": "2026-09-20T13:08:28Z",
+  "elapsed_s": 28,
+  "message": "Null control holds: Tokyo precip z-score vs ZW=F returns is noise (perm p=0.63, Bonferroni p=1.0, best lag r=0.10, OOS hit rate 29%); no trade.",
   "run_folder": "missions/runs/20260920-251-weather-tokyo-precip_x_finance-zw-f-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 1.21,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Tokyo daily precipitation 20d z-score is unrelated to ZC=F log returns at lags 0-10 days (second null control, corn); no trade [weather.tokyo.precip -> finance.ZC=F.log_return] (parent: R2-0155)"
 }
