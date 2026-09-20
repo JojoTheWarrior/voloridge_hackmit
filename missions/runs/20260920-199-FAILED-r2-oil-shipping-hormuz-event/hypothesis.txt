@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Hormuz event count 20d z-score > 1.5 leads FRO absolute returns (volatility) by 1 day (+); trade long FRO straddle proxy 2d [events.hormuz.count -> finance.FRO.abs_return] (parent: R2-0001)

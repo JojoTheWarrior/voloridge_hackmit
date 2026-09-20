@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T04:16:32.319246+00:00",
+  "git_commit": "699912fd18c98eeb05edf71b29c75af2a1c704ef",
+  "folder": "20260920-199-FAILED-r2-oil-shipping-hormuz-event",
+  "mission_id": "R2-0101",
+  "hypothesis": "R2 | [oil-shipping] Hormuz event count 20d z-score > 1.5 leads FRO absolute returns (volatility) by 1 day (+); trade long FRO straddle proxy 2d [events.hormuz.count -> finance.FRO.abs_return] (parent: R2-0001)",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "events.hormuz.count": "configured analysis window",
+    "finance.FRO.abs_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
