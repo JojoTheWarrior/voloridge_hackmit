@@ -1,0 +1,1 @@
+Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT.

@@ -107,3 +107,4 @@
 | `20260920-103-airquality-dubai-cams-no2_x_airquality-riyadh-cams-no2` | Gulf air quality improvements after airspace closures were larger in Dubai than in Riyadh. | ok | 566 | -0.054284579916593856 | 0.17365269461077845 | 3.72 | 4.6 | 6.24 |
 | `20260920-104-airquality-dubai-cams-pm25_x_gdelt-gkg-tanker-share` | Air-quality readings in Gulf cities correlate with tanker attack news volume (smoke from struck vessels). | ok | 202 | -0.0765231299369489 | 0.17564870259481039 | 3.5 | 3.5 | 5.22 |
 | `20260920-105-gdelt-irn-mentions_x_research-iran-crossref-pubs` | OpenAlex Iran-related publication counts correlate with GDELT Iran news volume with a one-month lag. | ok | 81 | -0.011377409664389715 | 1.0 | 0.02 | 2.46 | 2.4 |
+| `20260920-106-weather-tehran-temp-anomaly_x_gdelt-irn-mentions` | Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT. | ok | 564 | -0.06815122828033127 | 0.6387225548902196 | 0.24 | 3.26 | 6.32 |
