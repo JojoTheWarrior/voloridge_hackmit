@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0013",
+  "title": "[oil-shipping] Dubai CAMS NO2 20d z-score below -1.5 (Gulf refining/production s",
+  "hypothesis": "R2 | [oil-shipping] Dubai CAMS NO2 20d z-score below -1.5 (Gulf refining/production slowdown proxy) leads Brent higher by 4 days (+); trade long BZ=F 7d [airquality.dubai.cams_no2 -> finance.BZ=F.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:24:05Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
