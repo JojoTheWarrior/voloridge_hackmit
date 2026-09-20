@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:16:49.926497+00:00",
+  "git_commit": "c7f2f4296dc792af0fa58bdc9806f361243bc81b",
+  "folder": "20260920-135-gdelt-gkg-hormuz-share_x_finance-fro-log-return",
   "mission_id": "R2-0001",
-  "title": "Hormuz GKG share -> FRO returns",
   "hypothesis": "R2 | [oil-shipping] GDELT Hormuz GKG share 20d z-score > 1.5 leads FRO log returns by 2 days (+); trade long FRO 3d [gdelt.gkg.hormuz_share -> finance.FRO.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/5c907d0ff56e42318fbf7e16f4cbc65c",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:16:42Z",
-  "updated_at": "2026-09-20T03:16:51Z",
-  "finished_at": "2026-09-20T03:15:53Z",
-  "elapsed_s": 9,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-135-gdelt-gkg-hormuz-share_x_finance-fro-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 4.58
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.012569750680305716,
+  "perm_p": 0.6427145708582834,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 4.58,
   "trade_idea": {
     "instrument": "FRO",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 4.58,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.hormuz_share": "configured analysis window",
+    "finance.FRO.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

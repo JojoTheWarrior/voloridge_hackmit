@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT Hormuz GKG share 20d z-score > 1.5 leads FRO log returns by 2 days (+); trade long FRO 3d [gdelt.gkg.hormuz_share -> finance.FRO.log_return]
