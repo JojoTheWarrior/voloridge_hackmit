@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { formatReportDate } from '../../format'
 import type { Artifact, Mission, Report } from '../../types'
 import { ArtifactView } from '../artifacts/ArtifactView'
@@ -30,7 +31,7 @@ function Bullets({ items }: { items: string[] }) {
 }
 
 interface ReportDocumentProps {
-  mission: Pick<Mission, 'title' | 'events'>
+  mission: Pick<Mission, 'id' | 'title' | 'events'>
   report: Report
   /** Sits beside the eyebrow on screen and stays out of print. */
   actions: ReactNode
@@ -93,7 +94,12 @@ export function ReportDocument({ mission, report, actions }: ReportDocumentProps
           )}
           {report.nextQuestions.length > 0 && (
             <Section title="Ask next">
-              <Bullets items={report.nextQuestions} />
+              <ul className="mt-3 flex flex-col gap-2.5 text-sm leading-relaxed">
+                {report.nextQuestions.map((question, index) => (
+                  <li key={index}><Link to={`/missions/${encodeURIComponent(mission.id)}`} state={{ replyDraft: question }}
+                    className="block rounded-sm underline decoration-line underline-offset-4 transition-colors hover:decoration-ink print:no-underline">{question}</Link></li>
+                ))}
+              </ul>
             </Section>
           )}
         </div>

@@ -1,4 +1,4 @@
-/* Kingdom explorer kit: optional helpers. No dependencies; exposes one global, `Kingdom`.
+/* Kingdom explorer kit: optional helpers. Loads Leaflet on demand; exposes one global, `Kingdom`.
    Load it in <head> (it is tiny) so the theme is set before the first paint.
    Everything here is a convenience: read it, use what helps, replace what does not. */
 (function () {
@@ -169,6 +169,10 @@
       throw error
     }
     lib.control.zoom({ position: 'topright' }).addTo(leaflet)
+    // A bottom sheet can resize the stage without resizing the browser window.
+    const resize = new ResizeObserver(() => leaflet.invalidateSize({ pan: false }))
+    resize.observe(container)
+    leaflet.on('unload', () => resize.disconnect())
     const credits = lib.control.attribution({ prefix: '<a href="https://leafletjs.com">Leaflet</a>' }).addTo(leaflet).getContainer()
     // Under 640px the credits would cover the legend, so kit.css folds them behind this button.
     const creditsToggle = el('button', { type: 'button', class: 'leaflet-control k-credits-toggle', 'aria-label': 'Map credits', 'aria-expanded': 'false',

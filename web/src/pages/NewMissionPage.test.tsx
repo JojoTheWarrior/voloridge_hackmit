@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Route, Routes, useParams } from 'react-router-dom'
 import { seedDatasets } from '../api/fixtures'
@@ -114,5 +114,55 @@ describe('NewMissionPage', () => {
     await screen.findByText('mission m-1')
     expect(createMission.mock.calls[0][0].datasetIds).toEqual([])
     expect(screen.queryByRole('button', { pressed: true })).not.toBeInTheDocument()
+  })
+
+  it('preserves the prompt after a failed request and lets the user retry', async () => {
+    const { createMission, user } = renderPage()
+    createMission.mockRejectedValueOnce(new Error('offline'))
+    await user.type(prompt(), 'A leads B{Enter}')
+    expect(await screen.findByRole('alert')).toHaveTextContent('Couldn’t start the mission')
+    expect(prompt()).toHaveValue('A leads B')
+    await user.click(screen.getByRole('button', { name: 'Start mission' }))
+    expect(await screen.findByText('mission m-1')).toBeInTheDocument()
+    expect(createMission).toHaveBeenCalledTimes(2)
+  })
+
+  it('searches research and attaches the complete finding to the new mission', async () => {
+    const { api, createMission, user } = renderPage()
+    vi.spyOn(api, 'listResearch').mockResolvedValue([
+      { id: 'dams/0', title: 'Reservoirs under stress', summary: 'Look at storage', source: 'dams', verdict: 'partial', reference: 'Full evidence and caveats' },
+      { id: 'air/0', title: 'Air quality', summary: 'Pollution', source: 'air', verdict: 'partial', reference: 'Other evidence' },
+    ])
+    await user.click(screen.getByRole('button', { name: 'Attach research' }))
+    await user.type(await screen.findByRole('textbox', { name: 'Search research' }), 'reservoir')
+    await user.click(await screen.findByRole('button', { name: /Reservoirs under stress/ }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(prompt()).toHaveValue('Investigate: Reservoirs under stress')
+    await user.click(screen.getByRole('button', { name: 'Start mission' }))
+    await screen.findByText('mission m-1')
+    expect(createMission.mock.calls[0][0].reference).toBe('Full evidence and caveats')
+  })
+
+  it('attaches pasted notes without replacing a written question, and removes them', async () => {
+    const { createMission, user } = renderPage()
+    await user.type(prompt(), 'My question')
+    await user.click(screen.getByRole('button', { name: 'Attach research' }))
+    await user.click(screen.getByRole('button', { name: 'Paste notes' }))
+    await user.type(screen.getByRole('textbox', { name: 'Notes, findings, or source links' }), 'Prior evidence')
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach research' }))
+    expect(prompt()).toHaveValue('My question')
+    await user.click(screen.getByRole('button', { name: 'Remove research' }))
+    await user.click(screen.getByRole('button', { name: 'Start mission' }))
+    await screen.findByText('mission m-1')
+    expect(createMission.mock.calls[0][0]).not.toHaveProperty('reference')
+  })
+
+  it('recovers a failed library load', async () => {
+    const { api, user } = renderPage()
+    vi.spyOn(api, 'listResearch').mockRejectedValueOnce(new Error('offline')).mockResolvedValue([])
+    await user.click(screen.getByRole('button', { name: 'Attach research' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('library couldn’t load')
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
+    expect(await screen.findByRole('status')).toHaveTextContent('No research in the library yet')
   })
 })

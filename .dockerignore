@@ -1,0 +1,10 @@
+.git
+.env
+.venv
+.claude
+.kingdom
+**/__pycache__
+.pytest_cache
+web/node_modules
+web/dist
+data

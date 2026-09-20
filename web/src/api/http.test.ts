@@ -29,11 +29,13 @@ describe('http api', () => {
         'GET /api/meta': () => json({ demo: true }),
         'GET /api/missions': () => json([mission]),
         'GET /api/datasets': () => json([{ id: 'd1' }]),
+        'GET /api/research': () => json([{ id: 'dams/0', reference: 'Evidence' }]),
       })
       const api = createHttpApi()
       expect(await api.getMeta()).toEqual({ demo: true })
       expect(await api.listMissions()).toEqual([mission])
       expect(await api.listDatasets()).toEqual([{ id: 'd1' }])
+      expect(await api.listResearch()).toEqual([{ id: 'dams/0', reference: 'Evidence' }])
     })
 
     it('prefixes a base url', async () => {

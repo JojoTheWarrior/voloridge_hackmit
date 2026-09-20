@@ -46,6 +46,9 @@ export function LinkDatasetDialog({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
   const [error, setError] = useState<ValidationError>()
+  const [problem, setProblem] = useState('')
+  const [busy, setBusy] = useState(false)
+  const locked = useRef(false)
 
   useEffect(() => {
     dialogRef.current?.showModal()
@@ -53,12 +56,19 @@ export function LinkDatasetDialog({ onClose }: { onClose: () => void }) {
 
   async function submit(event: FormEvent) {
     event.preventDefault()
+    if (locked.current) return
+    locked.current = true
+    setBusy(true)
+    setProblem('')
     try {
       await api.linkDataset({ name, url })
       onClose()
     } catch (caught) {
-      if (!(caught instanceof ValidationError)) throw caught
-      setError(caught)
+      if (caught instanceof ValidationError) setError(caught)
+      else setProblem('Couldn’t link the dataset. Check your connection and try again.')
+    } finally {
+      locked.current = false
+      setBusy(false)
     }
   }
 
@@ -86,12 +96,13 @@ export function LinkDatasetDialog({ onClose }: { onClose: () => void }) {
         </div>
         <Field label="Name" value={name} onChange={edit(setName)} error={error?.field === 'name' ? error.message : undefined} placeholder="FRED oil prices" autoFocus />
         <Field label="URL" value={url} onChange={edit(setUrl)} error={error?.field === 'url' ? error.message : undefined} placeholder="https://" />
+        {problem && <p role="alert" className="text-[13px]">{problem}</p>}
         <div className="mt-1 flex justify-end gap-2">
           <button type="button" onClick={onClose} className="rounded-full px-4 py-1.5 text-[13px] text-muted transition-colors duration-150 hover:text-ink">
             Cancel
           </button>
-          <button type="submit" className="rounded-full bg-ink px-4 py-1.5 text-[13px] text-paper transition-colors duration-150 hover:bg-ink/85">
-            Link dataset
+          <button type="submit" disabled={busy} aria-busy={busy} className="rounded-full bg-ink px-4 py-1.5 text-[13px] text-paper transition-colors duration-150 hover:bg-ink/85 disabled:opacity-50">
+            {busy ? 'Linking…' : 'Link dataset'}
           </button>
         </div>
       </form>

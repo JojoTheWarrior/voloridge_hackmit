@@ -4,18 +4,24 @@ import type { Api } from '../api/index'
 import type { Dataset, Meta, Mission, MissionSummary } from '../types'
 
 /** Loads on mount and again after every api change. `undefined` until the first load resolves; a failed reload keeps the last value. */
-function useApiData<T>(load: (api: Api) => Promise<T>): T | undefined {
+function useApiData<T>(load: (api: Api) => Promise<T>) {
   const api = useApi()
   const [data, setData] = useState<T>()
+  const [reconnecting, setReconnecting] = useState(false)
 
   useEffect(() => {
     let cancelled = false
+    let sequence = 0
     const run = () => {
+      const request = ++sequence
       load(api).then(
         (value) => {
-          if (!cancelled) setData(value)
+          if (!cancelled && request === sequence) {
+            setData(value)
+            setReconnecting(false)
+          }
         },
-        () => {},
+        () => { if (!cancelled && request === sequence) setReconnecting(true) },
       )
     }
     run()
@@ -26,17 +32,21 @@ function useApiData<T>(load: (api: Api) => Promise<T>): T | undefined {
     }
   }, [api, load])
 
-  return data
+  return { data, reconnecting }
 }
 
 const loadMissions = (api: Api) => api.listMissions()
 const loadDatasets = (api: Api) => api.listDatasets()
 
 export function useMissions(): MissionSummary[] | undefined {
-  return useApiData(loadMissions)
+  return useApiData(loadMissions).data
 }
 
 export function useDatasets(): Dataset[] | undefined {
+  return useApiData(loadDatasets).data
+}
+
+export function useDatasetState() {
   return useApiData(loadDatasets)
 }
 

@@ -10,11 +10,13 @@ const QUIET_LINE = 'max-w-sm text-sm leading-relaxed text-muted'
 
 export function ReportPage() {
   const mission = useOutletMission()
-  const { busy, generate } = useGenerateReport(mission)
+  const { busy, generate, error } = useGenerateReport(mission)
+  const problem = error && <p role="alert" className="px-6 py-3 text-center text-[13px] text-muted print:hidden">{error}</p>
 
   if (mission.report) {
     return (
       <div className="h-full overflow-y-auto print:h-auto print:overflow-visible">
+        {problem}
         <ReportDocument mission={mission} report={mission.report} actions={<ReportActions busy={busy} onRegenerate={generate} />} />
       </div>
     )
@@ -39,6 +41,7 @@ export function ReportPage() {
       <button type="button" onClick={generate} className={`${OUTLINE_PILL} mt-3 px-4 py-1.5`}>
         Generate report
       </button>
+      {problem}
     </CenteredState>
   )
 }

@@ -1,4 +1,4 @@
-import type { Dataset, Meta, Mission, MissionSummary } from '../types'
+import type { Dataset, Meta, Mission, MissionSummary, ResearchFinding } from '../types'
 
 export interface Api {
   getMeta(): Promise<Meta>
@@ -15,12 +15,13 @@ export interface Api {
   /** Asks Devin to build, or with `instructions` to change, the mission's explorer. No-op while one is pending. */
   buildExplorer(id: string, instructions?: string): Promise<void>
   listDatasets(): Promise<Dataset[]>
+  listResearch(): Promise<ResearchFinding[]>
   linkDataset(input: { name: string; url: string }): Promise<Dataset>
   /** Calls `listener` after any change; returns an unsubscribe function. */
   subscribe(listener: () => void): () => void
 }
 
-export type ValidationField = 'name' | 'url' | 'hypothesis' | 'text'
+export type ValidationField = 'name' | 'url' | 'hypothesis' | 'text' | 'reference'
 
 export class ValidationError extends Error {
   field: ValidationField

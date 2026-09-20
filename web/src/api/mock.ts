@@ -185,6 +185,10 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       return structuredClone(datasets)
     },
 
+    async listResearch() {
+      return []
+    },
+
     async linkDataset(input) {
       const name = input.name.trim()
       const url = input.url.trim()
@@ -198,7 +202,6 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
         seriesCount: 0,
         dateRange: '',
         syncedAt: new Date().toISOString(),
-        kind: 'other',
       }
       datasets.unshift(dataset)
       notify()

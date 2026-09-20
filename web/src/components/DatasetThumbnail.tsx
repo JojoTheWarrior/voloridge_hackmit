@@ -2,9 +2,9 @@ import type { ReactNode } from 'react'
 import { hash, mulberry32 } from '../random'
 import type { DatasetKind } from '../types'
 
-const INK = '#0a0a0a'
-const FAINT = '#bdbdbd'
-const LINE = '#e5e5e5'
+const INK = 'var(--color-ink)'
+const FAINT = 'var(--color-faint)'
+const LINE = 'var(--color-line)'
 const WIDTH = 320
 const HEIGHT = 120
 const STROKE = { fill: 'none', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const

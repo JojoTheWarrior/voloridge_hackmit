@@ -95,7 +95,7 @@
             stat('Scored', fmt.num(buildings.length)),
             stat('Shown', fmt.num(shown.length)),
             stat('Median shown', fmt.pct(median))),
-          shown.length > 0 && el('p', { class: 'k-label', style: 'padding-top:14px' }, 'Select a building on the map or in the list to see the evidence.'))
+          ...(shown.length > 0 ? [el('p', { class: 'k-label', style: 'padding-top:14px' }, 'Select a building on the map or in the list to see the evidence.')] : []))
         return
       }
       const mapsUrl = `https://www.openstreetmap.org/?mlat=${building.lat}&mlon=${building.lon}#map=19/${building.lat}/${building.lon}`

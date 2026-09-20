@@ -26,6 +26,20 @@ async function openDialog(user: ReturnType<typeof userEvent.setup>) {
 beforeEach(() => localStorage.clear())
 
 describe('DatasetsPage', () => {
+  it('keeps the dataset form after a network failure and allows a retry', async () => {
+    const { api, user } = renderPage()
+    const link = vi.spyOn(api, 'linkDataset').mockRejectedValueOnce(new Error('offline'))
+    const dialog = await openDialog(user)
+    await user.type(within(dialog).getByLabelText('Name'), 'New source')
+    await user.type(within(dialog).getByLabelText('URL'), 'https://example.com')
+    await user.click(within(dialog).getByRole('button', { name: 'Link dataset' }))
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent('Couldn’t link the dataset')
+    expect(within(dialog).getByLabelText('Name')).toHaveValue('New source')
+    await user.click(within(dialog).getByRole('button', { name: 'Link dataset' }))
+    expect(await screen.findByText('New source')).toBeInTheDocument()
+    expect(link).toHaveBeenCalledTimes(2)
+  })
+
   it('lists linked datasets with their source host', async () => {
     renderPage()
     await screen.findByRole('table')

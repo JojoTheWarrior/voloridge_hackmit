@@ -6,7 +6,7 @@ import { foldWork } from './foldWork'
 import { ReplyComposer } from './ReplyComposer'
 import { WorkLog } from './WorkLog'
 
-export function MissionThread({ mission }: { mission: Mission }) {
+export function MissionThread({ mission, initialDraft = '' }: { mission: Mission; initialDraft?: string }) {
   const api = useApi()
   const { ref, onScroll, stick } = useStickToBottom<HTMLDivElement>(mission.events.length)
   const { opening, work, rest } = foldWork(mission)
@@ -33,7 +33,7 @@ export function MissionThread({ mission }: { mission: Mission }) {
             <span className="text-muted">Devin asks</span> {mission.needsUser}
           </p>
         )}
-        <ReplyComposer onSend={reply} />
+        <ReplyComposer onSend={reply} initialValue={initialDraft} />
       </div>
     </div>
   )

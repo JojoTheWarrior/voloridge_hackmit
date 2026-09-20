@@ -83,6 +83,43 @@ it live — its thinking as prose, its steps, and visual artifacts (charts, imag
 samples, join diagrams, tables, stats) as they are produced. Reply to steer it
 like a chat, and mark the mission done when you are satisfied.
 
+The mission header has **Thread**, **Report**, and **Explorer** views. Generate
+a report after findings arrive, follow an "Ask next" link to prepare a reply,
+or export the report through the browser's print dialog. Explorers are versioned
+static sites, served in an opaque-origin sandbox. The Leaflet kit supports maps,
+scored points, heatmaps, satellite imagery, and live light/dark theme changes.
+Dataset cards and a table are available from the view toggle on Datasets.
+
+**Container demo (recommended).** No host dependency installation or API key is
+needed. This uses a separate database volume and does not touch existing live
+missions:
+
+```bash
+docker compose up --build -d
+# Open http://localhost:5174; API is http://localhost:8031
+docker compose exec api python -m pytest tests -q
+docker compose exec web npm test
+docker compose exec web npm run lint
+docker compose exec web npm run build
+docker compose stop
+```
+
+Compose forces demo mode even if a local key exists. Keep the volume to retain
+demo missions. `KINGDOM_API_TARGET` selects the Vite proxy target (defaults to
+`http://127.0.0.1:8030` outside Compose). Forwarded host headers are required for
+the explorer's content security policy.
+
+**Start from research.** On New mission, choose **Attach research** to search
+the saved findings or paste notes. Choosing a finding attaches its complete
+record, including methods, source URLs and caveats; it fills an empty prompt
+without replacing a question already written. Edit the question, remove the
+attachment, or reopen it before submitting. Devin receives it as research
+context and must rerun the analysis; the reference is not added to the thread.
+The library reads `research/*/findings.json` through `GET /api/research`, skips
+archives and malformed entries, and caps each reference at 100,000 characters.
+Snapshots may be old and omit raw data; they are starting points, not newly
+verified results. The current snapshot has 82 findings in six collections.
+
 Two processes. Needs Node 20.19+ or 22.12+ (`node -v`) and the repo's Python
 environment:
 
@@ -119,9 +156,18 @@ an in-memory twin used by the tests.
 
 ```bash
 python -m pytest tests/server -q          # server tests, fully offline
-python -m pytest tests/server -m live -s  # one real Devin session, ≤ 1 ACU
+python -m pytest tests/server/test_live.py -m live -s  # one real Devin session, ≤ 1 ACU
 cd web && npm test && npm run build       # UI tests, type-check, build
 ```
+
+The optional `tests/server/test_live_delivery.py` checks a new geographic
+mission, its report, and its explorer in **one** session. It is skipped unless
+`KINGDOM_LIVE_DELIVERY_MAX_ACU` is explicitly set to an approved positive ACU
+budget and `-m live` is selected. Run that file alone to avoid also spending
+the separate smoke test's 1 ACU. It needs the local `DEVIN_API_KEY`, allows up
+to 15 minutes per delivery, and prints the session URL and downloaded explorer
+directory. A passing API test still requires a browser check of the generated
+site. No live delivery run has been performed during this polish pass.
 
 ## Research
 

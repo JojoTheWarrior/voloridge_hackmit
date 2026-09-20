@@ -157,7 +157,7 @@ describe('ReportPage', () => {
     it('goes from the invitation to the writing state to the report', async () => {
       const { user } = renderReport(makeMission('waiting'))
       await user.click(await generate())
-      expect(await screen.findByRole('status')).toHaveTextContent('Devin is writing the report')
+      expect(await screen.findByRole('heading', { name: 'Devin is writing the report' })).toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Generate report' })).not.toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Report, in progress' })).toBeInTheDocument()
 
@@ -177,7 +177,7 @@ describe('ReportPage', () => {
 
     it('shows the writing state for a report that was already on its way', async () => {
       renderReport(makeMission('working', { reportPending: true }))
-      expect(await screen.findByRole('status')).toHaveTextContent('Devin is writing the report')
+      expect(await screen.findByRole('heading', { name: 'Devin is writing the report' })).toBeInTheDocument()
       expect(screen.getByText(/keep using the thread/)).toHaveClass('text-muted')
     })
 
@@ -185,6 +185,7 @@ describe('ReportPage', () => {
       const { generateReport, user } = renderReport(makeMission('waiting'))
       generateReport.mockRejectedValueOnce(new TypeError('Failed to fetch'))
       await user.click(await generate())
+      expect(await screen.findByRole('alert')).toHaveTextContent('report request didn’t send')
       await user.click(await generate())
       expect(generateReport).toHaveBeenCalledTimes(2)
     })

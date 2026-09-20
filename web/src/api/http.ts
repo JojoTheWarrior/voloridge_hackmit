@@ -1,4 +1,4 @@
-import type { Dataset, Meta, Mission, MissionSummary } from '../types'
+import type { Dataset, Meta, Mission, MissionSummary, ResearchFinding } from '../types'
 import { ValidationError, type Api } from './index'
 
 const POLL_MS = 2000
@@ -97,6 +97,10 @@ export function createHttpApi(baseUrl = ''): Api {
 
     async listDatasets() {
       return read<Dataset[]>(await send('/datasets'))
+    },
+
+    async listResearch() {
+      return read<ResearchFinding[]>(await send('/research'))
     },
 
     async linkDataset(input) {

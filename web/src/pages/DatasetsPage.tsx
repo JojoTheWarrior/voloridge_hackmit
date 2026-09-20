@@ -3,17 +3,20 @@ import { DatasetCards } from '../components/DatasetCards'
 import { DatasetTable } from '../components/DatasetTable'
 import { LinkDatasetDialog } from '../components/LinkDatasetDialog'
 import { ViewToggle } from '../components/ViewToggle'
-import { useDatasets } from '../hooks/useApiData'
+import { useDatasetState } from '../hooks/useApiData'
+import { CenteredState } from '../components/mission/CenteredState'
 import { useDatasetView } from '../hooks/useDatasetView'
 
 const pillClass = 'rounded-full bg-ink px-4 py-1.5 text-[13px] text-paper transition-colors duration-150 hover:bg-ink/85'
 
 export function DatasetsPage() {
-  const datasets = useDatasets()
+  const { data: datasets, reconnecting } = useDatasetState()
   const [linking, setLinking] = useState(false)
   const [view, setView] = useDatasetView()
 
-  if (!datasets) return null
+  if (!datasets) return <CenteredState title={reconnecting ? 'Reconnecting to Kingdom' : 'Loading datasets'} busy>
+    {reconnecting && <p className="text-sm text-muted">Your datasets will appear when the connection returns.</p>}
+  </CenteredState>
   const linkButton = (
     <button type="button" onClick={() => setLinking(true)} className={pillClass}>
       Link dataset
@@ -22,6 +25,7 @@ export function DatasetsPage() {
 
   return (
     <div className="mx-auto w-full max-w-[880px] px-6 pt-12 pb-24">
+      {reconnecting && <p role="status" className="mb-4 text-[13px] text-muted">Reconnecting. Showing the last available datasets.</p>}
       {datasets.length === 0 ? (
         <div className="flex flex-col items-center gap-2 pt-32 text-center">
           <h1 className="text-lg font-medium tracking-tight">Link your first dataset</h1>
@@ -30,7 +34,7 @@ export function DatasetsPage() {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <h1 className="text-2xl font-medium tracking-[-0.025em]">Datasets</h1>
             <div className="flex items-center gap-3">
               <ViewToggle view={view} onChange={setView} />

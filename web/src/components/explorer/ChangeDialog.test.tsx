@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ValidationError } from '../../api/index'
 import { ChangeDialog } from './ChangeDialog'
@@ -133,6 +133,6 @@ describe('ChangeDialog', () => {
     await user.type(box(), '{Meta>}{Enter}{/Meta}')
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(send()).toHaveAttribute('aria-disabled', 'true')
-    finish()
+    await act(async () => finish())
   })
 })

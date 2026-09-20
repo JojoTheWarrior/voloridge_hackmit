@@ -50,6 +50,19 @@ describe('MissionLayout', () => {
     expect(screen.queryByRole('log')).not.toBeInTheDocument()
   })
 
+  it('prefills a report follow-up in the thread and sends only after confirmation', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    const { api } = renderApp([makeMission('done', { id: 'm1', report: makeReport() })], '/missions/m1/report')
+    const send = vi.spyOn(api, 'sendMessage')
+    await user.click(await screen.findByRole('link', { name: 'Does it hold over two years?' }))
+    const reply = await screen.findByRole('textbox', { name: 'Reply to Devin' })
+    expect(reply).toHaveValue('Does it hold over two years?')
+    expect(reply).toHaveFocus()
+    expect(send).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'Send reply' }))
+    expect(send).toHaveBeenCalledExactlyOnceWith('m1', 'Does it hold over two years?')
+  })
+
   it('reaches the report and the explorer from their cards in the thread', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     const events = [...makeMission('done').events, { id: 'report', at: '2026-09-20T12:30:00Z', kind: 'report' as const }, { id: 'explorer', at: '2026-09-20T12:40:00Z', kind: 'explorer' as const }]
@@ -67,9 +80,15 @@ describe('MissionLayout', () => {
     expect(screen.queryByRole('navigation', { name: 'Mission views' })).not.toBeInTheDocument()
   })
 
-  it.each(['', '/report', '/explorer'])('renders nothing at "/missions/m1%s" while the mission is loading', async (suffix) => {
+  it.each(['', '/report', '/explorer'])('shows loading at "/missions/m1%s" while the mission is loading', async (suffix) => {
     renderApp([makeMission('done', { id: 'm1' })], `/missions/m1${suffix}`, (api) => ({ ...api, getMission: () => new Promise(() => {}) }))
     await screen.findByRole('navigation', { name: 'Main' })
-    expect(screen.getByRole('main')).toBeEmptyDOMElement()
+    expect(within(screen.getByRole('main')).getByRole('status')).toHaveTextContent('Loading mission')
+  })
+
+  it('explains an initial connection failure instead of showing a blank page', async () => {
+    renderApp([], '/missions/m1', (api) => ({ ...api, getMission: async () => { throw new Error('offline') } }))
+    expect(await screen.findByRole('heading', { name: 'Reconnecting to Kingdom' })).toBeInTheDocument()
+    expect(screen.queryByText('Mission not found')).not.toBeInTheDocument()
   })
 })

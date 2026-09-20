@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    environment:
+      KINGDOM_FAKE_DEVIN: "1"
+      PYTEST_ADDOPTS: "-o cache_dir=/tmp/pytest-cache"
+    ports:
+      - "127.0.0.1:8031:8030"
+    volumes:
+      - .:/app:ro
+      - demo-state:/state
+  web:
+    image: node:22-bookworm-slim
+    working_dir: /app/web
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    environment:
+      KINGDOM_API_TARGET: http://api:8030
+    ports:
+      - "127.0.0.1:5174:5173"
+    volumes:
+      - .:/app
+      - web-deps:/app/web/node_modules
+    depends_on:
+      - api
+volumes:
+  demo-state:
+  web-deps:

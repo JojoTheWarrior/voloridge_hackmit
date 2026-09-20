@@ -1,8 +1,8 @@
 import { ArrowUp } from 'lucide-react'
 import { useRef, useState, type KeyboardEvent } from 'react'
 
-export function ReplyComposer({ onSend }: { onSend: (text: string) => Promise<void> }) {
-  const [value, setValue] = useState('')
+export function ReplyComposer({ onSend, initialValue = '' }: { onSend: (text: string) => Promise<void>; initialValue?: string }) {
+  const [value, setValue] = useState(initialValue)
   const [sending, setSending] = useState(false)
   const [failed, setFailed] = useState(false)
   // State lags a render behind; the ref is what stops a second Enter in the same tick.
@@ -37,6 +37,8 @@ export function ReplyComposer({ onSend }: { onSend: (text: string) => Promise<vo
       <div className="flex items-end gap-3 rounded-2xl border border-line bg-paper p-2 pl-3 transition-colors duration-150 focus-within:border-ink">
         <textarea
           aria-label="Reply to Devin"
+          autoFocus={Boolean(initialValue)}
+          readOnly={sending}
           rows={1}
           value={value}
           onChange={(event) => setValue(event.target.value)}

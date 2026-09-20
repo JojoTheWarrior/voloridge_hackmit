@@ -3,7 +3,7 @@ import type { DatasetKind } from '../types'
 import { DatasetThumbnail } from './DatasetThumbnail'
 
 const KINDS: DatasetKind[] = ['events', 'markets', 'weather', 'air', 'other']
-const PALETTE = ['#0a0a0a', '#bdbdbd', '#e5e5e5', 'none']
+const PALETTE = ['var(--color-ink)', 'var(--color-faint)', 'var(--color-line)', 'none']
 
 const markup = (id: string, kind: DatasetKind) => render(<DatasetThumbnail id={id} kind={kind} />).container.innerHTML
 

@@ -140,8 +140,6 @@ export interface Mission extends MissionSummary {
   events: MissionEvent[]
 }
 
-export type DatasetKind = 'events' | 'markets' | 'weather' | 'air' | 'other'
-
 export interface Dataset {
   id: string
   name: string
@@ -155,4 +153,13 @@ export interface Dataset {
 export interface Meta {
   /** True when the server is running its scripted fake instead of real Devin. */
   demo: boolean
+}
+
+export interface ResearchFinding {
+  id: string
+  title: string
+  summary: string
+  source: string
+  verdict: string
+  reference: string
 }

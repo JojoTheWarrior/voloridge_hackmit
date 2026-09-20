@@ -1,6 +1,7 @@
 import { Outlet, useParams } from 'react-router-dom'
 import { MissionHeader } from '../components/mission/MissionHeader'
 import { MissionNotFound } from '../components/mission/MissionNotFound'
+import { CenteredState } from '../components/mission/CenteredState'
 import { useMission } from '../hooks/useApiData'
 
 /** Loads the mission once for its three views, which share the header and its tabs. */
@@ -8,8 +9,9 @@ export function MissionLayout() {
   const { id = '' } = useParams()
   const { mission, loading, reconnecting } = useMission(id)
 
-  // Rendering nothing while loading avoids flashing "not found" before the mission arrives.
-  if (loading) return null
+  if (loading) return <CenteredState title={reconnecting ? 'Reconnecting to Kingdom' : 'Loading mission'} busy>
+    {reconnecting && <p className="text-sm text-muted">Your mission will appear when the connection returns.</p>}
+  </CenteredState>
   if (!mission) return <MissionNotFound />
 
   return (

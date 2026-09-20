@@ -19,6 +19,7 @@ from server.brief import (
 from server.devin import AttachmentRejected, DevinClient, DevinUnavailable, devin_mode, make_client, max_acu
 from server.explorer import DOCUMENT_EXTENSIONS, KIT_DIR, content_type, extension, read_kit, site_file
 from server.poller import Poller
+from server.research import MAX_REFERENCE_CHARS, RESEARCH_DIR, list_findings
 from server.store import MissionRow, Store
 
 log = logging.getLogger(__name__)
@@ -72,7 +73,7 @@ class NotFound(Exception):
     pass
 
 
-def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path = KIT_DIR) -> Flask:
+def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path = KIT_DIR, research_dir: Path = RESEARCH_DIR) -> Flask:
     app = Flask(__name__)
     app.json.sort_keys = False
 
@@ -108,6 +109,10 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
     def list_missions():
         return jsonify([_summary(mission) for mission in store.list_missions()])
 
+    @app.get("/api/research")
+    def research():
+        return jsonify(list_findings(research_dir))
+
     @app.post("/api/missions")
     def create_mission():
         body = _body()
@@ -117,6 +122,8 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
         requested = body.get("datasetIds")
         datasets = store.get_datasets(i for i in requested if isinstance(i, str)) if isinstance(requested, list) else []
         reference = _text(body.get("reference")) or None
+        if reference and len(reference) > MAX_REFERENCE_CHARS:
+            raise Invalid("reference", "Keep research under 100,000 characters")
         title = derive_title(hypothesis)
         prompt = build_prompt(hypothesis, datasets, reference)
         mission = store.create_mission(

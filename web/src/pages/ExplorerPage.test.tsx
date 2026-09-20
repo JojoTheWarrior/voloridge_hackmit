@@ -99,7 +99,7 @@ describe('ExplorerPage', () => {
     it('opens the change dialog from the slow-loading note too', async () => {
       const { user } = renderExplorer(ready())
       await frame()
-      act(() => vi.advanceTimersByTime(20_000))
+      await act(() => vi.advanceTimersByTimeAsync(20_001))
       await user.click(screen.getByRole('button', { name: 'request a change' }))
       expect(screen.getByRole('dialog', { name: 'Request a change' })).toBeInTheDocument()
     })
@@ -124,7 +124,7 @@ describe('ExplorerPage', () => {
   describe('while the first build is on its way', () => {
     it('fills the area with a calm building state', async () => {
       renderExplorer(makeMission('working', { explorerPending: true }))
-      const state = await screen.findByRole('status')
+      const state = (await screen.findByRole('heading', { name: 'Devin is building the explorer' })).closest('[role="status"]')!
       expect(state).toHaveTextContent('Devin is building the explorer')
       expect(screen.getByText('This can take several minutes. You can keep using the thread meanwhile.')).toHaveClass('text-muted')
       expect(document.querySelector('iframe')).toBeNull()

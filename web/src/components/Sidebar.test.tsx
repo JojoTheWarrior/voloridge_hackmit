@@ -117,7 +117,8 @@ describe('Sidebar', () => {
   it('calls onNavigate when a link is followed', async () => {
     const onNavigate = vi.fn()
     renderWithApp(<Sidebar onNavigate={onNavigate} />, { api: apiWith() })
-    ;(await screen.findByRole('link', { name: 'Datasets' })).click()
+    const link = await screen.findByRole('link', { name: 'Datasets' })
+    await act(async () => link.click())
     expect(onNavigate).toHaveBeenCalled()
   })
 })

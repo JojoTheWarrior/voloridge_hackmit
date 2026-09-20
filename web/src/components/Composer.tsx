@@ -1,4 +1,4 @@
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, LoaderCircle } from 'lucide-react'
 import { useState, type KeyboardEvent, type Ref } from 'react'
 import type { Dataset } from '../types'
 import { DatasetChips } from './DatasetChips'
@@ -9,9 +9,10 @@ interface ComposerProps {
   onChange: (value: string) => void
   onSubmit: (hypothesis: string, datasetIds: string[]) => void
   inputRef: Ref<HTMLTextAreaElement>
+  busy?: boolean
 }
 
-export function Composer({ datasets, value, onChange, onSubmit, inputRef }: ComposerProps) {
+export function Composer({ datasets, value, onChange, onSubmit, inputRef, busy = false }: ComposerProps) {
   // Tracking what is switched off keeps newly linked datasets on by default.
   const [deselected, setDeselected] = useState<Set<string>>(new Set())
   const selected = new Set(datasets.filter((d) => !deselected.has(d.id)).map((d) => d.id))
@@ -26,7 +27,7 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
   }
 
   function submit() {
-    if (!empty) onSubmit(value, [...selected])
+    if (!empty && !busy) onSubmit(value, [...selected])
   }
 
   function onKeyDown(event: KeyboardEvent) {
@@ -40,6 +41,7 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
       <textarea
         ref={inputRef}
         aria-label="Mission prompt"
+        readOnly={busy}
         autoFocus
         rows={2}
         value={value}
@@ -53,13 +55,14 @@ export function Composer({ datasets, value, onChange, onSubmit, inputRef }: Comp
         <button
           type="button"
           aria-label="Start mission"
-          aria-disabled={empty}
+          aria-disabled={empty || busy}
+          aria-busy={busy}
           onClick={submit}
           className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-paper transition-colors duration-150 ${
             empty ? 'cursor-default bg-line' : 'bg-ink hover:bg-ink/85'
           }`}
         >
-          <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />
+          {busy ? <LoaderCircle size={16} aria-hidden="true" className="animate-spin" /> : <ArrowUp size={16} strokeWidth={2} aria-hidden="true" />}
         </button>
       </div>
     </div>

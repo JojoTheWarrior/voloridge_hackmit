@@ -1,6 +1,6 @@
 # Handoff — Kingdom web app and Devin missions
 
-Written 2026-09-20. Everything below is committed; the working tree is clean.
+Updated 2026-09-20 after the local integration and polish pass.
 Pick up on branch **`devin-backend`**.
 
 ## What Kingdom is
@@ -32,9 +32,12 @@ same palette turned over. Rules live in
 Run it:
 
 ```bash
-python main.py serve                  # demo mode if no DEVIN_API_KEY
-cd web && npm install && npm run dev
+docker compose up --build -d          # isolated demo database; no Devin spend
+# UI: http://localhost:5174, API: http://localhost:8031
 ```
+
+The original Python/Vite commands still work at ports 8030/5173. See README
+and AGENTS.md for container checks. Compose never polls the local live DB.
 
 **Demo mode** (no key, or `KINGDOM_FAKE_DEVIN=1`): a scripted fake Devin plays
 a full mission, a report, and an explorer. Free. **Live mode**: a v3
@@ -48,19 +51,21 @@ the old CLI's `--brain devin` does not work with it; only `server/` does.
 | Branch | State |
 | --- | --- |
 | `main` | Green and verified from a fresh clone: live Devin backend, mission thread + artifacts + reply, dark mode, `research/`. **No** report or explorer |
-| `devin-backend` | `main` + report + explorer. Local is **1 commit ahead of GitHub** (`8c03d33`, the unverified Leaflet swap). `git push origin devin-backend` to back it up |
-| `dataset-cards` | Card view with generated thumbnails for the Datasets page. Finished, never merged; will conflict lightly with `devin-backend` in `types.ts`, `mock.ts`, `fixtures.ts` |
+| `devin-backend` | Includes local merges of `main` (`6422a21`) and `dataset-cards` (`322980d`), reports, explorers, research picker and polish. Changes remain local; no push or landing on `main` during this pass. |
+| `dataset-cards` | Integrated into `devin-backend`; cards now use theme tokens in dark mode. |
 | `research-snapshot` | Same research commit that is already on `main` |
 
-`devin-backend` has diverged from `main`: `main` also carries the research
-folder, a `pytest.ini` `testpaths = tests` line, and a README section. Merge or
-rebase before landing; without that `pytest.ini` line, pytest would try to
-collect `research/polymarket_experts/tests`.
+The local `main` research folder, pytest `testpaths = tests`, and README are
+integrated. Dark-mode conflicts preserved the newer shared theme store and
+report print styles. Remote refs were not refreshed; inspect them before a
+future push or landing.
 
 ## State of `devin-backend`
 
-Gates at the last commit: **Python 1,050 passed / 1 skipped** (`pytest
-tests/server`), **web 573 passed**, `tsc -b` clean, `oxlint` clean.
+Latest offline checks in Docker: **Python 1,195 passed / 3 skipped** across
+`tests`; **web 624 passed**. Production build and `oxlint` clean. The full
+Python run emits one existing SciPy precision warning for a constant-valued
+step-change fixture. No live Devin credits spent during this pass.
 
 Done and working:
 
@@ -69,6 +74,13 @@ Done and working:
   questions that prefill a reply, Copy link, Regenerate, Export PDF (print
   stylesheet forces light). Verified end to end in demo mode only.
 - **Mission tabs** Thread · Report · Explorer, shared header.
+- **Research attachment UI.** New mission → Attach research → search 82 saved
+  findings from six collections, or paste notes. Full evidence/caveats travel
+  through `reference`; the question remains editable and the attachment can be
+  removed. `GET /api/research` reads only current `research/*/findings.json`.
+- **Recovery and polish.** Visible submission errors and retry for missions,
+  dataset linking and reports; loading/reconnecting states instead of blank
+  mission/dataset pages; reduced motion; theme-aware dataset thumbnails.
 - **Explorer plumbing.** "Build explorer" / "Request a change" → message to
   the same Devin session → Devin attaches `explorer-v<N>.zip` → server
   downloads, unpacks as hostile input (zip-slip, bombs, symlinks, type
@@ -82,30 +94,24 @@ Done and working:
   followed without credentials. Devin's raw `ATTACHMENT:{…}` chat lines are
   stripped from the thread.
 
-### The open bug: the explorer's map is blank inside the sandbox
+### Resolved: the explorer map now renders inside the sandbox
 
-Served as a plain page, the kit's asbestos example is excellent (gray Kharkiv
-basemap, ink dots sized by likelihood). Inside the sandboxed frame the map area
-is blank and the framed page froze in Chrome. Cause: the kit used **MapLibre
-GL**, whose web workers do not survive an opaque origin. The sandbox is a
-deliberate security boundary (AI-written code inside the app) and should not be
-relaxed.
+The old MapLibre implementation produced a blank or frozen framed map.
+Leaflet now renders in the real product iframe under the server's production
+CSP, with **no sandbox relaxation**. Verified standalone and framed using the Codex in-app browser:
+gray basemap, point selection and evidence, live theme sync, dark heatmap,
+satellite imagery, zoom, 375px layout, bottom sheet, slider extremes and reset.
 
-Fix in progress, commit `8c03d33`, **never run**: `kit.js` and `kit.css` are
-converted to **Leaflet** (no workers, no WebGL; CARTO light/dark raster tiles,
-Esri satellite, canvas renderer for points, ink heatmap). `index.html` and
-`GUIDE.md` are only partly updated (`GUIDE.md` still mentions MapLibre once;
-check `index.html` calls match the new `Kingdom.map` surface). `node --check
-kit.js` passes; nothing else is known about it.
+The basemaps are Esri gray (light/dark) and World Imagery, with canvas points
+and an ink heatmap. GUIDE.md already contained the WebGL/worker warning.
+Browser testing found and fixed a literal `false` in the empty-filter view;
+the map also observes container resizing when the mobile sheet expands.
+The report's "Ask next" links were actually absent despite the earlier notes;
+they are now implemented and covered by navigation/send tests.
 
-To finish: make the example work standalone, then verify **inside a sandboxed
-iframe under the production CSP** — the agent brief in the session did this
-with a scratch dir (`index.html`, `data.json`, `kit/kit.css`, `kit/kit.js`,
-and a `host.html` that iframes it with the sandbox attribute), a tiny Python
-server adding the CSP header, and headless Chrome screenshots (Leaflet needs no
-WebGL, so headless works). Check light, dark, heatmap, satellite, 375px. Then
-update `GUIDE.md` to say WebGL/worker map libraries (MapLibre, Mapbox GL,
-deck.gl) do not work in explorers.
+Use demo mission `m_46bd8f7f`, explorer version 2, in the Compose volume for the browser walkthrough.
+It is synthetic: fake Devin always delivers the sample Kharkiv explorer,
+regardless of the mission question. The local live database is untouched.
 
 ### Not yet tested against real Devin
 
@@ -113,7 +119,7 @@ deck.gl) do not work in explorers.
    is fixed at session creation. The one live mission (`m_f064f4d0`, "Houston
    heat vs gas prices", in `.kingdom/kingdom.db`) predates the `report` and
    `explorer` fields, so they may only work on **new** missions.
-2. **The explorer request is ~65 KB** (guide + full kit text; example data is
+2. **The explorer request is ~79 KB** (guide + full kit text; example data is
    cut to 20,000 chars by `MAX_KIT_DATA_CHARS` in `server/brief.py`). Whether
    Devin's message endpoint accepts that is unknown. Fallback: have Devin fetch
    the kit from this repo on GitHub instead of inlining it.
@@ -127,6 +133,15 @@ deck.gl) do not work in explorers.
 
 Live Devin spend so far: one 1-ACU smoke test, one mission capped at 5 ACU, a
 few cheap follow-up messages.
+
+Prepared `tests/server/test_live_delivery.py` to exercise a new five-location
+hydropower mission, report and explorer in one capped session. It requires
+`-m live`, `DEVIN_API_KEY` and an explicitly approved positive
+`KINGDOM_LIVE_DELIVERY_MAX_ACU`. Run that file alone so the separate smoke test
+does not add another session. API delivery success does not prove the generated
+site works; inspect its saved files in the browser afterward. No new live
+session has been launched. The final user direction prioritizes hackathon
+frontend polish and speed; live validation is an optional follow-up.
 
 ## Things that will bite you
 
@@ -145,7 +160,7 @@ few cheap follow-up messages.
 - Replication: a mission's `reference` is prior research Devin retraces
   silently as its own investigation, never mentioning it, but it must really
   run the analyses and follow the data if it diverges. Wired end to end in the
-  server and brief; there is **no UI** to attach one yet.
+  server and brief; the New mission research picker now attaches one.
 - `web/src/types.ts` and `web/src/api/index.ts` are the contract between web
   and server. Change them deliberately, both sides together.
 - The repo rule for this project: commit locally, never push or merge without
@@ -153,13 +168,8 @@ few cheap follow-up messages.
 
 ## Suggested next steps, in order
 
-1. Finish and verify the Leaflet kit inside the sandbox (above). Push.
-2. Run one **new** live mission, then Generate report on it — settles unknown 1
-   for reports cheaply (well under 1 ACU on top of the mission).
-3. Run a live mission with place-level results (a fix-list idea via
-   `reference`), then Build explorer — settles unknowns 1–3. Watch the first
-   request for a message-size rejection.
-4. Merge `main` into `devin-backend` (research, `pytest.ini`), then land it on
-   `main`; merge `dataset-cards`.
-5. Build the UI for attaching a `reference` / importing a finding from
-   `research/*/findings.json`.
+1. Once an ACU budget is approved, run the opt-in live-delivery check. Verify
+   narration, structured output and acceptance of the full kit message.
+2. Inspect the real delivered explorer and report in the browser. A subsequent
+   mission can use a fix-list finding from the research library or pasted notes.
+3. Review the local integration commits, then push/land only when requested.
