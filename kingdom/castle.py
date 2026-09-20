@@ -370,7 +370,7 @@ class CastleScene(Scene):
             progress = m.progress if m.progress is not None else min(0.95, elapsed / MISSION_SECONDS)
             signal = m.signal()
             draw_sprite_or_box(surface, assets, "icon_hammer", card.x + 8, ty - 2, (16, 16), t)
-            bar = pygame.Rect(card.x + 28, ty, card.right - 28 - 40, 12)
+            bar = pygame.Rect(card.x + 28, ty, card.w - 28 - 6 - 40, 12)
             ProgressBar.draw(surface, assets, bar, progress, signal_color(signal), t, shimmer=True, pulse=signal is None)
             draw_text(surface, fmt_elapsed(elapsed), (card.right - 6, ty + 2), INK, align="right")
             ty += 12 + 4
