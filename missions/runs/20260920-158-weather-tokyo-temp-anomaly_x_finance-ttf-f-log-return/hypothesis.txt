@@ -1,0 +1,1 @@
+R2 | [gas-lng] NULL CONTROL: Tokyo temperature anomaly 20d z-score > 1 should show no lead on TTF log returns at lags 0-10 days (expected zero); trade none [weather.tokyo.temp_anomaly -> finance.TTF=F.log_return]

@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:41:41.302303+00:00",
+  "git_commit": "18ef9277dc4382bdee1b1b59f69fca662fc64ca0",
+  "folder": "20260920-158-weather-tokyo-temp-anomaly_x_finance-ttf-f-log-return",
   "mission_id": "R2-0038",
-  "title": "Null control: Tokyo temp anomaly vs TTF returns",
   "hypothesis": "R2 | [gas-lng] NULL CONTROL: Tokyo temperature anomaly 20d z-score > 1 should show no lead on TTF log returns at lags 0-10 days (expected zero); trade none [weather.tokyo.temp_anomaly -> finance.TTF=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/71c4436689784de781b13547a654fc46",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:41:31Z",
-  "updated_at": "2026-09-20T03:41:43Z",
-  "finished_at": null,
-  "elapsed_s": 12,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-158-weather-tokyo-temp-anomaly_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.4
-  },
+  "status": "ok",
+  "n_obs": 388,
+  "r": 0.02269613874808308,
+  "perm_p": 0.02594810379241517,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.4,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 1.4,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.tokyo.temp_anomaly": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
