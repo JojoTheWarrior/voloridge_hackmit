@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Iran-Gulf dyad event count 20d z-score > 1.5 hits US network carriers with Gulf-route exposure (-); trade short AAL 3d at 1d lag [gdelt.irn.conflict_events -> finance.AAL.log_return]
