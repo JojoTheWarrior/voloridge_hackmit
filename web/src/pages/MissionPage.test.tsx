@@ -57,7 +57,7 @@ describe('MissionPage', () => {
 
     await act(() => vi.advanceTimersByTimeAsync(STEP_MS * SCRIPT.length))
     expect(screen.getByText('Waiting for you')).toBeInTheDocument()
-    expect(screen.getByTestId('artifact')).toBeInTheDocument()
+    expect(screen.getAllByTestId('artifact')).toHaveLength(3)
     expect(screen.getByRole('region', { name: 'Conclusion' })).toBeInTheDocument()
     expect(screen.getByText(FIRST_STEP)).toBeVisible()
   })
@@ -112,7 +112,7 @@ describe('MissionPage', () => {
 
     await user.click(toggle)
     expect(screen.getByText(FIRST_STEP)).toBeInTheDocument()
-    expect(screen.getByTestId('artifact')).toBeInTheDocument()
+    expect(screen.getAllByTestId('artifact')).toHaveLength(3)
     expect(screen.getAllByText('Does A lead B?')).toHaveLength(1)
   })
 

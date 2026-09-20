@@ -31,7 +31,7 @@ export function MissionThread({ mission, reconnecting }: MissionThreadProps) {
         <article className="mx-auto flex w-full max-w-[720px] flex-col gap-6 px-6 pt-10 pb-8">
           <EventList events={opening} live={live} />
           <WorkLog events={work} />
-          <EventList events={rest} live={live} />
+          <EventList events={rest} live={live} missionId={mission.id} report={mission.report} />
         </article>
       </div>
 

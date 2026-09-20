@@ -6,6 +6,7 @@ import requests
 
 from server import devin
 from server.artifacts import normalise_artifact
+from server.brief import REPORT_REQUEST
 from server.devin import (
     Attachment,
     AttachmentRejected,
@@ -17,6 +18,7 @@ from server.devin import (
     make_client,
     max_acu,
 )
+from server.report import normalise_report
 
 KEY = "cog_test_key"
 ORG = "org-123"
@@ -162,6 +164,121 @@ def test_fake_has_no_attachments_and_rejects_downloads(fake):
     assert fake.list_attachments(ref.session_id) == []
     with pytest.raises(AttachmentRejected):
         fake.download(Attachment(name="x.png", url="https://x.test/x.png"))
+
+
+# ---------- FakeDevin's final report ----------
+
+def _finished(fake, ticker):
+    ref = _start(fake)
+    ticker.t += 600
+    return ref.session_id
+
+
+def test_fake_leaves_the_report_null_until_asked(fake, ticker):
+    session_id = _finished(fake, ticker)
+    assert fake.get_session(session_id).structured_output["report"] is None
+    fake.send_message(session_id, "What about the outlier?")
+    ticker.t += 60
+    assert fake.get_session(session_id).structured_output["report"] is None
+
+
+def test_fake_writes_the_report_two_beats_after_the_request(fake, ticker):
+    session_id = _finished(fake, ticker)
+    before = fake.get_session(session_id).structured_output
+    texts = _devin_texts(fake, session_id)
+
+    fake.send_message(session_id, REPORT_REQUEST)
+    assert fake.get_session(session_id).status == "running"
+    ticker.t += 5.9
+    early = fake.get_session(session_id)
+    assert (early.status, early.structured_output["report"]) == ("running", None)
+    assert _devin_texts(fake, session_id) == texts
+
+    ticker.t += 0.1
+    ready = fake.get_session(session_id)
+    assert ready.status == "waiting"
+    assert ready.structured_output["report"] is not None
+    assert {**ready.structured_output, "report": None} == before
+    assert _devin_texts(fake, session_id) == [*texts, "The report is ready."]
+
+
+def test_fake_does_not_treat_the_report_request_as_a_reply(fake, ticker):
+    session_id = _finished(fake, ticker)
+    artifacts = len(fake.get_session(session_id).structured_output["artifacts"])
+    fake.send_message(session_id, REPORT_REQUEST)
+    ticker.t += 60
+    assert len(fake.get_session(session_id).structured_output["artifacts"]) == artifacts
+    assert devin.REPLY_ACK not in _devin_texts(fake, session_id)
+    assert [m.text for m in fake.list_messages(session_id) if m.role == "user"] == ["the brief", REPORT_REQUEST]
+
+
+def test_fake_report_is_a_full_report_about_its_own_run(fake, ticker):
+    session_id = _finished(fake, ticker)
+    fake.send_message(session_id, REPORT_REQUEST)
+    ticker.t += 60
+    output = fake.get_session(session_id).structured_output
+    raw = output["report"]
+    artifacts = {a["id"]: a for a in output["artifacts"]}
+    report = normalise_report(raw, set(artifacts))
+
+    # Nothing is lost or reshaped by validation: the fake follows the brief to the letter.
+    assert report["keyArtifactIds"] == raw["key_artifact_ids"] and len(raw["key_artifact_ids"]) == 3
+    assert {(artifacts[i]["type"], artifacts[i].get("kind")) for i in raw["key_artifact_ids"]} >= {
+        ("chart", "scatter"), ("relation", None)}
+    assert report["headline"] == raw["headline"] and len(raw["headline"]) <= 70
+    assert report["summary"] == raw["summary"] and 3 <= raw["summary"].count(". ") + 1 <= 5
+    assert report["stats"] == raw["stats"] and len(raw["stats"]) == 4
+    assert all(len(stat["value"]) <= 16 for stat in raw["stats"])
+    assert report["steps"] == raw["steps"] and 5 <= len(raw["steps"]) <= 6
+    assert all(2 <= len(step["label"].split()) <= 5 and step["takeaway"].endswith(".") for step in raw["steps"])
+    assert report["caveats"] == raw["caveats"] and len(raw["caveats"]) == 2
+    assert report["nextQuestions"] == raw["next_questions"] and len(raw["next_questions"]) == 2
+    assert "*" not in repr(raw) and "#" not in repr(raw)
+
+
+def test_fake_regenerates_a_visibly_different_report_each_time(fake, ticker):
+    session_id = _finished(fake, ticker)
+    summaries = []
+    for _ in range(3):
+        fake.send_message(session_id, REPORT_REQUEST)
+        assert fake.get_session(session_id).status == "running"
+        # Until the rewrite lands, the previous report is still what the output holds.
+        previous = fake.get_session(session_id).structured_output["report"]
+        assert (previous or {}).get("summary") == (summaries[-1] if summaries else None)
+        ticker.t += 60
+        assert fake.get_session(session_id).status == "waiting"
+        summaries.append(fake.get_session(session_id).structured_output["report"]["summary"])
+    assert len(set(summaries)) == 3
+    assert "follow-up" in summaries[1]
+    assert _devin_texts(fake, session_id).count("The report is ready.") == 3
+    ids = [m.id for m in fake.list_messages(session_id)]
+    assert len(ids) == len(set(ids))
+
+
+def test_fake_handles_a_reply_and_a_report_request_together(fake, ticker):
+    session_id = _finished(fake, ticker)
+    fake.send_message(session_id, REPORT_REQUEST)
+    ticker.t += 1
+    fake.send_message(session_id, "What about the outlier?")
+    ticker.t += 5
+    assert fake.get_session(session_id).status == "running"
+    ticker.t += 60
+    after = fake.get_session(session_id)
+    assert after.status == "waiting" and after.structured_output["report"] is not None
+    assert after.structured_output["artifacts"][-1]["id"] == "r1"
+
+
+def test_fake_forgets_a_report_across_a_restart_but_writes_one_when_asked_again(fake, ticker):
+    session_id = _finished(fake, ticker)
+    fake.send_message(session_id, REPORT_REQUEST)
+    ticker.t += 60
+    first = fake.get_session(session_id).structured_output["report"]
+
+    restarted = FakeDevin(clock=ticker, beat_seconds=3.0)
+    assert restarted.get_session(session_id).structured_output["report"] is None
+    restarted.send_message(session_id, REPORT_REQUEST)
+    ticker.t += 60
+    assert restarted.get_session(session_id).structured_output["report"] == first
 
 
 @pytest.mark.parametrize("call", [

@@ -8,6 +8,13 @@ from server.artifacts import (
     MAX_TABLE_COLUMNS,
     MAX_TABLE_ROWS,
 )
+from server.report import (
+    MAX_CAVEATS,
+    MAX_KEY_ARTIFACTS,
+    MAX_NEXT_QUESTIONS,
+    MAX_REPORT_STATS,
+    MAX_REPORT_STEPS,
+)
 
 TITLE_MAX = 80
 
@@ -57,7 +64,40 @@ short phrase of at most 16 characters ("0.58", "p < 0.001", "2 days"); put lists
   - `image`: a single `src`. Use it with an attachment only when no typed artifact can express the idea.
 - `conclusion`: null until you have one, then `verdict` (one sentence), `summary` (a short \
 paragraph), and `stats` as [{{"label", "value"}}].
-- `needs_user`: the question you need me to answer, or null."""
+- `needs_user`: the question you need me to answer, or null.
+- `report`: a look back over the whole mission for someone who was not watching: `headline`, \
+`summary`, `stats`, `key_artifact_ids`, `steps` as [{{"label", "takeaway"}}], `caveats` and \
+`next_questions`. Leave it null until I explicitly ask you for the final report; that message will \
+say exactly what goes in each field."""
+
+REPORT_REQUEST = f"""\
+Please write the final report for this mission now.
+
+Look back over the whole mission, including any follow-up conversation we had after your first \
+conclusion. Do not rerun analyses and do not fetch new data: this is a write-up of what you already \
+did and found. Fill `report` in `structured_output`, keeping every existing step, artifact and the \
+conclusion exactly as they are. Write for a smart outsider who was not watching. Plain text only, \
+no markdown.
+
+- `headline`: the finding itself in plain words, not the question. At most about 70 characters, no \
+full stop at the end.
+- `summary`: exactly one paragraph of three to five sentences that an outsider could follow: what \
+was asked, what you found, why it is believable, and what it means.
+- `stats`: at most {MAX_REPORT_STATS} key numbers as [{{"label", "value"}}]. Each `value` is a single \
+short number or phrase of at most 16 characters, with a short label.
+- `key_artifact_ids`: at most {MAX_KEY_ARTIFACTS} ids of artifacts you already emitted, the ones that \
+best carry the story, most important first.
+- `steps`: your train of thought in order, at most {MAX_REPORT_STEPS}, as [{{"label", "takeaway"}}]. \
+Each `label` is two to five words, like a chapter title ("Nearly got fooled"), and each `takeaway` \
+is one sentence on what that step established. Include dead ends and reversals: they are what make \
+the result credible.
+- `caveats`: at most {MAX_CAVEATS} short sentences on what could be wrong or does not generalise.
+- `next_questions`: at most {MAX_NEXT_QUESTIONS} questions worth asking next.
+
+If you were given private notes at the start, the same rule holds for the report: never mention, \
+quote, or allude to them.
+
+When `report` is filled, post one short message saying the report is ready, then wait."""
 
 REFERENCE_GUIDE = """\
 Private notes on where to look follow. Treat them as a map, not a script. Retrace that line of \
@@ -134,6 +174,26 @@ OUTPUT_SCHEMA: dict = {
         },
         "needs_user": {"type": ["string", "null"]},
         "title": {"type": "string"},
+        "report": {
+            "type": ["object", "null"],
+            "properties": {
+                "headline": {"type": "string"},
+                "summary": {"type": "string"},
+                "stats": {"type": "array", "items": _STAT},
+                "key_artifact_ids": {"type": "array", "items": {"type": "string"}},
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {"label": {"type": "string"}, "takeaway": {"type": "string"}},
+                        "required": ["label", "takeaway"],
+                    },
+                },
+                "caveats": {"type": "array", "items": {"type": "string"}},
+                "next_questions": {"type": "array", "items": {"type": "string"}},
+            },
+            "required": ["headline", "summary"],
+        },
     },
     "required": ["steps", "artifacts"],
 }

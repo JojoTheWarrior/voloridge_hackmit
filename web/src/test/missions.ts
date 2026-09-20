@@ -1,5 +1,5 @@
 import { SCRIPT, threadAt } from '../api/script'
-import type { Mission, MissionStatus } from '../types'
+import type { Mission, MissionStatus, Report } from '../types'
 
 let counter = 0
 
@@ -18,9 +18,31 @@ export function makeMission(status: MissionStatus, overrides: Partial<Mission> =
     hypothesis,
     status,
     datasetIds: [],
+    reportPending: false,
     createdAt,
     updatedAt: events.at(-1)!.at,
     events,
+    ...overrides,
+  }
+}
+
+/** A full report whose figures are the ones a settled `makeMission` thread contains. */
+export function makeReport(overrides: Partial<Report> = {}): Report {
+  return {
+    headline: 'Wind leads dust by two days',
+    summary: 'When the wind picks up, dust follows two days later. The link beats shuffled data.',
+    stats: [
+      { label: 'Correlation', value: '0.58' },
+      { label: 'Best lag', value: '2 days' },
+    ],
+    keyArtifactIds: ['a1', 'a2'],
+    steps: [
+      { label: 'Read both datasets', takeaway: 'They cover the same window.' },
+      { label: 'Test each lag', takeaway: 'Two days stands out.' },
+    ],
+    caveats: ['A correlation is not a causal claim.'],
+    nextQuestions: ['Does it hold over two years?', 'Is there a weekday effect?'],
+    generatedAt: '2026-09-20T12:30:00.000Z',
     ...overrides,
   }
 }

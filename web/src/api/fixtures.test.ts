@@ -41,6 +41,48 @@ describe('seeds', () => {
     }
   })
 
+  it('start with no report pending', () => {
+    missions.forEach((m) => expect(m.reportPending).toBe(false))
+  })
+
+  describe('the one finished report', () => {
+    const reported = missions.filter((m) => m.report)
+    const [mission] = reported
+    const report = mission?.report
+
+    it('belongs to a done mission and closes its thread', () => {
+      expect(reported.map((m) => m.status)).toEqual(['done'])
+      expect(missions.flatMap((m) => m.events).filter((e) => e.kind === 'report')).toHaveLength(1)
+      expect(mission.events.at(-1)).toEqual({ id: 'report', at: report?.generatedAt, kind: 'report' })
+      expect(Date.parse(report!.generatedAt)).toBeGreaterThan(Date.parse(mission.events.at(-2)!.at))
+    })
+
+    it('features artifacts from its own thread and repeats the numbers of its conclusion', () => {
+      const ids = mission.events.flatMap((e) => (e.kind === 'artifact' ? [e.artifact.id] : []))
+      expect(report?.keyArtifactIds.length).toBeGreaterThan(1)
+      report?.keyArtifactIds.forEach((id) => expect(ids).toContain(id))
+      const conclusion = conclusionOf(mission)
+      expect(conclusion?.kind === 'conclusion' && conclusion.stats).toEqual(report?.stats)
+    })
+
+    it('quotes no correlation that the thread does not show', () => {
+      const thread = JSON.stringify(mission.events)
+      const prose = [report?.headline, report?.summary, ...report!.steps.map((s) => s.takeaway), ...report!.caveats].join(' ')
+      const quoted = prose.match(/\b0\.\d\d\b/g) ?? []
+      expect(quoted.length).toBeGreaterThan(0)
+      quoted.forEach((number) => expect(thread).toContain(`"${number}"`))
+    })
+
+    it('retells the steps of the thread and stays within the contract limits', () => {
+      const labels = mission.events.flatMap((e) => (e.kind === 'step' ? [e.label] : []))
+      expect(report?.steps.map((s) => s.label)).toEqual(labels)
+      expect(report?.stats.length).toBeLessThanOrEqual(4)
+      expect(report?.keyArtifactIds.length).toBeLessThanOrEqual(3)
+      expect(report?.caveats.length).toBeLessThanOrEqual(4)
+      expect(report?.nextQuestions.length).toBeLessThanOrEqual(3)
+    })
+  })
+
   it('has the waiting mission ask the user something', () => {
     expect(missions.filter((m) => m.needsUser).map((m) => m.status)).toEqual(['waiting'])
   })

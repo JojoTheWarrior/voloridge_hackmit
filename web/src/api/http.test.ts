@@ -75,6 +75,13 @@ describe('http api', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1)
     })
 
+    it('asks for a report with an empty post, escaping the id', async () => {
+      const fetchMock = stubFetch({ 'POST /api/missions/a%2Fb/report': () => json({}, 202) })
+      expect(await createHttpApi().generateReport('a/b')).toBeUndefined()
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({})
+    })
+
     it('links a dataset', async () => {
       const fetchMock = stubFetch({ 'POST /api/datasets': () => json({ id: 'd9', name: 'FRED' }, 201) })
       expect(await createHttpApi().linkDataset({ name: 'FRED', url: 'https://fred.stlouisfed.org' })).toMatchObject({ id: 'd9' })
@@ -103,6 +110,7 @@ describe('http api', () => {
       ['getMission', 'GET /api/missions/m1', 500],
       ['sendMessage', 'POST /api/missions/m1/messages', 404],
       ['markDone', 'POST /api/missions/m1/done', 404],
+      ['generateReport', 'POST /api/missions/m1/report', 404],
     ] as const)('rejects when %s gets an error status', async (method, route, status) => {
       stubFetch({ [route]: () => json({ message: 'nope' }, status) })
       const api = createHttpApi()
@@ -111,6 +119,7 @@ describe('http api', () => {
         getMission: () => api.getMission('m1'),
         sendMessage: () => api.sendMessage('m1', 'hi'),
         markDone: () => api.markDone('m1'),
+        generateReport: () => api.generateReport('m1'),
       }
       const error = await calls[method]().catch((e) => e)
       expect(error).toBeInstanceOf(Error)
@@ -139,6 +148,7 @@ describe('http api', () => {
         'GET /api/missions': () => (state.down ? Promise.reject(new TypeError('Failed to fetch')) : json(state.missions)),
         [`GET /api/missions/${state.missions[0].id}`]: () => json(state.missions[0]),
         'POST /api/missions/m1/done': () => json({}),
+        'POST /api/missions/m1/report': () => json({}, 202),
       })
       return { state, fetchMock, api: createHttpApi() }
     }
@@ -267,6 +277,15 @@ describe('http api', () => {
       const listener = vi.fn()
       const unsubscribe = api.subscribe(listener)
       await api.markDone('m1')
+      expect(listener).toHaveBeenCalledTimes(1)
+      unsubscribe()
+    })
+
+    it('notifies straight after asking for a report', async () => {
+      const { api } = pollable()
+      const listener = vi.fn()
+      const unsubscribe = api.subscribe(listener)
+      await api.generateReport('m1')
       expect(listener).toHaveBeenCalledTimes(1)
       unsubscribe()
     })

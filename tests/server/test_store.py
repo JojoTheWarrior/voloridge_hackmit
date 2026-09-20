@@ -312,3 +312,178 @@ def test_apply_sync_retitles_even_when_the_user_changed_the_status(store):
     store.apply_sync(mission.id, SyncResult([], [], "working", None, title="Late title"), expected_status="working")
     done = store.get_mission(mission.id)
     assert (done.status, done.title) == ("done", "Late title")
+
+
+# ---------- reports ----------
+
+REPORT = {"headline": "A leads B", "summary": "It does.", "stats": [], "keyArtifactIds": [], "steps": [],
+          "caveats": [], "nextQuestions": [], "generatedAt": "2026-09-20T12:40:00Z"}
+
+# The missions table as it was before reports existed; a database like this is in use.
+OLD_MISSIONS = """
+create table missions (
+    seq integer primary key autoincrement, id text not null unique, title text not null,
+    hypothesis text not null, reference text, prompt text not null, status text not null,
+    created_at text not null, updated_at text not null, dataset_ids text not null,
+    session_id text, session_url text, needs_user text, answered_needs_user text,
+    failures integer not null default 0
+);
+"""
+
+
+def _settled(report=None, status="waiting", new_events=()):
+    return SyncResult(list(new_events), [], status, None, report=report, report_settled=True)
+
+
+def test_a_new_mission_has_no_report(store):
+    mission = _mission(store)
+    assert (mission.report, mission.report_pending, mission.report_requested_at, mission.report_restore_done) == (
+        None, False, None, False)
+
+
+@pytest.mark.parametrize("before, restore", [("working", False), ("waiting", False), ("done", True)])
+def test_request_report_sets_pending_and_working_and_remembers_done(store, before, restore):
+    mission = _mission(store)
+    if before == "waiting":
+        store.apply_sync(mission.id, SyncResult([], [], "waiting", "Drop it?"), expected_status="working")
+    elif before == "done":
+        store.mark_done(mission.id)
+    asked = store.get_mission(mission.id)
+
+    store.request_report(mission.id)
+    pending = store.get_mission(mission.id)
+    assert (pending.status, pending.report_pending, pending.report_restore_done) == ("working", True, restore)
+    assert asked.updated_at < pending.report_requested_at <= pending.updated_at
+    assert pending.needs_user == asked.needs_user
+    assert store.list_events(mission.id) == []
+
+
+def test_request_report_for_an_unknown_mission_raises(store):
+    with pytest.raises(KeyError):
+        store.request_report("m_nope")
+
+
+def test_a_pending_report_keeps_a_done_mission_live(store):
+    done, pending_done, sessionless = _mission(store), _mission(store), _mission(store)
+    for mission in (done, pending_done):
+        store.set_session(mission.id, f"devin-{mission.id}", None)
+    store.mark_done(done.id)
+    store.request_report(pending_done.id)
+    store.mark_done(pending_done.id)
+    store.request_report(sessionless.id)
+    assert [m.id for m in store.live_missions()] == [pending_done.id]
+
+
+def test_apply_sync_delivers_a_report(store):
+    mission = _mission(store)
+    store.request_report(mission.id)
+    before = store.get_mission(mission.id)
+    store.apply_sync(mission.id, _settled(REPORT), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert after.report == REPORT
+    assert (after.status, after.report_pending, after.report_requested_at, after.report_restore_done) == (
+        "waiting", False, None, False)
+    assert after.updated_at > before.updated_at
+
+
+def test_apply_sync_returns_a_mission_to_done(store):
+    mission = _mission(store)
+    store.mark_done(mission.id)
+    store.request_report(mission.id)
+    store.apply_sync(mission.id, _settled(REPORT, status="done"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.status, after.report, after.report_restore_done) == ("done", REPORT, False)
+
+
+def test_a_failed_request_clears_pending_and_keeps_the_old_report(store):
+    mission = _mission(store)
+    store.request_report(mission.id)
+    store.apply_sync(mission.id, _settled(REPORT), expected_status="working")
+    store.request_report(mission.id)
+    error = {"id": "error:report:1", "at": "2026-09-20T12:50:00Z", "kind": "error", "text": "The report did not arrive"}
+    store.apply_sync(mission.id, _settled(None, new_events=[NewEvent(error)]), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.report, after.report_pending, after.report_requested_at, after.status) == (
+        REPORT, False, None, "waiting")
+    assert _ids(store, mission.id) == ["error:report:1"]
+
+
+def test_a_report_in_a_sync_that_settles_nothing_is_not_stored(store):
+    mission = _mission(store)
+    store.request_report(mission.id)
+    store.apply_sync(mission.id, SyncResult([], [], "working", None, report=REPORT), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.report, after.report_pending) == (None, True)
+
+
+def test_a_settled_sync_does_nothing_when_no_report_is_pending(store):
+    mission = _mission(store)
+    store.apply_sync(mission.id, _settled(REPORT, status="working"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.report, after.report_pending, after.updated_at) == (None, False, mission.updated_at)
+
+
+def test_mark_done_while_a_report_is_pending_wins_and_the_report_still_lands(store):
+    mission = _mission(store)
+    store.request_report(mission.id)
+    store.mark_done(mission.id)
+    assert store.get_mission(mission.id).report_pending
+
+    store.apply_sync(mission.id, _settled(REPORT, status="waiting"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.status, after.report, after.report_pending) == ("done", REPORT, False)
+
+
+def test_a_reply_while_a_report_is_pending_cancels_the_return_to_done(store):
+    mission = _mission(store)
+    store.mark_done(mission.id)
+    store.request_report(mission.id)
+    store.reopen(mission.id)
+    reopened = store.get_mission(mission.id)
+    assert (reopened.status, reopened.report_pending, reopened.report_restore_done) == ("working", True, False)
+
+    # This sync was computed before the reply, when the mission was still due to go back to done.
+    store.apply_sync(mission.id, _settled(REPORT, status="done"), expected_status="working")
+    after = store.get_mission(mission.id)
+    assert (after.status, after.report, after.report_pending) == ("working", REPORT, False)
+
+
+def test_report_state_survives_a_restart(tmp_path):
+    path = tmp_path / "k.db"
+    first = Store(path, now=Clock())
+    delivered, pending = _mission(first), _mission(first)
+    first.request_report(delivered.id)
+    first.apply_sync(delivered.id, _settled(REPORT), expected_status="working")
+    first.mark_done(pending.id)
+    first.request_report(pending.id)
+
+    second = Store(path, now=Clock())
+    assert second.get_mission(delivered.id).report == REPORT
+    assert second.get_mission(pending.id) == first.get_mission(pending.id)
+    assert second.get_mission(pending.id).report_restore_done
+
+
+def test_a_database_from_before_reports_is_migrated_in_place(tmp_path):
+    path = tmp_path / "old.db"
+    with sqlite3.connect(path) as db:
+        db.executescript(OLD_MISSIONS)
+        db.execute(
+            "insert into missions (id, title, hypothesis, prompt, status, created_at, updated_at, dataset_ids, "
+            "session_id, needs_user) values ('m_old', 'Old', 'Does A lead B?', 'brief', 'waiting', "
+            "'2026-09-19T10:00:00Z', '2026-09-19T11:00:00Z', '[\"gdelt\"]', 'devin-old', 'Drop it?')")
+    db.close()
+
+    store = Store(path, now=Clock())
+    old = store.get_mission("m_old")
+    assert (old.title, old.status, old.dataset_ids, old.needs_user) == ("Old", "waiting", ["gdelt"], "Drop it?")
+    assert (old.report, old.report_pending, old.report_requested_at, old.report_restore_done) == (
+        None, False, None, False)
+
+    store.request_report("m_old")
+    store.apply_sync("m_old", _settled(REPORT), expected_status="working")
+    assert store.get_mission("m_old").report == REPORT
+    newer = _mission(store)
+    assert [m.id for m in store.list_missions()] == [newer.id, "m_old"]
+
+    reopened = Store(path, now=Clock())
+    assert reopened.get_mission("m_old").report == REPORT

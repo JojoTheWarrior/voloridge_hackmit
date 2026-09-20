@@ -52,4 +52,28 @@ describe('foldWork', () => {
     ]
     expect(foldWork(makeMission('done', { events })).work).toEqual([])
   })
+
+  it('keeps a report that follows the conclusion in view', () => {
+    const mission = makeMission('done')
+    mission.events.push({ id: 'report', at, kind: 'report' })
+    const { work, rest } = foldWork(mission)
+    expect(kinds(rest)).toEqual(['conclusion', 'report'])
+    expect(kinds(work)).not.toContain('report')
+  })
+
+  it('lifts a report written before the conclusion out of the fold, to just after the conclusion', () => {
+    const mission = makeMission('done')
+    const conclusion = mission.events.pop()!
+    mission.events.push({ id: 'report', at, kind: 'report' }, conclusion, { id: 'u2', at, kind: 'user_message', text: 'Thanks' })
+    const { opening, work, rest } = foldWork(mission)
+    expect(kinds(rest)).toEqual(['conclusion', 'report', 'user_message'])
+    expect(kinds(work)).not.toContain('report')
+    expect(opening.length + work.length + rest.length).toBe(mission.events.length)
+  })
+
+  it('leaves a report where it is while nothing is folded', () => {
+    const mission = makeMission('waiting')
+    mission.events.splice(2, 0, { id: 'report', at, kind: 'report' })
+    expect(foldWork(mission).rest).toEqual(mission.events)
+  })
 })

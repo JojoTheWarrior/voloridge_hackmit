@@ -48,6 +48,18 @@ describe('script', () => {
     expect(conclusion?.kind === 'conclusion' && conclusion.stats.length).toBe(4)
   })
 
+  it('shows each figure once, and every artifact has its own id', () => {
+    const artifacts = play(blank(), SCRIPT.length).events.flatMap((e) => (e.kind === 'artifact' ? [e.artifact] : []))
+    expect(artifacts.map((a) => a.type)).toEqual(['chart', 'chart', 'table'])
+    expect(new Set(artifacts.map((a) => a.id)).size).toBe(3)
+  })
+
+  it('still has the mission testing lags four beats in, before any figure', () => {
+    const mission = play(blank(), 4)
+    expect(mission.events.at(-1)).toMatchObject({ kind: 'step', state: 'active' })
+    expect(mission.events.some((e) => e.kind === 'artifact')).toBe(false)
+  })
+
   it('honours a planted shape', () => {
     const mission = blank()
     SCRIPT.forEach((beat) => applyBeat(mission, beat, '2026-09-20T12:00:00Z', { strength: 0.02, lagDays: 0 }))

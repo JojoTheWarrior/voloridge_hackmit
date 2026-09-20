@@ -1,4 +1,4 @@
-import { formatCorrelation, formatLag, formatP, formatSynced } from './format'
+import { formatCorrelation, formatElapsed, formatLag, formatP, formatReportDate, formatSynced, pluralize } from './format'
 
 describe('formatP', () => {
   it.each([
@@ -49,5 +49,61 @@ describe('formatLag', () => {
     [7, '7 days'],
   ])('%i -> %s', (days, expected) => {
     expect(formatLag(days)).toBe(expected)
+  })
+})
+
+describe('formatElapsed', () => {
+  const start = '2026-09-20T09:12:00Z'
+  const after = (ms: number) => new Date(Date.parse(start) + ms).toISOString()
+  const MINUTE = 60_000
+  const HOUR = 60 * MINUTE
+
+  it.each([
+    [0, 'under a minute'],
+    [59_999, 'under a minute'],
+    [MINUTE, '1 minute'],
+    [14 * MINUTE + 30_000, '14 minutes'],
+    [59 * MINUTE, '59 minutes'],
+    [HOUR, '1 hour'],
+    [89 * MINUTE, '1 hour'],
+    [90 * MINUTE, '2 hours'],
+    [23 * HOUR, '23 hours'],
+    [24 * HOUR, '1 day'],
+    [36 * HOUR, '2 days'],
+    [9 * 24 * HOUR, '9 days'],
+  ])('%i ms -> %s', (ms, expected) => {
+    expect(formatElapsed(start, after(ms))).toBe(expected)
+  })
+
+  it('treats an end before the start as under a minute', () => {
+    expect(formatElapsed(start, after(-HOUR))).toBe('under a minute')
+  })
+
+  it.each([['nonsense', start], [start, ''], ['', '']])('has nothing to say about %j to %j', (from, to) => {
+    expect(formatElapsed(from, to)).toBe('')
+  })
+})
+
+describe('formatReportDate', () => {
+  it.each([
+    ['2026-09-20T12:00:00', '20 Sep 2026'],
+    ['2026-01-01T12:00:00', '1 Jan 2026'],
+    ['2025-12-31T12:00:00', '31 Dec 2025'],
+  ])('%s -> %s', (iso, expected) => {
+    expect(formatReportDate(iso)).toBe(expected)
+  })
+
+  it('has nothing to say about a date it cannot read', () => {
+    expect(formatReportDate('soon')).toBe('')
+  })
+})
+
+describe('pluralize', () => {
+  it.each([
+    [0, '0 steps'],
+    [1, '1 step'],
+    [2, '2 steps'],
+  ])('%i -> %s', (count, expected) => {
+    expect(pluralize(count, 'step')).toBe(expected)
   })
 })

@@ -1,4 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
+import { makeReport } from '../../test/missions'
 import type { Artifact, MissionEvent } from '../../types'
 import { EventList } from './EventList'
 
@@ -83,5 +85,41 @@ describe('EventList', () => {
   it('renders nothing for an empty thread', () => {
     const { container } = render(<EventList events={[]} live />)
     expect(container.textContent).toBe('')
+  })
+
+  describe('report event', () => {
+    const events: MissionEvent[] = [thread[7], { id: 'report', at, kind: 'report' }]
+    const longSummary = 'A long summary sentence that goes on. '.repeat(12).trim()
+
+    function renderReported(report?: ReturnType<typeof makeReport>) {
+      return render(
+        <MemoryRouter>
+          <EventList events={events} live={false} missionId="m 1" report={report} />
+        </MemoryRouter>,
+      )
+    }
+
+    it('shows a card with the headline, a clamped summary and a link to the report', () => {
+      renderReported(makeReport({ summary: longSummary }))
+      const card = within(screen.getByRole('region', { name: 'Report' }))
+      expect(card.getByText('Report ready')).toHaveClass('text-muted')
+      expect(card.getByText('Wind leads dust by two days')).toHaveClass('font-medium')
+      expect(card.getByText(longSummary)).toHaveClass('line-clamp-2', 'text-muted')
+      expect(card.getByRole('link', { name: 'View report' })).toHaveAttribute('href', '/missions/m%201/report')
+    })
+
+    it('sits after the conclusion', () => {
+      renderReported(makeReport())
+      const conclusion = screen.getByRole('region', { name: 'Conclusion' })
+      const card = screen.getByRole('region', { name: 'Report' })
+      expect(conclusion.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
+    it('renders nothing for the event when the report itself is missing', () => {
+      renderReported()
+      expect(screen.queryByRole('region', { name: 'Report' })).not.toBeInTheDocument()
+      expect(screen.queryByText('Report ready')).not.toBeInTheDocument()
+      expect(screen.getByRole('region', { name: 'Conclusion' })).toBeInTheDocument()
+    })
   })
 })

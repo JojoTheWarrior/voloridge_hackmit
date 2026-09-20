@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { useApi } from '../../api/context'
 import type { Mission, MissionStatus } from '../../types'
 import { StatusDot } from '../StatusDot'
+import { ReportControl } from './ReportControl'
 
 const STATUS_TEXT: Record<MissionStatus, string> = {
   working: 'Devin is working',
@@ -54,6 +55,7 @@ export function MissionHeader({ mission, reconnecting }: MissionHeaderProps) {
             <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
           </a>
         )}
+        <ReportControl mission={mission} />
         {mission.status !== 'done' && (
           <button
             type="button"

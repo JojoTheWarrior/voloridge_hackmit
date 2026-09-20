@@ -1,9 +1,14 @@
 import type { Dataset, Mission, MissionSummary } from '../types'
 import { seedDatasets, seedMissions } from './fixtures'
 import { ValidationError, type Api } from './index'
+import { buildReport } from './report'
 import { applyBeat, REPLY_BEAT, SCRIPT, type Beat } from './script'
 
 const TITLE_MAX = 48
+const REPORT_EVENT_ID = 'report'
+
+/** Writing the report takes a turn like any beat, so it queues behind whatever Devin is still doing. */
+type Turn = Beat | { kind: 'report' }
 
 interface MockOptions {
   stepMs?: number
@@ -36,7 +41,9 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
   const datasets = structuredClone(seed?.datasets ?? seedDatasets())
   const listeners = new Set<() => void>()
   // Beats still to play per mission. A mission works while its queue drains and waits once it is empty.
-  const queues = new Map<string, Beat[]>()
+  const queues = new Map<string, Turn[]>()
+  // Done missions that are only working on a report, and go back to done once it is delivered.
+  const settlesDone = new Set<string>()
   const timers = new Map<string, ReturnType<typeof setTimeout>>()
   let nextId = 1
 
@@ -48,6 +55,14 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
     return mission
   }
 
+  function take(mission: Mission, turn: Turn, at: string) {
+    if (turn.kind !== 'report') return applyBeat(mission, turn, at)
+    mission.report = buildReport(mission, at)
+    mission.reportPending = false
+    mission.events = [...mission.events.filter((e) => e.kind !== 'report'), { id: REPORT_EVENT_ID, at, kind: 'report' }]
+    mission.updatedAt = at
+  }
+
   function play(mission: Mission) {
     if (timers.has(mission.id) || !queues.get(mission.id)?.length) return
     timers.set(
@@ -55,22 +70,22 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       setTimeout(() => {
         timers.delete(mission.id)
         const queue = queues.get(mission.id)!
-        applyBeat(mission, queue.shift()!, new Date().toISOString())
-        if (queue.length === 0) mission.status = 'waiting'
+        take(mission, queue.shift()!, new Date().toISOString())
+        if (queue.length === 0) mission.status = settlesDone.delete(mission.id) ? 'done' : 'waiting'
         play(mission)
         notify()
       }, stepMs),
     )
   }
 
-  function enqueue(mission: Mission, beats: Beat[]) {
-    queues.set(mission.id, [...(queues.get(mission.id) ?? []), ...beats])
+  function enqueue(mission: Mission, turns: Turn[]) {
+    queues.set(mission.id, [...(queues.get(mission.id) ?? []), ...turns])
     play(mission)
   }
 
   for (const mission of missions.filter((m) => m.status === 'working')) {
     // Every beat adds one event, so the thread length says how far a seeded run has got.
-    const played = mission.events.filter((e) => e.kind !== 'user_message' && e.kind !== 'error').length
+    const played = mission.events.filter((e) => e.kind !== 'user_message' && e.kind !== 'error' && e.kind !== 'report').length
     enqueue(mission, SCRIPT.slice(played))
   }
 
@@ -99,6 +114,7 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
         createdAt: now,
         updatedAt: now,
         datasetIds: [...datasetIds],
+        reportPending: false,
         events: [{ id: 'e1', at: now, kind: 'user_message', text: trimmed }],
       }
       missions.unshift(mission)
@@ -116,6 +132,7 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       mission.updatedAt = now
       mission.status = 'working'
       delete mission.needsUser
+      settlesDone.delete(id)
       enqueue(mission, [REPLY_BEAT])
       notify()
     },
@@ -125,8 +142,20 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       clearTimeout(timers.get(id))
       timers.delete(id)
       queues.delete(id)
+      settlesDone.delete(id)
       mission.status = 'done'
+      mission.reportPending = false
       delete mission.needsUser
+      notify()
+    },
+
+    async generateReport(id) {
+      const mission = find(id)
+      if (mission.reportPending) return
+      if (mission.status === 'done') settlesDone.add(id)
+      mission.reportPending = true
+      mission.status = 'working'
+      enqueue(mission, [{ kind: 'report' }])
       notify()
     },
 

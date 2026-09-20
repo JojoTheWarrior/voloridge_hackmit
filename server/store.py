@@ -62,9 +62,19 @@ SEED_DATASETS = (
     ("cams", "CAMS air quality", "https://atmosphere.copernicus.eu", "air", 12, "Jun 2024 – Sep 2026"),
 )
 
+# Columns added since the first release. `create table if not exists` leaves an existing
+# table alone, so these are added one by one to whatever database is already on disk.
+ADDED_MISSION_COLUMNS = (
+    ("report", "text"),
+    ("report_pending", "integer not null default 0"),
+    ("report_requested_at", "text"),
+    ("report_restore_done", "integer not null default 0"),
+)
+
 _MISSION_COLUMNS = (
     "id, title, hypothesis, reference, prompt, status, created_at, updated_at, dataset_ids, "
-    "session_id, session_url, needs_user, answered_needs_user, failures"
+    "session_id, session_url, needs_user, answered_needs_user, failures, "
+    "report, report_pending, report_requested_at, report_restore_done"
 )
 
 
@@ -90,6 +100,12 @@ class MissionRow:
     # structured output does not flip the mission straight back to waiting.
     answered_needs_user: str | None
     failures: int
+    # The last delivered report, in the app's camelCase shape.
+    report: dict | None
+    report_pending: bool
+    report_requested_at: str | None
+    # The mission was done when the report was requested, and goes back to done once that is settled.
+    report_restore_done: bool
 
 
 class Store:
@@ -104,6 +120,7 @@ class Store:
         self._db.row_factory = sqlite3.Row
         with self._lock, self._db:
             self._db.executescript(SCHEMA)
+            self._migrate()
             self._seed_datasets()
 
     # ---------- missions ----------
@@ -134,8 +151,9 @@ class Store:
         return [_mission(row) for row in rows]
 
     def live_missions(self) -> list[MissionRow]:
-        """Missions the poller should sync: also what it resumes after a restart."""
-        return [m for m in self.list_missions() if m.status in LIVE_STATUSES and m.session_id]
+        """Missions the poller should sync: also what it resumes after a restart.
+        A mission marked done while its report is being written is followed until the report lands."""
+        return [m for m in self.list_missions() if (m.status in LIVE_STATUSES or m.report_pending) and m.session_id]
 
     def set_session(self, mission_id: str, session_id: str, session_url: str | None) -> None:
         with self._lock, self._db:
@@ -158,6 +176,20 @@ class Store:
                 status="working",
                 needs_user=None,
                 answered_needs_user=mission.needs_user or mission.answered_needs_user,
+                failures=0,
+                # A reply is the user carrying on, so a pending report no longer closes the mission.
+                report_restore_done=0,
+            )
+
+    def request_report(self, mission_id: str) -> None:
+        with self._lock, self._db:
+            mission = self._require(mission_id)
+            self._update(
+                mission_id,
+                status="working",
+                report_pending=1,
+                report_requested_at=self._now(),
+                report_restore_done=int(mission.status == "done"),
                 failures=0,
             )
 
@@ -195,6 +227,9 @@ class Store:
         with self._lock, self._db:
             mission = self._require(mission_id)
             changed = False
+            if result.report_settled and mission.report_pending:
+                self._settle_report(mission_id, result.report)
+                changed = True
             for new in result.new_events:
                 changed |= self._insert(mission_id, new.event, after=new.after)
             for updated in result.updated_events:
@@ -202,9 +237,12 @@ class Store:
             if result.title and result.title != mission.title:
                 self._update(mission_id, title=result.title)
                 changed = True
-            if mission.status == expected_status and (
-                (result.status, result.needs_user) != (mission.status, mission.needs_user)
-            ):
+            # A sync only closes a mission to put it back where a report found it, and a reply
+            # that landed while the sync was being computed has called that off.
+            user_acted = mission.status != expected_status or (
+                result.status == "done" and not mission.report_restore_done
+            )
+            if not user_acted and (result.status, result.needs_user) != (mission.status, mission.needs_user):
                 self._update(mission_id, status=result.status, needs_user=result.needs_user)
             elif changed:
                 self._touch(mission_id)
@@ -231,6 +269,18 @@ class Store:
         return next(d for d in self.list_datasets() if d["id"] == dataset_id)
 
     # ---------- internals ----------
+
+    def _migrate(self) -> None:
+        existing = {row["name"] for row in self._db.execute("pragma table_info(missions)")}
+        for name, definition in ADDED_MISSION_COLUMNS:
+            if name not in existing:
+                self._db.execute(f"alter table missions add column {name} {definition}")
+
+    def _settle_report(self, mission_id: str, report: dict | None) -> None:
+        fields: dict = {"report_pending": 0, "report_requested_at": None, "report_restore_done": 0}
+        if report is not None:
+            fields["report"] = json.dumps(report)
+        self._update(mission_id, **fields)
 
     def _seed_datasets(self) -> None:
         if self._db.execute("select 1 from datasets limit 1").fetchone():
@@ -313,6 +363,9 @@ def _payload(event: dict) -> dict:
 def _mission(row: sqlite3.Row) -> MissionRow:
     fields = dict(row)
     fields["dataset_ids"] = json.loads(fields["dataset_ids"])
+    fields["report"] = json.loads(fields["report"]) if fields["report"] else None
+    fields["report_pending"] = bool(fields["report_pending"])
+    fields["report_restore_done"] = bool(fields["report_restore_done"])
     return MissionRow(**fields)
 
 

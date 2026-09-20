@@ -13,7 +13,14 @@ from server.artifacts import (
     MAX_TABLE_COLUMNS,
     MAX_TABLE_ROWS,
 )
-from server.brief import OUTPUT_SCHEMA, TITLE_MAX, build_prompt, derive_title, session_title
+from server.brief import OUTPUT_SCHEMA, REPORT_REQUEST, TITLE_MAX, build_prompt, derive_title, session_title
+from server.report import (
+    MAX_CAVEATS,
+    MAX_KEY_ARTIFACTS,
+    MAX_NEXT_QUESTIONS,
+    MAX_REPORT_STATS,
+    MAX_REPORT_STEPS,
+)
 
 DATASETS = [
     {"id": "gdelt", "name": "GDELT events", "url": "https://www.gdeltproject.org"},
@@ -77,7 +84,7 @@ def test_schema_shape():
     json.dumps(OUTPUT_SCHEMA)
     assert OUTPUT_SCHEMA["type"] == "object"
     properties = OUTPUT_SCHEMA["properties"]
-    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user"}
+    assert set(properties) == {"title", "steps", "artifacts", "conclusion", "needs_user", "report"}
     assert properties["steps"]["items"]["properties"]["state"]["enum"] == ["active", "done"]
     artifact = properties["artifacts"]["items"]
     assert artifact["properties"]["type"]["enum"] == ["chart", "images", "relation", "table", "stats", "image"]
@@ -120,3 +127,56 @@ def test_schema_and_guide_ask_for_a_short_title():
 ])
 def test_prompt_demands_a_live_legible_thread(phrase):
     assert phrase in build_prompt("Does A lead B?", [], None)
+
+
+# ---------- final report ----------
+
+def test_schema_has_a_nullable_report():
+    report = OUTPUT_SCHEMA["properties"]["report"]
+    assert report["type"] == ["object", "null"]
+    assert set(report["properties"]) == {
+        "headline", "summary", "stats", "key_artifact_ids", "steps", "caveats", "next_questions"}
+    assert set(report["required"]) == {"headline", "summary"}
+    assert report["properties"]["stats"]["items"] == OUTPUT_SCHEMA["properties"]["conclusion"]["properties"]["stats"]["items"]
+    assert set(report["properties"]["steps"]["items"]["required"]) == {"label", "takeaway"}
+    for name in ("key_artifact_ids", "caveats", "next_questions"):
+        assert report["properties"][name] == {"type": "array", "items": {"type": "string"}}
+    assert "report" not in OUTPUT_SCHEMA["required"]
+
+
+def test_the_brief_describes_the_report_but_says_to_leave_it_null_until_asked():
+    prompt = build_prompt(HYPOTHESIS, DATASETS)
+    assert "`report`" in prompt
+    assert "leave it null until i explicitly ask" in prompt.lower()
+    assert REPORT_REQUEST not in prompt
+
+
+@pytest.mark.parametrize("phrase", [
+    "whole mission", "follow-up conversation",
+    "do not rerun", "do not fetch new data",
+    "`report`", "`structured_output`", "every existing step, artifact and the conclusion",
+    "`headline`", "not the question", "70 characters", "no full stop",
+    "`summary`", "exactly one paragraph", "three to five sentences", "outsider",
+    "`stats`", "`value`", "at most 16 characters",
+    "`key_artifact_ids`", "already emitted", "most important first",
+    "`steps`", "`label`", "two to five words", "nearly got fooled", "`takeaway`", "one sentence",
+    "dead ends and reversals", "credible",
+    "`caveats`", "`next_questions`",
+    "plain text", "no markdown",
+    "the report is ready", "wait",
+    "private notes", "never mention",
+])
+def test_report_request_says_everything_devin_needs(phrase):
+    assert phrase in REPORT_REQUEST.lower()
+
+
+def test_report_request_states_every_limit():
+    for name, limit in (("`stats`", MAX_REPORT_STATS), ("`key_artifact_ids`", MAX_KEY_ARTIFACTS),
+                        ("`steps`", MAX_REPORT_STEPS), ("`caveats`", MAX_CAVEATS),
+                        ("`next_questions`", MAX_NEXT_QUESTIONS)):
+        sentence = next(line for line in REPORT_REQUEST.splitlines() if line.startswith(f"- {name}"))
+        assert f"at most {limit}" in sentence, name
+
+
+def test_report_request_is_plain_text_itself():
+    assert "**" not in REPORT_REQUEST and "#" not in REPORT_REQUEST

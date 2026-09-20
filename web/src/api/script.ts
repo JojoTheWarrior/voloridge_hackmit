@@ -1,10 +1,10 @@
 import type { Mission, MissionEvent } from '../types'
-import { buildFindings, type FindingsShape } from './findings'
+import { buildFindings, type Findings, type FindingsShape } from './findings'
 
 export type Beat =
   | { kind: 'thought'; text: string }
   | { kind: 'step'; stepId: string; label: string }
-  | { kind: 'artifact' }
+  | { kind: 'artifact'; figure: keyof Omit<Findings, 'conclusion'> }
   | { kind: 'conclusion' }
 
 /** One scripted research run. Every beat adds exactly one event, so progress can be read off the thread. */
@@ -14,7 +14,10 @@ export const SCRIPT: Beat[] = [
   { kind: 'step', stepId: 's2', label: 'Align the two series' },
   { kind: 'step', stepId: 's3', label: 'Test the relationship at each lag' },
   { kind: 'thought', text: 'One lag stands out from the rest. I am checking it against shuffled data before I trust it.' },
-  { kind: 'artifact' },
+  { kind: 'artifact', figure: 'chart' },
+  { kind: 'artifact', figure: 'lags' },
+  { kind: 'step', stepId: 's4', label: 'Check that it holds on parts of the window' },
+  { kind: 'artifact', figure: 'checks' },
   { kind: 'conclusion' },
 ]
 
@@ -32,7 +35,7 @@ function bodyOf(mission: Thread, beat: Beat, shape?: FindingsShape): EventBody {
     case 'step':
       return { ...beat, state: 'active' }
     case 'artifact':
-      return { kind: 'artifact', artifact: buildFindings(mission.hypothesis, shape).chart }
+      return { kind: 'artifact', artifact: buildFindings(mission.hypothesis, shape)[beat.figure] }
     case 'conclusion':
       return { kind: 'conclusion', ...buildFindings(mission.hypothesis, shape).conclusion }
   }

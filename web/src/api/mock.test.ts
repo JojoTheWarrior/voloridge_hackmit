@@ -226,6 +226,145 @@ describe('mock api', () => {
     })
   })
 
+  describe('generateReport', () => {
+    const artifactIds = (mission?: Mission) => mission?.events.flatMap((e) => (e.kind === 'artifact' ? [e.artifact.id] : []))
+
+    it('goes to work on the report without adding a message, then delivers it and waits', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      const listener = vi.fn()
+      api.subscribe(listener)
+
+      await api.generateReport(mission.id)
+      const pending = await api.getMission(mission.id)
+      expect(pending).toMatchObject({ status: 'working', reportPending: true })
+      expect(pending?.report).toBeUndefined()
+      expect(pending?.events).toEqual(mission.events)
+      expect(listener).toHaveBeenCalledTimes(1)
+
+      vi.advanceTimersByTime(STEP_MS)
+      const delivered = await api.getMission(mission.id)
+      expect(delivered).toMatchObject({ status: 'waiting', reportPending: false })
+      expect(delivered?.report?.headline).not.toBe('')
+      expect(delivered?.events.at(-1)).toMatchObject({ id: 'report', kind: 'report', at: delivered?.report?.generatedAt })
+      expect(delivered?.events.slice(0, -1)).toEqual(mission.events)
+      expect(delivered?.updatedAt).toBe(delivered?.report?.generatedAt)
+      expect(listener).toHaveBeenCalledTimes(2)
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('features artifacts that are in the thread', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      vi.advanceTimersByTime(STEP_MS)
+      const delivered = await api.getMission(mission.id)
+      expect(delivered?.report?.keyArtifactIds.length).toBeGreaterThan(0)
+      delivered?.report?.keyArtifactIds.forEach((id) => expect(artifactIds(delivered)).toContain(id))
+    })
+
+    it('returns a done mission to done', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      expect((await api.getMission(mission.id))?.status).toBe('working')
+      vi.advanceTimersByTime(STEP_MS)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'done', reportPending: false })
+    })
+
+    it('leaves a done mission open if you reply while the report is being written', async () => {
+      const mission = makeMission('done')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      await api.sendMessage(mission.id, 'One more thing')
+      vi.advanceTimersByTime(STEP_MS * 2)
+      const settled = await api.getMission(mission.id)
+      expect(settled).toMatchObject({ status: 'waiting', reportPending: false })
+      expect(kinds(settled)?.slice(-3)).toEqual(['user_message', 'report', 'thought'])
+    })
+
+    it('does nothing when asked again while one is pending', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      const listener = vi.fn()
+      api.subscribe(listener)
+      await api.generateReport(mission.id)
+      await api.generateReport(mission.id)
+      expect(listener).toHaveBeenCalledTimes(1)
+      expect(vi.getTimerCount()).toBe(1)
+      vi.advanceTimersByTime(STEP_MS)
+      expect((await api.getMission(mission.id))?.events.filter((e) => e.kind === 'report')).toHaveLength(1)
+      vi.advanceTimersByTime(STEP_MS * 3)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'waiting', reportPending: false })
+    })
+
+    it('rewrites the report on request, moving the one report event to the end', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      vi.advanceTimersByTime(STEP_MS)
+      const first = (await api.getMission(mission.id))!.report!
+      await api.sendMessage(mission.id, 'And weekends?')
+      vi.advanceTimersByTime(STEP_MS)
+
+      await api.generateReport(mission.id)
+      const pending = await api.getMission(mission.id)
+      expect(pending?.report).toEqual(first)
+      expect(pending?.reportPending).toBe(true)
+      vi.advanceTimersByTime(STEP_MS)
+
+      const rewritten = await api.getMission(mission.id)
+      expect(rewritten?.report?.summary).not.toBe(first.summary)
+      expect(Date.parse(rewritten!.report!.generatedAt)).toBeGreaterThan(Date.parse(first.generatedAt))
+      expect(kinds(rewritten)?.filter((k) => k === 'report')).toHaveLength(1)
+      expect(rewritten?.events.at(-1)?.kind).toBe('report')
+      expect(new Set(rewritten?.events.map((e) => e.id)).size).toBe(rewritten?.events.length)
+    })
+
+    it('delivers after the script when asked mid-run', async () => {
+      const mission = makeMission('working')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      const beatsLeft = SCRIPT.length - (mission.events.length - 1)
+      vi.advanceTimersByTime(STEP_MS * beatsLeft)
+      expect(await api.getMission(mission.id)).toMatchObject({ status: 'working', reportPending: true })
+      vi.advanceTimersByTime(STEP_MS)
+      const settled = await api.getMission(mission.id)
+      expect(settled).toMatchObject({ status: 'waiting', reportPending: false })
+      expect(kinds(settled)?.slice(-2)).toEqual(['conclusion', 'report'])
+    })
+
+    it('is dropped when the mission is marked done first', async () => {
+      const mission = makeMission('waiting')
+      const api = seeded(mission)
+      await api.generateReport(mission.id)
+      await api.markDone(mission.id)
+      vi.advanceTimersByTime(STEP_MS * 2)
+      const done = await api.getMission(mission.id)
+      expect(done).toMatchObject({ status: 'done', reportPending: false })
+      expect(done?.report).toBeUndefined()
+      expect(vi.getTimerCount()).toBe(0)
+    })
+
+    it('does not mistake a delivered report for a played beat when carrying a seeded mission on', async () => {
+      const played = makeMission('working')
+      const mission = { ...played, events: [...played.events, { id: 'report', at: played.updatedAt, kind: 'report' as const }] }
+      const api = seeded(mission)
+      vi.advanceTimersByTime(STEP_MS * SCRIPT.length)
+      expect(kinds(await api.getMission(mission.id))?.filter((k) => k !== 'report')).toEqual(['user_message', ...SCRIPT.map((b) => b.kind)])
+    })
+
+    it('rejects an unknown mission', async () => {
+      await expect(seeded().generateReport('nope')).rejects.toThrow('Mission not found')
+    })
+  })
+
+  it('creates missions with no report pending', async () => {
+    const mission = await createMockApi({ seed: empty }).createMission({ hypothesis: 'A leads B', datasetIds: [] })
+    expect(mission.reportPending).toBe(false)
+    expect(mission.report).toBeUndefined()
+  })
+
   it.each(['', '   ', '\n\t'])('rejects blank hypothesis %j', async (hypothesis) => {
     const api = createMockApi({ seed: empty })
     const error = await api.createMission({ hypothesis, datasetIds: [] }).catch((e) => e)

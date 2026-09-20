@@ -13,6 +13,7 @@ from urllib.parse import quote, urlsplit
 
 import requests
 
+from server.brief import REPORT_REQUEST
 from warsignal.config import env
 
 DEFAULT_MAX_ACU = 5
@@ -410,6 +411,42 @@ SCRIPT: tuple[Beat, ...] = (
 
 REPLY_ACK = "Good point. Let me rerun the comparison with that in mind."
 REPLY_DONE = "Done. I split the panel in half by date and the link holds in both halves, so the conclusion stands."
+REPORT_READY = "The report is ready."
+
+REPORT = {
+    "headline": "A leads B by about a week, but only modestly",
+    "summary": "The question was whether movements in source A show up later in source B. Across 412 "
+               "region-weeks they do: A correlates with B one week later at r = 0.58, and a permutation test "
+               "over lags of zero to four weeks puts the p-value at 0.003. The link is believable because it "
+               "was tested only after B's own downward drift was removed, and it survives dropping the one "
+               "region that supplies most of the extreme points. It is a real but modest lead, useful as an "
+               "early signal rather than a forecast.",
+    "stats": [{"label": "Correlation", "value": "0.58"}, {"label": "Lead", "value": "1 week"},
+              {"label": "p-value", "value": "0.003"}, {"label": "Region-weeks", "value": "412"}],
+    "key_artifact_ids": ["a5", "a2", "a6"],
+    "steps": [
+        {"label": "Looked before testing",
+         "takeaway": "A sample of the raw records showed about one in ten is too cloudy to use."},
+        {"label": "Found the join",
+         "takeaway": "With no shared id, both sources were aggregated to region-weeks, which kept 412 of 455."},
+        {"label": "Nearly got fooled",
+         "takeaway": "The raw series seemed to move together, but most of that was source B's own downward "
+                     "drift, so it was differenced before any test."},
+        {"label": "Tested the link",
+         "takeaway": "A leads B by one week at r = 0.58, with a permutation test so that choosing the best "
+                     "lag did not flatter the p-value."},
+        {"label": "Doubted one region",
+         "takeaway": "East supplies most of the extreme points, and dropping it lowers the correlation to "
+                     "0.49 without removing it."},
+        {"label": "Checked the map",
+         "takeaway": "The residuals show no spatial clustering, so the link is not an artefact of "
+                     "neighbouring regions."},
+    ],
+    "caveats": ["One region drives much of the strength, and without it the correlation falls to 0.49.",
+                "The first month is missing because source B had not started reporting."],
+    "next_questions": ["Does the one-week lead hold in a fresh quarter of data?",
+                       "What is different about East that makes its swings so large?"],
+}
 
 
 @dataclass
@@ -417,6 +454,7 @@ class _FakeSession:
     prompt: str
     created: float
     replies: list[tuple[float, str]] = field(default_factory=list)
+    report_requests: list[float] = field(default_factory=list)
 
 
 _DEMO_PREFIX = "devin-demo-"
@@ -458,8 +496,12 @@ class FakeDevin:
         for number, (sent, _) in enumerate(session.replies, start=1):
             if now >= sent + 2 * self._beat:
                 artifacts.append(_reply_artifact(number, steps[-1]["id"] if steps else None))
-        running = len(beats) < len(SCRIPT) or any(now < sent + 2 * self._beat for sent, _ in session.replies)
-        output = {"steps": steps, "artifacts": artifacts, "conclusion": conclusion, "needs_user": None}
+        # Replies and report requests are both answered two beats after they arrive.
+        answered = [now >= sent + 2 * self._beat for sent in session.report_requests]
+        running = len(beats) < len(SCRIPT) or not all(answered) or any(
+            now < sent + 2 * self._beat for sent, _ in session.replies)
+        output = {"steps": steps, "artifacts": artifacts, "conclusion": conclusion, "needs_user": None,
+                  "report": _report(sum(answered)) if any(answered) else None}
         return SessionSnapshot("running" if running else "waiting", None, output)
 
     def list_messages(self, session_id: str) -> list[DevinMessage]:
@@ -473,13 +515,20 @@ class FakeDevin:
             for offset, suffix, say in ((1, "ack", REPLY_ACK), (2, "done", REPLY_DONE)):
                 if now >= sent + offset * self._beat:
                     timeline.append((sent + offset * self._beat, f"{session_id}:r{number}{suffix}", "devin", say))
+        for number, sent in enumerate(session.report_requests, start=1):
+            timeline.append((sent, f"{session_id}:q{number}", "user", REPORT_REQUEST))
+            if now >= sent + 2 * self._beat:
+                timeline.append((sent + 2 * self._beat, f"{session_id}:p{number}", "devin", REPORT_READY))
         timeline.sort(key=lambda entry: entry[0])
         return [DevinMessage(message_id, role, text, _iso(at)) for at, message_id, role, text in timeline]
 
     def send_message(self, session_id: str, text: str) -> None:
         session = self._session(session_id)
         with self._lock:
-            session.replies.append((self._clock(), text))
+            if text == REPORT_REQUEST:
+                session.report_requests.append(self._clock())
+            else:
+                session.replies.append((self._clock(), text))
 
     def list_attachments(self, session_id: str) -> list[Attachment]:
         self._session(session_id)
@@ -510,3 +559,13 @@ def _reply_artifact(number: int, after_step: str | None) -> dict:
         "x_label": "Half", "y_label": "r",
         "series": [{"name": "r", "points": [["First half", round(0.55 + 0.01 * number, 2)], ["Second half", 0.6]]}],
     }
+
+
+def _report(number: int) -> dict:
+    """The report as written for the `number`th request. Each rewrite reads differently,
+    as Devin's would, so the app can tell a regenerated report from the one it already has."""
+    report = copy.deepcopy(REPORT)
+    if number > 1:
+        report["summary"] += (f" This is revision {number}, written after looking back over the follow-up "
+                              "conversation too, and the verdict has not changed.")
+    return report

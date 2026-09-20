@@ -1,3 +1,4 @@
+import { formatCorrelation } from '../format'
 import { buildFindings } from './findings'
 
 const stat = (findings: ReturnType<typeof buildFindings>, label: string) =>
@@ -54,5 +55,33 @@ describe('buildFindings', () => {
     expect(buildFindings('Do protest events move gold futures?').chart.series.map((s) => s.name)).toEqual(['Protest events', 'Gold futures'])
     expect(buildFindings('something vague').chart.series.map((s) => s.name)).toEqual(['Signal', 'Target'])
     expect(buildFindings('something vague').chart.title).toBe('Signal vs Target')
+  })
+
+  it('charts the correlation at every lag, peaking where the conclusion says', () => {
+    const findings = buildFindings('x', { strength: 0.7, lagDays: 2 })
+    expect(findings.lags).toMatchObject({ type: 'chart', kind: 'bar', headline: 'Best at 2 days' })
+    const [sweep] = findings.lags.series
+    expect(sweep.points.map(([x]) => x)).toEqual(['0', '1', '2', '3', '4', '5', '6', '7'])
+    const best = sweep.points.reduce((a, b) => (Math.abs(b[1]) > Math.abs(a[1]) ? b : a))
+    expect(best[0]).toBe('2')
+    expect(formatCorrelation(best[1])).toBe(stat(findings, 'Correlation'))
+  })
+
+  it('tabulates robustness checks, the first being the headline correlation', () => {
+    const findings = buildFindings('x', { strength: 0.7, lagDays: 2 })
+    expect(findings.checks).toMatchObject({ type: 'table', columns: ['Check', 'Correlation', 'Holds'] })
+    expect(findings.checks.rows.map((row) => row[0])).toEqual(['Full window', 'First half', 'Second half', 'Without the 5 largest moves'])
+    expect(findings.checks.rows[0]).toEqual(['Full window', stat(findings, 'Correlation'), 'Yes'])
+    findings.checks.rows.forEach((row) => expect(row[1]).toMatch(/^−?[01]\.\d\d$/))
+  })
+
+  it('says a null result does not hold', () => {
+    const { checks } = buildFindings('x', { strength: 0.02, lagDays: 0 })
+    expect(checks.rows[0][2]).toBe('No')
+  })
+
+  it('gives every figure its own id', () => {
+    const { chart, lags, checks } = buildFindings('A leads B')
+    expect(new Set([chart.id, lags.id, checks.id]).size).toBe(3)
   })
 })

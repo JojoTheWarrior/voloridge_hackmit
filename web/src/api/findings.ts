@@ -1,5 +1,5 @@
 import { formatCorrelation, formatLag, formatP } from '../format'
-import type { ChartArtifact, ChartSeries, Stat } from '../types'
+import type { ChartArtifact, ChartSeries, Stat, TableArtifact } from '../types'
 
 const N_DAYS = 120
 const MAX_LAG = 7
@@ -7,6 +7,8 @@ const END_DATE = Date.UTC(2026, 8, 15)
 const DAY_MS = 86_400_000
 // Daily series are autocorrelated, so far fewer than N_DAYS observations are independent.
 const EFFECTIVE_N = N_DAYS / 4
+const WEAK = 0.2
+const LARGEST_MOVES = 5
 
 function hash(text: string): number {
   let h = 2166136261
@@ -58,6 +60,10 @@ function pValueFor(r: number, n: number): number {
   return Math.min(1, poly * Math.exp(-x * x))
 }
 
+function isReliable(r: number, p: number): boolean {
+  return p < 0.05 && Math.abs(r) >= WEAK
+}
+
 function seriesNames(hypothesis: string): [string, string] {
   const match = hypothesis.match(
     /^(?:do|does|did|is|are|can)\s+(.+?)\s+(?:vs\.?|versus|leads?|predicts?|moves?|drives?|affects?|tracks?)\s+(.+?)\??$/i,
@@ -69,7 +75,7 @@ function seriesNames(hypothesis: string): [string, string] {
 
 function writeUp(a: string, b: string, r: number, lag: number, p: number): { summary: string; verdict: string } {
   const caveat = `This is a correlation over ${N_DAYS} days, not a causal claim. A shared driver could explain both series.`
-  if (p >= 0.05 || Math.abs(r) < 0.2) {
+  if (!isReliable(r, p)) {
     return {
       summary: `${a} and ${b} show no dependable relationship at any lag up to ${MAX_LAG} days. The strongest correlation found was ${r.toFixed(2)}, which a permutation test cannot tell apart from chance.\n\nA null result is still a result: this pairing can be dropped from the queue.`,
       verdict: 'No reliable link.',
@@ -96,6 +102,10 @@ export interface FindingsShape {
 
 export interface Findings {
   chart: ChartArtifact
+  /** The correlation at every lag tried. */
+  lags: ChartArtifact
+  /** The headline correlation again on parts of the window. */
+  checks: TableArtifact
   conclusion: { verdict: string; summary: string; stats: Stat[] }
 }
 
@@ -117,18 +127,30 @@ export function buildFindings(hypothesis: string, shape: FindingsShape = {}): Fi
   const noise = zscore(rawNoise.map((v, i) => v - overlap * lagged[i]))
   const b = zscore(lagged.map((v, i) => strength * v + Math.sqrt(1 - strength ** 2) * noise[i]))
 
-  let bestLagDays = 0
-  let correlation = 0
-  for (let lag = 0; lag <= MAX_LAG; lag++) {
-    const r = pearson(a.slice(MAX_LAG - lag, length - lag), b.slice(MAX_LAG))
-    if (Math.abs(r) > Math.abs(correlation)) [bestLagDays, correlation] = [lag, r]
-  }
+  const target = b.slice(MAX_LAG)
+  const leadBy = (lag: number) => a.slice(MAX_LAG - lag, length - lag)
+  const sweep = Array.from({ length: MAX_LAG + 1 }, (_, lag) => pearson(leadBy(lag), target))
+  const bestLagDays = sweep.reduce((best, r, lag) => (Math.abs(r) > Math.abs(sweep[best]) ? lag : best), 0)
+  const correlation = sweep[bestLagDays]
 
   const dates = a.slice(MAX_LAG).map((_, i) => new Date(END_DATE - (N_DAYS - 1 - i) * DAY_MS).toISOString().slice(0, 10))
   const pointsOf = (values: number[]): ChartSeries['points'] => dates.map((date, i) => [date, Number(values[i + MAX_LAG].toFixed(3))])
 
   const pValue = pValueFor(correlation, EFFECTIVE_N)
   const shownCorrelation = formatCorrelation(correlation)
+
+  const lead = leadBy(bestLagDays)
+  const half = N_DAYS / 2
+  const largest = new Set(
+    target
+      .map((v, i) => [Math.abs(v), i])
+      .sort(([x], [y]) => y - x)
+      .slice(0, LARGEST_MOVES)
+      .map(([, i]) => i),
+  )
+  const calm = (values: number[]) => values.filter((_, i) => !largest.has(i))
+  const holds = (r: number) => (Math.sign(r) === Math.sign(correlation) && Math.abs(r) >= WEAK ? 'Yes' : 'No')
+  const check = (label: string, r: number) => [label, formatCorrelation(r), holds(r)]
   return {
     chart: {
       id: 'a1',
@@ -140,6 +162,29 @@ export function buildFindings(hypothesis: string, shape: FindingsShape = {}): Fi
       series: [
         { name: seriesA, points: pointsOf(a) },
         { name: seriesB, points: pointsOf(b) },
+      ],
+    },
+    lags: {
+      id: 'a2',
+      type: 'chart',
+      kind: 'bar',
+      title: `Correlation when ${seriesA} leads`,
+      caption: 'Each bar shifts the first series that many days ahead of the second',
+      headline: `Best at ${formatLag(bestLagDays).toLowerCase()}`,
+      xLabel: 'Lag in days',
+      yLabel: 'Correlation',
+      series: [{ name: 'Correlation', points: sweep.map((r, lag) => [String(lag), Number(r.toFixed(3))]) }],
+    },
+    checks: {
+      id: 'a3',
+      type: 'table',
+      title: 'Does it hold on parts of the window',
+      columns: ['Check', 'Correlation', 'Holds'],
+      rows: [
+        ['Full window', shownCorrelation, isReliable(correlation, pValue) ? 'Yes' : 'No'],
+        check('First half', pearson(lead.slice(0, half), target.slice(0, half))),
+        check('Second half', pearson(lead.slice(half), target.slice(half))),
+        check(`Without the ${LARGEST_MOVES} largest moves`, pearson(calm(lead), calm(target))),
       ],
     },
     conclusion: {

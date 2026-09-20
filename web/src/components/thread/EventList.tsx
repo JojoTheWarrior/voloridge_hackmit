@@ -1,7 +1,8 @@
-import type { MissionEvent } from '../../types'
+import type { MissionEvent, Report } from '../../types'
 import { ArtifactView } from '../artifacts/ArtifactView'
 import { ConclusionCard } from './ConclusionCard'
 import { ErrorEvent } from './ErrorEvent'
+import { ReportCard } from './ReportCard'
 import { StepEvent } from './StepEvent'
 import { ThoughtEvent } from './ThoughtEvent'
 
@@ -13,7 +14,11 @@ function UserMessage({ text }: { text: string }) {
   )
 }
 
-function Event({ event, live }: { event: MissionEvent; live: boolean }) {
+interface EventProps extends Omit<EventListProps, 'events'> {
+  event: MissionEvent
+}
+
+function Event({ event, live, missionId, report }: EventProps) {
   switch (event.kind) {
     case 'user_message':
       return <UserMessage text={event.text} />
@@ -27,6 +32,9 @@ function Event({ event, live }: { event: MissionEvent; live: boolean }) {
       return <ConclusionCard verdict={event.verdict} summary={event.summary} stats={event.stats} />
     case 'error':
       return <ErrorEvent text={event.text} />
+    case 'report':
+      // The event only marks the place; without the report itself there is nothing to show.
+      return missionId !== undefined && report ? <ReportCard missionId={missionId} report={report} /> : null
   }
 }
 
@@ -34,15 +42,18 @@ interface EventListProps {
   events: MissionEvent[]
   /** Whether Devin is working right now; only then does the active step spin. */
   live: boolean
+  /** Needed only by a list that may contain the `report` event. */
+  missionId?: string
+  report?: Report
 }
 
 /** Consecutive steps sit closer together than the rest of the thread so a run of them reads as one list. */
-export function EventList({ events, live }: EventListProps) {
+export function EventList({ events, live, missionId, report }: EventListProps) {
   if (events.length === 0) return null
   return (
     <div className="flex flex-col gap-6 [&>[data-step]+[data-step]]:-mt-3.5">
       {events.map((event) => (
-        <Event key={event.id} event={event} live={live} />
+        <Event key={event.id} event={event} live={live} missionId={missionId} report={report} />
       ))}
     </div>
   )

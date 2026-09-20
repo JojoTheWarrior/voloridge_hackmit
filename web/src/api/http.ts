@@ -86,6 +86,10 @@ export function createHttpApi(baseUrl = ''): Api {
       await change(`/missions/${encodeURIComponent(id)}/done`, {})
     },
 
+    async generateReport(id) {
+      await change(`/missions/${encodeURIComponent(id)}/report`, {})
+    },
+
     async listDatasets() {
       return read<Dataset[]>(await send('/datasets'))
     },

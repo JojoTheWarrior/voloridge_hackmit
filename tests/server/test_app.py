@@ -4,6 +4,7 @@ from __future__ import annotations
 import pytest
 
 from server.app import create_app
+from server.brief import REPORT_REQUEST
 from server.devin import Attachment, AttachmentRejected, DevinUnavailable, FakeDevin, SessionRef
 from server.poller import Poller
 from server.store import Store
@@ -91,7 +92,8 @@ def test_create_mission(client, devin, store, monkeypatch):
     mission = response.get_json()
 
     assert set(mission) == {"id", "title", "hypothesis", "status", "createdAt", "updatedAt", "datasetIds",
-                            "sessionUrl", "events"}
+                            "sessionUrl", "reportPending", "events"}
+    assert mission["reportPending"] is False
     assert mission["id"].startswith("m_")
     assert mission["title"] == "Do satellite images of storm damage predict how long power outages last"
     assert mission["hypothesis"] == HYPOTHESIS
@@ -278,6 +280,134 @@ def test_mark_done_unknown_mission_is_404(client):
     assert client.post("/api/missions/m_nope/done").status_code == 404
 
 
+# ---------- report ----------
+
+REPORT = {"headline": "A leads B", "summary": "It does.", "stats": [{"label": "r", "value": "0.58"}],
+          "keyArtifactIds": [], "steps": [{"label": "Read the data", "takeaway": "Messy."}], "caveats": [],
+          "nextQuestions": [], "generatedAt": "2026-09-20T12:40:00Z"}
+
+
+def _deliver(store, mission_id, report=REPORT, status="waiting"):
+    row = store.get_mission(mission_id)
+    store.apply_sync(mission_id, SyncResult([], [], status, None, report=report, report_settled=True),
+                     expected_status=row.status)
+
+
+def test_request_report(client, devin, store):
+    mission = _create(client).get_json()
+    store.apply_sync(mission["id"], SyncResult([], [], "waiting", None), expected_status="working")
+    response = client.post(f"/api/missions/{mission['id']}/report")
+    assert response.status_code == 202 and response.get_json() == {}
+    assert devin.sent == [("devin-abc", REPORT_REQUEST)]
+
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["reportPending"]) == ("working", True)
+    assert "report" not in fetched
+    # The request is between the server and Devin: it is not something the user said.
+    assert [e["kind"] for e in fetched["events"]] == ["user_message"]
+
+
+def test_request_report_for_an_unknown_mission_is_404(client, devin):
+    response = client.post("/api/missions/m_nope/report")
+    assert response.status_code == 404
+    assert response.get_json() == {"message": "Mission not found"}
+    assert devin.sent == []
+
+
+def test_request_report_while_one_is_pending_does_nothing(client, devin):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/report")
+    before = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert client.post(f"/api/missions/{mission['id']}/report").status_code == 202
+    assert len(devin.sent) == 1
+    assert client.get(f"/api/missions/{mission['id']}").get_json() == before
+
+
+def test_request_report_without_a_session_explains_itself(client, devin):
+    devin.create_error = DevinUnavailable("down")
+    mission = _create(client).get_json()
+    devin.create_error = None
+    response = client.post(f"/api/missions/{mission['id']}/report")
+    assert response.status_code == 202 and response.get_json() == {}
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["reportPending"]) == ("failed", False)
+    assert [e["kind"] for e in fetched["events"]] == ["user_message", "error", "error"]
+    assert "nothing to report on" in fetched["events"][-1]["text"]
+    assert devin.sent == []
+
+
+@pytest.mark.parametrize("was_done", [False, True])
+def test_request_report_when_devin_is_down_leaves_the_mission_as_it_was(client, devin, was_done):
+    mission = _create(client).get_json()
+    if was_done:
+        client.post(f"/api/missions/{mission['id']}/done")
+    devin.send_error = DevinUnavailable("Devin message failed (503)")
+    assert client.post(f"/api/missions/{mission['id']}/report").status_code == 202
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["reportPending"]) == ("done" if was_done else "working", False)
+    assert fetched["events"][-1]["kind"] == "error"
+    assert "did not reach Devin" in fetched["events"][-1]["text"] and "503" in fetched["events"][-1]["text"]
+
+    devin.send_error = None
+    client.post(f"/api/missions/{mission['id']}/report")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["reportPending"] is True
+
+
+def test_a_delivered_report_is_on_the_mission_but_not_on_summaries(client, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/report")
+    _deliver(store, mission["id"])
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["report"], fetched["reportPending"], fetched["status"]) == (REPORT, False, "waiting")
+    (summary,) = client.get("/api/missions").get_json()
+    assert set(summary) == {"id", "title", "hypothesis", "status", "createdAt", "updatedAt"}
+
+
+def test_regenerating_keeps_showing_the_old_report_while_pending(client, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/report")
+    _deliver(store, mission["id"])
+    client.post(f"/api/missions/{mission['id']}/report")
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["report"], fetched["reportPending"], fetched["status"]) == (REPORT, True, "working")
+
+
+def test_a_report_for_a_done_mission_reopens_it_only_until_it_arrives(client, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/done")
+    client.post(f"/api/missions/{mission['id']}/report")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["status"] == "working"
+    assert [m.id for m in store.live_missions()] == [mission["id"]]
+    _deliver(store, mission["id"], status="done")
+    assert client.get(f"/api/missions/{mission['id']}").get_json()["status"] == "done"
+
+
+def test_mark_done_while_a_report_is_pending_is_done_at_once_and_still_gets_the_report(client, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/report")
+    assert client.post(f"/api/missions/{mission['id']}/done").status_code == 200
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["reportPending"]) == ("done", True)
+    assert [m.id for m in store.live_missions()] == [mission["id"]]
+
+    _deliver(store, mission["id"], status="done")
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["reportPending"], fetched["report"]) == ("done", False, REPORT)
+    assert store.live_missions() == []
+
+
+def test_a_reply_while_a_report_is_pending_goes_through_and_the_report_is_still_expected(client, devin, store):
+    mission = _create(client).get_json()
+    client.post(f"/api/missions/{mission['id']}/done")
+    client.post(f"/api/missions/{mission['id']}/report")
+    assert client.post(f"/api/missions/{mission['id']}/messages", json={"text": "One more thing"}).status_code == 202
+    assert [text for _, text in devin.sent] == [REPORT_REQUEST, "One more thing"]
+    fetched = client.get(f"/api/missions/{mission['id']}").get_json()
+    assert (fetched["status"], fetched["reportPending"]) == ("working", True)
+    # The reply reopened the mission, so the report no longer puts it back to done.
+    assert not store.get_mission(mission["id"]).report_restore_done
+
+
 # ---------- attachments ----------
 
 def test_attachment_proxy_serves_images(client):
@@ -409,3 +539,50 @@ def test_end_to_end_with_the_fake_and_the_poller(store):
 
     client.post(f"/api/missions/{mission['id']}/done")
     assert client.get("/api/missions").get_json()[0]["status"] == "done"
+
+
+def _tick(poller, clock, times):
+    for _ in range(times):
+        poller.tick()
+        clock[0] += 5
+
+
+def test_report_end_to_end_with_the_fake_and_the_poller(store):
+    clock = [1_800_000_000.0]
+    fake = FakeDevin(clock=lambda: clock[0], beat_seconds=3.0)
+    client = create_app(store, fake, demo=True).test_client()
+    poller = Poller(store, fake)
+    mission_id = _create(client).get_json()["id"]
+    _tick(poller, clock, 12)
+    before = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (before["status"], before["reportPending"]) == ("waiting", False)
+
+    client.post(f"/api/missions/{mission_id}/report")
+    poller.tick()
+    pending = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (pending["status"], pending["reportPending"], "report" in pending) == ("working", True, False)
+    assert pending["events"] == before["events"]
+
+    clock[0] += 5
+    _tick(poller, clock, 2)
+    first = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (first["status"], first["reportPending"]) == ("waiting", False)
+    assert [e["kind"] for e in first["events"]][-3:] == ["thought", "conclusion", "report"]
+    assert first["events"][-3]["text"] == "The report is ready."
+    assert REPORT_REQUEST not in repr(first["events"])
+    artifacts = {e["artifact"]["id"]: e["artifact"] for e in first["events"] if e["kind"] == "artifact"}
+    assert [artifacts[i]["type"] for i in first["report"]["keyArtifactIds"]] == ["chart", "relation", "stats"]
+    assert set(first["report"]) == {"headline", "summary", "stats", "keyArtifactIds", "steps", "caveats",
+                                    "nextQuestions", "generatedAt"}
+
+    # Regenerating from a done mission: a different report, one marker, and back to done.
+    client.post(f"/api/missions/{mission_id}/done")
+    client.post(f"/api/missions/{mission_id}/report")
+    assert client.get(f"/api/missions/{mission_id}").get_json()["status"] == "working"
+    clock[0] += 5
+    _tick(poller, clock, 2)
+    second = client.get(f"/api/missions/{mission_id}").get_json()
+    assert (second["status"], second["reportPending"]) == ("done", False)
+    assert second["report"]["summary"] != first["report"]["summary"]
+    assert [e["kind"] for e in second["events"]].count("report") == 1
+    assert [e["kind"] for e in second["events"]][-2:] == ["conclusion", "report"]
