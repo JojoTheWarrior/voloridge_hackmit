@@ -87,3 +87,15 @@ def test_screenshot_cli(tmp_path):
         timeout=120,
     )
     assert out.is_file() and out.stat().st_size > 0
+
+
+def test_hud_lines_and_box_fit_tags():
+    from kingdom.field import HUD_MIN_W, hud_lines, hud_size
+    from kingdom.text import text_size
+    pygame.font.init()
+    lines = hud_lines(3, 97, 322, 48, 123.9)
+    assert lines == ["Active   3", "Queued   97", "Done     322 ok", "Failed   48", "Runtime  123s"]
+    w, h = hud_size(lines, "sync 4s  net err")
+    assert w >= HUD_MIN_W and w >= text_size("sync 4s  net err", "small")[0] + 12
+    assert h == 10 + 6 * 10
+    assert hud_size(lines)[1] == 10 + 5 * 10

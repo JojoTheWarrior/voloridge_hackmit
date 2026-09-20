@@ -43,16 +43,21 @@ def _render(text: str, kind: str, color: tuple) -> pygame.Surface:
 
 
 def draw_text(target: pygame.Surface, text: str, pos: tuple[int, int], color=(238, 240, 244), kind: str = "normal",
-              shadow=None, align: str = "left") -> pygame.Rect:
+              shadow=None, align: str = "left", bold: bool = False) -> pygame.Rect:
+    """Blit ``text``; ``bold`` fakes a heavier weight by drawing it twice, 1px apart."""
     surf = _render(text, kind, tuple(color))
     x, y = int(pos[0]), int(pos[1])
+    w = surf.get_width() + (1 if bold else 0)
     if align == "center":
-        x -= surf.get_width() // 2
+        x -= w // 2
     elif align == "right":
-        x -= surf.get_width()
+        x -= w
     if shadow is not None:
         target.blit(_render(text, kind, tuple(shadow)), (x + 1, y + 1))
-    return target.blit(surf, (x, y))
+    rect = target.blit(surf, (x, y))
+    if bold:
+        rect = rect.union(target.blit(surf, (x + 1, y)))
+    return rect
 
 
 def wrap_text(text: str, max_width: int, kind: str = "normal") -> list[str]:

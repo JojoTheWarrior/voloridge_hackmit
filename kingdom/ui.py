@@ -16,6 +16,7 @@ from typing import Optional
 import pygame
 
 from .assets import Assets, Sprite
+from .note import NoteLine, format_note
 from .text import draw_text, line_height, text_size, wrap_text
 
 WOOD = (74, 59, 42)
@@ -292,24 +293,56 @@ class ScrollList:
             draw_sprite_or_box(target, assets, "arrow_down", track.x - 2, track.bottom + 2, (8, 8), t)
 
 
+class StyledLine(str):
+    """A rendered line of text; its first ``bold_end`` characters are drawn bold."""
+    bold_end: int
+
+    def __new__(cls, text: str, bold_end: int = 0):
+        obj = super().__new__(cls, text)
+        obj.bold_end = max(0, min(int(bold_end), len(text)))
+        return obj
+
+
+CONTINUATION_INDENT = 2
+
+
+def layout_note_line(line: NoteLine, max_width: int, kind: str = "small") -> list[StyledLine]:
+    """Wrap one logical line; continuation lines are indented ``CONTINUATION_INDENT`` spaces."""
+    if line.blank:
+        return [StyledLine("")]
+    pad = " " * line.indent
+    cont = " " * (line.indent + CONTINUATION_INDENT)
+    body = f"{line.bold} {line.text}" if line.bold and line.text else (line.bold or line.text)
+    width = max(8, max_width - text_size(cont, kind)[0])
+    out: list[StyledLine] = []
+    consumed = 0
+    for i, piece in enumerate(wrap_hard(body, width, kind)):
+        prefix = pad if i == 0 else cont
+        bold_left = max(0, len(line.bold) - consumed)
+        out.append(StyledLine(prefix + piece, len(prefix) + min(bold_left, len(piece)) if bold_left else 0))
+        consumed += len(piece) + 1
+    return out
+
+
 class TextPanel:
-    """Wrapped, scrollable text (used for notes)."""
+    """Wrapped, scrollable note text with bold attribute labels."""
 
     def __init__(self, rect: pygame.Rect, kind: str = "small"):
         self.rect = pygame.Rect(rect)
         self.kind = kind
-        self.lines: list[str] = []
+        self.lines: list[StyledLine] = []
         self.scroll = ScrollList(self.rect.inflate(-8, -8), step=line_height(kind))
-        self._source: Optional[str] = None
+        self._source: Optional[tuple[str, str, str]] = None
 
-    def set_text(self, text: str):
-        if text == self._source:
+    def set_text(self, text: str, title: str = "", subtitle: str = ""):
+        key = (text, title, subtitle)
+        if key == self._source:
             return
-        self._source = text
+        self._source = key
         width = self.scroll.viewport.w - 12
         self.lines = []
-        for paragraph in clean_markdown(text).split("\n"):
-            self.lines.extend(wrap_hard(paragraph, width, self.kind) if paragraph.strip() else [""])
+        for line in format_note(text, title, subtitle):
+            self.lines.extend(layout_note_line(line, width, self.kind))
         self.scroll.set_content_height(len(self.lines) * line_height(self.kind))
         self.scroll.scroll_to(0)
 
@@ -326,7 +359,14 @@ class TextPanel:
         first = self.scroll.offset // lh
         y = view.y - (self.scroll.offset % lh)
         for line in self.lines[first:first + view.h // lh + 2]:
-            draw_text(target, line, (view.x, y), color, kind=self.kind)
+            bold_end = getattr(line, "bold_end", 0)
+            if bold_end:
+                head, rest = line[:bold_end], line[bold_end:]
+                r = draw_text(target, head, (view.x, y), color, kind=self.kind, bold=True)
+                if rest:
+                    draw_text(target, rest, (r.right, y), color, kind=self.kind)
+            else:
+                draw_text(target, line, (view.x, y), color, kind=self.kind)
             y += lh
         target.set_clip(prev)
         self.scroll.draw_scrollbar(target, assets, rect.right - 7, dx=0, dy=0)
