@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/027f4608fb4d4b049abe53ec00ed84a8",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:07:19Z",
-  "updated_at": "2026-09-20T04:07:38Z",
+  "updated_at": "2026-09-20T04:08:24Z",
   "finished_at": null,
-  "elapsed_s": 19,
+  "elapsed_s": 65,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-189-gdelt-gkg-drone-share_x_finance-noc-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 4.82,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Reversal control: GDELT drone GKG share 20d z-score > 1 leads defense ETF returns lower by 4-6 days (-) as drone-heavy news signals cheap asymmetric warfare rather than big-ticket orders; trade short ITA 6d [gdelt.gkg.drone_share -> finance.ITA.log_return] (parent: R2-0084)"
 }
