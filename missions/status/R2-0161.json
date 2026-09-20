@@ -41,5 +41,5 @@
     "actionability": 3.5,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": "R2 | [fuel-airspace-losers] Neutral control CCL reproduced the LHA.DE null (hit 50 pct, validity 0), so the Doha NO2 short edge is noise; test whether the effect is airline-specific by shorting AF.PA 3d at 1d lag on Doha CAMS NO2 20d z-score above 1 (-) [airquality.doha.cams_no2 -> finance.AF.PA.log_return] (parent: R2-0161)"
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Neutral control CCL reproduced the LHA.DE null (hit 50 pct, validity 0), so the Doha NO2 short edge is noise; test whether the effect is airline-specific by shorting IAG.L 3d at 1d lag on Doha CAMS NO2 20d z-score above 1 (-) [airquality.doha.cams_no2 -> finance.IAG.L.log_return] (parent: R2-0161)"
 }
