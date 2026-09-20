@@ -41,5 +41,5 @@
     "actionability": 1.25,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": "R2 | [fertilizer-ag] Tokyo daily precipitation 20d z-score is unrelated to ZS=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.precip -> finance.ZS=F.log_return] (parent: R2-0057)"
+  "followup_hypothesis": "R2 | [fertilizer-ag] Tokyo daily precipitation 20d z-score is unrelated to ZW=F log returns at lags 0-10 days (null control); no trade [weather.tokyo.precip -> finance.ZW=F.log_return] (parent: R2-0057)"
 }
