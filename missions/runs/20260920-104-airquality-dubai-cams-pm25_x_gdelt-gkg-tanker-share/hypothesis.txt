@@ -1,0 +1,1 @@
+Air-quality readings in Gulf cities correlate with tanker attack news volume (smoke from struck vessels).

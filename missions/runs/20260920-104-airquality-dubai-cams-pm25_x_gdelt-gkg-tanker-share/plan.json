@@ -1,0 +1,12 @@
+{
+  "indicator_a": "airquality.dubai.cams_pm25",
+  "indicator_b": "gdelt.gkg.tanker_share",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use CAMS-modeled PM2.5 anomalies in a major Gulf port city (Dubai) as a proxy for smoke from damaged tankers and relate them to global news tanker-share volume during the active war period, allowing a few days for atmospheric transport and media coverage to align; CAMS is the closest available to ground air-quality near Hormuz."
+}
