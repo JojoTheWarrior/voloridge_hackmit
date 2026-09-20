@@ -1,4 +1,3 @@
-R2 | [oil-shipping] Crossref weekly oil_price counts 12-week z-score > 2 precede XOP underperformance by 5 days (-) as the shock is already priced; trade short XOP 7d [research.oil_price.crossref_pubs -> finance.XOP.log_return]
 R2 | [oil-shipping] Brent 3d cumulative log return > 8 pct is over-extended and fades: Brent reverses over the next 4 days (-); trade short BZ=F 4d [finance.BZ=F.log_return -> finance.BZ=F.log_return]
 R2 | [oil-shipping] Brent-WTI spread 20d z-score > 2 leads tanker equities higher by 2 days (+) as ton-mile demand reprices; trade long FRO 5d [finance.spread.brent_wti -> finance.FRO.log_return]
 R2 | [oil-shipping] Null control: Tokyo daily mean temperature 20d z-score > 1 has no relation to tanker equity returns at 0-5 day lags (0); no trade [weather.tokyo.temp_mean -> finance.STNG.log_return]
