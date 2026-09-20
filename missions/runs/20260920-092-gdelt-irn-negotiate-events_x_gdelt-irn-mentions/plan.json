@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.negotiate_events",
+  "indicator_b": "gdelt.irn.mentions",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": "diplomacy",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Iran-focused GDELT negotiation event counts as proxies for diplomatic events and total Iran mentions as news volume, then compare post-event decay profiles between diplomatic (negotiate_events spikes) and military (fight/conflict_events spikes in a separate specification) to test whether mentions fall back to baseline faster after diplomacy than after conflict."
+}
