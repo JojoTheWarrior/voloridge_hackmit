@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/c775c361f17146d39514fb3c18f60870",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:20:04Z",
-  "updated_at": "2026-09-20T13:20:28Z",
-  "finished_at": null,
-  "elapsed_s": 24,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:21:22Z",
+  "finished_at": "2026-09-20T13:21:22Z",
+  "elapsed_s": 78,
+  "message": "Brent spike (z20>1) -> short CCL next day: r=-0.30 at lag 0 (n=390), rule hit 52% (50 trades, avg +0.37%, OOS 62.5%/16), sharpe-like 0.94, max DD -18.6%; weak, contemporaneous effect, no strong 1d continuation",
   "run_folder": "missions/runs/20260920-265-finance-bz-f-log-return_x_finance-ccl-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.32,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Brent spike -> short CCL 1d gave hit 52% (OOS 62.5%, n=16) with rule capped at 1d hold; test whether the 2-3 day continuation exists by targeting royal caribbean instead: Brent log-return z>1 -> short RCL for 3 days at 1d lag (-) [finance.BZ=F.log_return -> finance.RCL.log_return] (parent: R2-0175)"
 }
