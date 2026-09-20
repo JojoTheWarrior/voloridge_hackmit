@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:28:02.303205+00:00",
+  "git_commit": "dd685b4c33416ae850bd2ebeb1e123d165b7ef7c",
+  "folder": "20260920-274-gdelt-gkg-tanker-share_x_finance-ewj-log-return",
   "mission_id": "R2-0188",
-  "title": "Tanker headline z>1 -> EWJ rebound 3d",
   "hypothesis": "R2 | [risk-macro-em] Reversal control: GDELT tanker GKG share 20d z-score > 1 is followed by EWJ rebounding higher within 3 days (+) as shipping-headline fear fades; trade long EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return] (parent: R2-0089)",
-  "parent_mission_id": "R2-0089",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/5dd5fd51b954408b8cd1e31fd6f31b2c",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:27:48Z",
-  "updated_at": "2026-09-20T13:28:03Z",
-  "finished_at": null,
-  "elapsed_s": 15,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-274-gdelt-gkg-tanker-share_x_finance-ewj-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 5.24
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.008032941002348167,
+  "perm_p": 0.6387225548902196,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.24,
   "trade_idea": {
     "instrument": "EWJ",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 5.24,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.tanker_share": "configured analysis window",
+    "finance.EWJ.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

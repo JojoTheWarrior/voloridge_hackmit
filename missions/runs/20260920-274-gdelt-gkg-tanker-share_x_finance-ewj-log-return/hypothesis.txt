@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Reversal control: GDELT tanker GKG share 20d z-score > 1 is followed by EWJ rebounding higher within 3 days (+) as shipping-headline fear fades; trade long EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return] (parent: R2-0089)
