@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:48:12Z",
-  "updated_at": "2026-09-20T03:48:51Z",
+  "updated_at": "2026-09-20T03:49:13Z",
   "finished_at": "2026-09-20T03:48:51Z",
-  "elapsed_s": 39,
+  "elapsed_s": 61,
   "message": "Noise: OKC precip z>1 -> short CF 2d gives 29 trades, hit 48%, excess +0.3%, sharpe -0.05, OOS 14 trades hit 43%; perm p=0.85, Bonferroni 1.0; actionability 1.99",
   "run_folder": "missions/runs/20260920-167-weather-oklahoma-city-precip_x_finance-cf-log-return",
   "scores": {
