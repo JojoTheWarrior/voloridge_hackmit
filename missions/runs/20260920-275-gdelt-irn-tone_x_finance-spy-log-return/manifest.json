@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:29:27.863150+00:00",
+  "git_commit": "1ff4f78ca8797eefcfa93d0dd1e398fdcbfbfbd6",
+  "folder": "20260920-275-gdelt-irn-tone_x_finance-spy-log-return",
   "mission_id": "R2-0190",
-  "title": "Iran tone fear -> long SPY 3d",
   "hypothesis": "R2 | [risk-macro-em] Iran GDELT tone 20d z-score < -1 (unusually negative coverage) leads S&P returns higher by 1-3 days (+); buy the fear long SPY 3d [gdelt.irn.tone -> finance.SPY.log_return] (parent: R2-0092)",
-  "parent_mission_id": "R2-0092",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/a82191be619f4870baca082c3cf3aa53",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:29:17Z",
-  "updated_at": "2026-09-20T13:29:29Z",
-  "finished_at": null,
-  "elapsed_s": 12,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-275-gdelt-irn-tone_x_finance-spy-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.87
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.07010269115858245,
+  "perm_p": 0.8363273453093812,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.87,
   "trade_idea": {
     "instrument": "SPY",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 1.87,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.tone": "configured analysis window",
+    "finance.SPY.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
