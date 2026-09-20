@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.conflict_events",
+  "indicator_b": "research.missile.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Iranian conflict event counts as a proxy for the 2026 war intensity and weekly Crossref 'missile' publication counts as the closest available stand-in for 'missile defense' research, comparing pre- and post-war periods to test whether missile-related publications increased with the onset of open conflict."
+}
