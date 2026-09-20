@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/7a621b6f63474700b74fe54eab53a3f9",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:45:06Z",
-  "updated_at": "2026-09-20T12:45:22Z",
+  "updated_at": "2026-09-20T12:45:56Z",
   "finished_at": null,
-  "elapsed_s": 16,
+  "elapsed_s": 50,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-222-airquality-bandar-abbas-cams-dust_x_finance-dht-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 1.41,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Null control 2: Bandar Abbas CAMS PM10 20d z-score > 1 (coarse mineral dust proxy) leads DHT log returns by 1-4 days (+); if PM10 also shows no edge while AOD does, the AOD signal is not natural aerosol [airquality.bandar_abbas.cams_pm10 -> finance.DHT.log_return] (parent: R2-0113)"
 }
