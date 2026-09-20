@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/928d79c5558d4fe9a6da2367d3219810",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "done",
+  "stage": "done",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:18:10Z",
-  "updated_at": "2026-09-20T03:18:29Z",
+  "updated_at": "2026-09-20T03:18:56Z",
   "finished_at": "2026-09-20T03:17:20Z",
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "elapsed_s": 46,
+  "message": "Not supported at lag 2 (r=-0.033, n=390, best lag 6 r=-0.082); z>1 long-DHT 6d rule shows 28 trades, hit 64%, excess 0.34%, actionability 8.69 - likely war common-cause.",
   "run_folder": "missions/runs/20260920-136-gdelt-irn-conflict-events_x_finance-dht-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 8.69,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Iran conflict event 20d z-score > 1 leads DHT log returns by 1 day (+), null control: same rule on XLE should show weaker edge; trade long DHT 6d [gdelt.irn.conflict_events -> finance.DHT.log_return] (parent: R2-0004)"
 }
