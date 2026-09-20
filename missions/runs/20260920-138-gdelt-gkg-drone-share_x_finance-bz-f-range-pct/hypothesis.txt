@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT drone GKG share day-over-day pct change > 40 pct leads Brent intraday range by 1 day (+); trade long BZ=F straddle proxy via BZ=F 2d [gdelt.gkg.drone_share -> finance.BZ=F.range_pct]
