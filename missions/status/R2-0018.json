@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:28:10Z",
-  "updated_at": "2026-09-20T03:29:17Z",
+  "updated_at": "2026-09-20T03:29:43Z",
   "finished_at": "2026-09-20T03:29:17Z",
-  "elapsed_s": 67,
+  "elapsed_s": 93,
   "message": "Not supported: shorting Brent after 20d z>1 over-extension lost money (50 trades, hit 46%, avg -0.30%/trade, Sharpe-like -0.68; OOS war 16 trades hit 37.5%). Brent strength shows momentum, not a fade. Original same-indicator tag collapsed to pre/post mode; signal swapped once to BZ=F.close.",
   "run_folder": "missions/runs/20260920-145-finance-bz-f-close_x_finance-bz-f-log-return",
   "scores": {
