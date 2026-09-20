@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/c0c02fed52c640339bb8ad1a63b53f24",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:07:50Z",
-  "updated_at": "2026-09-20T13:07:54Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:08:20Z",
+  "finished_at": "2026-09-20T13:08:20Z",
+  "elapsed_s": 30,
+  "message": "Not supported: r=0.08 (n=390); short-NTR-1d rule hit 80% but only 5 trades (1 OOS), actionability 7.39 is fragile",
   "run_folder": "missions/runs/20260920-250-gdelt-gkg-helium-share_x_finance-ntr-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 7.39,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] null control: GDELT helium GKG share 20d z-score > 1 short-NTR-1d rule had hit 80% on only 5 trades (r=0.08, not supported), so test whether the same short 1d rule transfers to MOS log returns; if it does not, the NTR result is likely noise [gdelt.gkg.helium_share -> finance.MOS.log_return] (parent: R2-0154)"
 }
