@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.ceasefire_share",
+  "indicator_b": "finance.EIS.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "diplomacy",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT ceasefire news intensity as a daily proxy for ceasefire announcements and relate it to Israel ETF (EIS) daily log returns during the war window, expecting positive EIS moves on ceasefire-heavy news days and then testing divergence versus TUR in a follow-up cross-asset step."
+}
