@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-09-20T02:46:44.932781+00:00",
+  "git_commit": "ef42f1acd7391f12e8928f0996412de912cbbb2b",
+  "folder": "20260920-133-finance-ng-f-close_x_finance-ttf-f-close",
+  "mission_id": "M20260920-47ce02",
+  "hypothesis": "US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness).",
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.12524741482200136,
+  "perm_p": 0.04790419161676647,
+  "validity": 6.0,
+  "interestingness": 3.78,
+  "unexpectedness": 6.76,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/9da7216df5634c41b47e59c3f9e75b16"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/170cc101ac394b72a63ed9cfcf3e5c5b"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/cb9c7f5b74a2484a8f4b40a5f5116423"
+    }
+  ],
+  "indicator_coverage": {
+    "finance.NG=F.close": "configured analysis window",
+    "finance.TTF=F.close": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.NG=F.close",
+  "indicator_b": "finance.TTF=F.close",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Henry Hub (NG=F) is the hypothesised driver; the intended response is the PUDL EIA-923 monthly gas fuel-cost-at-plant series, which does not appear in the visible (truncated) catalogue, so TTF=F.close is the closest available delivered-gas price proxy - pct_change with up to 30-day lag captures monthly contract pass-through, and compare_pre_post tests whether the Henry Hub linkage weakened after the war began (caveat: TTF is not US plant fuel cost, and both series share the war as a common driver).",
+  "mode": "pair"
+}
