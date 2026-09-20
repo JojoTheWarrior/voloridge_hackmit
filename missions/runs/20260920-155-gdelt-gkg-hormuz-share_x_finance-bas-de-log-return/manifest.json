@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:38:29.216952+00:00",
+  "git_commit": "6a15789d9fea0ef7f01e36aa4701acd439b8964a",
+  "folder": "20260920-155-gdelt-gkg-hormuz-share_x_finance-bas-de-log-return",
   "mission_id": "R2-0034",
-  "title": "Hormuz GKG share leads BASF returns (short)",
   "hypothesis": "R2 | [gas-lng] GDELT hormuz GKG share 20d z-score > 1 leads BASF returns by 2 days (-) as LNG diversion lifts European gas input costs; trade short BAS.DE 5d [gdelt.gkg.hormuz_share -> finance.BAS.DE.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/6d1c2945255b45e9bebed452658813cc",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:38:08Z",
-  "updated_at": "2026-09-20T03:38:30Z",
-  "finished_at": null,
-  "elapsed_s": 22,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-155-gdelt-gkg-hormuz-share_x_finance-bas-de-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 392,
+  "r": 0.09414210444297826,
+  "perm_p": 0.3473053892215569,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "BAS",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.hormuz_share": "configured analysis window",
+    "finance.BAS.DE.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

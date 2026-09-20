@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT hormuz GKG share 20d z-score > 1 leads BASF returns by 2 days (-) as LNG diversion lifts European gas input costs; trade short BAS.DE 5d [gdelt.gkg.hormuz_share -> finance.BAS.DE.log_return]
