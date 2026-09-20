@@ -21,6 +21,7 @@ from .app import LOGICAL_H, LOGICAL_W, Scene
 from .data import CompletedMission
 from .text import draw_text, text_size
 from .ui import (
+    AMBER,
     GOLD,
     GOLD_LIGHT,
     GREEN,
@@ -567,7 +568,7 @@ class CastleScene(Scene):
             if y > view.bottom or y + row_h < view.y:
                 continue
             row = pygame.Rect(view.x, y, view.w, row_h)
-            tint = RED if m.failed else GREEN
+            tint = RED if m.failed else GREEN if m.status == "ok" else AMBER
             if i == self.selected:
                 pygame.draw.rect(surface, OUTLINE, row)
                 pygame.draw.rect(surface, lerp_color(WOOD_DARK, GOLD, 0.18), row.inflate(-2, -2))
@@ -591,6 +592,8 @@ class CastleScene(Scene):
                      f"lag={lag}")
             if m.failed:
                 stats = "FAILED  " + stats
+            elif m.status != "ok":
+                stats = f"{m.status.upper()}  " + stats
             draw_text(surface, clip_lines(stats, row_text_w, 1, "small")[0], (tx, y + 3 + LH * 3),
                       lerp_color(tint, GOLD_LIGHT, 0.45), kind="small")
             if has_thumb:
