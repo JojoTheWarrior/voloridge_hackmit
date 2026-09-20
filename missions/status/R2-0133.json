@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:55:24Z",
-  "updated_at": "2026-09-20T12:56:04Z",
+  "updated_at": "2026-09-20T12:56:20Z",
   "finished_at": "2026-09-20T12:56:04Z",
-  "elapsed_s": 40,
+  "elapsed_s": 56,
   "message": "Long BAS.DE 1d after Hormuz GKG z>1: 5/5 hits, avg +1.84%, excess +1.57%, actionability 9.1 but validity 0 (r=0.09, n=392), only 5 war-period trades - suggestive, not robust",
   "run_folder": "missions/runs/20260920-235-gdelt-gkg-hormuz-share_x_finance-bas-de-log-return",
   "scores": {
