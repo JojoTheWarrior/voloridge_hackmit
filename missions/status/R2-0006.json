@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/8f75a947dd714153ae3d4d3ebfdca387",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "done",
+  "stage": "done",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:18:24Z",
-  "updated_at": "2026-09-20T03:18:43Z",
+  "updated_at": "2026-09-20T03:19:22Z",
   "finished_at": "2026-09-20T03:17:29Z",
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "elapsed_s": 58,
+  "message": "Not supported: Oman events vs Brent r=+0.14 (n=391, perm p=0.08), opposite sign to hypothesis; short rule hit rate 33%, sharpe -2.4; actionability 1.83",
   "run_folder": "missions/runs/20260920-137-gdelt-omn-events_x_finance-bz-f-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 1.83,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Oman GDELT event count 20d z-score > 1.5 marks Gulf tension (not diplomacy) and leads Brent higher by 2 days (+); trade long BZ=F 3d [gdelt.omn.events -> finance.BZ=F.log_return] (parent: R2-0006)"
 }
