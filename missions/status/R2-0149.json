@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/4dcde201a7044fa9a76c55edb2050398",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:05:21Z",
-  "updated_at": "2026-09-20T13:05:37Z",
+  "updated_at": "2026-09-20T13:05:54Z",
   "finished_at": null,
-  "elapsed_s": 16,
+  "elapsed_s": 33,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-247-weather-oklahoma-city-precip_x_finance-cf-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.37,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Oklahoma City precipitation 20d z-score > 1 (wet spell) leads CF absolute returns by 3 days (+) - rain shocks move nitrogen demand uncertainty rather than direction, so volatility not sign should respond; null-control of the failed directional R2-0149 [weather.oklahoma_city.precip -> finance.CF.abs_return] (parent: R2-0149)"
 }
