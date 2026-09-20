@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Crossref hormuz weekly counts 8-week z-score > 1 lead India ETF returns lower by 5-10 days (-) via import-cost fear; trade short INDA 10d [research.hormuz.crossref_pubs -> finance.INDA.log_return]

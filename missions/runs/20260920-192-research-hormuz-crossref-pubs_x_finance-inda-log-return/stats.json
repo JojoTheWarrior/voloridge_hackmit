@@ -1,0 +1,94 @@
+{
+  "n_obs": 81,
+  "coverage_start": "2025-03-03",
+  "coverage_end": "2026-09-14",
+  "correlation": {
+    "n": 81,
+    "pearson_r": -0.04552430128355965,
+    "pearson_p": 0.6865364029733155,
+    "spearman_r": -0.0684313286846312,
+    "spearman_p": 0.5438365502377842
+  },
+  "lagged": {
+    "lags": [
+      -1,
+      0,
+      1
+    ],
+    "r": [
+      0.0728834983622305,
+      -0.04552430128355965,
+      -0.209804408101603
+    ],
+    "best_lag": 1,
+    "best_r": -0.209804408101603
+  },
+  "perm_p": 0.1996007984031936,
+  "n_lags_tested": 3,
+  "bonferroni_p": 0.5988023952095809,
+  "pre_post": null,
+  "event_study": null,
+  "event_study_b": null,
+  "window": "full",
+  "lag_unit": "weeks",
+  "max_lag_steps": 1,
+  "sign_matches_expectation": true,
+  "trade": {
+    "rule": {
+      "signal_transform": "rolling_zscore_20d",
+      "threshold": 1.0,
+      "direction": "short",
+      "holding_days": 1,
+      "target_kind": "log_return"
+    },
+    "all": {
+      "n_trades": 7,
+      "hit_rate": 0.5714285714285714,
+      "avg_return": 0.001024418359101577,
+      "baseline_avg_return": 0.0013294781741722223,
+      "excess_return": -0.0003050598150706452,
+      "sharpe_like": 0.4785066049696387,
+      "max_drawdown": -0.011271317427436589,
+      "total_return": 0.007080514538782667
+    },
+    "fit_pre_war": {
+      "n_trades": 5,
+      "hit_rate": 0.6,
+      "avg_return": 0.0011179819320019878,
+      "baseline_avg_return": 0.0012868942091028275,
+      "excess_return": -0.00016891227710083968,
+      "sharpe_like": 0.3775980749568786,
+      "max_drawdown": -0.010446577551835423,
+      "total_return": 0.005492834790927992
+    },
+    "test_war": {
+      "n_trades": 2,
+      "hit_rate": 0.5,
+      "avg_return": 0.0007905094268505497,
+      "baseline_avg_return": 0.0013909883459391256,
+      "excess_return": -0.0006004789190885759,
+      "sharpe_like": 0.6884110011555722,
+      "max_drawdown": 0.0,
+      "total_return": 0.0015790065258742825
+    },
+    "n_signal_days": 66,
+    "trade_idea": {
+      "instrument": "INDA",
+      "direction": "short",
+      "entry_rule": "research.hormuz.crossref_pubs rolling_zscore_20d > 1 at close -> short INDA next session",
+      "exit_rule": "close after 1 trading days (no overlapping entries)",
+      "holding_days": 1,
+      "hit_rate": 0.5714285714285714,
+      "avg_return": 0.001024418359101577,
+      "excess_return": -0.0003050598150706452,
+      "n_trades": 7,
+      "sharpe_like": 0.4785066049696387,
+      "max_drawdown": -0.011271317427436589,
+      "oos_n_trades": 2,
+      "oos_avg_return": 0.0007905094268505497,
+      "oos_hit_rate": 0.5,
+      "actionability": 2.79,
+      "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+    }
+  }
+}
