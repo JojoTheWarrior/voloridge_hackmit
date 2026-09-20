@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 29,
+    "hit_rate": 0.0,
+    "avg_return": -0.7503249648340116,
+    "baseline_avg_return": -0.7237767581714074,
+    "excess_return": -0.026548206662604157,
+    "sharpe_like": -21.40215782495808,
+    "max_drawdown": -1.0000000000000009,
+    "total_return": -1.0
+  },
+  "fit_pre_war": {
+    "n_trades": 15,
+    "hit_rate": 0.0,
+    "avg_return": -0.6192103555129705,
+    "baseline_avg_return": -0.6109988480430196,
+    "excess_return": -0.008211507469950918,
+    "sharpe_like": -18.57779708053664,
+    "max_drawdown": -0.9999998750088052,
+    "total_return": -0.9999999288264325
+  },
+  "test_war": {
+    "n_trades": 14,
+    "hit_rate": 0.0,
+    "avg_return": -0.8908049033922697,
+    "baseline_avg_return": -0.9225579666710831,
+    "excess_return": 0.03175306327881344,
+    "sharpe_like": -24.964792942416146,
+    "max_drawdown": -1.0000000267237132,
+    "total_return": -0.9999999999999538
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "ratio:tankers_xle",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.ceasefire_share rolling_zscore_20d > 1 at close -> short ratio:tankers_xle next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.0,
+    "avg_return": -0.7503249648340116,
+    "excess_return": -0.026548206662604157,
+    "n_trades": 29,
+    "sharpe_like": -21.40215782495808,
+    "max_drawdown": -1.0000000000000009,
+    "oos_n_trades": 14,
+    "oos_avg_return": -0.8908049033922697,
+    "oos_hit_rate": 0.0,
+    "actionability": 1.17,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

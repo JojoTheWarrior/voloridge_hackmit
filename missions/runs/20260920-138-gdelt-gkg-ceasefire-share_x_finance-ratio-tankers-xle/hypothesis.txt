@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT ceasefire GKG share 10d z-score > 1 leads tankers-to-XLE ratio lower by 2 days (-); trade short FRO 4d [gdelt.gkg.ceasefire_share -> finance.ratio.tankers_xle]
