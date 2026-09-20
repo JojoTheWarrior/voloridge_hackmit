@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/7494ae281b1343c3a747824c1ad2ea68",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "failed",
+  "stage": "done",
   "progress": 1.0,
   "signal": null,
   "started_at": "2026-09-20T04:08:28Z",
-  "updated_at": "2026-09-20T04:08:30Z",
+  "updated_at": "2026-09-20T04:09:50Z",
   "finished_at": "2026-09-20T04:08:30Z",
-  "elapsed_s": 2,
-  "message": "committing run folder",
+  "elapsed_s": 82,
+  "message": "FAILED: research.missile.crossref_pubs has no cached data (data/raw/crossref/missile.json missing); one-shot swap to research.iran.crossref_pubs also failed (only 7 weekly points, Mar-Apr 2025, no overlap with ITA window). No trade rule testable.",
   "run_folder": "missions/runs/20260920-190-FAILED-r2-risk-macro-em-crossref",
   "scores": {
     "validity": null,
@@ -24,5 +24,5 @@
     "actionability": null
   },
   "trade_idea": null,
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] GDELT military_buildup daily event count 20d z-score > 1 leads defense ETF returns by 3-5 days (+); trade long ITA 5d [events.military_buildup.count -> finance.ITA.log_return] (parent: R2-0085)"
 }
