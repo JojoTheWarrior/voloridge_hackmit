@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/5e18111e4ced422eb933f24bbf407976",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:31:32Z",
-  "updated_at": "2026-09-20T03:31:54Z",
+  "updated_at": "2026-09-20T03:33:23Z",
   "finished_at": null,
-  "elapsed_s": 22,
+  "elapsed_s": 111,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-148-gdelt-qat-conflict-events_x_finance-vg-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 7.46,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Robustness: Qatar GDELT conflict event count 20d z-score > 1 leads Cheniere (LNG) returns by 1 day (+); trade long LNG 4d [gdelt.qat.conflict_events -> finance.LNG.log_return] (parent: R2-0023)"
 }
