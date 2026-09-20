@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:03:21Z",
-  "updated_at": "2026-09-20T13:04:02Z",
+  "updated_at": "2026-09-20T13:04:23Z",
   "finished_at": "2026-09-20T13:04:02Z",
-  "elapsed_s": 41,
+  "elapsed_s": 62,
   "message": "Weak stats (r=-0.10, n=390, validity 0) but 1d short-MOS fade backtests at 60% hit, sharpe-like 1.87, OOS 60%/20 trades; actionability 8.75, treat as fragile",
   "run_folder": "missions/runs/20260920-245-gdelt-gkg-fertilizer-share_x_finance-mos-log-return",
   "scores": {
