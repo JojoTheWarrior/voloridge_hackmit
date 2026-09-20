@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:59:12.620218+00:00",
+  "git_commit": "8d26d3889055c38b12ac7e242fc5eb7960cb2842",
+  "folder": "20260920-240-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
   "mission_id": "R2-0139",
-  "title": "LNG news share -> TTF gas returns null control",
   "hypothesis": "R2 | [fertilizer-ag] GDELT lng GKG share 20d z-score > 1 leads CF log returns by 3 days (+) but shows no excess over baseline; null control on European gas TTF=F log returns to test whether the LNG-news channel acts through gas at all [gdelt.gkg.lng_share -> finance.TTF=F.log_return] (parent: R2-0041)",
-  "parent_mission_id": "R2-0041",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/c629c7ca30b24616be3a9f7597a827cc",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:59:02Z",
-  "updated_at": "2026-09-20T12:59:14Z",
-  "finished_at": null,
-  "elapsed_s": 12,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-240-gdelt-gkg-lng-share_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.31
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.24710120456775034,
+  "perm_p": 0.033932135728542916,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.31,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 3.31,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.lng_share": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
