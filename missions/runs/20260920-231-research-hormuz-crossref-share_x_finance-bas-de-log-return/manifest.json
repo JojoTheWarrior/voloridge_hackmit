@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:52:42.134829+00:00",
+  "git_commit": "599c8f06d53c15115d121593e98207a9a0cb89d7",
+  "folder": "20260920-231-research-hormuz-crossref-share_x_finance-bas-de-log-return",
   "mission_id": "R2-0127",
-  "title": "Null control: Hormuz crossref share -> BAS.DE",
   "hypothesis": "R2 | [gas-lng] Null control: Crossref Hormuz publication share (not raw counts) 20d z-score > 1 leads BAS.DE returns by 5 days (-); if share also fails the crossref->BASF gas-fear channel is dead [research.hormuz.crossref_share -> finance.BAS.DE.log_return] (parent: R2-0030)",
-  "parent_mission_id": "R2-0030",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/eb21038bf46846ff82a57ede349b2ac2",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:52:16Z",
-  "updated_at": "2026-09-20T12:52:43Z",
-  "finished_at": null,
-  "elapsed_s": 27,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-231-research-hormuz-crossref-share_x_finance-bas-de-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.056179548503531206,
+  "perm_p": 0.2435129740518962,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "BAS",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.hormuz.crossref_share": "2025-03..current week",
+    "finance.BAS.DE.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
