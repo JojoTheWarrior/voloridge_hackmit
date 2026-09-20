@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/d95b1f2c5c7d49679886af30cc067109",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:19:51Z",
-  "updated_at": "2026-09-20T04:20:11Z",
-  "finished_at": null,
-  "elapsed_s": 20,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:20:50Z",
+  "finished_at": "2026-09-20T04:20:50Z",
+  "elapsed_s": 59,
+  "message": "Supported-but-weak: r=-0.003 (n=390, best lag -4d r=-0.057); rule short spread 1d: 57 trades, hit 0.56, excess +0.11pt, OOS 16 trades hit 0.69, but DD -21pt and negative total return -> actionability 7.0 overstates; needs robustness check",
   "run_folder": "missions/runs/20260920-204-gdelt-gkg-oil-share_x_finance-spread-brent-wti",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 7.02,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] GDELT oil GKG share 20d z-score > 1.5 leads Brent-WTI spread NARROWING by 3 days (-); robustness check of R2-0106 (act 7.0 but r~0, DD -21pt, total return negative): tighter threshold, longer hold; trade short BZ=F long CL=F 3d [gdelt.gkg.oil_share -> finance.spread.brent_wti] (parent: R2-0106)"
 }
