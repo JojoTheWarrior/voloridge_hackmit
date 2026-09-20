@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.iran_israel_dyad_events",
+  "indicator_b": "finance.fred.DCOILBRENTEU",
+  "transform_a": "zscore",
+  "transform_b": "log_return",
+  "max_lag_days": 7,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use the daily count of Iran\u2013Israel dyadic GDELT events (proxying the share of such events in news) in standardized form as a potential short\u2011lead indicator of Brent crude price jumps, measured via daily log returns, within the active war period where geopolitical shocks should most strongly precede oil-price spikes."
+}
