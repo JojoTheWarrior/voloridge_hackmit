@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Crossref weekly strait_of_hormuz counts 8-week z-score > 1.5 mark peak attention and fade: Brent falls over the following 10 days (-); trade short BZ=F 10d [research.hormuz.crossref_pubs -> finance.BZ=F.log_return]
