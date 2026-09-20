@@ -43,43 +43,65 @@ supported / inconclusive, with the key number). 2) What the data shows (n, corre
 post-war change, event-study effect, permutation p-value). 3) Confounders and caveats specific to these
 two series. 4) One follow-up mission idea. Never claim causation. Do not restate the hypothesis verbatim."""
 
-# Jev "state" is the compact JSON statistics dict; these are the questions asked against it.
+# Jev "state" is the compact JSON statistics dict (plus the hypothesis and plan). Jev Score questions
+# return an index into the ordered `criteria` list (0..5); the client rescales to 0-10 (x2).
+JEV_SCORE_LEVELS = 6
 JEV_QUESTIONS = {
     "validity": {
         "type": "score",
-        "question": (
-            "On a 0-10 scale, how statistically valid is the claimed relationship, given the sample size, "
-            "the permutation p-value (which accounts for autocorrelation), the stability of the sign across "
-            "pre-war and war windows, and the plausibility of the chosen lag? 0 = noise, 10 = robust."
+        "instructions": (
+            "How statistically valid is the claimed relationship, given n_obs, the permutation p-value "
+            "(perm_p; accounts for autocorrelation), the Bonferroni-adjusted p-value over the lags tested, "
+            "sign stability across pre-war and war windows, and the plausibility of the chosen lag?"
         ),
-        "min": 0,
-        "max": 10,
+        "criteria": [
+            "Noise: tiny n or |r|<0.1 or perm_p>0.5",
+            "Very weak: |r|<0.15 or perm_p>0.2",
+            "Weak: modest |r|, perm_p between 0.05 and 0.2",
+            "Moderate: perm_p<0.05 but fails Bonferroni or sign unstable across windows",
+            "Strong: perm_p<0.05, passes Bonferroni, plausible lag, n>100",
+            "Robust: strong plus consistent sign in pre-war and war windows and event study agrees",
+        ],
     },
     "interestingness": {
         "type": "score",
-        "question": (
-            "On a 0-10 scale, how interesting is this result to a quantitative researcher studying the 2026 "
-            "Iran war with alternative data? Consider effect size, whether it links different data domains "
-            "(weather, air quality, news, research, materials, utilities, markets), and whether it could be "
-            "acted on or investigated further. 0 = trivial/tautological, 10 = striking."
+        "instructions": (
+            "How interesting is this result to a quantitative researcher studying the 2026 Iran war with "
+            "alternative data? Consider effect size, whether it links different data domains (weather, air "
+            "quality, news, research, materials, utilities, markets), and whether it invites follow-up."
         ),
-        "min": 0,
-        "max": 10,
+        "criteria": [
+            "Trivial or tautological (same domain, obvious mechanics)",
+            "Mildly interesting but expected",
+            "Somewhat interesting cross-domain link with small effect",
+            "Interesting: clear cross-domain effect or a clean pre/post-war regime change",
+            "Very interesting: sizeable effect a desk would want to investigate",
+            "Striking: novel, sizeable, and actionable",
+        ],
     },
     "unexpectedness": {
         "type": "score",
-        "question": (
-            "On a 0-10 scale, how unexpected is the observed result relative to the stated hypothesis and "
-            "common economic intuition? A confirmed obvious link (oil up on Hormuz closure) scores low; a "
-            "sign reversal, a lead where a lag was expected, or a cross-domain link scores high. Null "
-            "controls that stay null score low."
+        "instructions": (
+            "How unexpected is the observed result relative to the stated hypothesis and common economic "
+            "intuition? A confirmed obvious link (oil up on Hormuz closure) or a null control staying null is "
+            "unsurprising; a sign reversal, a lead where a lag was expected, or a surprising cross-domain link is."
         ),
-        "min": 0,
-        "max": 10,
+        "criteria": [
+            "Entirely expected (or a null control that stayed null)",
+            "Mostly expected",
+            "Slightly surprising detail (e.g. lag length)",
+            "Surprising: sign or timing differs from intuition",
+            "Very surprising: robust cross-domain link with no obvious mechanism",
+            "Shocking: contradicts the hypothesis and intuition with strong statistics",
+        ],
     },
     "supported": {
         "type": "noul",
-        "question": "Is the hypothesis supported by the statistics in the state (sign matches expectation and permutation p-value below 0.05)?",
+        "instructions": (
+            "The hypothesis is supported by the statistics in the state: the sign of the best-lag correlation "
+            "matches expected_sign and perm_p is below 0.05 (or, for compare_pre_post plans, the pre/post "
+            "change is in the hypothesised direction with fisher_z_p below 0.05)."
+        ),
     },
 }
 

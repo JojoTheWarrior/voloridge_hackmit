@@ -8,27 +8,32 @@ import time
 import requests
 
 from warsignal.ai.openai_client import AIUnavailable, chat_json
-from warsignal.ai.prompts import FALLBACK_JUDGE_SYSTEM
+from warsignal.ai.prompts import FALLBACK_JUDGE_SYSTEM, JEV_SCORE_LEVELS
 from warsignal.config import env
 
 
 class JevClient:
     def judge(self, state: dict, questions: dict) -> dict:
-        fallback = _fallback(state, questions)
         key = env("TYPESAFE_API_KEY")
-        if not key:
-            return fallback
-        body = {"model": "jev-latest", "state": json.dumps(state), "questions": [
-            {"id": key_, **value} for key_, value in questions.items()
-        ]}
-        try:
+        if key:
+            try:
+                return self.ask_jev(key, state, questions)
+            except Exception as exc:  # noqa: BLE001 - fall through to the OpenAI/heuristic judge
+                print(f"[jev] unavailable ({type(exc).__name__}: {exc}); using fallback judge")
+        return _fallback(state, questions)
+
+    @staticmethod
+    def ask_jev(key: str, state: dict, questions: dict, model: str = "jev-latest") -> dict:
+        body = {"model": model, "state": json.dumps(state, default=str), "questions": questions}
+        for attempt in range(3):
             response = requests.post("https://api.typesafe.ai/v1/systemone", json=body,
                                      headers={"Authorization": f"Bearer {key}"}, timeout=60)
+            if response.status_code in (429, 500, 502, 503, 504) and attempt < 2:
+                time.sleep(2 ** attempt)
+                continue
             response.raise_for_status()
-            parsed = response.json()
-            return _normalise(parsed, "jev", "jev-latest")
-        except Exception:
-            return fallback
+            return _normalise_jev(response.json(), model)
+        raise RuntimeError("jev retries exhausted")
 
 
 def _fallback(state, questions):
@@ -61,6 +66,28 @@ def _openai_fallback(state):
     supported = result.get("supported") or {}
     return {"scores": scores, "supported_prob": float(supported.get("probability", 0.0)),
             "judge": "openai-fallback", "model": env("WARSIGNAL_CHEAP_MODEL", "gpt-5-mini"), "raw": result}
+
+
+def _normalise_jev(data: dict, model: str) -> dict:
+    """Map a System One response ({answers: {id: {type, score|noul|choice, confidence}}}) to our contract.
+
+    Score answers are indices into the ordered criteria (0..JEV_SCORE_LEVELS-1); rescale to 0..10.
+    """
+    answers = data.get("answers") or {}
+    scale = 10.0 / (JEV_SCORE_LEVELS - 1)
+    scores, confidence = {}, {}
+    for key in ("validity", "interestingness", "unexpectedness"):
+        item = answers.get(key) or {}
+        raw = item.get("score")
+        if raw is None:
+            raise ValueError(f"jev answer missing score for {key}: {item}")
+        scores[key] = round(max(0.0, min(10.0, float(raw) * scale)), 2)
+        confidence[key] = item.get("confidence")
+    supported = (answers.get("supported") or {}).get("noul")
+    if supported is None:
+        raise ValueError("jev answer missing supported.noul")
+    return {"scores": scores, "supported_prob": float(supported), "judge": "jev",
+            "model": data.get("model", model), "confidence": confidence, "raw": data}
 
 
 def _normalise(data, judge, model):
