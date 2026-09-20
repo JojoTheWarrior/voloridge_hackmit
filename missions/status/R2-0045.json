@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0045",
+  "title": "[fertilizer-ag] GDELT tanker GKG share 10d z-score > 1.5 leads ZC=F log returns ",
+  "hypothesis": "R2 | [fertilizer-ag] GDELT tanker GKG share 10d z-score > 1.5 leads ZC=F log returns by 4 days (+) via freight cost pass-through into corn; trade long ZC=F 4d [gdelt.gkg.tanker_share -> finance.ZC=F.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:45:06Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
