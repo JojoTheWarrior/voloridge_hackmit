@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0130",
+  "title": "[gas-lng] Houston temperature anomaly 20d z-score > 1.5 leads Henry Hub absolute",
+  "hypothesis": "R2 | [gas-lng] Houston temperature anomaly 20d z-score > 1.5 leads Henry Hub absolute returns (volatility, not direction) by 3 days (+); trade long NG=F straddle proxy 3d [weather.houston.temp_anomaly -> finance.NG=F.abs_return] (parent: R2-0035)",
+  "parent_mission_id": "R2-0035",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:53:14Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
