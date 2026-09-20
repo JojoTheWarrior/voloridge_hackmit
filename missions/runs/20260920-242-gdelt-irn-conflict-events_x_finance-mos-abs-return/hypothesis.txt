@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Iran conflict event count 20d z-score > 2 leads MOS absolute returns by 3 days (+) as Gulf escalation raises fertilizer volatility regardless of direction; trade long MOS straddle-proxy 5d [gdelt.irn.conflict_events -> finance.MOS.abs_return] (parent: R2-0044)
