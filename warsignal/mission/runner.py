@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import inspect
 import math
 import shutil
 import secrets
@@ -117,14 +116,13 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
     judge = {}
     brain_sessions = []
     try:
-        planner_args = {"use_ai": use_ai}
-        if "mission_id" in inspect.signature(plan_mission).parameters:
-            planner_args.update(
-                mission_id=mission_id,
-                brain_backend=brain_backend,
-                brain_sessions=brain_sessions,
-            )
-        plan, planner_model = plan_mission(hypothesis, **planner_args)
+        plan, planner_model = plan_mission(
+            hypothesis,
+            use_ai=use_ai,
+            mission_id=mission_id,
+            brain_backend=brain_backend,
+            brain_sessions=brain_sessions,
+        )
         a = raw_a = get_series(plan.indicator_a, START, END)
         if plan.mode == "single":
             b = None
@@ -168,14 +166,13 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
         failed_plan = locals().get("plan", None)
         if failed_plan is None:
             try:
-                failed_args = {"use_ai": use_ai}
-                if "mission_id" in inspect.signature(plan_mission).parameters:
-                    failed_args.update(
-                        mission_id=mission_id,
-                        brain_backend=brain_backend,
-                        brain_sessions=brain_sessions,
-                    )
-                failed_plan, failed_model = plan_mission(hypothesis, **failed_args)
+                failed_plan, failed_model = plan_mission(
+                    hypothesis,
+                    use_ai=use_ai,
+                    mission_id=mission_id,
+                    brain_backend=brain_backend,
+                    brain_sessions=brain_sessions,
+                )
             except Exception:
                 failed_plan, failed_model = heuristic_plan(hypothesis), "heuristic"
         else:
