@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:58:03Z",
-  "updated_at": "2026-09-20T03:59:06Z",
+  "updated_at": "2026-09-20T03:59:28Z",
   "finished_at": "2026-09-20T03:59:06Z",
-  "elapsed_s": 63,
+  "elapsed_s": 85,
   "message": "Short RCL on sanctions-share z>1 at 5d lag loses money: hit 42%, avg -0.50%/trade, n=26, OOS flips positive; weak 5d lag r=-0.14; actionability 2.3 - not tradeable.",
   "run_folder": "missions/runs/20260920-180-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
   "scores": {
