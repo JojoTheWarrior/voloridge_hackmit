@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:53:55.568051+00:00",
+  "git_commit": "b106c77bb938e2e12e2881d4484ee77a4c3c1f0f",
+  "folder": "20260920-173-airquality-dubai-cams-no2_x_finance-iag-l-log-return",
   "mission_id": "R2-0060",
-  "title": "Dubai NO2 drop leads IAG.L weakness",
   "hypothesis": "R2 | [fuel-airspace-losers] Dubai CAMS NO2 20d z-score < -1 as a Gulf airspace-closure proxy precedes European carrier weakness (-); trade short IAG.L 5d at 2d lag [airquality.dubai.cams_no2 -> finance.IAG.L.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/f8d3bf2a4c404104b136765fae6fec28",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:53:44Z",
-  "updated_at": "2026-09-20T03:53:57Z",
-  "finished_at": null,
-  "elapsed_s": 13,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-173-airquality-dubai-cams-no2_x_finance-iag-l-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 5.22
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.11311517435535264,
+  "perm_p": 0.530938123752495,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 5.22,
   "trade_idea": {
     "instrument": "IAG",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 5.22,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.dubai.cams_no2": "2025-03..2026-09 archive window",
+    "finance.IAG.L.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

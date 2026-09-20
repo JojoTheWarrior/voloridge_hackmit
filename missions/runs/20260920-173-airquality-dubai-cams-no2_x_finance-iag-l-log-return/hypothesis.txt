@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Dubai CAMS NO2 20d z-score < -1 as a Gulf airspace-closure proxy precedes European carrier weakness (-); trade short IAG.L 5d at 2d lag [airquality.dubai.cams_no2 -> finance.IAG.L.log_return]

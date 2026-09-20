@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 55,
+    "hit_rate": 0.45454545454545453,
+    "avg_return": 0.0008973278618196473,
+    "baseline_avg_return": -0.0010444898584211738,
+    "excess_return": 0.0019418177202408212,
+    "sharpe_like": 0.25934938905619587,
+    "max_drawdown": -0.16497920274719236,
+    "total_return": 0.03220362465051174
+  },
+  "fit_pre_war": {
+    "n_trades": 37,
+    "hit_rate": 0.4594594594594595,
+    "avg_return": 0.0005682215562288656,
+    "baseline_avg_return": -0.0012898466615757732,
+    "excess_return": 0.001858068217804639,
+    "sharpe_like": 0.12298979615419131,
+    "max_drawdown": -0.1450710097759612,
+    "total_return": 0.006885072502295753
+  },
+  "test_war": {
+    "n_trades": 18,
+    "hit_rate": 0.4444444444444444,
+    "avg_return": 0.0015738241566451427,
+    "baseline_avg_return": -0.0006120264284004771,
+    "excess_return": 0.00218585058504562,
+    "sharpe_like": 0.3391089703245806,
+    "max_drawdown": -0.08934013050145484,
+    "total_return": 0.02514542408032261
+  },
+  "n_signal_days": 384,
+  "trade_idea": {
+    "instrument": "IAG",
+    "direction": "short",
+    "entry_rule": "airquality.dubai.cams_no2 rolling_zscore_20d > 1 at close -> short IAG next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.45454545454545453,
+    "avg_return": 0.0008973278618196473,
+    "excess_return": 0.0019418177202408212,
+    "n_trades": 55,
+    "sharpe_like": 0.25934938905619587,
+    "max_drawdown": -0.16497920274719236,
+    "oos_n_trades": 18,
+    "oos_avg_return": 0.0015738241566451427,
+    "oos_hit_rate": 0.4444444444444444,
+    "actionability": 5.22,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
