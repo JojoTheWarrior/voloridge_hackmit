@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0090",
+  "title": "[risk-macro-em] Israel conflict-event count 20d z-score > 1 leads VIX higher by ",
+  "hypothesis": "R2 | [risk-macro-em] Israel conflict-event count 20d z-score > 1 leads VIX higher by 0-1 days (+); trade long VIX exposure 2d [gdelt.isr.conflict_events -> finance.^VIX.close]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:09:48Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
