@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0146",
+  "title": "[fertilizer-ag] GDELT daily LNG news share z-score > 1 leads YAR.OL returns by 6",
+  "hypothesis": "R2 | [fertilizer-ag] GDELT daily LNG news share z-score > 1 leads YAR.OL returns by 6 days (+) as a daily-frequency gas-input-anxiety substitute for the sparse Crossref series; long YAR.OL 6d [gdelt.gkg.lng_share -> finance.YAR.OL.log_return] (parent: R2-0048)",
+  "parent_mission_id": "R2-0048",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:01:18Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
