@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] Crossref missile_defense weekly counts 8-week z-score > 1 lead defense ETF returns by 5-10 days (+); trade long ITA 10d [research.missile.crossref_pubs -> finance.ITA.log_return]
 R2 | [risk-macro-em] Crossref sanctions weekly counts 8-week z-score > 1 lead Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [research.sanctions.crossref_pubs -> finance.TUR.log_return]
 R2 | [risk-macro-em] Crossref energy_security weekly counts 8-week z-score > 1 lead India ETF returns lower by 5-10 days (-) via import-cost fear; trade short INDA 10d [research.oil_price.crossref_pubs -> finance.INDA.log_return]
 R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads India ETF returns lower by 2-3 days (-) as crude import bill jumps; trade short INDA 3d [gdelt.gkg.hormuz_share -> finance.INDA.log_return]
