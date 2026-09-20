@@ -1,0 +1,1 @@
+Materials Project documents containing helium or noble gases are rare and unchanged; use as a null baseline.

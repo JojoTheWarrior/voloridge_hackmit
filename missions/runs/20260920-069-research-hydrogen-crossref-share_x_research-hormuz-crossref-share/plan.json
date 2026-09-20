@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.hydrogen.crossref_share",
+  "indicator_b": "research.hormuz.crossref_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "As a null baseline for largely time-invariant Materials Project helium/noble-gas data, we instead compare unrelated weekly Crossref topic shares (hydrogen vs. Hormuz) over 2025\u20132026 where we do not expect any systematic correlation, using levels and zero lag to emulate a static, non-war-driven relationship."
+}
