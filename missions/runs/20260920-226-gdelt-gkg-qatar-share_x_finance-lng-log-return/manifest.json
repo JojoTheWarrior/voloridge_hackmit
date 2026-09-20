@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:48:35.608409+00:00",
+  "git_commit": "1ec674ceb821f4c2000c48dc7e1648a05694c156",
+  "folder": "20260920-226-gdelt-gkg-qatar-share_x_finance-lng-log-return",
   "mission_id": "R2-0120",
-  "title": "Qatar GKG attention peak fades: short LNG 3d",
   "hypothesis": "R2 | [gas-lng] GDELT Qatar GKG share 20d z-score > 1.5 marks peak attention that fades: LNG log return reverses over the next 3 days (-); trade short LNG 3d [gdelt.gkg.qatar_share -> finance.LNG.log_return] (parent: R2-0022)",
-  "parent_mission_id": "R2-0022",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/494c79b395c449baba0fc6fa9f2351b2",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:48:32Z",
-  "updated_at": "2026-09-20T12:48:37Z",
-  "finished_at": null,
-  "elapsed_s": 5,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-226-gdelt-gkg-qatar-share_x_finance-lng-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.94
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.12491499394398034,
+  "perm_p": 0.18762475049900199,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.94,
   "trade_idea": {
     "instrument": "LNG",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 3.94,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.qatar_share": "configured analysis window",
+    "finance.LNG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
