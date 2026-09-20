@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.tehran.precip",
+  "indicator_b": "gdelt.irn.events",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Tehran daily precipitation (as anomaly vs 2025 same-week baseline to capture wet vs typical days) against total Iran GDELT event counts in levels, allowing up to a week of lead/lag, to test whether unusually rainy days in Tehran coincide with fewer Iran-related news events."
+}

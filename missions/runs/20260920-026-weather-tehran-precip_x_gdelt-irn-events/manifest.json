@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:51:13.850683+00:00",
+  "git_commit": "1681cdab5c6ba392c00af811602eb8e09cd72b50",
+  "folder": "20260920-026-weather-tehran-precip_x_gdelt-irn-events",
+  "mission_id": "M20260920-64030d",
+  "hypothesis": "Tehran precipitation days show lower Iran-related GDELT event counts.",
+  "status": "ok",
+  "n_obs": 564,
+  "r": 0.13470390492496237,
+  "perm_p": 0.13972055888223553,
+  "validity": 3.7,
+  "interestingness": 3.74,
+  "unexpectedness": 6.94,
+  "indicator_coverage": {
+    "weather.tehran.precip": "configured analysis window",
+    "gdelt.irn.events": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
