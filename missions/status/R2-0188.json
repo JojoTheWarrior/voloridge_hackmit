@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:27:48Z",
-  "updated_at": "2026-09-20T13:28:58Z",
+  "updated_at": "2026-09-20T13:29:26Z",
   "finished_at": "2026-09-20T13:28:58Z",
-  "elapsed_s": 70,
+  "elapsed_s": 98,
   "message": "Not supported: tanker GKG share z>1 -> EWJ 3d rebound r=0.008 (n=390, perm p=0.64); in-sample 1d long hit 64% but OOS avg return negative. No reversal edge.",
   "run_folder": "missions/runs/20260920-274-gdelt-gkg-tanker-share_x_finance-ewj-log-return",
   "scores": {
