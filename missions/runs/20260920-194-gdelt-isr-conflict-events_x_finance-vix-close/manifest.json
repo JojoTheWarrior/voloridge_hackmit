@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:10:50.905903+00:00",
+  "git_commit": "41b241e2aa81faa0faa070ee11444fd385dad969",
+  "folder": "20260920-194-gdelt-isr-conflict-events_x_finance-vix-close",
   "mission_id": "R2-0090",
-  "title": "Israel conflict z>1 leads VIX",
   "hypothesis": "R2 | [risk-macro-em] Israel conflict-event count 20d z-score > 1 leads VIX higher by 0-1 days (+); trade long VIX exposure 2d [gdelt.isr.conflict_events -> finance.^VIX.close]",
-  "parent_mission_id": null,
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/a8c74e118efb44d6a26f27870c36218b",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:10:33Z",
-  "updated_at": "2026-09-20T04:10:52Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-194-gdelt-isr-conflict-events_x_finance-vix-close",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.78
-  },
+  "status": "ok",
+  "n_obs": 391,
+  "r": 0.08613826695062553,
+  "perm_p": 0.07784431137724551,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.78,
   "trade_idea": {
     "instrument": "^VIX",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 2.78,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.isr.conflict_events": "configured analysis window",
+    "finance.^VIX.close": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

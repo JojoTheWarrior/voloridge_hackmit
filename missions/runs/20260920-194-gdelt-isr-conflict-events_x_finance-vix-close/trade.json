@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "level"
+  },
+  "all": {
+    "n_trades": 59,
+    "hit_rate": 0.423728813559322,
+    "avg_return": 0.0006013600772805707,
+    "baseline_avg_return": 0.0017588752785360638,
+    "excess_return": -0.0011575152012554932,
+    "sharpe_like": 0.06797637195743104,
+    "max_drawdown": -0.46122669782483205,
+    "total_return": -0.09129321104008614
+  },
+  "fit_pre_war": {
+    "n_trades": 41,
+    "hit_rate": 0.3902439024390244,
+    "avg_return": -0.0056398593725870095,
+    "baseline_avg_return": 0.0025988402478291043,
+    "excess_return": -0.008238699620416113,
+    "sharpe_like": -0.5181303628055858,
+    "max_drawdown": -0.46122669782483205,
+    "total_return": -0.27948388685092385
+  },
+  "test_war": {
+    "n_trades": 18,
+    "hit_rate": 0.5,
+    "avg_return": 0.014817471046423392,
+    "baseline_avg_return": 0.0002993616794098585,
+    "excess_return": 0.014518109367013534,
+    "sharpe_like": 1.0226109195407111,
+    "max_drawdown": -0.14835234233242145,
+    "total_return": 0.26118871233612606
+  },
+  "n_signal_days": 387,
+  "trade_idea": {
+    "instrument": "^VIX",
+    "direction": "long",
+    "entry_rule": "gdelt.isr.conflict_events rolling_zscore_20d > 1 at close -> long ^VIX next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.423728813559322,
+    "avg_return": 0.0006013600772805707,
+    "excess_return": -0.0011575152012554932,
+    "n_trades": 59,
+    "sharpe_like": 0.06797637195743104,
+    "max_drawdown": -0.46122669782483205,
+    "oos_n_trades": 18,
+    "oos_avg_return": 0.014817471046423392,
+    "oos_hit_rate": 0.5,
+    "actionability": 2.78,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
