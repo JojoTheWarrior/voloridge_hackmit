@@ -24,3 +24,9 @@ Checked 2026-09-20.
 
 The application is being edited concurrently. Captures are suitable for the
 style study, and final shots must be refreshed against the finished UI.
+
+Logo refinement: the React mark and favicon share identical 32-unit vector
+geometry. Browser preview checked both light/dark backgrounds, 16–48px sizes and
+the actual app header. Video vector rasterization checked in a rendered 1080p
+closing frame. Web production build, lint, the two existing CastleLogo tests,
+and video Ruff passed. No new research or complete video rerender was needed.

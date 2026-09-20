@@ -11,10 +11,13 @@ import json
 import math
 import subprocess
 import wave
+import xml.etree.ElementTree as ET
 from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
+from fontTools.pens.basePen import BasePen
+from fontTools.svgLib.path import parse_path
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 from PIL import Image, ImageDraw, ImageFont
@@ -97,14 +100,56 @@ def backdrop():
     return canvas
 
 
+class LogoPen(BasePen):
+    """Flatten the source vector's curves before supersampled rasterization."""
+
+    def __init__(self):
+        super().__init__(None)
+        self.points = []
+
+    def _moveTo(self, point):
+        self.points.append(point)
+
+    def _lineTo(self, point):
+        self.points.append(point)
+
+    def _curveToOne(self, a, b, c):
+        start = self._getCurrentPoint()
+        for i in range(1, 25):
+            t = i / 24
+            self.points.append(tuple((1-t)**3 * start[j] + 3*(1-t)**2*t*a[j]
+                                     + 3*(1-t)*t*t*b[j] + t**3*c[j] for j in (0, 1)))
+
+    def _qCurveToOne(self, a, b):
+        start = self._getCurrentPoint()
+        for i in range(1, 17):
+            t = i / 16
+            self.points.append(tuple((1-t)**2*start[j] + 2*(1-t)*t*a[j] + t*t*b[j]
+                                     for j in (0, 1)))
+
+    def _closePath(self):
+        pass
+
+
+@lru_cache(maxsize=32)
+def castle_mask(size):
+    path = ROOT.parent / "web/public/castle.svg"
+    if not path.exists():
+        path = ASSETS / "castle.svg"
+    root = ET.parse(path).getroot()
+    geometry = root.find("{http://www.w3.org/2000/svg}path")
+    pen = LogoPen()
+    parse_path(geometry.attrib["d"], pen)
+    extent = float(root.attrib["viewBox"].split()[2])
+    scale = size * 4 / extent
+    mask = Image.new("L", (size * 4, size * 4))
+    ImageDraw.Draw(mask).polygon([(px * scale, py * scale) for px, py in pen.points], fill=255)
+    return mask.resize((size, size), Image.Resampling.LANCZOS)
+
+
 def castle(canvas, x, y, size, color=INK):
-    # Same silhouette as the app's web/public/castle.svg.
-    s = size / 16
-    points = [(1, 2), (4, 2), (4, 4), (6, 4), (6, 2), (10, 2), (10, 4),
-              (12, 4), (12, 2), (15, 2), (15, 15), (10, 15), (10, 11),
-              (9.7, 10), (9, 9.3), (8, 9), (7, 9.3), (6.3, 10), (6, 11),
-              (6, 15), (1, 15)]
-    ImageDraw.Draw(canvas).polygon([(x + px * s, y + py * s) for px, py in points], fill=color)
+    size = round(size)
+    canvas.paste(color, (round(x), round(y), round(x) + size, round(y) + size), castle_mask(size))
 
 
 def chrome(canvas, t, chapter):

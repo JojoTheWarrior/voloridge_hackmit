@@ -10,11 +10,11 @@ export function CastleLogo({ size = 16, className }: CastleLogoProps) {
       aria-label="kingdom"
       width={size}
       height={size}
-      viewBox="0 0 16 16"
+      viewBox="0 0 32 32"
       fill="currentColor"
       className={className}
     >
-      <path d="M1 2h3v2h2V2h4v2h2V2h3v13h-5v-4a2 2 0 0 0-4 0v4H1z" />
+      <path d="M4.1 3H7.9Q9 3 9 4.1V8.35Q9 9 9.65 9H12.35Q13 9 13 8.35V4.1Q13 3 14.1 3H17.9Q19 3 19 4.1V8.35Q19 9 19.65 9H22.35Q23 9 23 8.35V4.1Q23 3 24.1 3H27.9Q29 3 29 4.1V27.4Q29 29 27.4 29H20.65Q20 29 20 28.35V22C20 19.791 18.209 18 16 18S12 19.791 12 22V28.35Q12 29 11.35 29H4.6Q3 29 3 27.4V4.1Q3 3 4.1 3Z" />
     </svg>
   )
 }

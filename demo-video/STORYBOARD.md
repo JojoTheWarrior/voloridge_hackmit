@@ -3,6 +3,12 @@
 Status: production preparation. Tom chooses and runs the missions. The final
 research story is intentionally unselected; no result below is a claimed finding.
 
+Tom's feedback on the first preview: the design is approved, but the pacing is
+too slow and the emphasis should move to the mission results. For the final cut,
+shorten generic typography/homepage beats and spend the time on the strongest
+finding and meaningful explorer interactions. Adjust scene boundaries once those
+missions are selected; retain the two-minute total.
+
 ## Creative direction
 
 Monochrome, Geist, generous negative space. Large white typography on near-black.
@@ -17,7 +23,7 @@ homepage and dataset-library screenshots. Its sample question is an unsubmitted
 draft. It contains no research results, launch click or simulated agent execution.
 It is a style proof, not the first 30 seconds of the eventual final edit.
 
-## Locked timing, flexible evidence
+## Target timing, flexible evidence
 
 | Time | Picture and movement | Copy/narration intent | Required source |
 |---|---|---|---|

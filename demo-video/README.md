@@ -24,6 +24,24 @@ camera crops and cursor choreography are editorial. Research scenes await the
 missions Tom runs himself. The preview uses synthesized original audio, no
 downloaded music and no narration.
 
+## Refined castle
+
+The app component and `web/public/castle.svg` now use a symmetric 32-unit mark
+with equal battlements, subtle corner radii and a smooth arch. The video renderer
+reads this vector and uses supersampled curves instead of its former polygon.
+It reads the app asset when available, or the bundled `assets/castle.svg` copy
+when running in the isolated video container. Refresh that copy before rendering:
+
+```sh
+cp web/public/castle.svg demo-video/assets/castle.svg
+```
+
+`logo-preview.html` shows both backgrounds, before/after, and small-size use.
+`output/kingdom-logo-refined.png` is its captured preview;
+`output/logo-video-frame.png` verifies the updated large video mark. The original
+30-second MP4 remains the original style study; the final film will use the new
+mark and faster pacing around real mission results.
+
 ## Container workflow
 
 From the application repository:
