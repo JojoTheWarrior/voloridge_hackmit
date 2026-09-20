@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.generation.solar_mwh",
+  "indicator_b": "gdelt.usa.events",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Heuristic keyword overlap with source-diverse catalogue entries."
+}

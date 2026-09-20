@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:51:27.297169+00:00",
+  "git_commit": "ab8ea4572ac385beefb25b41d2c4497eb066c1c7",
+  "folder": "20260920-028-FAILED-open-meteo-shortwave-radiation-in",
+  "mission_id": "M20260920-e0482c",
+  "hypothesis": "Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control).",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "utility.generation.solar_mwh": "configured analysis window",
+    "gdelt.usa.events": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

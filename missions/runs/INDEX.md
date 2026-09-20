@@ -29,3 +29,4 @@
 | `20260920-025-weather-tehran-isd-visibility-mean_x_gdelt-irn-fight-events` | Cloud cover or low visibility over Tehran reduces the number of strike events reported the next day. | ok | 0 | None | None | 0.0 | 1.66 | 1.22 |
 | `20260920-026-weather-tehran-precip_x_gdelt-irn-events` | Tehran precipitation days show lower Iran-related GDELT event counts. | ok | 564 | 0.13470390492496237 | 0.13972055888223553 | 3.7 | 3.74 | 6.94 |
 | `20260920-027-FAILED-open-meteo-shortwave-radiation-in` | Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control). | failed | 0 | None | None | None | None | None |
+| `20260920-028-FAILED-open-meteo-shortwave-radiation-in` | Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control). | failed | 0 | None | None | None | None | None |
