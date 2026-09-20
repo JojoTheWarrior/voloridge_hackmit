@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:55:51.291395+00:00",
+  "git_commit": "78e2dfb0d7ad1220d2cd1af54e209c5fcd02baee",
+  "folder": "20260920-063-research-oil-price-crossref-share_x_airquality-dubai-cams-pm25",
+  "mission_id": "M20260920-5e7e9e",
+  "hypothesis": "OpenAlex \"air pollution\" publications correlate with observed PM2.5 in Gulf cities.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.22303239301173147,
+  "perm_p": 0.043912175648702596,
+  "validity": 6.0,
+  "interestingness": 3.88,
+  "unexpectedness": 5.44,
+  "indicator_coverage": {
+    "research.oil_price.crossref_share": "2025-03..current week",
+    "airquality.dubai.cams_pm25": "2025-03..2026-09 archive window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
