@@ -1,0 +1,13 @@
+{
+  "indicator_a": "gdelt.irn.tone",
+  "indicator_b": "gdelt.irn.tone",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use GDELT IRN mean tone in levels, comparing the 14 days before 2026-02-28 to a 2025 daily baseline (e.g., same calendar period) to test if news about Iran became more negative leading up to the strikes.",
+  "mode": "single"
+}
