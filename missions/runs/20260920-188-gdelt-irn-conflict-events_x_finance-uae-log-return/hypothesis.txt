@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Iran-Gulf dyad event count 20d z-score > 1 leads UAE ETF returns lower by 1-2 days (-); trade short UAE 3d [gdelt.irn.conflict_events -> finance.UAE.log_return]
