@@ -1,0 +1,1 @@
+SHERLOCK | [#6 industrial heat] Houston CAMS SO2 20d z-score > 1 (heavy-industry combustion proxy) leads copper futures returns by 3 days (+); trade long HG=F 3d [airquality.houston.cams_so2 -> finance.HG=F.log_return]
