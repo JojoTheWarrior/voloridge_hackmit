@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/36541f2db6c24b5588c41c535ea278b2",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:21:08Z",
-  "updated_at": "2026-09-20T13:21:21Z",
-  "finished_at": null,
-  "elapsed_s": 13,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:22:07Z",
+  "finished_at": "2026-09-20T13:22:07Z",
+  "elapsed_s": 59,
+  "message": "Not tradeable: RB=F log-return z>1 short JETS/SPY fit pre-war (31 trades, hit 55%, +0.25%/trade) but lost in war test (17 trades, hit 53%, -0.18%/trade, excess -0.23%); relationship is coincident (lag0 r=-0.34, n=389), no lead at lags 1-3; actionability 4.21",
   "run_folder": "missions/runs/20260920-266-finance-rb-f-log-return_x_finance-ratio-jets-spy",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 4.21,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] RB=F gasoline daily log-return 20d z-score > 1 is followed by JETS/SPY ratio mean-reverting higher over 2-5 days (+); reversal control of R2-0177 where the coincident r=-0.34 vanished at positive lags (|r|<0.08) and the 1d short lost out-of-sample (war hit 53%, -0.18%/trade); trade long JETS vs SPY 3d [finance.RB=F.log_return -> finance.ratio.jets_spy] (parent: R2-0177)"
 }
