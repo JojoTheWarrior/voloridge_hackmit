@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:27:22.968677+00:00",
+  "git_commit": "dd60f9755ddb2a23eaca8fbbd19b64617e7fda9c",
+  "folder": "20260920-273-gdelt-irn-conflict-events_x_finance-ita-log-return",
   "mission_id": "R2-0186",
-  "title": "Military buildup z-score leads ITA",
   "hypothesis": "R2 | [risk-macro-em] GDELT Iran conflict daily event count 20d z-score > 1 leads defense ETF returns by 3-5 days (+); trade long ITA 5d [gdelt.irn.conflict_events -> finance.ITA.log_return] (parent: R2-0085)",
-  "parent_mission_id": "R2-0085",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/b716672d0a7042479beea6635cf9b3f4",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:26:38Z",
-  "updated_at": "2026-09-20T13:27:24Z",
-  "finished_at": "2026-09-20T13:26:49Z",
-  "elapsed_s": 46,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-273-gdelt-irn-conflict-events_x_finance-ita-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 6.85
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.062244961446667885,
+  "perm_p": 0.28542914171656686,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.85,
   "trade_idea": {
     "instrument": "ITA",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 6.85,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.conflict_events": "configured analysis window",
+    "finance.ITA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
