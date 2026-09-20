@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/546cd620e1ba418194c1d5f16cb4c473",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:27:52Z",
-  "updated_at": "2026-09-20T13:27:56Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:28:20Z",
+  "finished_at": "2026-09-20T13:28:20Z",
+  "elapsed_s": 28,
+  "message": "Not supported: sanctions-share z>1 vs TUR r=0.03 (n=390), best lag -4d r=0.11; short TUR 1d rule loses (hit 43%, avg -0.21%/trade, 42 trades, OOS -0.19%). Null.",
   "run_folder": "missions/runs/20260920-274-gdelt-gkg-sanctions-share_x_finance-tur-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.73,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] GDELT GKG sanctions-share 20d z-score > 1 leads broad EM ETF returns higher by 3-5 days (+) as sanctions headlines mean-revert; trade long EEM 5d [gdelt.gkg.sanctions_share -> finance.EEM.log_return] (parent: R2-0189)"
 }
