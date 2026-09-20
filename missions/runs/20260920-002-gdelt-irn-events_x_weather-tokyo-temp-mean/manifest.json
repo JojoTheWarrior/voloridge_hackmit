@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:47:42.582879+00:00",
+  "git_commit": "e8108257b573d75c8d24cf92c57c15d0a1833638",
+  "folder": "20260920-002-gdelt-irn-events_x_weather-tokyo-temp-mean",
+  "mission_id": "M20260920-535d44",
+  "hypothesis": "Average GDELT tone of Iran-related news is more negative in the two weeks before the Feb 28 strikes than in the 2025 baseline.",
+  "status": "ok",
+  "n_obs": 564,
+  "r": -0.15316825728221248,
+  "perm_p": 0.7005988023952096,
+  "validity": 0.22,
+  "interestingness": 3.28,
+  "unexpectedness": 6.7,
+  "indicator_coverage": {
+    "gdelt.irn.events": "configured analysis window",
+    "weather.tokyo.temp_mean": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
