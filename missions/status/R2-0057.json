@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:51:44Z",
-  "updated_at": "2026-09-20T04:20:33Z",
+  "updated_at": "2026-09-20T04:23:27Z",
   "finished_at": "2026-09-20T03:53:12Z",
-  "elapsed_s": 1729,
+  "elapsed_s": 1903,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-170-weather-tokyo-temp-mean_x_finance-zc-f-log-return",
   "scores": {
