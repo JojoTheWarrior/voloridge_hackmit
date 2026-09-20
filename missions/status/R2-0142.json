@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/ed5b41df625a4eeaac8d57b438436da3",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:01:03Z",
-  "updated_at": "2026-09-20T13:01:22Z",
+  "updated_at": "2026-09-20T13:02:17Z",
   "finished_at": null,
-  "elapsed_s": 19,
+  "elapsed_s": 74,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-242-gdelt-qat-conflict-events_x_finance-cf-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 9.79,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Null control: Qatar GDELT conflict-event count 20d z-score > 1 leads SPY log returns by 3 days (+) - if the CF/NTR edge (pre-war hit 75%, war 58%) is generic equity beta this should match it, otherwise it is fertilizer-specific; trade long SPY 3d [gdelt.qat.conflict_events -> finance.SPY.log_return] (parent: R2-0142)"
 }
