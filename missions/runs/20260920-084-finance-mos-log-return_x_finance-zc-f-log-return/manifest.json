@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:58:50.825953+00:00",
+  "git_commit": "d99bdb4425dc0cd047c99decc626aa6d8feaf1f3",
+  "folder": "20260920-084-finance-mos-log-return_x_finance-zc-f-log-return",
+  "mission_id": "M20260920-8282c1",
+  "hypothesis": "Wheat and corn futures moved with fertilizer stocks after March 20 2026.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.046183208636114914,
+  "perm_p": 0.8542914171656687,
+  "validity": 0.18,
+  "interestingness": 1.26,
+  "unexpectedness": 1.92,
+  "indicator_coverage": {
+    "finance.MOS.log_return": "configured analysis window",
+    "finance.ZC=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
