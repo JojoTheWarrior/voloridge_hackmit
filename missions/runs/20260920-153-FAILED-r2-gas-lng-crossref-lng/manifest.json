@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T03:37:12.230102+00:00",
+  "git_commit": "c04d9459475f268139451d5e15e53a1b88ff83da",
+  "folder": "20260920-153-FAILED-r2-gas-lng-crossref-lng",
+  "mission_id": "R2-0031",
+  "hypothesis": "R2 | [gas-lng] Crossref lng weekly counts 8-week z-score > 1 lead Cheniere returns by 7 days (+) as US export capacity attention builds; trade long LNG 7d [research.lng.crossref_pubs -> finance.LNG.log_return]",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.lng.crossref_pubs": "2025-03..current week",
+    "finance.LNG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
