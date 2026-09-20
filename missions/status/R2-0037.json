@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/17913f724119437c89163b4dd5dc70b5",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:41:25Z",
-  "updated_at": "2026-09-20T03:42:34Z",
+  "updated_at": "2026-09-20T03:42:49Z",
   "finished_at": null,
-  "elapsed_s": 69,
+  "elapsed_s": 84,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-159-finance-ttf-f-abs-return_x_finance-ttf-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 0.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] MOMENTUM (reverse of R2-0037): TTF absolute return 20d z-score > 1 (volatility spike) is followed by continuation, not a fade, over the next 3 days (+); trade long TTF=F 1-3d after the spike day [finance.TTF=F.abs_return -> finance.TTF=F.log_return] (parent: R2-0037)"
 }
