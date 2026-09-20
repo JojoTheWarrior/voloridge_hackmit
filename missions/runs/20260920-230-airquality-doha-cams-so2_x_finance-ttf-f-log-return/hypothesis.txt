@@ -1,0 +1,1 @@
+R2 | [gas-lng] Doha CAMS SO2 20d z-score < -1 (Ras Laffan train outage proxy) leads TTF log returns by 2 days (+) via tighter European supply; trade long TTF=F 3d [airquality.doha.cams_so2 -> finance.TTF=F.log_return] (parent: R2-0029)
