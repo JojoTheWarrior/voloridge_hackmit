@@ -174,8 +174,7 @@ class CastleScene(Scene):
         except ValueError:
             rel = target
         command = f'code "{rel.as_posix()}"'
-        if copy_to_clipboard(command):
-            self.copied_until = self.t + COPIED_SECONDS
+        self.copied_until = self.t + COPIED_SECONDS if copy_to_clipboard(command) else -1.0
         return command
 
     # -- events ------------------------------------------------------------
