@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/29a42be88270478b9a915fc7da88facf",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:33:55Z",
-  "updated_at": "2026-09-20T03:34:49Z",
+  "updated_at": "2026-09-20T03:35:49Z",
   "finished_at": null,
-  "elapsed_s": 54,
+  "elapsed_s": 114,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-149-airquality-doha-cams-no2_x_finance-ttf-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 2.14,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Doha CAMS NO2 20d z-score > 1 (reversal control: Ras Laffan activity proxy was a losing short in the war test) leads TTF log returns by 3 days (+); trade long TTF=F 3d [airquality.doha.cams_no2 -> finance.TTF=F.log_return] (parent: R2-0028)"
 }
