@@ -1,0 +1,542 @@
+[
+  {
+    "id": "P1-consensus",
+    "title": "Expert-weighted consensus remains untested",
+    "one_liner": "83 registered tests; 0 evaluated; 83 blocked by missing verified history. No skill verdict.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "registered_family_size",
+        "value": 83,
+        "n": 83,
+        "note": "Frozen before tests"
+      },
+      {
+        "metric": "evaluated_tests",
+        "value": 0,
+        "n": 83,
+        "note": "Not a statistical null"
+      },
+      {
+        "metric": "Brier improvement",
+        "value": null,
+        "n": 0,
+        "note": "Missing, not zero"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "partial",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/family_overview.png",
+      "explore/polymarket_experts/figures/reliability_by_category.png",
+      "explore/polymarket_experts/figures/brier_improvement_by_category.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-fills-sufficiency",
+    "title": "Reject the fill-only inventory shortcut",
+    "one_liner": "1,252 wallet\u2013token pairs have negative fill-only balances in a 126,752-fill audit.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "negative_fill_only_wallet_token_pairs",
+        "value": 1252,
+        "n": 126752,
+        "note": "Descriptive audit, no inferential test"
+      },
+      {
+        "metric": "exchange_as_taker_rows",
+        "value": 51419,
+        "n": 126752,
+        "note": "Exchange is not an independent forecasting wallet"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "rejected",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/ledger_completeness.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Rejected claim is that fills alone suffice for full positions/PnL. Does not reject expert skill; sample limited to Nov 2022\u2013Jun 2023.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-source-validation",
+    "title": "Bulk fill fields pass limited receipt checks",
+    "one_liner": "Six fills match three public RPC receipts exactly; complete-ledger validation is still missing.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "exact_raw_fill_matches",
+        "value": 6,
+        "n": 6,
+        "note": "Three transactions, five integer data fields and two address fields checked"
+      },
+      {
+        "metric": "same_provider_PnL_matches",
+        "value": 3,
+        "n": 3,
+        "note": "NOT independent full-wallet reconstruction"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "supported",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/ledger_completeness.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Small raw-event checks do not validate lifetime PnL or archive completeness.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-sports",
+    "title": "Sports advantage is untested",
+    "one_liner": "No category has eligible paired forecasts.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "eligible_observations",
+        "value": 0,
+        "n": 0,
+        "note": "Not estimable; missing estimates and MDE remain null"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "partial",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/brier_improvement_by_category.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-divergence",
+    "title": "Divergence information and drift are untested",
+    "one_liner": "No verified expert-minus-mid divergence exists to regress or lag-search.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "eligible_observations",
+        "value": 0,
+        "n": 0,
+        "note": "Not estimable; missing estimates and MDE remain null"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "partial",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/case_study_1.png",
+      "explore/polymarket_experts/figures/case_study_2.png",
+      "explore/polymarket_experts/figures/case_study_3.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-persistence",
+    "title": "Persistent expertise is untested",
+    "one_liner": "Past and future category P&L cannot yet be compared without missing lifecycle accounting.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "eligible_observations",
+        "value": 0,
+        "n": 0,
+        "note": "Not estimable; missing estimates and MDE remain null"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "partial",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/skill_persistence_deciles.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-economics",
+    "title": "No executable edge established",
+    "one_liner": "No historical spread, depth and fee-adjusted effect is available.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "eligible_observations",
+        "value": 0,
+        "n": 0,
+        "note": "Not estimable; missing estimates and MDE remain null"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "partial",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/family_overview.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  },
+  {
+    "id": "P1-whales",
+    "title": "Whale-watching extras remain exploratory and unavailable",
+    "one_liner": "Profit concentration, net expert flow, news timing, lockstep clusters and specialization are not estimated.",
+    "datasets": [
+      {
+        "name": "wzsg Polymarket V1 OrderFilled",
+        "url": "https://huggingface.co/datasets/wzsg/polymarket-orderfilled-v1",
+        "access": "anonymous parquet; 8 monthly shards cached"
+      },
+      {
+        "name": "Polymarket Data API V2",
+        "url": "https://data-api.polymarket.com/v2/docs",
+        "access": "keyless read-only probes"
+      },
+      {
+        "name": "Polygon dRPC",
+        "url": "https://polygon.drpc.org",
+        "access": "read-only JSON-RPC historical spot checks"
+      }
+    ],
+    "mechanism": "Historical category performance might identify informative positions; valid inference requires a complete point-in-time ledger.",
+    "method": "83 preregistered tests; hard validity gates; descriptive source and transaction audits; no empirical skill test evaluated.",
+    "results": [
+      {
+        "metric": "eligible_observations",
+        "value": 0,
+        "n": 0,
+        "note": "Not estimable; missing estimates and MDE remain null"
+      }
+    ],
+    "controls": [
+      "Temporal holdout fixed at 2025-01-01",
+      "Resolution strictly precedes expert qualification",
+      "No current leaderboard selection for research",
+      "10 matched placebo tests registered but blocked",
+      "Whole-family BH includes all 83 specifications"
+    ],
+    "verdict": "partial",
+    "known_or_novel": "Known idea; this run contributes an access and accounting audit, not a new skill result.",
+    "prior_art": [
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+      "https://hashdive.com/",
+      "https://www.polytrackhq.app/",
+      "https://predictionpro.app/",
+      "https://arxiv.org/abs/2605.11640",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "explore/polymarket_experts/figures/pnl_concentration.png"
+    ],
+    "scripts": [
+      "explore/polymarket_experts/scripts/ingest.py",
+      "explore/polymarket_experts/scripts/ledger.py",
+      "explore/polymarket_experts/scripts/panel.py",
+      "explore/polymarket_experts/scripts/inference.py",
+      "explore/polymarket_experts/scripts/publish.py"
+    ],
+    "caveats": [
+      "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+      "Research demonstration, not investment advice.",
+      "Code and report prepared with AI assistance."
+    ]
+  }
+]

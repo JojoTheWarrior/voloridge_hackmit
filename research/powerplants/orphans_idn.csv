@@ -1,0 +1,9 @@
+lat,lon,enh_umol_m2,ndays,gppd_mw_within_25km,gppd_names,city_within_30km,orphan
+-2.828,122.147,98.2,51,280.0,Sulawesi Mining power station,,False
+-2.023,121.412,37.0,153,0.0,,,True
+0.462,127.993,33.0,63,0.0,,,True
+-3.878,122.427,25.8,104,0.0,,Kendari(351k),False
+-5.138,119.522,20.7,135,513.092,PLTG Sengkang/Wajo; PLTGU Sengkang/Wajo; PLTG Tello,Makassar(1474k),False
+-2.268,121.728,19.0,133,0.0,,,True
+-1.533,127.468,8.5,54,0.0,,,True
+-4.788,119.558,6.2,148,70.0,PLTU Tonasa II (Boiler Turbine Generator),,False

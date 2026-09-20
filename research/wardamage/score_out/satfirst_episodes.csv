@@ -1,0 +1,27 @@
+asset,ep,start,end,days,n_novel,frp,matched_events
+Abqaiq processing,1,2026-04-09,2026-04-12,2,24,92.60000000000001,
+Abqaiq processing,2,2026-07-26,2026-07-26,1,16,450.6,
+Das Island LNG,3,2026-07-17,2026-07-17,1,1,24.6,
+Fujairah oil terminal,4,2026-03-03,2026-03-08,4,140,864.8,E10
+Fujairah oil terminal,5,2026-03-14,2026-03-22,8,71,540.6,"E26,E29"
+Gachsaran field,6,2026-06-14,2026-06-17,3,21,221.0,
+Habshan gas complex,7,2026-04-06,2026-04-06,1,5,16.4,E47
+Habshan gas complex,8,2026-04-19,2026-04-19,1,3,16.9,
+Jebel Ali port/EGA,9,2026-02-28,2026-03-01,2,8,135.1,E02
+Jubail refinery (SASREF/Aramco),10,2026-04-06,2026-04-06,1,3,5.5,E53
+Lavan refinery,11,2026-04-08,2026-04-09,2,35,447.5,E55
+Mesaieed Industrial City,12,2026-05-11,2026-05-11,1,2,25.7,
+Mesaieed Industrial City,13,2026-06-13,2026-06-13,1,12,109.0,
+Mesaieed Industrial City,14,2026-06-17,2026-06-17,1,6,53.5,
+Mesaieed Industrial City,15,2026-07-07,2026-07-07,1,10,75.3,
+Persian Gulf Star refinery,16,2026-03-29,2026-03-29,1,5,7.5,
+Ras Laffan LNG/Industrial City,17,2026-07-06,2026-07-06,1,2,69.7,
+Riyadh refinery,18,2026-03-20,2026-03-21,2,17,42.6,
+Riyadh refinery,19,2026-05-11,2026-05-11,1,7,53.9,
+SATORP Jubail,20,2026-05-29,2026-05-30,2,13,90.6,
+SATORP Jubail,21,2026-06-25,2026-06-25,1,5,11.2,
+SATORP Jubail,22,2026-07-06,2026-07-06,1,6,38.7,
+SATORP Jubail,23,2026-08-16,2026-08-16,1,5,48.6,
+Shiraz refinery,24,2026-06-29,2026-06-29,1,5,7.9,
+Tehran refinery (Rey),25,2026-03-07,2026-03-07,1,2,25.2,E16
+Tehran-Karaj B1 bridge area,26,2026-03-03,2026-03-05,3,25,148.4,

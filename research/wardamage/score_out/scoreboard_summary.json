@@ -1,0 +1,272 @@
+{
+ "n_events_news_first": 72,
+ "n_satellite_first": 11,
+ "overall": {
+  "n": 72,
+  "hit": 15,
+  "ambiguous": 7,
+  "miss": 50,
+  "not_observable": 0,
+  "hit_rate": 0.208
+ },
+ "war2026": {
+  "n": 66,
+  "hit": 12,
+  "ambiguous": 7,
+  "miss": 47,
+  "not_observable": 0,
+  "hit_rate": 0.182
+ },
+ "war2025": {
+  "n": 6,
+  "hit": 3,
+  "ambiguous": 0,
+  "miss": 3,
+  "not_observable": 0,
+  "hit_rate": 0.5
+ },
+ "auto_rule_only": {
+  "miss": "49",
+  "hit": "19",
+  "ambiguous": "3",
+  "not_observable": "1"
+ },
+ "excluding_round1_known": {
+  "n": 65,
+  "hit": 12,
+  "ambiguous": 6,
+  "miss": 47,
+  "not_observable": 0,
+  "hit_rate": 0.185
+ },
+ "by_site_class": {
+  "non_flare": {
+   "n": 40,
+   "hit": 11,
+   "ambiguous": 4,
+   "miss": 25,
+   "not_observable": 0,
+   "hit_rate": 0.275
+  },
+  "permanent_flare": {
+   "n": 32,
+   "hit": 4,
+   "ambiguous": 3,
+   "miss": 25,
+   "not_observable": 0,
+   "hit_rate": 0.125
+  }
+ },
+ "by_asset_type": {
+  "airbase": {
+   "n": 3,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 3,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "airport": {
+   "n": 2,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 2,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "depot": {
+   "n": 10,
+   "hit": 4,
+   "ambiguous": 1,
+   "miss": 5,
+   "not_observable": 0,
+   "hit_rate": 0.4
+  },
+  "gas_processing": {
+   "n": 4,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 4,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "lng": {
+   "n": 2,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 2,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "nuclear": {
+   "n": 1,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 1,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "other": {
+   "n": 2,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 2,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "petrochemical": {
+   "n": 6,
+   "hit": 0,
+   "ambiguous": 2,
+   "miss": 4,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "port": {
+   "n": 7,
+   "hit": 2,
+   "ambiguous": 0,
+   "miss": 5,
+   "not_observable": 0,
+   "hit_rate": 0.286
+  },
+  "power_plant": {
+   "n": 1,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 1,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "refinery": {
+   "n": 12,
+   "hit": 3,
+   "ambiguous": 1,
+   "miss": 8,
+   "not_observable": 0,
+   "hit_rate": 0.25
+  },
+  "smelter": {
+   "n": 2,
+   "hit": 0,
+   "ambiguous": 1,
+   "miss": 1,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "steel": {
+   "n": 2,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 2,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "tank_farm": {
+   "n": 8,
+   "hit": 4,
+   "ambiguous": 1,
+   "miss": 3,
+   "not_observable": 0,
+   "hit_rate": 0.5
+  },
+  "tanker": {
+   "n": 5,
+   "hit": 0,
+   "ambiguous": 0,
+   "miss": 5,
+   "not_observable": 0,
+   "hit_rate": 0.0
+  },
+  "terminal": {
+   "n": 5,
+   "hit": 2,
+   "ambiguous": 1,
+   "miss": 2,
+   "not_observable": 0,
+   "hit_rate": 0.4
+  }
+ },
+ "hits_by_first_detection_daynight": {
+  "N": "9",
+  "D": "6"
+ },
+ "hits_by_detection_mode": {
+  "novel_cell": "11",
+  "frp_excess": "3",
+  "manual": "1"
+ },
+ "latency_vs_news_h": {
+  "n": 11,
+  "median": -2.2,
+  "p25": -4.699999999999999,
+  "p75": 1.3,
+  "min": -19.5,
+  "max": 7.0,
+  "n_satellite_before_news": 7,
+  "events_satellite_before_news": [
+   "E02",
+   "E06",
+   "E10",
+   "E26",
+   "E37",
+   "E45",
+   "E55"
+  ],
+  "with_3h_nrt_data_latency": {
+   "median": 0.8,
+   "n_satellite_before_news": 4,
+   "note": "first_det_utc is overpass time; FIRMS/GIBS NRT data typically appear ~3 h later outside the US/Canada URT footprint"
+  },
+  "caveat": "news time = first English URL slug naming the site in GDELT 15-min export ingest; an upper bound that misses liveblogs, wires, Farsi/Arabic and social media"
+ },
+ "latency_vs_event_h": {
+  "E55": 4.0
+ },
+ "events_with_reported_clock_time": 4,
+ "events_with_gdelt_first_news": 56,
+ "satellite_first": {
+  "S01": "unmatched: many Tehran strikes 3-5 Mar, nothing naming this site",
+  "S02": "partial: Iranian missile strike on Riyadh 20 Mar (1 killed); no report naming the refinery",
+  "S03": "matched: Saudi statement that attacks forced energy facilities to halt, output -600 kb/d (facility list not given)",
+  "S04": "unmatched",
+  "S05": "unmatched",
+  "S06": "unmatched (13 Jun: Qatar denied a US media report of LNG facility damage)",
+  "S07": "unmatched",
+  "S08": "unmatched",
+  "S09": "unmatched",
+  "S10": "matched: Houthi/Iraqi-militia drone attacks on Aramco sites 25-28 Jul (Wikipedia: >30 drone attacks on Eastern Province oil infrastructure in 72 h)",
+  "S11": "unmatched"
+ },
+ "placebo_event_sites": {
+  "n_sites": 57,
+  "n_windows": 2223,
+  "window_fpr": 0.0076,
+  "window_fpr_novel_only": 0.0058,
+  "window_fpr_flare_sites": 0.0158,
+  "window_fpr_nonflare_sites": 0.0008,
+  "n_windows_flare": 1014,
+  "n_windows_nonflare": 1209,
+  "frozen_flagged_days_per_asset_month": 0.09,
+  "frozen_any_novel_days_per_asset_month": 0.215,
+  "frozen_share_sites_with_any_flag": 0.193
+ },
+ "placebo_round1_assets_r3km": {
+  "n_sites": 50,
+  "n_windows": 1950,
+  "window_fpr": 0.0062,
+  "window_fpr_novel_only": 0.0046,
+  "window_fpr_flare_sites": 0.0053,
+  "window_fpr_nonflare_sites": 0.0074,
+  "n_windows_flare": 1138,
+  "n_windows_nonflare": 812,
+  "frozen_flagged_days_per_asset_month": 0.056,
+  "frozen_any_novel_days_per_asset_month": 0.123,
+  "frozen_share_sites_with_any_flag": 0.2
+ },
+ "gdelt_access": {
+  "doc_api": "HTTP 429 on every attempt (5 tries over ~40 min, single requests) - unusable from this IP",
+  "raw_15min_export": "works keyless; 9,672 files (~650 MB) fetched; 2025-06-14 18:00 -> early Jul 2025 files are 404 (GDELT gap)",
+  "repo_cache": "data/cache/gdelt_daily.parquet is daily-only; gdelt_live.py pulls v1 daily + 4 GKG files/day, no sub-daily event timing"
+ }
+}

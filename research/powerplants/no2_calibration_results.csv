@@ -1,0 +1,36 @@
+metric,value,n,note
+"plants passing label-free detectability screen (mean enh>=2 umol/m2, t>=8)",42.0,58,median CEMS NOx of passing 1037 lbs/h vs failing 410
+"daily per-plant r, detectable plants, index=enh*u^0.0",0.305485634316376,42,IQR 0.16-0.36
+"daily per-plant r, detectable plants, index=enh*u^0.5",0.2923474482676235,42,IQR 0.14-0.34
+"daily per-plant r, detectable plants, index=enh*u^1.0",0.2627155714283851,42,IQR 0.14-0.32
+"daily per-plant pearson r vs CEMS NOx, median [simple disc-annulus, all winds]",0.24696964119217485,58,IQR 0.13-0.35; plant-days 28302
+"daily per-plant pearson r vs CEMS NOx, median [wind-rotated enh, all winds]",0.2378669020075343,58,IQR 0.13-0.33; plant-days 28302
+"daily per-plant pearson r vs CEMS NOx, median [wind-rotated flux (enh*u), all winds]",0.17185877359642068,58,IQR 0.09-0.29; plant-days 28302
+"daily per-plant pearson r vs CEMS NOx, median [wind-rotated enh, 2-9 m/s]",0.27078109211009094,58,IQR 0.16-0.34; plant-days 20884
+"daily per-plant pearson r vs CEMS NOx, median [wind-rotated flux, 2-9 m/s]",0.21186884143350304,58,IQR 0.13-0.30; plant-days 20884
+"daily per-plant r, fuel=coal",0.2313353236724136,38,
+"daily per-plant r, fuel=gas",0.16518248611358044,20,
+daily pooled pearson flux vs NOx,0.3894482843340551,20884,
+daily pooled pearson flux vs MW,0.2650845414496448,20884,
+"14-day index vs 14-day mean CEMS NOx (relative to plant mean), pooled pearson, non-overlapping",0.4207192054414968,2149,spearman 0.43
+14-day index: within-plant pearson median,0.42798250948429306,42,IQR 0.27-0.60
+"14-day index vs MW (relative), pooled pearson",0.31002562227537267,2149,
+"30-day index vs 30-day mean CEMS NOx (relative to plant mean), pooled pearson, non-overlapping",0.43861388095734954,1108,spearman 0.45
+30-day index: within-plant pearson median,0.4196737852274178,42,IQR 0.26-0.65
+"30-day index vs MW (relative), pooled pearson",0.3104897789279135,1108,
+"60-day index vs 60-day mean CEMS NOx (relative to plant mean), pooled pearson, non-overlapping",0.49101830493519516,579,spearman 0.48
+60-day index: within-plant pearson median,0.5285031578167301,38,IQR 0.30-0.71
+"60-day index vs MW (relative), pooled pearson",0.3006237677864389,579,
+"temperature coefficient of index/NOx ratio (per degC, last fold)",-0.024269487662664676,27056,negative = NO2 per unit NOx higher when cold (longer lifetime)
+"30-day held-out: pooled pearson, raw relative index",0.43861388095734954,1108,
+"30-day held-out: pooled pearson, temperature-corrected index",0.47562480623377495,1108,
+30-day held-out: 80% prediction-interval coverage,0.7951263537906137,1108,mean interval width 0.81 (in units of plant-mean NOx)
+30-day held-out: RMSE of relative NOx,0.39095937934949115,1108,vs sd of truth 0.44
+"outage detection AUC, 30-day, temperature-corrected held-out index",0.8113962154062405,147,25 plants
+"outage detection rate at 5% false alarms, 30-day, temperature-corrected",0.4489795918367347,147,threshold index<0.42 of plant mean
+"outage detection AUC, 14-day window (NOx<30% of normal vs >70%)",0.7593293339486231,197,31 plants with outages; 2310 normal windows
+"outage detection rate at 5% false alarms, 14-day",0.30456852791878175,197,threshold index<0.24 of plant mean
+"outage detection AUC, 30-day window (NOx<30% of normal vs >70%)",0.7756693320603095,147,25 plants with outages; 2565 normal windows
+"outage detection rate at 5% false alarms, 30-day",0.4421768707482993,147,threshold index<0.39 of plant mean
+"outage detection AUC, 60-day window (NOx<30% of normal vs >70%)",0.7531045778263067,86,15 plants with outages; 2854 normal windows
+"outage detection rate at 5% false alarms, 60-day",0.43023255813953487,86,threshold index<0.47 of plant mean

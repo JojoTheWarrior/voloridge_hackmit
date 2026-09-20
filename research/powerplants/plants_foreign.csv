@@ -1,0 +1,10 @@
+plant_id_eia,plant_name_eia,state,latitude,longitude
+900001,Shoaiba SEC (SAU oil 6.8GW),SAU,20.63,39.555
+900002,Rabigh (SAU oil 7.1GW),SAU,22.665,39.035
+900003,Qurayyah (SAU gas 6.3GW),SAU,25.86,50.118
+900004,Riyadh PP11-12 (SAU 3.8GW),SAU,24.79,45.624
+900005,Az Zour South (KWT gas 5.8GW),KWT,28.7072,48.3742
+900006,Shahid Rajaee (IRN gas 2.0GW),IRN,36.1595,50.2997
+900007,Kerman (IRN gas 1.9GW),IRN,30.21,56.7932
+900008,Neka (IRN oil 1.8GW),IRN,36.8387,53.2593
+900009,Ramin Ahwaz (IRN oil 1.9GW),IRN,31.5027,48.883

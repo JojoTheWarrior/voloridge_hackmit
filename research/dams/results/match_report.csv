@@ -1,0 +1,11 @@
+truth,status,n,capacity_gw,share_n,share_capacity
+eia923,hydrolakes_lake_not_in_gww,27,2.842,0.018,0.034
+eia923,matched,707,64.561,0.462,0.777
+eia923,no_reservoir_within_range,797,15.636,0.521,0.188
+none,hydrolakes_lake_not_in_gww,71,14.269,0.027,0.02
+none,matched,1141,477.848,0.438,0.662
+none,no_reservoir_within_range,1389,228.661,0.533,0.317
+none,too_small,4,1.485,0.002,0.002
+ons,hydrolakes_lake_not_in_gww,2,0.235,0.012,0.002
+ons,matched,107,93.576,0.66,0.689
+ons,no_reservoir_within_range,53,41.95,0.327,0.309

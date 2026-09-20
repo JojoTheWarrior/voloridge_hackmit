@@ -1,0 +1,4 @@
+subset,n_months,n_reservoirs,r_monthly,r_annual_means,n_years
+all months,143,29,0.22215270557074132,0.46606706216383037,21
+ice-free months (Jun-Oct),92,29,0.471687104609426,0.6783648234105089,20
+winter (Dec-Apr),26,29,-0.13785111456950103,-0.2533713894890269,13

@@ -1,0 +1,677 @@
+[
+ {
+  "id": "M0",
+  "title": "Family verdict: orbit-measured physical signals vs liquid market returns",
+  "one_liner": "0 of 46 market-tier tests survive BH at q=0.05 (smallest q=0.16); the p-value distribution is indistinguishable from the placebo battery.",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat/Sentinel-2 derived)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST"
+   },
+   {
+    "name": "VIIRS S-NPP 375 m thermal anomalies, NASA GIBS vector tiles, daily 2012-01-20..2026-09-18 (5,355 days x 3 tiles)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_SNPP_Thermal_Anomalies_375m_All/",
+    "access": "keyless"
+   },
+   {
+    "name": "GloFAS v4 river discharge via Open-Meteo Flood API (Kaub; Budapest, Saumur placebos)",
+    "url": "https://flood-api.open-meteo.com/v1/flood",
+    "access": "keyless"
+   },
+   {
+    "name": "NVE weekly reservoir filling, Norway 1995-2026",
+    "url": "https://biapi.nve.no/magasinstatistikk/api/Magasinstatistikk/HentOffentligData",
+    "access": "keyless"
+   },
+   {
+    "name": "Brazil ONS open data: EAR by subsystem (daily), CMO (weekly), energy balance (hourly)",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   },
+   {
+    "name": "SHFE aluminium main contract AL0 (Sina Finance via akshare)",
+    "url": "https://finance.sina.com.cn/futures/quotes/AL0.shtml",
+    "access": "keyless"
+   },
+   {
+    "name": "EIA-930 hourly generation by source (PUDL nightly parquet, cached by scout)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   }
+  ],
+  "mechanism": "A physical supply shock visible from orbit (low reservoir, dark flares, low river) should move the price of the constrained commodity or the equity of the exposed producer in the weeks/months after the satellite value becomes knowable.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs.",
+  "results": [
+   {
+    "metric": "family size pre-registered / run",
+    "value": "53 / 53",
+    "n": 53,
+    "note": "all run"
+   },
+   {
+    "metric": "market-tier tests with uncorrected max-stat p<0.05",
+    "value": 1,
+    "n": 46,
+    "note": "expected by chance ~2.3; the one hit is F3 (Libya flares -> tanker equities, p=0.019, q=0.16); it has no directional prior, its train-period sign is opposite, and it flips sign (r=+0.095) when the flare index is normalised by the Algeria control"
+   },
+   {
+    "metric": "market-tier BH survivors (q<=0.05)",
+    "value": 0,
+    "n": 46,
+    "note": "also zero at q<=0.10"
+   },
+   {
+    "metric": "median |r| market tier",
+    "value": 0.062,
+    "n": 46,
+    "note": "median |r| needed for nominal significance 0.16: effects larger than ~0.15 (n~240) to ~0.25 (n~90) are excluded; smaller ones are not"
+   },
+   {
+    "metric": "placebo reservoirs/regions vs the same market targets: share with p<0.05",
+    "value": 0.031,
+    "n": 131,
+    "note": "nominal 0.05 -> the null is calibrated on real data too"
+   }
+  ],
+  "controls": "After partialling ^SPGSCI/DXY/Shanghai Composite out of the targets the smallest market-tier p is 0.014 (F3 again; next 0.16). Year-shuffle and exact circular-shift nulls agree with the block null. Signs match the pre-registered mechanism in 46% of market tests and train/test signs agree in 39% - coin flips.",
+  "verdict": "rejected",
+  "known_or_novel": "known in spirit (semi-strong efficiency; Mukherjee et al. 2021 show satellite estimates are already impounded in prices) - the contribution is a clean, pre-registered, keyless replication across 6 physical systems",
+  "prior_art": [
+   "https://www.sciencedirect.com/science/article/abs/pii/S0304405X21000921",
+   "https://www.cambridge.org/core/journals/journal-of-financial-and-quantitative-analysis/article/on-the-capital-market-consequences-of-big-data-evidence-from-outer-space/2F5F99D68D1F8940F61578F198D6C005"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig4_family_overview.png",
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig5_lag_profiles.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/prereg_build.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/targets.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/engine.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/test_engine.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py"
+  ],
+  "caveats": "Monthly/weekly horizons only; latency assumptions are conservative (1 month for GWW); power is limited for |r|<0.15; equities tested in excess of the local index only; no options/vol or intraday targets; results describe statistical association, not trading advice."
+ },
+ {
+  "id": "Y",
+  "title": "Yunnan reservoirs from orbit -> aluminium",
+  "one_liner": "Xiaowan+Nuozhadu surface-area anomalies carry no information for SHFE/COMEX aluminium or producer equities at 1-3 months after they are knowable; at 3 of 5 curtailment announcements the knowable anomaly was positive.",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat/Sentinel-2 derived)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST"
+   },
+   {
+    "name": "SHFE aluminium main contract AL0 (Sina Finance via akshare)",
+    "url": "https://finance.sina.com.cn/futures/quotes/AL0.shtml",
+    "access": "keyless"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Low Lancang storage -> Yunnan hydro deficit -> smelter curtailment (Yunnan ~12% of Chinese capacity) -> aluminium up, Yunnan Aluminium down, ex-China producers up.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs. Signal from 2019-01 (both reservoirs impounded by 2014; 3 years of expanding climatology).",
+  "results": [
+   {
+    "metric": "Y1_z: r(yunnan_area|<bound method Series.transform of tier                                 market\nsignal                          yunnan_area\ntransform                                 z\ntarget                              SHFE_AL\nexpected_sign                            -1\nfreq                                      M\nlatency                                   1\nlags                              [1, 2, 3]\nn                                        89\nbest_lag                                  2\nr                                 -0.017434\nbeta                              -0.000861\nspearman                          -0.025707\nperm_p                             0.857814\nmaxstat_p                            0.9956\nbh_q                                 0.9961\nsign_ok                                True\nsurvives_bh05                         False\ncirc_p                                  1.0\nyearshuffle_p                      0.994101\nr_partial                         -0.016451\np_partial                            0.9962\nr_train                           -0.031921\nr_test                             0.049731\np_test                             0.633637\noos_same_sign                         False\nr_by_lag         [-0.0032, -0.0174, 0.0174]\nsample_start                     2019-01-01\nsample_end                       2026-08-01\ncirc_n_shifts                            82\ntrain_n                                  54\ntest_n                                   35\ntrain_lag                                 2\nsplit                            2023-07-01\nlag_partial                             2.0\nName: Y1_z, dtype: object> -> SHFE_AL) at best lag 2m",
+    "value": -0.017,
+    "n": 89,
+    "note": "max-stat p=0.9956, BH q=0.996, single-lag p=0.8578, needed |r|>=0.22 for p<.05; OOS r_train=-0.03 -> r_test=+0.05 (p=0.634)."
+   },
+   {
+    "metric": "Y1_dz3: r(yunnan_area|<bound method Series.transform of tier                                 market\nsignal                          yunnan_area\ntransform                               dz3\ntarget                              SHFE_AL\nexpected_sign                            -1\nfreq                                      M\nlatency                                   1\nlags                              [1, 2, 3]\nn                                        85\nbest_lag                                  3\nr                                  0.088701\nbeta                               0.004697\nspearman                           0.048681\nperm_p                             0.389461\nmaxstat_p                          0.759224\nbh_q                                 0.9961\nsign_ok                               False\nsurvives_bh05                         False\ncirc_p                                0.725\nyearshuffle_p                      0.772623\nr_partial                           0.09528\np_partial                          0.707329\nr_train                            0.102582\nr_test                             0.052256\np_test                             0.381662\noos_same_sign                          True\nr_by_lag         [-0.0408, -0.0808, 0.0887]\nsample_start                     2019-04-01\nsample_end                       2026-08-01\ncirc_n_shifts                            79\ntrain_n                                  52\ntest_n                                   33\ntrain_lag                                 3\nsplit                            2023-08-01\nlag_partial                             3.0\nName: Y1_dz3, dtype: object> -> SHFE_AL) at best lag 3m",
+    "value": 0.089,
+    "n": 85,
+    "note": "max-stat p=0.7592, BH q=0.996, single-lag p=0.3895, needed |r|>=0.25 for p<.05; OOS r_train=+0.10 -> r_test=+0.05 (p=0.382)."
+   },
+   {
+    "metric": "Y2_z: r(yunnan_area|<bound method Series.transform of tier                               market\nsignal                        yunnan_area\ntransform                               z\ntarget                              ALI=F\nexpected_sign                          -1\nfreq                                    M\nlatency                                 1\nlags                            [1, 2, 3]\nn                                      89\nbest_lag                                2\nr                                0.078902\nbeta                             0.005541\nspearman                         0.113773\nperm_p                           0.480952\nmaxstat_p                         0.80452\nbh_q                               0.9961\nsign_ok                             False\nsurvives_bh05                       False\ncirc_p                           0.771084\nyearshuffle_p                    0.722428\nr_partial                        0.083792\np_partial                        0.749225\nr_train                          0.036665\nr_test                          -0.052761\np_test                           0.625737\noos_same_sign                       False\nr_by_lag         [0.0484, 0.0789, 0.0255]\nsample_start                   2019-01-01\nsample_end                     2026-08-01\ncirc_n_shifts                          82\ntrain_n                                54\ntest_n                                 34\ntrain_lag                               3\nsplit                          2023-07-01\nlag_partial                           2.0\nName: Y2_z, dtype: object> -> ALI=F) at best lag 2m",
+    "value": 0.079,
+    "n": 89,
+    "note": "max-stat p=0.8045, BH q=0.996, single-lag p=0.4810, needed |r|>=0.26 for p<.05; OOS r_train=+0.04 -> r_test=-0.05 (p=0.626)."
+   },
+   {
+    "metric": "Y3_dz3: r(yunnan_area|<bound method Series.transform of tier                               market\nsignal                        yunnan_area\ntransform                             dz3\ntarget                000807.SZ-000001.SS\nexpected_sign                           1\nfreq                                    M\nlatency                                 1\nlags                            [1, 2, 3]\nn                                      85\nbest_lag                                3\nr                                0.092018\nbeta                             0.013048\nspearman                         0.048407\nperm_p                           0.366263\nmaxstat_p                        0.726727\nbh_q                               0.9961\nsign_ok                              True\nsurvives_bh05                       False\ncirc_p                             0.6125\nyearshuffle_p                    0.747725\nr_partial                        0.101717\np_partial                        0.659734\nr_train                          0.095976\nr_test                           0.090466\np_test                           0.290671\noos_same_sign                        True\nr_by_lag         [-0.0484, 0.0371, 0.092]\nsample_start                   2019-04-01\nsample_end                     2026-08-01\ncirc_n_shifts                          79\ntrain_n                                52\ntest_n                                 33\ntrain_lag                               3\nsplit                          2023-08-01\nlag_partial                           3.0\nName: Y3_dz3, dtype: object> -> 000807.SZ-000001.SS) at best lag 3m",
+    "value": 0.092,
+    "n": 85,
+    "note": "max-stat p=0.7267, BH q=0.996, single-lag p=0.3663, needed |r|>=0.23 for p<.05; OOS r_train=+0.10 -> r_test=+0.09 (p=0.291)."
+   },
+   {
+    "metric": "Y4_z: r(yunnan_area|<bound method Series.transform of tier                               market\nsignal                        yunnan_area\ntransform                               z\ntarget                           AA-^GSPC\nexpected_sign                          -1\nfreq                                    M\nlatency                                 1\nlags                            [1, 2, 3]\nn                                      88\nbest_lag                                3\nr                                0.182892\nbeta                             0.032014\nspearman                         0.119862\nperm_p                            0.09649\nmaxstat_p                        0.224478\nbh_q                               0.9961\nsign_ok                             False\nsurvives_bh05                       False\ncirc_p                           0.361446\nyearshuffle_p                    0.223378\nr_partial                        0.183903\np_partial                        0.173583\nr_train                          0.260454\nr_test                           -0.04452\np_test                           0.579842\noos_same_sign                       False\nr_by_lag         [0.1148, 0.1271, 0.1829]\nsample_start                   2019-01-01\nsample_end                     2026-08-01\ncirc_n_shifts                          82\ntrain_n                                54\ntest_n                                 34\ntrain_lag                               3\nsplit                          2023-07-01\nlag_partial                           3.0\nName: Y4_z, dtype: object> -> AA-^GSPC) at best lag 3m",
+    "value": 0.183,
+    "n": 88,
+    "note": "max-stat p=0.2245, BH q=0.996, single-lag p=0.0965, needed |r|>=0.26 for p<.05; OOS r_train=+0.26 -> r_test=-0.04 (p=0.580)."
+   },
+   {
+    "metric": "Y5_z: r(yunnan_area|<bound method Series.transform of tier                              market\nsignal                       yunnan_area\ntransform                              z\ntarget                   NHY.OL-OSEBX.OL\nexpected_sign                         -1\nfreq                                   M\nlatency                                1\nlags                           [1, 2, 3]\nn                                     90\nbest_lag                               1\nr                               0.089349\nbeta                            0.007244\nspearman                        0.078964\nperm_p                           0.39886\nmaxstat_p                       0.718028\nbh_q                              0.9961\nsign_ok                            False\nsurvives_bh05                      False\ncirc_p                           0.73494\nyearshuffle_p                   0.662734\nr_partial                        0.08772\np_partial                       0.735026\nr_train                         0.145893\nr_test                          0.001459\np_test                           0.50225\noos_same_sign                       True\nr_by_lag         [0.0893, 0.077, 0.0793]\nsample_start                  2019-01-01\nsample_end                    2026-08-01\ncirc_n_shifts                         82\ntrain_n                               54\ntest_n                                34\ntrain_lag                              3\nsplit                         2023-07-01\nlag_partial                          1.0\nName: Y5_z, dtype: object> -> NHY.OL-OSEBX.OL) at best lag 1m",
+    "value": 0.089,
+    "n": 90,
+    "note": "max-stat p=0.7180, BH q=0.996, single-lag p=0.3989, needed |r|>=0.25 for p<.05; OOS r_train=+0.15 -> r_test=+0.00 (p=0.502)."
+   },
+   {
+    "metric": "coincident (lag 0, no latency) r, yunnan z vs SHFE_AL [EXPLORATORY]",
+    "value": 0.067,
+    "n": 92,
+    "note": "p=0.47: the market does not even co-move with the area anomaly"
+   },
+   {
+    "metric": "case studies: curtailment announcements (n=5, NOT statistics)",
+    "value": "[{\"event_month\": \"2021-05\", \"z_known_at_event (month m-2)\": 1.77, \"shfe_al_ret_prev3m_%\": 23.6, \"shfe_al_ret_next3m_%\": 12.8}, {\"event_month\": \"2021-09\", \"z_known_at_event (month m-2)\": 0.65, \"shfe_al_ret_prev3m_%\": 12.8, \"shfe_al_ret_next3m_%\": -10.2}, {\"event_month\": \"2022-09\", \"z_known_at_event (month m-2)\": 0.95, \"shfe_al_ret_prev3m_%\": -12.2, \"shfe_al_ret_next3m_%\": 2.3}, {\"event_month\": \"2023-02\", \"z_known_at_event (month m-2)\": -0.98, \"shfe_al_ret_prev3m_%\": 7.6, \"shfe_al_ret_next3m_%\": -2.4}, {\"event_month\": \"2023-11\", \"z_known_at_event (month m-2)\": -0.23, \"shfe_al_ret_prev3m_%\": 4.4, \"shfe_al_ret_next3m_%\": 1.7}]",
+    "n": 5,
+    "note": "2021-05 and 2022-09: knowable z was +1.8 and +1.0; SHFE had already rallied 24% in the 3 months before 2021-05"
+   }
+  ],
+  "controls": "Partial-out of SPGSCI/DXY/Shanghai Composite leaves r unchanged; 4 placebo reservoirs give the same p-value distribution; scout's earlier informal look (r=0.06, n=144) counted as prior exploration.",
+  "verdict": "rejected",
+  "known_or_novel": "mechanism is well known to metals desks (Reuters/Fastmarkets/SMM cover it in real time); the satellite-to-price null at monthly latency is, as far as we found, not published",
+  "prior_art": [
+   "https://www.mining.com/web/column-another-yunnan-power-blow-to-chinas-aluminum-output/",
+   "https://www.fastmarkets.com/insights/yunnan-aluminium-producers-ordered-to-cut-output-amid-power-rationing/",
+   "https://news.metal.com/newscontent/101936979-smm-analysis-of-the-impact-of-power-shortages-in-yunnan-on-chinese-aluminum-supply",
+   "https://www.alcircle.com/news/yunnan-aluminium-industry-is-in-woes-due-to-the-dry-season-with-nearly-400-000-tonnes-of-output-cut-110295"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig1_yunnan_aluminium_case_study.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/exploratory.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures.py"
+  ],
+  "caveats": "n=85-90 months: only |r|>~0.22-0.26 was detectable. Monsoon cloud leaves Jun-Sep gaps at Xiaowan. Two multi-year regulating reservoirs are a poor proxy for province-wide inflow; curtailments were also driven by demand growth and energy 'dual-control' policy. Event dates are month-resolution from trade press."
+ },
+ {
+  "id": "B-phys",
+  "title": "Brazil: satellite reservoir area -> official stored energy -> marginal cost and thermal dispatch",
+  "one_liner": "A 9-reservoir satellite composite tracks ONS stored energy (3-month changes r=+0.75, OOS +0.87) and explains marginal operating cost nearly as well as the operator's own data (r=-0.45 vs -0.49) - but it is coincident, not predictive, and ONS publishes the truth daily.",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat/Sentinel-2 derived)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST"
+   },
+   {
+    "name": "Brazil ONS open data: EAR by subsystem (daily), CMO (weekly), energy balance (hourly)",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   }
+  ],
+  "mechanism": "SE/CO holds ~70% of Brazilian storage; the dispatch model prices water by storage, so storage down -> CMO (the basis of the PLD spot price) up -> thermal share up.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs. Physical-link tier: 3-month changes on both sides, lags 0-2 months, latency ignored.",
+  "results": [
+   {
+    "metric": "P1: r(brazil_seco_area|<bound method Series.transform of tier                            physical\nsignal                  brazil_seco_area\ntransform                            dz3\ntarget                  d3_EAR_SECO_anom\nexpected_sign                          1\nfreq                                   M\nlatency                                0\nlags                           [0, 1, 2]\nn                                    234\nbest_lag                               0\nr                                0.74654\nbeta                            8.760055\nspearman                        0.758494\nperm_p                            0.0001\nmaxstat_p                         0.0001\nbh_q                             0.00106\nsign_ok                             True\nsurvives_bh05                       True\ncirc_p                          0.004219\nyearshuffle_p                     0.0001\nr_partial                            NaN\np_partial                            NaN\nr_train                         0.724924\nr_test                          0.868272\np_test                            0.0001\noos_same_sign                       True\nr_by_lag         [0.7465, 0.643, 0.3672]\nsample_start                  2006-07-01\nsample_end                    2026-08-01\ncirc_n_shifts                        236\ntrain_n                              140\ntest_n                                94\ntrain_lag                              0\nsplit                         2018-11-01\nlag_partial                          NaN\nName: P1, dtype: object> -> d3_EAR_SECO_anom) at best lag 0m",
+    "value": 0.747,
+    "n": 234,
+    "note": "max-stat p=0.0001, BH q=0.001, single-lag p=0.0001, needed |r|>=0.22 for p<.05; OOS r_train=+0.72 -> r_test=+0.87 (p=0.000)."
+   },
+   {
+    "metric": "P2: r(brazil_seco_area|<bound method Series.transform of tier                                physical\nsignal                      brazil_seco_area\ntransform                                dz3\ntarget                          d3_logCMO_SE\nexpected_sign                             -1\nfreq                                       M\nlatency                                    0\nlags                               [0, 1, 2]\nn                                        234\nbest_lag                                   0\nr                                  -0.449473\nbeta                               -0.987576\nspearman                           -0.542912\nperm_p                                0.0001\nmaxstat_p                             0.0001\nbh_q                                 0.00106\nsign_ok                                 True\nsurvives_bh05                           True\ncirc_p                              0.004219\nyearshuffle_p                         0.0001\nr_partial                                NaN\np_partial                                NaN\nr_train                            -0.565097\nr_test                              -0.35671\np_test                                0.0047\noos_same_sign                           True\nr_by_lag         [-0.4495, -0.3053, -0.0885]\nsample_start                      2006-07-01\nsample_end                        2026-08-01\ncirc_n_shifts                            236\ntrain_n                                  140\ntest_n                                    94\ntrain_lag                                  0\nsplit                             2018-11-01\nlag_partial                              NaN\nName: P2, dtype: object> -> d3_logCMO_SE) at best lag 0m",
+    "value": -0.449,
+    "n": 234,
+    "note": "max-stat p=0.0001, BH q=0.001, single-lag p=0.0001, needed |r|>=0.20 for p<.05; OOS r_train=-0.57 -> r_test=-0.36 (p=0.005)."
+   },
+   {
+    "metric": "P3: r(brazil_seco_area|<bound method Series.transform of tier                                physical\nsignal                      brazil_seco_area\ntransform                                dz3\ntarget                  d3_thermal_share_SIN\nexpected_sign                             -1\nfreq                                       M\nlatency                                    0\nlags                               [0, 1, 2]\nn                                        234\nbest_lag                                   0\nr                                  -0.493107\nbeta                               -0.031614\nspearman                           -0.483307\nperm_p                                0.0001\nmaxstat_p                             0.0001\nbh_q                                 0.00106\nsign_ok                                 True\nsurvives_bh05                           True\ncirc_p                              0.004219\nyearshuffle_p                         0.0001\nr_partial                                NaN\np_partial                                NaN\nr_train                            -0.551902\nr_test                             -0.495514\np_test                                0.0002\noos_same_sign                           True\nr_by_lag         [-0.4931, -0.3867, -0.2154]\nsample_start                      2006-07-01\nsample_end                        2026-08-01\ncirc_n_shifts                            236\ntrain_n                                  140\ntest_n                                    94\ntrain_lag                                  0\nsplit                             2018-11-01\nlag_partial                              NaN\nName: P3, dtype: object> -> d3_thermal_share_SIN) at best lag 0m",
+    "value": -0.493,
+    "n": 234,
+    "note": "max-stat p=0.0001, BH q=0.001, single-lag p=0.0001, needed |r|>=0.21 for p<.05; OOS r_train=-0.55 -> r_test=-0.50 (p=0.000)."
+   },
+   {
+    "metric": "P4: r(brazil_ear_seco|<bound method Series.transform of tier                                physical\nsignal                       brazil_ear_seco\ntransform                                dz3\ntarget                          d3_logCMO_SE\nexpected_sign                             -1\nfreq                                       M\nlatency                                    0\nlags                               [0, 1, 2]\nn                                        245\nbest_lag                                   0\nr                                  -0.485796\nbeta                               -0.853654\nspearman                           -0.596634\nperm_p                                0.0001\nmaxstat_p                             0.0001\nbh_q                                 0.00106\nsign_ok                                 True\nsurvives_bh05                           True\ncirc_p                              0.004149\nyearshuffle_p                         0.0001\nr_partial                                NaN\np_partial                                NaN\nr_train                            -0.578385\nr_test                             -0.489627\np_test                                0.0003\noos_same_sign                           True\nr_by_lag         [-0.4858, -0.3228, -0.0532]\nsample_start                      2006-04-01\nsample_end                        2026-09-01\ncirc_n_shifts                            240\ntrain_n                                  147\ntest_n                                    98\ntrain_lag                                  0\nsplit                             2018-07-01\nlag_partial                              NaN\nName: P4, dtype: object> -> d3_logCMO_SE) at best lag 0m",
+    "value": -0.486,
+    "n": 245,
+    "note": "max-stat p=0.0001, BH q=0.001, single-lag p=0.0001, needed |r|>=0.20 for p<.05; OOS r_train=-0.58 -> r_test=-0.49 (p=0.000). upper bound with official storage"
+   },
+   {
+    "metric": "forward prediction of CMO change over the 3 months AFTER the satellite value is knowable [EXPLORATORY]",
+    "value": 0.04,
+    "n": 231,
+    "note": "p=0.65: no lead. Official EAR z-level -> next-3m CMO change r=+0.21 (uncorrected p=0.013, positive = mean reversion, not a drought signal)"
+   },
+   {
+    "metric": "partial r(satellite, CMO | official EAR) [EXPLORATORY]",
+    "value": -0.226,
+    "n": 234,
+    "note": "non-zero, but official data has 1-day latency vs ~1 month for GWW, so no usable edge"
+   },
+   {
+    "metric": "placebo warning: Toktogul (Kyrgyzstan) area vs Brazil stored energy",
+    "value": 0.342,
+    "n": 214,
+    "note": "p=0.0004 under block, circular and year-shuffle nulls; OOS r=0.17. Likely a shared climate driver (ENSO). Geographic placebos are not independent draws; separate real from placebo by effect size and OOS stability (0.75/0.87 vs 0.34/0.17), not by p alone"
+   }
+  ],
+  "controls": "4 placebo reservoirs; year-shuffle p=0.0001; exact circular-shift p=0.004 (floor 1/230); OOS holds for all four.",
+  "verdict": "supported",
+  "known_or_novel": "known (storage drives Brazilian power prices by construction of NEWAVE/DECOMP); our add is that a keyless satellite composite recovers ~90% of the official signal's explanatory power - useful only where no ONS-like operator data exists",
+  "prior_art": [
+   "https://www.nature.com/articles/s41598-022-17074-6",
+   "https://dados.ons.org.br/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig2_brazil_storage_cmo_equity.png",
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig5_lag_profiles.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/fetch_ons.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/targets.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/exploratory.py"
+  ],
+  "caveats": "CMO is an administratively computed price, not a traded one; overlapping 3-month differences (handled by block null). This validates the sensor, it is not a market signal."
+ },
+ {
+  "id": "B-mkt",
+  "title": "Brazil reservoir storage -> utility and thermal-generator equities",
+  "one_liner": "No predictive relation from satellite area OR from official ONS stored energy to excess returns of Eletrobras/Axia, Cemig, Engie Brasil, Eneva, Energisa.",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat/Sentinel-2 derived)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST"
+   },
+   {
+    "name": "Brazil ONS open data: EAR by subsystem (daily), CMO (weekly), energy balance (hourly)",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Hydro-long generators lose (GSF deficit) and gas generators gain when storage is low.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs.",
+  "results": [
+   {
+    "metric": "B1_z: r(brazil_seco_area|<bound method Series.transform of tier                                 market\nsignal                     brazil_seco_area\ntransform                                 z\ntarget                       AXIA3.SA-^BVSP\nexpected_sign                             1\nfreq                                      M\nlatency                                   1\nlags                              [1, 2, 3]\nn                                       237\nbest_lag                                  3\nr                                  -0.10735\nbeta                              -0.008972\nspearman                           -0.07478\nperm_p                             0.091091\nmaxstat_p                          0.190581\nbh_q                                 0.9961\nsign_ok                               False\nsurvives_bh05                         False\ncirc_p                             0.186441\nyearshuffle_p                      0.121488\nr_partial                         -0.104293\np_partial                          0.212579\nr_train                           -0.089935\nr_test                            -0.167894\np_test                             0.025497\noos_same_sign                          True\nr_by_lag         [-0.056, -0.0776, -0.1074]\nsample_start                     2006-04-01\nsample_end                       2026-08-01\ncirc_n_shifts                           235\ntrain_n                                 143\ntest_n                                   94\ntrain_lag                                 3\nsplit                            2018-07-01\nlag_partial                             3.0\nName: B1_z, dtype: object> -> AXIA3.SA-^BVSP) at best lag 3m",
+    "value": -0.107,
+    "n": 237,
+    "note": "max-stat p=0.1906, BH q=0.996, single-lag p=0.0911, needed |r|>=0.15 for p<.05; OOS r_train=-0.09 -> r_test=-0.17 (p=0.025)."
+   },
+   {
+    "metric": "B3_z: r(brazil_seco_area|<bound method Series.transform of tier                                  market\nsignal                      brazil_seco_area\ntransform                                  z\ntarget                        EGIE3.SA-^BVSP\nexpected_sign                              1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        237\nbest_lag                                   3\nr                                  -0.089656\nbeta                               -0.003978\nspearman                           -0.079282\nperm_p                              0.163284\nmaxstat_p                           0.316368\nbh_q                                  0.9961\nsign_ok                                False\nsurvives_bh05                          False\ncirc_p                              0.241525\nyearshuffle_p                       0.267473\nr_partial                          -0.082183\np_partial                           0.339566\nr_train                            -0.083514\nr_test                             -0.136349\np_test                              0.076792\noos_same_sign                           True\nr_by_lag         [-0.0392, -0.0653, -0.0897]\nsample_start                      2006-04-01\nsample_end                        2026-08-01\ncirc_n_shifts                            235\ntrain_n                                  143\ntest_n                                    94\ntrain_lag                                  3\nsplit                             2018-07-01\nlag_partial                              3.0\nName: B3_z, dtype: object> -> EGIE3.SA-^BVSP) at best lag 3m",
+    "value": -0.09,
+    "n": 237,
+    "note": "max-stat p=0.3164, BH q=0.996, single-lag p=0.1633, needed |r|>=0.15 for p<.05; OOS r_train=-0.08 -> r_test=-0.14 (p=0.077)."
+   },
+   {
+    "metric": "B4_dz3: r(brazil_seco_area|<bound method Series.transform of tier                                  market\nsignal                      brazil_seco_area\ntransform                                dz3\ntarget                        ENEV3.SA-^BVSP\nexpected_sign                             -1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        219\nbest_lag                                   3\nr                                  -0.089396\nbeta                                -0.01936\nspearman                           -0.049219\nperm_p                              0.194781\nmaxstat_p                            0.40186\nbh_q                                  0.9961\nsign_ok                                 True\nsurvives_bh05                          False\ncirc_p                              0.342593\nyearshuffle_p                       0.335966\nr_partial                          -0.074318\np_partial                           0.517248\nr_train                            -0.113597\nr_test                                -0.046\np_test                              0.335266\noos_same_sign                           True\nr_by_lag         [-0.0534, -0.0759, -0.0894]\nsample_start                      2007-12-01\nsample_end                        2026-08-01\ncirc_n_shifts                            215\ntrain_n                                  132\ntest_n                                    87\ntrain_lag                                  3\nsplit                             2019-02-01\nlag_partial                              3.0\nName: B4_dz3, dtype: object> -> ENEV3.SA-^BVSP) at best lag 3m",
+    "value": -0.089,
+    "n": 219,
+    "note": "max-stat p=0.4019, BH q=0.996, single-lag p=0.1948, needed |r|>=0.16 for p<.05; OOS r_train=-0.11 -> r_test=-0.05 (p=0.335)."
+   },
+   {
+    "metric": "B5_z: r(brazil_seco_area|<bound method Series.transform of tier                                  market\nsignal                      brazil_seco_area\ntransform                                  z\ntarget                       ENGI11.SA-^BVSP\nexpected_sign                              1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        197\nbest_lag                                   3\nr                                  -0.098201\nbeta                               -0.006185\nspearman                           -0.090973\nperm_p                              0.108389\nmaxstat_p                           0.235076\nbh_q                                  0.9961\nsign_ok                                False\nsurvives_bh05                          False\ncirc_p                              0.150259\nyearshuffle_p                        0.19628\nr_partial                          -0.086355\np_partial                           0.311969\nr_train                            -0.070507\nr_test                             -0.082025\np_test                              0.213079\noos_same_sign                           True\nr_by_lag         [-0.0687, -0.0704, -0.0982]\nsample_start                      2009-11-01\nsample_end                        2026-08-01\ncirc_n_shifts                            192\ntrain_n                                  119\ntest_n                                    78\ntrain_lag                                  3\nsplit                             2019-11-01\nlag_partial                              3.0\nName: B5_z, dtype: object> -> ENGI11.SA-^BVSP) at best lag 3m",
+    "value": -0.098,
+    "n": 197,
+    "note": "max-stat p=0.2351, BH q=0.996, single-lag p=0.1084, needed |r|>=0.14 for p<.05; OOS r_train=-0.07 -> r_test=-0.08 (p=0.213)."
+   },
+   {
+    "metric": "G1_dz3: r(brazil_ear_seco|<bound method Series.transform of tier                              market\nsignal                   brazil_ear_seco\ntransform                            dz3\ntarget                    AXIA3.SA-^BVSP\nexpected_sign                          1\nfreq                                   M\nlatency                                0\nlags                           [1, 2, 3]\nn                                    242\nbest_lag                               3\nr                               0.090397\nbeta                            0.011454\nspearman                        0.072187\nperm_p                          0.150085\nmaxstat_p                       0.321968\nbh_q                              0.9961\nsign_ok                             True\nsurvives_bh05                      False\ncirc_p                          0.213389\nyearshuffle_p                   0.347265\nr_partial                       0.094283\np_partial                       0.293171\nr_train                         0.103113\nr_test                          0.008606\np_test                          0.466653\noos_same_sign                       True\nr_by_lag         [0.0888, 0.064, 0.0904]\nsample_start                  2006-04-01\nsample_end                    2026-09-01\ncirc_n_shifts                        238\ntrain_n                              146\ntest_n                                96\ntrain_lag                              3\nsplit                         2018-06-01\nlag_partial                          1.0\nName: G1_dz3, dtype: object> -> AXIA3.SA-^BVSP) at best lag 3m",
+    "value": 0.09,
+    "n": 242,
+    "note": "max-stat p=0.3220, BH q=0.996, single-lag p=0.1501, needed |r|>=0.15 for p<.05; OOS r_train=+0.10 -> r_test=+0.01 (p=0.467)."
+   },
+   {
+    "metric": "G2_dz3: r(brazil_ear_seco|<bound method Series.transform of tier                                 market\nsignal                      brazil_ear_seco\ntransform                               dz3\ntarget                       ENEV3.SA-^BVSP\nexpected_sign                            -1\nfreq                                      M\nlatency                                   0\nlags                              [1, 2, 3]\nn                                       222\nbest_lag                                  3\nr                                 -0.108518\nbeta                              -0.021611\nspearman                           -0.06988\nperm_p                             0.117288\nmaxstat_p                          0.244676\nbh_q                                 0.9961\nsign_ok                                True\nsurvives_bh05                         False\ncirc_p                             0.205479\nyearshuffle_p                      0.227677\nr_partial                          -0.09323\np_partial                          0.327867\nr_train                           -0.136373\nr_test                             0.007511\np_test                             0.525747\noos_same_sign                         False\nr_by_lag         [0.0368, -0.0778, -0.1085]\nsample_start                     2007-12-01\nsample_end                       2026-09-01\ncirc_n_shifts                           218\ntrain_n                                 134\ntest_n                                   88\ntrain_lag                                 3\nsplit                            2019-02-01\nlag_partial                             3.0\nName: G2_dz3, dtype: object> -> ENEV3.SA-^BVSP) at best lag 3m",
+    "value": -0.109,
+    "n": 222,
+    "note": "max-stat p=0.2447, BH q=0.996, single-lag p=0.1173, needed |r|>=0.16 for p<.05; OOS r_train=-0.14 -> r_test=+0.01 (p=0.526)."
+   }
+  ],
+  "controls": "Upper-bound design: if the operator's own storage series (G1-G3) has no information for next-month returns, no satellite proxy can. Excess over Bovespa; SPGSCI/DXY partial-out.",
+  "verdict": "rejected",
+  "known_or_novel": "not found in prior art as a tested null",
+  "prior_art": [
+   "https://dados.ons.org.br/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig2_brazil_storage_cmo_equity.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py"
+  ],
+  "caveats": "Several wrong-signed r around -0.1 (B1_z, B3_z, B5_z) are what mean reversion after crisis sell-offs would produce; none is significant. Yahoo CMIG4 history needed a splice-error fix (daily |log return|>1.5 nulled)."
+ },
+ {
+  "id": "Z",
+  "title": "Zambia (Itezhi-Tezhi area) -> copper, First Quantum, kwacha",
+  "one_liner": "No relation at 1-3 months; nearest is kwacha vs 3-month area change (r=-0.15, p=0.17) with zero out-of-sample correlation.",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat/Sentinel-2 derived)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Kafue/Zambezi hydro deficit -> ZESCO load-shedding -> mine output, imports, FX stress.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs. Kariba excluded a priori: scout showed its area does not track level.",
+  "results": [
+   {
+    "metric": "Z1_z: r(zambia_itt_area|<bound method Series.transform of tier                                market\nsignal                     zambia_itt_area\ntransform                                z\ntarget                                HG=F\nexpected_sign                           -1\nfreq                                     M\nlatency                                  1\nlags                             [1, 2, 3]\nn                                      213\nbest_lag                                 3\nr                                -0.052627\nbeta                             -0.002505\nspearman                         -0.043932\nperm_p                            0.471553\nmaxstat_p                         0.762624\nbh_q                                0.9961\nsign_ok                               True\nsurvives_bh05                        False\ncirc_p                            0.629464\nyearshuffle_p                     0.714529\nr_partial                        -0.066006\np_partial                         0.570143\nr_train                          -0.009979\nr_test                            0.030661\np_test                            0.620538\noos_same_sign                        False\nr_by_lag         [-0.021, -0.028, -0.0526]\nsample_start                    2007-04-01\nsample_end                      2026-08-01\ncirc_n_shifts                          223\ntrain_n                                129\ntest_n                                  86\ntrain_lag                                1\nsplit                           2019-05-01\nlag_partial                            2.0\nName: Z1_z, dtype: object> -> HG=F) at best lag 3m",
+    "value": -0.053,
+    "n": 213,
+    "note": "max-stat p=0.7626, BH q=0.996, single-lag p=0.4716, needed |r|>=0.17 for p<.05; OOS r_train=-0.01 -> r_test=+0.03 (p=0.621)."
+   },
+   {
+    "metric": "Z2_z: r(zambia_itt_area|<bound method Series.transform of tier                                  market\nsignal                       zambia_itt_area\ntransform                                  z\ntarget                         FM.TO-^GSPTSE\nexpected_sign                              1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        213\nbest_lag                                   3\nr                                  -0.027225\nbeta                                -0.00296\nspearman                           -0.021286\nperm_p                              0.690831\nmaxstat_p                           0.944906\nbh_q                                  0.9961\nsign_ok                                False\nsurvives_bh05                          False\ncirc_p                                0.9375\nyearshuffle_p                       0.919208\nr_partial                          -0.048152\np_partial                           0.756124\nr_train                             0.016418\nr_test                             -0.029548\np_test                              0.563444\noos_same_sign                          False\nr_by_lag         [-0.0238, -0.0193, -0.0272]\nsample_start                      2007-04-01\nsample_end                        2026-08-01\ncirc_n_shifts                            223\ntrain_n                                  129\ntest_n                                    85\ntrain_lag                                  2\nsplit                             2019-05-01\nlag_partial                              2.0\nName: Z2_z, dtype: object> -> FM.TO-^GSPTSE) at best lag 3m",
+    "value": -0.027,
+    "n": 213,
+    "note": "max-stat p=0.9449, BH q=0.996, single-lag p=0.6908, needed |r|>=0.16 for p<.05; OOS r_train=+0.02 -> r_test=-0.03 (p=0.563)."
+   },
+   {
+    "metric": "Z3_dz3: r(zambia_itt_area|<bound method Series.transform of tier                                  market\nsignal                       zambia_itt_area\ntransform                                dz3\ntarget                                USDZMW\nexpected_sign                             -1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        150\nbest_lag                                   2\nr                                  -0.148721\nbeta                               -0.006362\nspearman                           -0.206315\nperm_p                              0.076492\nmaxstat_p                           0.174183\nbh_q                                  0.9961\nsign_ok                                 True\nsurvives_bh05                          False\ncirc_p                               0.16129\nyearshuffle_p                       0.226577\nr_partial                          -0.132237\np_partial                           0.249575\nr_train                            -0.165377\nr_test                              0.002304\np_test                               0.50065\noos_same_sign                          False\nr_by_lag         [-0.0667, -0.1487, -0.1181]\nsample_start                      2013-01-01\nsample_end                        2026-08-01\ncirc_n_shifts                            154\ntrain_n                                   90\ntest_n                                    59\ntrain_lag                                  3\nsplit                             2021-06-01\nlag_partial                              2.0\nName: Z3_dz3, dtype: object> -> USDZMW) at best lag 2m",
+    "value": -0.149,
+    "n": 150,
+    "note": "max-stat p=0.1742, BH q=0.996, single-lag p=0.0765, needed |r|>=0.20 for p<.05; OOS r_train=-0.17 -> r_test=+0.00 (p=0.501)."
+   }
+  ],
+  "controls": "HG=F partialled out of USDZMW; placebos.",
+  "verdict": "rejected",
+  "known_or_novel": "mechanism known (2015-16, 2019, 2024 load-shedding); tested null not found",
+  "prior_art": [
+   "https://www.nature.com/articles/s41598-022-17074-6"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig4_family_overview.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py"
+  ],
+  "caveats": "Zambia is ~3% of world copper, so a price effect was a weak prior. No keyless Eurobond series. USDZMW from Yahoo starts 2013."
+ },
+ {
+  "id": "U",
+  "title": "US West reservoirs -> hydro/gas generation -> Henry Hub and California utilities",
+  "one_liner": "Price leg null everywhere; the pre-registered 6-reservoir composite does not even track Western-Interconnection hydro (wrong geography: WECC hydro is Columbia-basin), though a California-only composite tracks CAISO hydro (exploratory r=0.48).",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat/Sentinel-2 derived)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST"
+   },
+   {
+    "name": "EIA-930 hourly generation by source (PUDL nightly parquet, cached by scout)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Low storage -> less hydro -> more gas burn -> gas price / utility procurement cost and wildfire liability.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs.",
+  "results": [
+   {
+    "metric": "P5: r(uswest_area|<bound method Series.transform of tier                              physical\nsignal                         uswest_area\ntransform                              dz3\ntarget                  d3_WECC_hydro_anom\nexpected_sign                            1\nfreq                                     M\nlatency                                  0\nlags                             [0, 1, 2]\nn                                       92\nbest_lag                                 0\nr                                 0.124228\nbeta                              0.712316\nspearman                          0.105174\nperm_p                            0.341666\nmaxstat_p                          0.60034\nbh_q                                0.9961\nsign_ok                               True\nsurvives_bh05                        False\ncirc_p                            0.689655\nyearshuffle_p                     0.527147\nr_partial                              NaN\np_partial                              NaN\nr_train                           0.079001\nr_test                            0.183015\np_test                            0.156484\noos_same_sign                         True\nr_by_lag         [0.1242, 0.0035, -0.0954]\nsample_start                    2018-10-01\nsample_end                      2026-05-01\ncirc_n_shifts                           86\ntrain_n                                 55\ntest_n                                  37\ntrain_lag                                0\nsplit                           2023-05-01\nlag_partial                            NaN\nName: P5, dtype: object> -> d3_WECC_hydro_anom) at best lag 0m",
+    "value": 0.124,
+    "n": 92,
+    "note": "max-stat p=0.6003, BH q=0.996, single-lag p=0.3417, needed |r|>=0.30 for p<.05; OOS r_train=+0.08 -> r_test=+0.18 (p=0.156)."
+   },
+   {
+    "metric": "P6: r(uswest_area|<bound method Series.transform of tier                               physical\nsignal                          uswest_area\ntransform                               dz3\ntarget                  d3_WECC_fossil_anom\nexpected_sign                            -1\nfreq                                      M\nlatency                                   0\nlags                              [0, 1, 2]\nn                                        92\nbest_lag                                  0\nr                                 -0.212075\nbeta                               -1.46396\nspearman                          -0.119816\nperm_p                             0.109989\nmaxstat_p                          0.225677\nbh_q                                 0.9961\nsign_ok                                True\nsurvives_bh05                         False\ncirc_p                             0.494253\nyearshuffle_p                      0.173183\nr_partial                               NaN\np_partial                               NaN\nr_train                           -0.208468\nr_test                            -0.189172\np_test                             0.180082\noos_same_sign                          True\nr_by_lag         [-0.2121, -0.0838, 0.0084]\nsample_start                     2018-10-01\nsample_end                       2026-05-01\ncirc_n_shifts                            86\ntrain_n                                  55\ntest_n                                   37\ntrain_lag                                 0\nsplit                            2023-05-01\nlag_partial                             NaN\nName: P6, dtype: object> -> d3_WECC_fossil_anom) at best lag 0m",
+    "value": -0.212,
+    "n": 92,
+    "note": "max-stat p=0.2257, BH q=0.996, single-lag p=0.1100, needed |r|>=0.30 for p<.05; OOS r_train=-0.21 -> r_test=-0.19 (p=0.180)."
+   },
+   {
+    "metric": "P7: r(wecc_hydro_anom|<bound method Series.transform of tier                                market\nsignal                     wecc_hydro_anom\ntransform                              dz3\ntarget                                NG=F\nexpected_sign                           -1\nfreq                                     M\nlatency                                  0\nlags                             [1, 2, 3]\nn                                       58\nbest_lag                                 1\nr                                 0.105513\nbeta                              0.014604\nspearman                          0.132425\nperm_p                            0.410959\nmaxstat_p                         0.779222\nbh_q                                0.9961\nsign_ok                              False\nsurvives_bh05                        False\ncirc_p                                0.75\nyearshuffle_p                     0.539546\nr_partial                         0.112468\np_partial                         0.753825\nr_train                            0.20851\nr_test                           -0.023378\np_test                            0.506949\noos_same_sign                        False\nr_by_lag         [0.1055, -0.0268, 0.0271]\nsample_start                    2021-10-01\nsample_end                      2026-08-01\ncirc_n_shifts                           51\ntrain_n                                 34\ntest_n                                  24\ntrain_lag                                1\nsplit                           2024-08-01\nlag_partial                            1.0\nName: P7, dtype: object> -> NG=F) at best lag 1m",
+    "value": 0.106,
+    "n": 58,
+    "note": "max-stat p=0.7792, BH q=0.996, single-lag p=0.4110, needed |r|>=0.30 for p<.05; OOS r_train=+0.21 -> r_test=-0.02 (p=0.507). ground-truth EIA-930 hydro anomaly as signal (upper bound)"
+   },
+   {
+    "metric": "U1_dz3: r(uswest_area|<bound method Series.transform of tier                                  market\nsignal                           uswest_area\ntransform                                dz3\ntarget                                  NG=F\nexpected_sign                             -1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        242\nbest_lag                                   2\nr                                  -0.068231\nbeta                               -0.023241\nspearman                           -0.075132\nperm_p                              0.254675\nmaxstat_p                           0.529747\nbh_q                                  0.9961\nsign_ok                                 True\nsurvives_bh05                          False\ncirc_p                              0.476395\nyearshuffle_p                       0.426857\nr_partial                          -0.071423\np_partial                            0.50205\nr_train                            -0.098016\nr_test                              0.050524\np_test                               0.69733\noos_same_sign                          False\nr_by_lag         [-0.0662, -0.0682, -0.0316]\nsample_start                      2006-04-01\nsample_end                        2026-05-01\ncirc_n_shifts                            232\ntrain_n                                  145\ntest_n                                    96\ntrain_lag                                  3\nsplit                             2018-05-01\nlag_partial                              2.0\nName: U1_dz3, dtype: object> -> NG=F) at best lag 2m",
+    "value": -0.068,
+    "n": 242,
+    "note": "max-stat p=0.5297, BH q=0.996, single-lag p=0.2547, needed |r|>=0.14 for p<.05; OOS r_train=-0.10 -> r_test=+0.05 (p=0.697)."
+   },
+   {
+    "metric": "U2_z: r(uswest_area|<bound method Series.transform of tier                                  market\nsignal                           uswest_area\ntransform                                  z\ntarget                               PCG-XLU\nexpected_sign                              1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        245\nbest_lag                                   2\nr                                  -0.118587\nbeta                               -0.015567\nspearman                           -0.115868\nperm_p                              0.055594\nmaxstat_p                           0.127487\nbh_q                                0.965261\nsign_ok                                False\nsurvives_bh05                          False\ncirc_p                               0.34322\nyearshuffle_p                       0.085291\nr_partial                          -0.113908\np_partial                           0.159884\nr_train                            -0.225116\nr_test                             -0.116462\np_test                              0.106889\noos_same_sign                           True\nr_by_lag         [-0.1044, -0.1186, -0.0966]\nsample_start                      2006-01-01\nsample_end                        2026-05-01\ncirc_n_shifts                            235\ntrain_n                                  147\ntest_n                                    98\ntrain_lag                                  2\nsplit                             2018-04-01\nlag_partial                              2.0\nName: U2_z, dtype: object> -> PCG-XLU) at best lag 2m",
+    "value": -0.119,
+    "n": 245,
+    "note": "max-stat p=0.1275, BH q=0.965, single-lag p=0.0556, needed |r|>=0.14 for p<.05; OOS r_train=-0.23 -> r_test=-0.12 (p=0.107)."
+   },
+   {
+    "metric": "U3_z: r(uswest_area|<bound method Series.transform of tier                                  market\nsignal                           uswest_area\ntransform                                  z\ntarget                               EIX-XLU\nexpected_sign                              1\nfreq                                       M\nlatency                                    1\nlags                               [1, 2, 3]\nn                                        244\nbest_lag                                   3\nr                                  -0.057408\nbeta                               -0.003483\nspearman                           -0.032225\nperm_p                              0.330167\nmaxstat_p                           0.594541\nbh_q                                  0.9961\nsign_ok                                False\nsurvives_bh05                          False\ncirc_p                              0.351695\nyearshuffle_p                       0.417058\nr_partial                          -0.054303\np_partial                           0.608439\nr_train                             0.020969\nr_test                             -0.125835\np_test                               0.90421\noos_same_sign                          False\nr_by_lag         [-0.0412, -0.0564, -0.0574]\nsample_start                      2006-01-01\nsample_end                        2026-05-01\ncirc_n_shifts                            235\ntrain_n                                  147\ntest_n                                    97\ntrain_lag                                  3\nsplit                             2018-04-01\nlag_partial                              3.0\nName: U3_z, dtype: object> -> EIX-XLU) at best lag 3m",
+    "value": -0.057,
+    "n": 244,
+    "note": "max-stat p=0.5945, BH q=0.996, single-lag p=0.3302, needed |r|>=0.13 for p<.05; OOS r_train=+0.02 -> r_test=-0.13 (p=0.904)."
+   },
+   {
+    "metric": "WECC deseasonalised hydro vs gas+coal, lag 0 [EXPLORATORY replication of scout]",
+    "value": -0.384,
+    "n": 98,
+    "note": "slope -0.62 MWh fossil per MWh hydro; p=0.005. Weaker than scout's -0.85/R2=0.64 (different BA list and sample)"
+   },
+   {
+    "metric": "California 4-reservoir z vs CAISO hydro anomaly, lag 0 [EXPLORATORY]",
+    "value": 0.48,
+    "n": 97,
+    "note": "uncorrected p=0.025; vs CAISO gas r=-0.21 (p=0.31)"
+   }
+  ],
+  "controls": "Placebos; DXY partial-out for NG=F.",
+  "verdict": "rejected",
+  "known_or_novel": "hydro-gas substitution is known (EIA Today-in-Energy drought notes); price-leg null is ours",
+  "prior_art": [
+   "https://www.eia.gov/todayinenergy/detail.php?id=51839"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig4_family_overview.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/exploratory.py"
+  ],
+  "caveats": "EIA-930 by-source data starts 2018-07 (n~92 months; P7 n=58). Henry Hub is a national price; a SoCal/PG&E citygate basis would be the right target but no keyless series was found. The P5/P6 miss is a design error in the pre-registration (geography), reported as-is."
+ },
+ {
+  "id": "F",
+  "title": "Gas-flare radiative power (Libya, Basra) -> Brent, Brent-WTI, tanker equities",
+  "one_liner": "Orbit cleanly sees outages (Libya 2020 blockade: flares -53%) but 2-week flare changes have no relation to subsequent Brent returns (r=+0.030, n=599, p=0.90); prices move on the news, satellites confirm magnitude later.",
+  "datasets": [
+   {
+    "name": "VIIRS S-NPP 375 m thermal anomalies, NASA GIBS vector tiles, daily 2012-01-20..2026-09-18 (5,355 days x 3 tiles)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_SNPP_Thermal_Anomalies_375m_All/",
+    "access": "keyless"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Associated-gas flaring scales with oil throughput; a flaring collapse = shut-in = supply loss.",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs. Weekly clear-sky index = mean of 3 brightest nights per Fri-Thu week over persistent flare cells; signal known before Friday close.",
+  "results": [
+   {
+    "metric": "F1: r(libya_flare|<bound method Series.transform of tier                                         market\nsignal                                  libya_flare\ntransform                                        d2\ntarget                                         BZ=F\nexpected_sign                                    -1\nfreq                                              W\nlatency                                           0\nlags                                   [1, 2, 3, 4]\nn                                               599\nbest_lag                                          1\nr                                          0.030399\nbeta                                       0.004833\nspearman                                   0.033958\nperm_p                                     0.461154\nmaxstat_p                                   0.90301\nbh_q                                         0.9961\nsign_ok                                       False\nsurvives_bh05                                 False\ncirc_p                                     0.901503\nyearshuffle_p                                   NaN\nr_partial                                  0.027611\np_partial                                  0.931807\nr_train                                    0.064021\nr_test                                    -0.026478\np_test                                     0.649035\noos_same_sign                                 False\nr_by_lag         [0.0304, -0.0025, -0.0301, 0.0255]\nsample_start                             2015-02-06\nsample_end                               2026-09-25\ncirc_n_shifts                                   598\ntrain_n                                         359\ntest_n                                          237\ntrain_lag                                         4\nsplit                                    2022-01-21\nlag_partial                                     4.0\nName: F1, dtype: object> -> BZ=F) at best lag 1w",
+    "value": 0.03,
+    "n": 599,
+    "note": "max-stat p=0.9030, BH q=0.996, single-lag p=0.4612, needed |r|>=0.10 for p<.05; OOS r_train=+0.06 -> r_test=-0.03 (p=0.649)."
+   },
+   {
+    "metric": "F2: r(libya_flare|<bound method Series.transform of tier                                       market\nsignal                                libya_flare\ntransform                                      d2\ntarget                             d_BZ-CL_spread\nexpected_sign                                  -1\nfreq                                            W\nlatency                                         0\nlags                                 [1, 2, 3, 4]\nn                                             598\nbest_lag                                        2\nr                                       -0.045603\nbeta                                    -0.187012\nspearman                                -0.017372\nperm_p                                   0.283572\nmaxstat_p                                 0.69573\nbh_q                                       0.9961\nsign_ok                                      True\nsurvives_bh05                               False\ncirc_p                                   0.662771\nyearshuffle_p                                 NaN\nr_partial                               -0.045318\np_partial                                0.694731\nr_train                                  0.072908\nr_test                                  -0.025967\np_test                                   0.645635\noos_same_sign                               False\nr_by_lag         [0.0161, -0.0456, 0.0121, 0.032]\nsample_start                           2015-02-06\nsample_end                             2026-09-25\ncirc_n_shifts                                 598\ntrain_n                                       359\ntest_n                                        240\ntrain_lag                                       1\nsplit                                  2022-01-21\nlag_partial                                   2.0\nName: F2, dtype: object> -> d_BZ-CL_spread) at best lag 2w",
+    "value": -0.046,
+    "n": 598,
+    "note": "max-stat p=0.6957, BH q=0.996, single-lag p=0.2836, needed |r|>=0.11 for p<.05; OOS r_train=+0.07 -> r_test=-0.03 (p=0.646)."
+   },
+   {
+    "metric": "F3: r(libya_flare|<bound method Series.transform of tier                                         market\nsignal                                  libya_flare\ntransform                                        d2\ntarget                       TANKERS(FRO,DHT)-^GSPC\nexpected_sign                                     0\nfreq                                              W\nlatency                                           0\nlags                                   [1, 2, 3, 4]\nn                                               596\nbest_lag                                          4\nr                                         -0.115743\nbeta                                      -0.018434\nspearman                                   -0.10809\nperm_p                                       0.0043\nmaxstat_p                                  0.018598\nbh_q                                       0.164284\nsign_ok                                        True\nsurvives_bh05                                 False\ncirc_p                                     0.041736\nyearshuffle_p                                   NaN\nr_partial                                 -0.115415\np_partial                                  0.013799\nr_train                                    0.127767\nr_test                                     0.096609\np_test                                     0.072293\noos_same_sign                                  True\nr_by_lag         [-0.0703, 0.1135, 0.0116, -0.1157]\nsample_start                             2015-02-06\nsample_end                               2026-09-25\ncirc_n_shifts                                   598\ntrain_n                                         359\ntest_n                                          239\ntrain_lag                                         2\nsplit                                    2022-01-21\nlag_partial                                     4.0\nName: F3, dtype: object> -> TANKERS(FRO,DHT)-^GSPC) at best lag 4w",
+    "value": -0.116,
+    "n": 596,
+    "note": "max-stat p=0.0186, BH q=0.164, single-lag p=0.0043, needed |r|>=0.10 for p<.05; OOS r_train=+0.13 -> r_test=+0.10 (p=0.072)."
+   },
+   {
+    "metric": "F4: r(basra_flare|<bound method Series.transform of tier                                     market\nsignal                              basra_flare\ntransform                                    d2\ntarget                                     BZ=F\nexpected_sign                                -1\nfreq                                          W\nlatency                                       0\nlags                               [1, 2, 3, 4]\nn                                           596\nbest_lag                                      4\nr                                      0.053049\nbeta                                   0.006288\nspearman                               0.039209\nperm_p                                  0.19728\nmaxstat_p                              0.570543\nbh_q                                     0.9961\nsign_ok                                   False\nsurvives_bh05                             False\ncirc_p                                 0.629382\nyearshuffle_p                               NaN\nr_partial                              0.055488\np_partial                              0.519248\nr_train                               -0.040157\nr_test                                 0.094798\np_test                                 0.913209\noos_same_sign                             False\nr_by_lag         [0.034, 0.0211, 0.0188, 0.053]\nsample_start                         2015-02-06\nsample_end                           2026-09-25\ncirc_n_shifts                               598\ntrain_n                                     359\ntest_n                                      238\ntrain_lag                                     3\nsplit                                2022-01-21\nlag_partial                                 4.0\nName: F4, dtype: object> -> BZ=F) at best lag 4w",
+    "value": 0.053,
+    "n": 596,
+    "note": "max-stat p=0.5705, BH q=0.996, single-lag p=0.1973, needed |r|>=0.10 for p<.05; OOS r_train=-0.04 -> r_test=+0.09 (p=0.913)."
+   },
+   {
+    "metric": "F5: r(basra_flare|<bound method Series.transform of tier                                         market\nsignal                                  basra_flare\ntransform                                        d2\ntarget                       TANKERS(FRO,DHT)-^GSPC\nexpected_sign                                     0\nfreq                                              W\nlatency                                           0\nlags                                   [1, 2, 3, 4]\nn                                               598\nbest_lag                                          2\nr                                          0.035766\nbeta                                        0.00418\nspearman                                    0.05691\nperm_p                                     0.384762\nmaxstat_p                                  0.832717\nbh_q                                         0.9961\nsign_ok                                        True\nsurvives_bh05                                 False\ncirc_p                                     0.804674\nyearshuffle_p                                   NaN\nr_partial                                  0.033002\np_partial                                  0.867013\nr_train                                   -0.051292\nr_test                                     0.054317\np_test                                     0.786821\noos_same_sign                                 False\nr_by_lag         [-0.0243, 0.0358, -0.0062, 0.0058]\nsample_start                             2015-02-06\nsample_end                               2026-09-25\ncirc_n_shifts                                   598\ntrain_n                                         359\ntest_n                                          238\ntrain_lag                                         3\nsplit                                    2022-01-21\nlag_partial                                     2.0\nName: F5, dtype: object> -> TANKERS(FRO,DHT)-^GSPC) at best lag 2w",
+    "value": 0.036,
+    "n": 598,
+    "note": "max-stat p=0.8327, BH q=0.996, single-lag p=0.3848, needed |r|>=0.10 for p<.05; OOS r_train=-0.05 -> r_test=+0.05 (p=0.787)."
+   },
+   {
+    "metric": "case studies: Libya outages (n=4, NOT statistics)",
+    "value": "[{\"event\": \"2013-07-15\", \"note\": \"port/field blockades begin (to mid-2014)\", \"flare_MW_pre8w\": 441, \"flare_MW_post(2-10w)\": 347, \"change_%\": -21, \"first_week_below_half_move\": \"2013-08-08\", \"brent_ret_event_week_%\": -0.7, \"brent_ret_next4w_%\": 2.8}, {\"event\": \"2020-01-18\", \"note\": \"LNA blockade (to 2020-09-18)\", \"flare_MW_pre8w\": 515, \"flare_MW_post(2-10w)\": 241, \"change_%\": -53, \"first_week_below_half_move\": \"2020-01-16\", \"brent_ret_event_week_%\": -1.2, \"brent_ret_next4w_%\": -6.7}, {\"event\": \"2022-04-17\", \"note\": \"Sharara/El Feel + ports shut\", \"flare_MW_pre8w\": 544, \"flare_MW_post(2-10w)\": 387, \"change_%\": -29, \"first_week_below_half_move\": \"2022-04-14\", \"brent_ret_event_week_%\": -3.1, \"brent_ret_next4w_%\": 3.4}, {\"event\": \"2024-08-26\", \"note\": \"central-bank dispute shut-in\", \"flare_MW_pre8w\": 673, \"flare_MW_post(2-10w)\": 647, \"change_%\": -4, \"first_week_below_half_move\": \"2024-09-05\", \"brent_ret_event_week_%\": -0.3, \"brent_ret_next4w_%\": -9.1}]",
+    "n": 4,
+    "note": "flare drop -21% / -53% / -29% / -4%; Brent 4-week return after: +2.8 / -6.7 / +3.4 / -9.1 % -> no consistent sign"
+   },
+   {
+    "metric": "F3 robustness: log(Libya/Algeria) ratio index -> tankers [EXPLORATORY]",
+    "value": 0.095,
+    "n": 598,
+    "note": "sign flips vs the pre-registered F3 (-0.116) -> F3's nominal p=0.019 is noise"
+   }
+  ],
+  "controls": "Algeria placebo flare index vs Brent: p=0.29. Plotting exposed a sensor artefact (S-NPP safe-mode gap, Jul-Aug 2022) that appears as a simultaneous 'collapse' in Libya and the Algeria placebo.",
+  "verdict": "rejected",
+  "known_or_novel": "flaring-as-production-proxy is known (Elvidge/Payne Institute VIIRS Nightfire; wardamage round 1); the 14-year keyless weekly lead-lag null is ours",
+  "prior_art": [
+   "https://www.mdpi.com/1996-1073/9/1/14",
+   "https://payneinstitute.mines.edu/eog/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig3_libya_flares_brent.png",
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig5_lag_profiles.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/fetch_flares.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/exploratory.py"
+  ],
+  "caveats": "FRP is not barrels. The 2024-08 Libyan shut-in barely shows in flares (-4%). Archive (v1) vs NRT (v2.0) product versions differ; night filter derived from local solar time. Sovereign/FX legs untestable (pegged currencies, no keyless bond data). Basra's 2026 collapse is one regime shift (n=1)."
+ },
+ {
+  "id": "R",
+  "title": "Rhine low flow at Kaub -> BASF",
+  "one_liner": "Correct sign, tiny and not significant: r=-0.051, n=1024 weeks, p=0.34.",
+  "datasets": [
+   {
+    "name": "GloFAS v4 river discharge via Open-Meteo Flood API (Kaub; Budapest, Saumur placebos)",
+    "url": "https://flood-api.open-meteo.com/v1/flood",
+    "access": "keyless"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Kaub low water -> barges light-load -> Ludwigshafen logistics cost and curtailment (2018: ~EUR 250m).",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs. Stress = max(0, log(q10/Q)) with expanding 10th percentile.",
+  "results": [
+   {
+    "metric": "R1: r(rhine_stress|<bound method Series.transform of tier                                        market\nsignal                                rhine_stress\ntransform                                       d1\ntarget                               BAS.DE-^GDAXI\nexpected_sign                                   -1\nfreq                                             W\nlatency                                          0\nlags                                  [1, 2, 3, 4]\nn                                             1024\nbest_lag                                         4\nr                                        -0.050967\nbeta                                     -0.021875\nspearman                                 -0.042319\nperm_p                                    0.105889\nmaxstat_p                                 0.337266\nbh_q                                        0.9961\nsign_ok                                       True\nsurvives_bh05                                False\ncirc_p                                    0.361765\nyearshuffle_p                                  NaN\nr_partial                                -0.048053\np_partial                                 0.393461\nr_train                                  -0.069034\nr_test                                   -0.033378\np_test                                    0.258474\noos_same_sign                                 True\nr_by_lag         [-0.0477, 0.0322, 0.0085, -0.051]\nsample_start                            2007-01-12\nsample_end                              2026-09-25\ncirc_n_shifts                                 1019\ntrain_n                                        616\ntest_n                                         408\ntrain_lag                                        4\nsplit                                   2018-11-02\nlag_partial                                    4.0\nName: R1, dtype: object> -> BAS.DE-^GDAXI) at best lag 4w",
+    "value": -0.051,
+    "n": 1024,
+    "note": "max-stat p=0.3373, BH q=0.996, single-lag p=0.1059, needed |r|>=0.08 for p<.05; OOS r_train=-0.07 -> r_test=-0.03 (p=0.258)."
+   }
+  ],
+  "controls": "Danube (Budapest) and Loire (Saumur) placebo stress series vs BASF: p=0.52, 0.24.",
+  "verdict": "rejected",
+  "known_or_novel": "macro effect of 2018 low water is known (Kiel Institute: -1.5% industrial production at peak); equity-return null is ours",
+  "prior_art": [
+   "https://www.kielinstitut.de/fileadmin/Dateiverwaltung/IfW-Publications/fis-import/d0c53966-8307-4bff-9cf9-13544afe7d80-KWP_2155_low_water_econ_activity.pdf",
+   "https://www.wirtschaftsdienst.eu/inhalt/jahr/2019/heft/1/beitrag/niedrigwasser-bremst-produktion.html"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig4_family_overview.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/fetch_misc.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py"
+  ],
+  "caveats": "GloFAS is a model reanalysis (not a satellite observation), and Open-Meteo serves the consolidated series rather than the real-time vintage (mild look-ahead, which makes the null stronger). Stress is zero in ~90% of weeks: the test is driven by 2003, 2011, 2015, 2018, 2022."
+ },
+ {
+  "id": "N",
+  "title": "Norwegian reservoir filling (NVE ground truth) -> Nord Pool price, Norsk Hydro",
+  "one_liner": "Weekly filling surprises move the Nord Pool system price in the same week (r=-0.31, n=569, 2000-2010; NO2 2011-2025 exploratory r=-0.30) fading to -0.14 one week later (partly mechanical: weekly-average prices; NVE is published mid-following-week) and ~0 beyond; Norsk Hydro excess return: null (r=-0.031, n=698, p=0.85).",
+  "datasets": [
+   {
+    "name": "NVE weekly reservoir filling, Norway 1995-2026",
+    "url": "https://biapi.nve.no/magasinstatistikk/api/Magasinstatistikk/HentOffentligData",
+    "access": "keyless"
+   },
+   {
+    "name": "Nord Pool day-ahead SYS price via Energi Data Service",
+    "url": "https://api.energidataservice.dk/dataset/Elspotprices",
+    "access": "keyless but aggressively rate-limited (429)"
+   },
+   {
+    "name": "Yahoo Finance daily closes via yfinance",
+    "url": "https://finance.yahoo.com",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Hydro balance is the textbook driver of the Nordic system price; Hydro is both a hydropower seller and a smelter power buyer (sign ambiguous).",
+  "method": "Pre-registered (prereg.json, sha256 in data/prereg.sha256) before any signal-target statistic was computed. Signals: expanding-window deseasonalised anomalies (no full-sample statistics), lagged by product latency. Targets: log returns (equities in excess of local index). Statistic: max |Pearson r| over pre-registered lags; null = 10,000 block-permutation+circular-shift surrogates (calibrated on synthetic AR data: 5% false-positive rate); exact circular-shift and year-shuffle nulls as cross-checks; Benjamini-Hochberg across the whole family; 60/40 chronological OOS split; partial-out of commodity index/DXY/Shanghai Composite; placebo reservoirs. NVE is ground truth, not satellite: GWW area is unusable in Norway in winter (ice/snow).",
+  "results": [
+   {
+    "metric": "N1: r(nve_fill|<bound method Series.transform of tier                                       market\nsignal                                   nve_fill\ntransform                                      d1\ntarget                            NHY.OL-OSEBX.OL\nexpected_sign                                   0\nfreq                                            W\nlatency                                         1\nlags                                 [1, 2, 3, 4]\nn                                             698\nbest_lag                                        3\nr                                       -0.031435\nbeta                                    -0.000644\nspearman                                -0.027982\nperm_p                                   0.408959\nmaxstat_p                                0.853015\nbh_q                                       0.9961\nsign_ok                                      True\nsurvives_bh05                               False\ncirc_p                                   0.851799\nyearshuffle_p                                 NaN\nr_partial                               -0.028477\np_partial                                 0.89931\nr_train                                  0.032302\nr_test                                  -0.038957\np_test                                   0.744026\noos_same_sign                               False\nr_by_lag         [0.006, 0.0041, -0.0314, 0.0037]\nsample_start                           2013-03-08\nsample_end                             2026-09-11\ncirc_n_shifts                                 694\ntrain_n                                       419\ntest_n                                        280\ntrain_lag                                       2\nsplit                                  2021-04-23\nlag_partial                                   3.0\nName: N1, dtype: object> -> NHY.OL-OSEBX.OL) at best lag 3w",
+    "value": -0.031,
+    "n": 698,
+    "note": "max-stat p=0.8530, BH q=0.996, single-lag p=0.4090, needed |r|>=0.09 for p<.05; OOS r_train=+0.03 -> r_test=-0.04 (p=0.744)."
+   },
+   {
+    "metric": "P8: r(nve_fill|<bound method Series.transform of tier                                                physical\nsignal                                              nve_fill\ntransform                                                 d1\ntarget                                     dlog_NordPool_SYS\nexpected_sign                                             -1\nfreq                                                       W\nlatency                                                    0\nlags                                         [0, 1, 2, 3, 4]\nn                                                        569\nbest_lag                                                   0\nr                                                  -0.307703\nbeta                                               -0.019056\nspearman                                           -0.385913\nperm_p                                                0.0001\nmaxstat_p                                             0.0001\nbh_q                                                 0.00106\nsign_ok                                                 True\nsurvives_bh05                                           True\ncirc_p                                              0.000725\nyearshuffle_p                                            NaN\nr_partial                                                NaN\np_partial                                                NaN\nr_train                                            -0.237275\nr_test                                             -0.421055\np_test                                                0.0001\noos_same_sign                                           True\nr_by_lag         [-0.3077, -0.1409, -0.0116, 0.0404, 0.0699]\nsample_start                                      2000-01-14\nsample_end                                        2026-09-11\ncirc_n_shifts                                           1378\ntrain_n                                                  341\ntest_n                                                   228\ntrain_lag                                                  0\nsplit                                             2006-08-11\nlag_partial                                              NaN\nName: P8, dtype: object> -> dlog_NordPool_SYS) at best lag 0w",
+    "value": -0.308,
+    "n": 569,
+    "note": "max-stat p=0.0001, BH q=0.001, single-lag p=0.0001, needed |r|>=0.11 for p<.05; OOS r_train=-0.24 -> r_test=-0.42 (p=0.000). SYS price is served by Energi Data Service for 2000-2010 only; r by lag 0..4 = [-0.3077, -0.1409, -0.0116, 0.0404, 0.0699]"
+   },
+   {
+    "metric": "NO2 area price 2011-2025 [EXPLORATORY]",
+    "value": -0.296,
+    "n": 765,
+    "note": "r by lag 0..4 = [-0.2964, 0.0024, 0.1115, 0.1156, 0.1032]: coincident only"
+   }
+  ],
+  "controls": "SPGSCI/DXY partial-out for N1; split-sample replication of P8 on a different price series and decade (E10).",
+  "verdict": "partial",
+  "known_or_novel": "hydro-balance -> Nordic price is known",
+  "prior_art": [
+   "https://www.nve.no/energi/analyser-og-statistikk/magasinstatistikk/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/figures/fig4_family_overview.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/markets/fetch_nordpool.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/signals.py",
+   "/Users/tomalmog/projects/kingdom/explore/markets/run_tests.py"
+  ],
+  "caveats": "Verdict 'partial' = physical->power-price link supported (coincident), equity leg rejected. NVE is a ground-truth survey, not a satellite product; the same-week correlation partly reflects weather (inflow and demand) driving both. NVE publishes with ~3 days lag, so lag 0 is a nowcast, not a forecast. OSEBX.OL history on Yahoo starts 2013."
+ }
+]

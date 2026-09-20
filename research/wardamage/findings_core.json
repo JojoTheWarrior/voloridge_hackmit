@@ -1,0 +1,1105 @@
+[
+ {
+  "id": "us_bakken_flared_volume",
+  "title": "Bakken: VIIRS night flare power vs reported flared gas volume",
+  "one_liner": "Satellite flare power tracks officially reported flared volume in the Bakken at annual/seasonally-adjusted scale, but month-to-month changes are mostly noise.",
+  "datasets": [
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "North Dakota DMR monthly gas produced/sold/flared 1990-2026",
+    "url": "https://www.dmr.nd.gov/oilgas/stats/Gas1990ToPresent.xls",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Flared gas burns at ~1600-2000 K; VIIRS I4/M13 radiance at night gives fire radiative power roughly proportional to flared volume.",
+  "method": "SNPP-only night detections 2012-02..2026-08 from keyless GIBS tiles, 0.02 deg cells lit on >=N nights, monthly statistic of nightly FRP sums; metric variant (frp_p90|min3) chosen on 2012-2018 only; log-log OLS trained 2012-2018, tested 2019+; month fixed-effects variant; rolling-origin yearly refits vs a persistence baseline.",
+  "results": [
+   {
+    "metric": "r log-levels (monthly)",
+    "value": 0.675,
+    "n": 173,
+    "note": ""
+   },
+   {
+    "metric": "r month-over-month dlog",
+    "value": 0.185,
+    "n": 172,
+    "note": "weak"
+   },
+   {
+    "metric": "r year-over-year dlog",
+    "value": 0.61,
+    "n": 161,
+    "note": ""
+   },
+   {
+    "metric": "r deseasonalised+detrended",
+    "value": 0.71,
+    "n": 173,
+    "note": ""
+   },
+   {
+    "metric": "annual r (log levels)",
+    "value": 0.907,
+    "n": 14,
+    "note": ""
+   },
+   {
+    "metric": "annual r (dlog)",
+    "value": 0.774,
+    "n": 13,
+    "note": ""
+   },
+   {
+    "metric": "out-of-sample R2 2019+ (plain)",
+    "value": 0.239,
+    "n": 90,
+    "note": ""
+   },
+   {
+    "metric": "out-of-sample R2 2019+ (month FE)",
+    "value": 0.551,
+    "n": 90,
+    "note": ""
+   },
+   {
+    "metric": "rolling-origin MAPE % model vs persistence",
+    "value": "31.8 vs 34.5",
+    "n": null,
+    "note": "barely beats persistence"
+   },
+   {
+    "metric": "elasticity (log label on log FRP)",
+    "value": 0.159,
+    "n": 82,
+    "note": "attenuated well below 1: FRP is a noisy regressor"
+   }
+  ],
+  "controls": "Train/test split in time; metric variant chosen on train only; persistence baseline; deseasonalising and differencing reported alongside levels.",
+  "verdict": "partial",
+  "known_or_novel": "known (VIIRS Nightfire literature calibrates flare radiant heat to volume); the keyless replication and the honest monthly-change null are ours",
+  "prior_art": [
+   "https://www.mdpi.com/1996-1073/9/1/14",
+   "https://www.worldbank.org/en/programs/gasflaringreduction"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_bakken_validation.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/gibs.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fetch_us_basins.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/labels_build.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/flarelib.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/us_validate.py"
+  ],
+  "caveats": "State-level label vs basin bbox; Texas V&F is operator-reported and lagged; FIRMS FRP is not Nightfire radiant heat (no temperature fit); satellite series carries a 4-7x seasonal artifact absent from the label."
+ },
+ {
+  "id": "us_permian_flared_volume",
+  "title": "Permian: VIIRS night flare power vs reported flared gas volume",
+  "one_liner": "Satellite flare power tracks officially reported flared volume in the Permian at annual/seasonally-adjusted scale, but month-to-month changes are mostly noise.",
+  "datasets": [
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "EIA natural gas vented & flared by state, monthly",
+    "url": "https://www.eia.gov/dnav/ng/xls/NG_PROD_SUM_A_EPG0_VGV_MMCF_M.xls",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Flared gas burns at ~1600-2000 K; VIIRS I4/M13 radiance at night gives fire radiative power roughly proportional to flared volume.",
+  "method": "SNPP-only night detections 2012-02..2026-08 from keyless GIBS tiles, 0.02 deg cells lit on >=N nights, monthly statistic of nightly FRP sums; metric variant (frp_p75|min10) chosen on 2012-2018 only; log-log OLS trained 2012-2018, tested 2019+; month fixed-effects variant; rolling-origin yearly refits vs a persistence baseline.",
+  "results": [
+   {
+    "metric": "r log-levels (monthly)",
+    "value": 0.756,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "r month-over-month dlog",
+    "value": 0.226,
+    "n": 154,
+    "note": "weak"
+   },
+   {
+    "metric": "r year-over-year dlog",
+    "value": 0.573,
+    "n": 143,
+    "note": ""
+   },
+   {
+    "metric": "r deseasonalised+detrended",
+    "value": 0.623,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "annual r (log levels)",
+    "value": 0.866,
+    "n": 13,
+    "note": ""
+   },
+   {
+    "metric": "annual r (dlog)",
+    "value": 0.76,
+    "n": 12,
+    "note": ""
+   },
+   {
+    "metric": "out-of-sample R2 2019+ (plain)",
+    "value": 0.445,
+    "n": 72,
+    "note": ""
+   },
+   {
+    "metric": "out-of-sample R2 2019+ (month FE)",
+    "value": 0.339,
+    "n": 72,
+    "note": ""
+   },
+   {
+    "metric": "rolling-origin MAPE % model vs persistence",
+    "value": "21.9 vs 32.7",
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "elasticity (log label on log FRP)",
+    "value": 0.491,
+    "n": 82,
+    "note": "attenuated well below 1: FRP is a noisy regressor"
+   }
+  ],
+  "controls": "Train/test split in time; metric variant chosen on train only; persistence baseline; deseasonalising and differencing reported alongside levels.",
+  "verdict": "partial",
+  "known_or_novel": "known (VIIRS Nightfire literature calibrates flare radiant heat to volume); the keyless replication and the honest monthly-change null are ours",
+  "prior_art": [
+   "https://www.mdpi.com/1996-1073/9/1/14",
+   "https://www.worldbank.org/en/programs/gasflaringreduction"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_permian_validation.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/gibs.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fetch_us_basins.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/labels_build.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/flarelib.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/us_validate.py"
+  ],
+  "caveats": "State-level label vs basin bbox; Texas V&F is operator-reported and lagged; FIRMS FRP is not Nightfire radiant heat (no temperature fit); satellite series carries a 4-7x seasonal artifact absent from the label."
+ },
+ {
+  "id": "us_flare_vs_crude_production",
+  "title": "US shale: flare power as a gauge of crude production",
+  "one_liner": "In US shale basins flare power says almost nothing about monthly crude output; flaring is driven by gas-takeaway constraints, not barrels.",
+  "datasets": [
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "EIA crude production by state, monthly",
+    "url": "https://www.eia.gov/dnav/pet/xls/PET_CRD_CRPDN_ADC_MBBLPD_M.xls",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Hypothesis: more oil -> more associated gas -> more flaring. In practice flaring depends on pipeline/processing capacity and regulation.",
+  "method": "Same monthly SNPP metrics vs EIA state crude production (ND; TX+NM).",
+  "results": [
+   {
+    "metric": "Bakken r MoM dlog",
+    "value": 0.231,
+    "n": 172,
+    "note": ""
+   },
+   {
+    "metric": "Bakken r YoY dlog",
+    "value": 0.484,
+    "n": 161,
+    "note": ""
+   },
+   {
+    "metric": "Bakken r log-levels",
+    "value": 0.23,
+    "n": 173,
+    "note": ""
+   },
+   {
+    "metric": "Permian r MoM dlog",
+    "value": -0.011,
+    "n": 172,
+    "note": "zero"
+   },
+   {
+    "metric": "Permian r YoY dlog",
+    "value": 0.332,
+    "n": 161,
+    "note": ""
+   },
+   {
+    "metric": "Permian r deseason+detrend",
+    "value": 0.305,
+    "n": 173,
+    "note": ""
+   }
+  ],
+  "controls": "Differencing and deseasonalising; same pipeline that does track flared volume.",
+  "verdict": "rejected",
+  "known_or_novel": "known",
+  "prior_art": [
+   "https://www.worldbank.org/en/programs/gasflaringreduction"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_bakken_validation.png",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_permian_validation.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/us_validate.py"
+  ],
+  "caveats": "State production is not basin production; YoY correlations of 0.3-0.5 reflect the shared 2014-16 and 2020 cycles, not a usable gauge."
+ },
+ {
+  "id": "cloud_mask_normalisation",
+  "title": "Does clear-sky normalisation rescue the gauge? (tested against a gold label)",
+  "one_liner": "Per-cell clear-sky normalisation barely improves fit to reported flared volume, and the satellite series has a 4-7x seasonal swing that cloud does not explain; strict clear-sky filters are biased because flares themselves lower clear-sky confidence.",
+  "datasets": [
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "NASA GIBS WMS VIIRS night clear-sky confidence (SNPP 2012+, NOAA-20 2018+)",
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?LAYERS=VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+    "access": "keyless (PNG + published colormap)"
+   },
+   {
+    "name": "North Dakota DMR monthly gas produced/sold/flared 1990-2026",
+    "url": "https://www.dmr.nd.gov/oilgas/stats/Gas1990ToPresent.xls",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "Cloud blocks the 4 micron signal, so detections should scale with observation opportunity.",
+  "method": "Nightly SNPP clear-sky-confidence grids (5,297 nights) sampled at active Bakken flare cells; monthly FRP divided by observable fraction (conf>0.05), by strict clear fraction (conf>=0.95), and clear-nights-only; compared to ND DMR flared volume. Gulf: P(detect) by confidence bin at 1,177 persistent NOAA-20 flare cells.",
+  "results": [
+   {
+    "metric": "Bakken r MoM dlog raw -> best normalised",
+    "value": "0.245 -> 0.272",
+    "n": 170,
+    "note": ""
+   },
+   {
+    "metric": "Bakken r deseason+detrend raw -> conf>=0.95 normalised",
+    "value": "0.677 -> 0.718",
+    "n": 170,
+    "note": ""
+   },
+   {
+    "metric": "seasonal amplitude of satellite series (max/min month) raw / normalised / label",
+    "value": "6.7 / 9.6 / 1.18",
+    "n": null,
+    "note": "observable fraction is HIGHER in winter when FRP is lowest, so cloud is not the cause"
+   },
+   {
+    "metric": "Gulf P(detect) at clear-sky conf (-0.01,0.05]",
+    "value": 0.151,
+    "n": null,
+    "note": "share of cell-nights 0.285, mean FRP 1.69 MW"
+   },
+   {
+    "metric": "Gulf P(detect) at clear-sky conf (0.05,0.5]",
+    "value": 0.582,
+    "n": null,
+    "note": "share of cell-nights 0.158, mean FRP 10.16 MW"
+   },
+   {
+    "metric": "Gulf P(detect) at clear-sky conf (0.5,0.9]",
+    "value": 0.563,
+    "n": null,
+    "note": "share of cell-nights 0.241, mean FRP 5.45 MW"
+   },
+   {
+    "metric": "Gulf P(detect) at clear-sky conf (0.9,0.99]",
+    "value": 0.465,
+    "n": null,
+    "note": "share of cell-nights 0.219, mean FRP 1.97 MW"
+   },
+   {
+    "metric": "Gulf P(detect) at clear-sky conf (0.99,1.01]",
+    "value": 0.483,
+    "n": null,
+    "note": "share of cell-nights 0.097, mean FRP 1.49 MW"
+   }
+  ],
+  "controls": "Gold label (ND DMR); same overpass for detections and mask.",
+  "verdict": "rejected",
+  "known_or_novel": "novel (small): the cloud mask is contaminated by the target - detection probability and FRP peak at intermediate confidence, only conf<=0.05 suppresses detection",
+  "prior_art": [],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_cloud_normalised_regions.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/cloud_fetch.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/cloud_fetch_bakken.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/us_cloudnorm.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/cloud_norm.py"
+  ],
+  "caveats": "Cloud mask over snow at night is itself unreliable; cause of the seasonal artifact not identified (candidates: background temperature, summer twilight at 48N, atmospheric transmission). Use YoY or month fixed effects instead."
+ },
+ {
+  "id": "intl_flare_vs_production",
+  "title": "Country-month flare power vs crude production, 16 countries 2012-2024",
+  "one_liner": "Flare power tracks production only where routine associated-gas flaring is heavy and the production move is a collapse (Libya, Yemen, Iran, Iraq); in low-flaring-intensity producers (Saudi, Kuwait, UAE, Qatar, Oman) the correlation is zero.",
+  "datasets": [
+   {
+    "name": "NASA FIRMS country-year archive CSVs (VIIRS SNPP 2012-2024)",
+    "url": "https://firms.modaps.eosdis.nasa.gov/data/country/viirs-snpp/{year}/viirs-snpp_{year}_{Country}.csv",
+    "access": "keyless (2025+ not published; API needs MAP_KEY)"
+   },
+   {
+    "name": "EIA International bulk file (monthly crude+condensate production by country to 2026-05)",
+    "url": "https://www.eia.gov/opendata/bulk/INTL.zip",
+    "access": "keyless bulk (API itself needs a key)"
+   },
+   {
+    "name": "JODI Oil World Database primary CSV",
+    "url": "https://www.jodidata.org/_resources/files/downloads/oil-data/world_primary_csv.zip",
+    "access": "keyless (gaps: Iraq, Qatar, UAE, Libya missing for 2026)"
+   }
+  ],
+  "mechanism": "Routine flaring of associated gas scales with oil lifted; where gas is captured, flares are safety/process flares unrelated to output.",
+  "method": "SNPP night detections in persistent flare cells (>=24 nights, >=180-day span) per country, monthly mean nightly FRP, SNPP outage days removed; vs EIA monthly crude. Quarterly non-overlapping YoY dlog panel; country-cluster bootstrap; mismatched-country placebo; split by flaring intensity (FRP per kb/d, chosen ex ante at 0.25).",
+  "results": [
+   {
+    "metric": "pooled r, quarterly YoY dlog",
+    "value": 0.531,
+    "n": 752,
+    "note": ""
+   },
+   {
+    "metric": "pooled slope (95% CI, country-cluster bootstrap)",
+    "value": "0.405 [0.004, 0.73]",
+    "n": 16,
+    "note": "CI nearly touches zero: a handful of countries carry it"
+   },
+   {
+    "metric": "placebo r (mismatched country), mean / p95",
+    "value": "0.014 / 0.082",
+    "n": 1000,
+    "note": "p=0.0"
+   },
+   {
+    "metric": "high-intensity countries r / leave-one-country-out R2",
+    "value": "0.603 / 0.115",
+    "n": 376,
+    "note": "Libya, Yemen, Iran, Iraq, Venezuela, Algeria, Syria, Turkmenistan"
+   },
+   {
+    "metric": "low-intensity countries r",
+    "value": 0.009,
+    "n": 376,
+    "note": "no information"
+   },
+   {
+    "metric": "Libya r YoY dlog (monthly)",
+    "value": 0.931,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Yemen r YoY dlog (monthly)",
+    "value": 0.776,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Iran r YoY dlog (monthly)",
+    "value": 0.584,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Iraq r YoY dlog (monthly)",
+    "value": 0.407,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Nigeria r YoY dlog (monthly)",
+    "value": 0.147,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Venezuela r YoY dlog (monthly)",
+    "value": 0.049,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Kazakhstan r YoY dlog (monthly)",
+    "value": -0.073,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Algeria r YoY dlog (monthly)",
+    "value": 0.029,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Saudi_Arabia r YoY dlog (monthly)",
+    "value": -0.036,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Kuwait r YoY dlog (monthly)",
+    "value": -0.055,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "United_Arab_Emirates r YoY dlog (monthly)",
+    "value": 0.011,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Qatar r YoY dlog (monthly)",
+    "value": -0.087,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Oman r YoY dlog (monthly)",
+    "value": -0.217,
+    "n": 155,
+    "note": ""
+   },
+   {
+    "metric": "Spearman(country r, flaring intensity) / (country r, production volatility)",
+    "value": "0.218 / 0.638",
+    "n": 16,
+    "note": "label variance explains where it works at least as well as intensity"
+   }
+  ],
+  "controls": "Changes not levels; placebo; clustered bootstrap; leave-one-country-out.",
+  "verdict": "partial",
+  "known_or_novel": "known in outline (World Bank GGFR/Payne use VIIRS for flaring volumes); the production-gauge validity map by country is not something we found published",
+  "prior_art": [
+   "https://www.worldbank.org/en/programs/gasflaringreduction",
+   "https://www.mdpi.com/1996-1073/9/1/14",
+   "https://energynewsbeat.co/crude-oil/iran-appears-to-have-increased-flaring-to-keep-the-oil-and-gas-fields-stable-to-avoid-shut-ins/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_intl_calibration.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fetch_firms_countries.sh",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fetch_firms_rev.sh",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/intl_build.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/intl_validate.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/intl_asymmetry.py"
+  ],
+  "caveats": "FIRMS country files are land-only (offshore flares missing: Nigeria, UAE, Qatar, Angola hurt); Russia and Angola not tested (download size); EIA monthly figures for Venezuela/Syria/Libya are themselves estimates; Syria and Venezuela show production collapse with flat flaring."
+ },
+ {
+  "id": "natural_experiments",
+  "title": "Named natural experiments: does flaring fall when production is knocked out?",
+  "one_liner": "Sustained collapses show up nearly 1:1 (Libya 2020 -89%/-89%, Yemen 2015 -90%/-90%, Iran sanctions -41%/-30%), managed OPEC+ cuts do not, and acute outages at gas-handling-heavy producers make flaring go UP (Abqaiq +122%, Kazakhstan +44%/+305%).",
+  "datasets": [
+   {
+    "name": "NASA FIRMS country-year archive CSVs (VIIRS SNPP 2012-2024)",
+    "url": "https://firms.modaps.eosdis.nasa.gov/data/country/viirs-snpp/{year}/viirs-snpp_{year}_{Country}.csv",
+    "access": "keyless (2025+ not published; API needs MAP_KEY)"
+   },
+   {
+    "name": "EIA International bulk file (monthly crude+condensate production by country to 2026-05)",
+    "url": "https://www.eia.gov/opendata/bulk/INTL.zip",
+    "access": "keyless bulk (API itself needs a key)"
+   }
+  ],
+  "mechanism": "Shut-in wells stop flaring; but when processing/export infrastructure trips while wells keep flowing, gas is diverted to flare.",
+  "method": "21 pre-specified (country, pre-window, event-window) episodes; % change in mean monthly flare FRP vs % change in EIA production.",
+  "results": [
+   {
+    "metric": "episodes with same sign",
+    "value": 0.71,
+    "n": 21,
+    "note": ""
+   },
+   {
+    "metric": "same sign among |dP|>=15%",
+    "value": 0.8,
+    "n": 15,
+    "note": ""
+   },
+   {
+    "metric": "r of log changes",
+    "value": 0.601,
+    "n": 21,
+    "note": ""
+   },
+   {
+    "metric": "Libya 2013 port blockades: production % / flare %",
+    "value": "-72.6 / -46.9",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Libya 2020 Haftar blockade: production % / flare %",
+    "value": "-88.7 / -89.0",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Libya 2014-16 civil war low: production % / flare %",
+    "value": "-71.4 / -47.9",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Saudi_Arabia Abqaiq Sep-2019: production % / flare %",
+    "value": "-13.6 / 122.3",
+    "n": null,
+    "note": "OPPOSITE sign"
+   },
+   {
+    "metric": "Saudi_Arabia OPEC+ cut 2020: production % / flare %",
+    "value": "-15.8 / -7.3",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Iraq OPEC+ cut 2020: production % / flare %",
+    "value": "-14.7 / 44.7",
+    "n": null,
+    "note": "OPPOSITE sign"
+   },
+   {
+    "metric": "Kuwait OPEC+ cut 2020: production % / flare %",
+    "value": "-21.8 / 27.4",
+    "n": null,
+    "note": "OPPOSITE sign"
+   },
+   {
+    "metric": "United_Arab_Emirates OPEC+ cut 2020: production % / flare %",
+    "value": "-23.7 / -2.5",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Kazakhstan OPEC+ cut 2020: production % / flare %",
+    "value": "-15.7 / 304.5",
+    "n": null,
+    "note": "OPPOSITE sign"
+   },
+   {
+    "metric": "Algeria OPEC+ cut 2020: production % / flare %",
+    "value": "-17.0 / -3.8",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Nigeria OPEC+ cut 2020: production % / flare %",
+    "value": "-13.1 / -81.9",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Oman OPEC+ cut 2020: production % / flare %",
+    "value": "-12.3 / -29.8",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Venezuela 2016->2020 collapse: production % / flare %",
+    "value": "-76.6 / -0.7",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Iran 2018-19 sanctions: production % / flare %",
+    "value": "-40.6 / -30.2",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Iran 2012-13 sanctions: production % / flare %",
+    "value": "-15.9 / -19.0",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Iran 2016 sanctions relief: production % / flare %",
+    "value": "32.8 / 70.9",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Kazakhstan Aug-2022 Kashagan/Tengiz outage: production % / flare %",
+    "value": "-12.8 / 43.3",
+    "n": null,
+    "note": "OPPOSITE sign"
+   },
+   {
+    "metric": "Yemen 2015 war: production % / flare %",
+    "value": "-90.0 / -89.6",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Syria 2012->2014 collapse: production % / flare %",
+    "value": "-84.8 / 1.2",
+    "n": null,
+    "note": "OPPOSITE sign"
+   },
+   {
+    "metric": "Nigeria 2016 Niger Delta Avengers: production % / flare %",
+    "value": "-20.1 / -70.1",
+    "n": null,
+    "note": "same sign"
+   },
+   {
+    "metric": "Iraq 2014 ISIS (north lost): production % / flare %",
+    "value": "4.0 / 46.4",
+    "n": null,
+    "note": "same sign"
+   }
+  ],
+  "controls": "Windows fixed before looking at flare data; all episodes reported including failures.",
+  "verdict": "partial",
+  "known_or_novel": "known for Libya/Yemen-type collapses; the sign flip for acute outages is documented anecdotally (Payne 2026: Iran flaring up)",
+  "prior_art": [
+   "https://energynewsbeat.co/crude-oil/iran-appears-to-have-increased-flaring-to-keep-the-oil-and-gas-fields-stable-to-avoid-shut-ins/",
+   "https://www.worldbank.org/en/programs/gasflaringreduction"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_intl_calibration.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/intl_validate.py"
+  ],
+  "caveats": "Short windows are not seasonally controlled; Venezuela (-77% production, flat flaring) and Syria (-85%, flat) are outright failures of the gauge; n=21."
+ },
+ {
+  "id": "calibration_drop_to_production",
+  "title": "Given an X% flare drop sustained for a quarter, what production change does history imply?",
+  "one_liner": "Only flare drops deeper than ~50% carry information (median production -36%, but 10th-90th percentile -88%..+16%); drops of 15-50% imply a median production change of about -1%. The pooled calibration failed out-of-sample on the 2026 war.",
+  "datasets": [
+   {
+    "name": "NASA FIRMS country-year archive CSVs (VIIRS SNPP 2012-2024)",
+    "url": "https://firms.modaps.eosdis.nasa.gov/data/country/viirs-snpp/{year}/viirs-snpp_{year}_{Country}.csv",
+    "access": "keyless (2025+ not published; API needs MAP_KEY)"
+   },
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "EIA International bulk file (monthly crude+condensate production by country to 2026-05)",
+    "url": "https://www.eia.gov/opendata/bulk/INTL.zip",
+    "access": "keyless bulk (API itself needs a key)"
+   }
+  ],
+  "mechanism": "Empirical calibration of d log(production) on d log(flare FRP).",
+  "method": "752 country-quarters (16 countries, 2013-2024) of YoY changes; conditional distributions by flare-change bin; pooled OLS with residual-sd prediction interval; then applied, untouched, to Mar-May 2026 vs Mar-May 2025 for 7 Gulf producers and compared with EIA actuals.",
+  "results": [
+   {
+    "metric": "flare YoY -99%..-50%: median production % (p10..p90)",
+    "value": "-35.7 (-87.8..16.0)",
+    "n": 26,
+    "note": "6 countries; P(prod down>10%)=0.58, P(down>30%)=0.54"
+   },
+   {
+    "metric": "flare YoY -50%..-30%: median production % (p10..p90)",
+    "value": "-1.2 (-31.3..9.5)",
+    "n": 63,
+    "note": "14 countries; P(prod down>10%)=0.27, P(down>30%)=0.11"
+   },
+   {
+    "metric": "flare YoY -30%..-15%: median production % (p10..p90)",
+    "value": "-1.5 (-20.3..8.7)",
+    "n": 118,
+    "note": "16 countries; P(prod down>10%)=0.25, P(down>30%)=0.08"
+   },
+   {
+    "metric": "flare YoY -15%..17%: median production % (p10..p90)",
+    "value": "0.0 (-9.5..9.9)",
+    "n": 371,
+    "note": "16 countries; P(prod down>10%)=0.1, P(down>30%)=0.01"
+   },
+   {
+    "metric": "flare YoY 17%..14741%: median production % (p10..p90)",
+    "value": "1.5 (-10.7..40.4)",
+    "n": 174,
+    "note": "16 countries; P(prod down>10%)=0.11, P(down>30%)=0.04"
+   },
+   {
+    "metric": "pooled slope / resid sd (log points)",
+    "value": "0.405 / 0.277",
+    "n": 752,
+    "note": ""
+   },
+   {
+    "metric": "2026 out-of-sample: actuals inside 80% PI",
+    "value": 0.29,
+    "n": 7,
+    "note": "should be ~0.8"
+   },
+   {
+    "metric": "2026 Spearman(flare change, actual production change)",
+    "value": 0.571,
+    "n": 7,
+    "note": ""
+   },
+   {
+    "metric": "2026 Iraq: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "-64.0 -> -35.0 [-54..-7] vs -67.0",
+    "n": null,
+    "note": "OUTSIDE PI"
+   },
+   {
+    "metric": "2026 Qatar: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "-33.0 -> -16.0 [-41..19] vs -84.0",
+    "n": null,
+    "note": "OUTSIDE PI"
+   },
+   {
+    "metric": "2026 Kuwait: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "-26.0 -> -13.0 [-39..24] vs -70.0",
+    "n": null,
+    "note": "OUTSIDE PI"
+   },
+   {
+    "metric": "2026 Saudi_Arabia: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "62.0 -> 20.0 [-16..71] vs -25.0",
+    "n": null,
+    "note": "OUTSIDE PI"
+   },
+   {
+    "metric": "2026 United_Arab_Emirates: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "471.0 -> 99.0 [40..184] vs -32.0",
+    "n": null,
+    "note": "OUTSIDE PI"
+   },
+   {
+    "metric": "2026 Iran: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "-18.0 -> -9.0 [-36..30] vs -13.0",
+    "n": null,
+    "note": "inside PI"
+   },
+   {
+    "metric": "2026 Oman: flare YoY % -> predicted % [80% PI] vs actual %",
+    "value": "-7.0 -> -5.0 [-33..36] vs 8.0",
+    "n": null,
+    "note": "inside PI"
+   },
+   {
+    "metric": "2026 Iraq with high-intensity-only calibration (exploratory)",
+    "value": "pred -43% [-64..-9] vs actual -67.0%",
+    "n": null,
+    "note": "post-hoc subset, n=2"
+   },
+   {
+    "metric": "2026 Iran with high-intensity-only calibration (exploratory)",
+    "value": "pred -13% [-46..38] vs actual -13.0%",
+    "n": null,
+    "note": "post-hoc subset, n=2"
+   }
+  ],
+  "controls": "Calibration frozen on <=2024 data; 2026 labels (EIA INTL to 2026-05) never used in fitting.",
+  "verdict": "rejected",
+  "known_or_novel": "novel (the negative result and the conditional table)",
+  "prior_art": [
+   "https://energynewsbeat.co/crude-oil/iran-appears-to-have-increased-flaring-to-keep-the-oil-and-gas-fields-stable-to-avoid-shut-ins/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_intl_calibration.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/intl_validate.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/intl_asymmetry.py"
+  ],
+  "caveats": "The deep-drop bin is 26 quarters from 6 countries (mostly Libya and Yemen). Honest product statement: a >50% sustained drop in a heavy-flaring country means a major outage with ~60% probability of >10% production loss; nothing finer."
+ },
+ {
+  "id": "gulf2026_clear_sky_robustness",
+  "title": "2026 Hormuz closure: which regional flare collapses survive clear-sky normalisation?",
+  "one_liner": "Basra (-65% YoY) and Qatar (-53%) survive per-cell clear-sky normalisation with non-overlapping bootstrap intervals; the round-1 drops for Saudi-East and Kuwait were cloud artifacts and vanish.",
+  "datasets": [
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "NASA GIBS WMS VIIRS night clear-sky confidence (SNPP 2012+, NOAA-20 2018+)",
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?LAYERS=VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+    "access": "keyless (PNG + published colormap)"
+   },
+   {
+    "name": "EIA International bulk file (monthly crude+condensate production by country to 2026-05)",
+    "url": "https://www.eia.gov/opendata/bulk/INTL.zip",
+    "access": "keyless bulk (API itself needs a key)"
+   }
+  ],
+  "mechanism": "Iraq had no export route and shut in; Qatar halted LNG; less lifted oil/gas -> less routine flaring.",
+  "method": "NOAA-20 night detections at 1,177 persistent flare cells; per-cell baseline mean FRP on observable nights; index = observed/expected over observable cell-nights only; closure window 4 Mar-8 Apr 2026 vs same weeks 2025 and vs Dec-Feb; weekly block bootstrap; 3 control regions.",
+  "results": [
+   {
+    "metric": "Qatar: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "0.495 [0.37-0.72] vs 1.05 [0.87-1.19]; -53.0%",
+    "n": 19,
+    "note": "raw (unnormalised) YoY -54.0%; observable share 0.36 vs 0.54"
+   },
+   {
+    "metric": "Kuwait: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "0.915 [0.73-1.12] vs 0.806 [0.54-1.36]; 14.0%",
+    "n": 25,
+    "note": "raw (unnormalised) YoY 60.0%; observable share 0.39 vs 0.36"
+   },
+   {
+    "metric": "Iraq-Basra: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "0.357 [0.27-0.46] vs 1.022 [0.80-1.23]; -65.0%",
+    "n": 94,
+    "note": "raw (unnormalised) YoY -78.0%; observable share 0.32 vs 0.5"
+   },
+   {
+    "metric": "Iran-Khuzestan: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "1.184 [0.78-1.56] vs 0.851 [0.71-1.01]; 39.0%",
+    "n": 159,
+    "note": "raw (unnormalised) YoY 57.0%; observable share 0.45 vs 0.43"
+   },
+   {
+    "metric": "Iran-SouthPars/Bushehr: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "1.113 [0.96-1.21] vs 0.943 [0.78-1.11]; 18.0%",
+    "n": 42,
+    "note": "raw (unnormalised) YoY 6.0%; observable share 0.45 vs 0.5"
+   },
+   {
+    "metric": "Saudi-East: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "1.11 [0.87-1.32] vs 0.765 [0.56-0.94]; 45.0%",
+    "n": 80,
+    "note": "raw (unnormalised) YoY 63.0%; observable share 0.35 vs 0.42"
+   },
+   {
+    "metric": "UAE: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "1.542 [0.74-2.46] vs 0.791 [0.61-0.94]; 95.0%",
+    "n": 57,
+    "note": "raw (unnormalised) YoY 105.0%; observable share 0.41 vs 0.47"
+   },
+   {
+    "metric": "CTRL Iraq-Kirkuk/Kurdistan: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "0.904 [0.63-1.15] vs 0.762 [0.62-0.83]; 19.0%",
+    "n": 84,
+    "note": "raw (unnormalised) YoY -2.0%; observable share 0.42 vs 0.44"
+   },
+   {
+    "metric": "CTRL Oman: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "1.073 [0.92-1.31] vs 1.01 [0.83-1.21]; 6.0%",
+    "n": 56,
+    "note": "raw (unnormalised) YoY -7.0%; observable share 0.47 vs 0.41"
+   },
+   {
+    "metric": "CTRL Turkmenistan: closure index [95% CI] vs same weeks 2025 [CI]; YoY %",
+    "value": "0.692 [0.55-0.88] vs 0.845 [0.67-1.07]; -18.0%",
+    "n": 88,
+    "note": "raw (unnormalised) YoY -26.0%; observable share 0.3 vs 0.27"
+   },
+   {
+    "metric": "EIA actual production Mar-May 2026 YoY: Iraq / Qatar / Kuwait / Saudi / UAE",
+    "value": "-67.0 / -84.0 / -70.0 / -25.0 / -32.0",
+    "n": null,
+    "note": "flaring fell only where routine flaring dominates"
+   }
+  ],
+  "controls": "Control regions (Kirkuk, Oman, Turkmenistan); same-weeks-prior-year; observation-opportunity normalisation; block bootstrap.",
+  "verdict": "supported",
+  "known_or_novel": "known (Payne Institute published the regional flaring decline for this war); the clear-sky robustness check and the Saudi/Kuwait correction are ours",
+  "prior_art": [
+   "https://energynewsbeat.co/crude-oil/iran-appears-to-have-increased-flaring-to-keep-the-oil-and-gas-fields-stable-to-avoid-shut-ins/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_cloud_normalised_regions.png",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/flare_proxy_regions.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/cloud_fetch.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/cloud_norm.py",
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/flare_proxy.py"
+  ],
+  "caveats": "March 2026 was cloudier than March 2025 over Basra (observable share 0.32 vs 0.50). One year of baseline only. The normalisation uses conf>0.05 because stricter cuts are biased (see cloud_mask_normalisation)."
+ },
+ {
+  "id": "alarm_latency",
+  "title": "How fast does the flare gauge flag a regional shut-in, and how often does it cry wolf?",
+  "one_liner": "A 7-day clear-sky-normalised alarm fired for Basra 7 days after the war began (10 days for the 14-day window) and stayed on for 84-91% of the closure; controls fired 0-5% of the time; Kuwait, Saudi and UAE never alarmed despite 25-70% production losses.",
+  "datasets": [
+   {
+    "name": "NASA GIBS WMTS vector tiles: VIIRS 375 m thermal anomalies (SNPP/NOAA-20/NOAA-21)",
+    "url": "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_NOAA20_Thermal_Anomalies_375m_All/default/{date}/500m/{z}/{row}/{col}.mvt",
+    "access": "keyless"
+   },
+   {
+    "name": "NASA GIBS WMS VIIRS night clear-sky confidence (SNPP 2012+, NOAA-20 2018+)",
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?LAYERS=VIIRS_NOAA20_Clear_Sky_Confidence_Night",
+    "access": "keyless (PNG + published colormap)"
+   }
+  ],
+  "mechanism": "as above",
+  "method": "Alarm = N-day normalised index below the 2nd percentile of its own Jan 2025-Feb 2026 distribution; count distinct baseline alarm episodes as false alarms.",
+  "results": [
+   {
+    "metric": "CTRL Iraq-Kirkuk/Kurdistan 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "24.0 / 6 / 0.03",
+    "n": null,
+    "note": "threshold 0.47"
+   },
+   {
+    "metric": "CTRL Iraq-Kirkuk/Kurdistan 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "24.0 / 3 / 0.05",
+    "n": null,
+    "note": "threshold 0.57"
+   },
+   {
+    "metric": "CTRL Iraq-Kirkuk/Kurdistan 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 3 / 0.0",
+    "n": null,
+    "note": "threshold 0.67"
+   },
+   {
+    "metric": "CTRL Oman 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 5 / 0.0",
+    "n": null,
+    "note": "threshold 0.48"
+   },
+   {
+    "metric": "CTRL Oman 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 2 / 0.0",
+    "n": null,
+    "note": "threshold 0.54"
+   },
+   {
+    "metric": "CTRL Oman 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 2 / 0.0",
+    "n": null,
+    "note": "threshold 0.66"
+   },
+   {
+    "metric": "Iraq-Basra 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "7.0 / 3 / 0.84",
+    "n": null,
+    "note": "threshold 0.51"
+   },
+   {
+    "metric": "Iraq-Basra 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "10.0 / 4 / 0.91",
+    "n": null,
+    "note": "threshold 0.61"
+   },
+   {
+    "metric": "Iraq-Basra 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "18.0 / 2 / 0.84",
+    "n": null,
+    "note": "threshold 0.68"
+   },
+   {
+    "metric": "Kuwait 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "51.0 / 4 / 0.02",
+    "n": null,
+    "note": "threshold 0.27"
+   },
+   {
+    "metric": "Kuwait 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 2 / 0.0",
+    "n": null,
+    "note": "threshold 0.37"
+   },
+   {
+    "metric": "Kuwait 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 1 / 0.0",
+    "n": null,
+    "note": "threshold 0.46"
+   },
+   {
+    "metric": "Qatar 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "14.0 / 4 / 0.21",
+    "n": null,
+    "note": "threshold 0.51"
+   },
+   {
+    "metric": "Qatar 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "15.0 / 2 / 0.27",
+    "n": null,
+    "note": "threshold 0.61"
+   },
+   {
+    "metric": "Qatar 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "18.0 / 3 / 0.39",
+    "n": null,
+    "note": "threshold 0.7"
+   },
+   {
+    "metric": "Saudi-East 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "57.0 / 3 / 0.02",
+    "n": null,
+    "note": "threshold 0.41"
+   },
+   {
+    "metric": "Saudi-East 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 3 / 0.0",
+    "n": null,
+    "note": "threshold 0.49"
+   },
+   {
+    "metric": "Saudi-East 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 3 / 0.0",
+    "n": null,
+    "note": "threshold 0.51"
+   },
+   {
+    "metric": "UAE 7d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 5 / 0.0",
+    "n": null,
+    "note": "threshold 0.48"
+   },
+   {
+    "metric": "UAE 14d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 6 / 0.0",
+    "n": null,
+    "note": "threshold 0.59"
+   },
+   {
+    "metric": "UAE 28d: days after war start / baseline alarm episodes / share of war days in alarm",
+    "value": "nan / 3 / 0.0",
+    "n": null,
+    "note": "threshold 0.69"
+   }
+  ],
+  "controls": "Threshold set on pre-war data only; control regions.",
+  "verdict": "partial",
+  "known_or_novel": "novel (operational characterisation)",
+  "prior_art": [],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/fig_cloud_normalised_regions.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/wardamage/alarm_latency.py"
+  ],
+  "caveats": "2nd-percentile threshold by construction fires ~2% of baseline days (2-6 episodes in 14 months). The 10 Mar \"6.7 mb/d offline\" headline came 3 days after the first Basra alarm, but prices had already moved (round 1: Brent half-move 6 Mar)."
+ }
+]
