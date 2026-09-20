@@ -1,0 +1,2139 @@
+[
+  {
+    "id": "P2_0",
+    "title": "Weather prices absorb most obvious temperature information",
+    "one_liner": "7/22 tests survive BH; 6 in the predicted direction. 98.8% of threshold crossings were already \u22643\u00a2; remaining next-hour drift averaged 0.078\u00a2, below a 1\u00a2 illustrative cost.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Once a running station extreme rules out a temperature bucket, its YES probability should approach zero; contract-source mismatch and costs constrain the interpretation.",
+    "method": "2,400 sampled events, 25,362 token histories, frozen 22-test family, temporal holdout, 10,000 resamples and full-family BH.",
+    "results": [
+      {
+        "metric": "registered tests",
+        "value": 22,
+        "n": 22,
+        "note": "Includes blocked and insufficient rows as p=1"
+      },
+      {
+        "metric": "BH survivors",
+        "value": 7,
+        "n": 22,
+        "note": "One contradicts its expected direction; diagnostics are not trading edges"
+      },
+      {
+        "metric": "already at or below 3 cents",
+        "value": 0.9876953125,
+        "n": 5120,
+        "note": "Holdout bucket crossings with an initial sampled price; not independent events"
+      },
+      {
+        "metric": "next-hour average decline, cents",
+        "value": 0.07803990122869,
+        "n": 954,
+        "note": "Date-clustered across 110 dates; not captured profit"
+      }
+    ],
+    "controls": "0/11 placebo false positives at p<0.05; source concordance audit, exact local-day/DST handling, strict as-of prices, seven-day block sensitivity.",
+    "verdict": "partial",
+    "known_or_novel": "Dataset-specific replication and source-quality evidence; no novelty or profit claim.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig7_family_overview.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/acquire.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/publish.py"
+    ],
+    "caveats": [
+      "No historical executable spread/depth/fee reconstruction.",
+      "Archived NOAA observations lack first-publication timestamps; 30-minute lag is assumed.",
+      "Several non-weather tests are blocked or underpowered, not measured nulls.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A1",
+    "title": "Station threshold crossing predicts a price decline",
+    "one_liner": "Held-out effect -0.0007804; 95% interval [-0.001338, -0.0002923]; BH q=0.01577 across 22 tests. Expected direction supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "A monotone running extreme rules out a bucket; observations delayed 30 minutes; >=30 independent local dates",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. post-minus-pre price, event mean. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 954,
+        "note": "YES price 60m minus price at station crossing+30m; no conditioning on final winner or initial nonzero price. Reconstructed observation availability; not executable latency."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0157650901576509,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0007803990122869,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0013381930494786,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.0002922625466885,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0007485843784307,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0010403413200238,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "supported",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "YES price 60m minus price at station crossing+30m; no conditioning on final winner or initial nonzero price. Reconstructed observation availability; not executable latency.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A2",
+    "title": "Day-ahead market beats persistence",
+    "one_liner": "Held-out effect -0.02105; 95% interval [-0.02365, -0.01842]; BH q=0.00044 across 22 tests. Expected direction supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Price pools information beyond lagged weather; persistence uses day d-2, the latest complete day at cutoff",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired score difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 943,
+        "note": "Equal-event mean binary Brier difference; paired complete cases. Empirical baseline distributions use early-period data only; persistence observes d-2, forecast uses previous_day3 GFS."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0004399560043995,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0210506677129767,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.023653653166715,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.0184174315976475,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0037542415546962,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0052174380433753,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "supported",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Equal-event mean binary Brier difference; paired complete cases. Empirical baseline distributions use early-period data only; persistence observes d-2, forecast uses previous_day3 GFS.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A3",
+    "title": "Day-ahead market beats seasonal climatology",
+    "one_liner": "Held-out effect -0.02221; 95% interval [-0.02503, -0.01929]; BH q=0.00044 across 22 tests. Expected direction supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Price incorporates forecast innovations; trailing +/-30 calendar-day season window, past dates only, >=30 days",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired score difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 957,
+        "note": "Equal-event mean binary Brier difference; paired complete cases. Empirical baseline distributions use early-period data only; persistence observes d-2, forecast uses previous_day3 GFS."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0004399560043995,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0222084253623723,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0250291787178457,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.0192909068098897,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0040682762062816,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0056538660979501,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "supported",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Equal-event mean binary Brier difference; paired complete cases. Empirical baseline distributions use early-period data only; persistence observes d-2, forecast uses previous_day3 GFS.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A4",
+    "title": "Archived forecast improves on day-ahead market",
+    "one_liner": "Held-out effect 0.01463; 95% interval [0.01202, 0.01712]; BH q=0.00044 across 22 tests. Registered directional claim not supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Every target-day hour at 72h offset precedes the cutoff; early-period residual distribution produces bucket probabilities",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired score difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 943,
+        "note": "Equal-event mean binary Brier difference; paired complete cases. Empirical baseline distributions use early-period data only; persistence observes d-2, forecast uses previous_day3 GFS."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0004399560043995,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": 0.014626699991586,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": 0.0120205907126845,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": 0.0171168187194022,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.003698908482551,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0051405391887168,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "rejected",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Equal-event mean binary Brier difference; paired complete cases. Empirical baseline distributions use early-period data only; persistence observes d-2, forecast uses previous_day3 GFS.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A5",
+    "title": "Open-ended tail buckets are overpriced",
+    "one_liner": "Held-out effect -0.005211; 95% interval [-0.01188, 0.001383]; BH q=0.2921 across 22 tests. Registered directional claim not supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Longshot demand inflates tails; compare within event; calibration uses residuals, not level correlation",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. calibration residual difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 1372,
+        "note": "Within-event open-tail minus finite-bucket outcome-price residual; no level correlation."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.292081902920819,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0052108554305413,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0118795235540843,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": 0.0013826266764761,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.00949524817196,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0131959726943257,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "rejected",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Within-event open-tail minus finite-bucket outcome-price residual; no level correlation.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A6",
+    "title": "Bucket-sum discrepancy subsequently contracts",
+    "one_liner": "Held-out effect -0.003376; 95% interval [-0.006664, -0.0001315]; BH q=0.121 across 22 tests. Registered directional claim not supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Complete partitions should normalize; all buckets must have nonstale histories",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired absolute-error difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 1431,
+        "note": "All bucket histories required within 15m; sums use asynchronous last sampled prices, not simultaneous executable quotes. No arbitrage claim."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.120987901209879,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0033756311478036,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0066644570182724,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.0001315275793484,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0046969702891668,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0065275904915195,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "rejected",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "All bucket histories required within 15m; sums use asynchronous last sampled prices, not simultaneous executable quotes. No arbitrage claim.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A7",
+    "title": "Prices update less overnight",
+    "one_liner": "Held-out effect -0.01019; 95% interval [-0.01209, -0.008221]; BH q=0.00044 across 22 tests. Expected direction supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Trader activity differs by local clock; weather information arrival is a confound",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. within-event volatility difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 1433,
+        "note": "Night 00-06 minus day 12-18 mean absolute hourly change, IANA local time. Information timing confounds activity interpretation."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0004399560043995,
+        "n": 110,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0101855767659849,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0120887164494963,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.0082210865609577,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0027550040615219,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0038287528361773,
+        "n": 110,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "supported",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Night 00-06 minus day 12-18 mean absolute hourly change, IANA local time. Information timing confounds activity interpretation.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A8",
+    "title": "Rounding explains station-settlement mismatch",
+    "one_liner": "Held-out effect -0.163; 95% interval [-0.1735, -0.152]; BH q=0.00044 across 22 tests. Expected direction supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Display precision changes bucket classification; diagnostic only, no causal or trading interpretation",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired error difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 5081,
+        "note": "Source-agreement diagnostic; lower error after rounding is not a price edge. All available matched station events, not just price sample."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0004399560043995,
+        "n": 109,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.1629534366197737,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.1734873866600061,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.1519578253533313,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0150734777732899,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0209482888180058,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "supported",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Source-agreement diagnostic; lower error after rounding is not a price edge. All available matched station events, not just price sample.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_A9",
+    "title": "METAR-only observations better reproduce settlement",
+    "one_liner": "Held-out effect -0.00734; 95% interval [-0.01299, -0.003198]; BH q=0.02074 across 22 tests. Expected direction supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Different observation subsets can change daily extreme; diagnostic, not tradability",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired error difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 5081,
+        "note": "Both observation subsets must have >=18 local hours. Signed effect below zero supports METAR-only advantage; mismatch remains a source-proxy comparison."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.0207407830645506,
+        "n": 109,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0073399029887034,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0129926959303786,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.0031975175391257,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0069622786288498,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0096757911971062,
+        "n": 109,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "supported",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig1_settlement_audit.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig2_weather_calibration.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig3_convergence_distribution.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig4_intraday_cases.png",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig8_forecast_and_bucket_sums.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Both observation subsets must have >=18 local hours. Signed effect below zero supports METAR-only advantage; mismatch remains a source-proxy comparison.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_B1",
+    "title": "Dated news anchors concentrate market movement",
+    "one_liner": "Insufficient: Iran date-only anchors; UTC 24h before/after, no minute lead inference. Other event types have no verified precise anchor panel in this run.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Cached GDELT daily data and team event timeline",
+        "url": "https://www.gdeltproject.org/data.html",
+        "access": "Local cached public data; no DOC API calls"
+      }
+    ],
+    "mechanism": "New information moves beliefs; date-only anchors use UTC day boundaries with no minute lead claims",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. paired absolute-return difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "insufficient",
+        "n": 20,
+        "note": "Iran date-only anchors; UTC 24h before/after, no minute lead inference. Other event types have no verified precise anchor panel in this run."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 20,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": 0.0068002976190476,
+        "n": 20,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0068516369047619,
+        "n": 20,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": 0.0244654241071428,
+        "n": 20,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0228041996118535,
+        "n": 20,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0316920200445751,
+        "n": 20,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig5_belief_clock.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Iran date-only anchors; UTC 24h before/after, no minute lead inference. Other event types have no verified precise anchor panel in this run.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_B2",
+    "title": "News innovations precede market revisions",
+    "one_liner": "Held-out effect -0.0428; 95% interval [-0.1986, 0.1151]; BH q=1 across 22 tests. Registered directional claim not supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Cached GDELT daily data and team event timeline",
+        "url": "https://www.gdeltproject.org/data.html",
+        "access": "Local cached public data; no DOC API calls"
+      }
+    ],
+    "mechanism": "Beliefs absorb news with delay; choose lag on early 60%, max-statistic null across all three",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. first difference news; probability return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 156,
+        "note": "Daily Iran topic changes; sparse source days remain missing. First 60% dates select lag; last 40% score, 7-day block max-stat permutation. Broad YES questions differ in direction; no causal interpretation."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 156,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0428029373235332,
+        "n": 156,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.198610632559843,
+        "n": 156,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": 0.1151149411565083,
+        "n": 156,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.2227314185583201,
+        "n": 156,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.3048124941901347,
+        "n": 156,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "rejected",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig5_belief_clock.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Daily Iran topic changes; sparse source days remain missing. First 60% dates select lag; last 40% score, 7-day block max-stat permutation. Broad YES questions differ in direction; no causal interpretation.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_C1",
+    "title": "Options divergence predicts crypto threshold drift",
+    "one_liner": "Blocked: Public Deribit current option summaries accessible, but no synchronized historical same-strike/same-expiry digital panel acquired. Current snapshot is exploratory only; option settlement and Polymarket definitions differ.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Kalshi public market data",
+        "url": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+        "access": "Keyless GET works; no identical historical panel"
+      },
+      {
+        "name": "Deribit public option summaries",
+        "url": "https://docs.deribit.com/api-reference/market-data/public-get_book_summary_by_currency",
+        "access": "Keyless current snapshot"
+      }
+    ],
+    "mechanism": "Public derivatives and prediction markets price the same terminal threshold; exact expiry/settlement match required",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. probability divergence vs return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "Public Deribit current option summaries accessible, but no synchronized historical same-strike/same-expiry digital panel acquired. Current snapshot is exploratory only; option settlement and Polymarket definitions differ."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig6_cross_venue.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Public Deribit current option summaries accessible, but no synchronized historical same-strike/same-expiry digital panel acquired. Current snapshot is exploratory only; option settlement and Polymarket definitions differ.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_C2",
+    "title": "Cross-venue divergence predicts convergence",
+    "one_liner": "Blocked: Kalshi public market data accessible. Exact payoff, resolution source and timestamp matching required; current NYC weather uses a different thermometer, so it is not an identical contract. No historical matched panel.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Kalshi public market data",
+        "url": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+        "access": "Keyless GET works; no identical historical panel"
+      },
+      {
+        "name": "Deribit public option summaries",
+        "url": "https://docs.deribit.com/api-reference/market-data/public-get_book_summary_by_currency",
+        "access": "Keyless current snapshot"
+      }
+    ],
+    "mechanism": "Identical payoff markets should converge; contract language and timestamp match required",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. gap change. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "Kalshi public market data accessible. Exact payoff, resolution source and timestamp matching required; current NYC weather uses a different thermometer, so it is not an identical contract. No historical matched panel."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig6_cross_venue.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Kalshi public market data accessible. Exact payoff, resolution source and timestamp matching required; current NYC weather uses a different thermometer, so it is not an identical contract. No historical matched panel.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_C3",
+    "title": "Fed futures divergence predicts prediction-market drift",
+    "one_liner": "Blocked: CME FedWatch public page probed; no keyless historical futures-implied decision probability series reconstructed. Current pages cannot be backfilled into historical signals.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Kalshi public market data",
+        "url": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+        "access": "Keyless GET works; no identical historical panel"
+      },
+      {
+        "name": "Deribit public option summaries",
+        "url": "https://docs.deribit.com/api-reference/market-data/public-get_book_summary_by_currency",
+        "access": "Keyless current snapshot"
+      }
+    ],
+    "mechanism": "Same decision reprices across venues; keyless historical futures and contract-matched timestamps required",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. probability divergence vs return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "CME FedWatch public page probed; no keyless historical futures-implied decision probability series reconstructed. Current pages cannot be backfilled into historical signals."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig6_cross_venue.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "CME FedWatch public page probed; no keyless historical futures-implied decision probability series reconstructed. Current pages cannot be backfilled into historical signals.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_D1",
+    "title": "Iran news tone predicts drift",
+    "one_liner": "Held-out effect 0.09118; 95% interval [-0.06641, 0.2443]; BH q=0.5253 across 22 tests. Registered directional claim not supported.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Cached GDELT daily data and team event timeline",
+        "url": "https://www.gdeltproject.org/data.html",
+        "access": "Local cached public data; no DOC API calls"
+      }
+    ],
+    "mechanism": "Tone shocks may leave delayed belief revisions; no direction chosen after observing returns",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. tone first difference and return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "tested",
+        "n": 157,
+        "note": "Daily Iran topic changes; sparse source days remain missing. First 60% dates select lag; last 40% score, 7-day block max-stat permutation. Broad YES questions differ in direction; no causal interpretation."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 0.5253074692530747,
+        "n": 157,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": 0.0911771168846327,
+        "n": 157,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0664123576977102,
+        "n": 157,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": 0.2443285672362838,
+        "n": 157,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.2220311706545867,
+        "n": 157,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.303883529950269,
+        "n": 157,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "rejected",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig5_belief_clock.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Daily Iran topic changes; sparse source days remain missing. First 60% dates select lag; last 40% score, 7-day block max-stat permutation. Broad YES questions differ in direction; no causal interpretation.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_D2",
+    "title": "Crypto news tone predicts drift",
+    "one_liner": "Blocked: Cached GDELT file has country and Gulf-topic aggregates, no crypto tone series. No substitute topic was tested.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Cached GDELT daily data and team event timeline",
+        "url": "https://www.gdeltproject.org/data.html",
+        "access": "Local cached public data; no DOC API calls"
+      }
+    ],
+    "mechanism": "Same fixed tone specification across topics",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. tone first difference and return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "Cached GDELT file has country and Gulf-topic aggregates, no crypto tone series. No substitute topic was tested."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig5_belief_clock.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Cached GDELT file has country and Gulf-topic aggregates, no crypto tone series. No substitute topic was tested.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_D3",
+    "title": "Election news tone predicts drift",
+    "one_liner": "Blocked: Cached GDELT file has no election-specific tone series. Country-wide tone is not an election-tone substitute.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "Cached GDELT daily data and team event timeline",
+        "url": "https://www.gdeltproject.org/data.html",
+        "access": "Local cached public data; no DOC API calls"
+      }
+    ],
+    "mechanism": "Same fixed tone specification across topics",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. tone first difference and return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "Cached GDELT file has no election-specific tone series. Country-wide tone is not an election-tone substitute."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig5_belief_clock.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Cached GDELT file has no election-specific tone series. Country-wide tone is not an election-tone substitute.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_E1",
+    "title": "Weather has lower forecast loss than politics",
+    "one_liner": "Insufficient: Matched calendar dates, mean weather minus politics Brier at scheduled-end minus 24h. Different outcome difficulty and event composition preclude causal category claims.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Physical outcomes may be easier to forecast; descriptive category comparison with composition caveat",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. date-clustered score difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "insufficient",
+        "n": 7,
+        "note": "Matched calendar dates, mean weather minus politics Brier at scheduled-end minus 24h. Different outcome difficulty and event composition preclude causal category claims."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 7,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0293014900278293,
+        "n": 7,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.1688113257575758,
+        "n": 7,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": 0.0565399909941249,
+        "n": 7,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.1924588138694976,
+        "n": 7,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.2674686544901506,
+        "n": 7,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig9_calibration_slices.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Matched calendar dates, mean weather minus politics Brier at scheduled-end minus 24h. Different outcome difficulty and event composition preclude causal category claims.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_E2",
+    "title": "Longshots are overpriced relative to favourites",
+    "one_liner": "Insufficient: Longshot (<=.10) minus favourite (>=.90) calibration residual on same dates, fixed 24h horizon; category and terminal-volume strata descriptive.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      }
+    ],
+    "mechanism": "Replicate favourite-longshot distortion, one fixed horizon; liquidity strata descriptive only",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. calibration residual difference. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "insufficient",
+        "n": 24,
+        "note": "Longshot (<=.10) minus favourite (>=.90) calibration residual on same dates, fixed 24h horizon; category and terminal-volume strata descriptive."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 24,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": -0.0449164688112786,
+        "n": 24,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": -0.0576495396540544,
+        "n": 24,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": -0.032400028931844,
+        "n": 24,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": 0.0187714837148066,
+        "n": 24,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": 0.0260875737049257,
+        "n": 24,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig9_calibration_slices.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Longshot (<=.10) minus favourite (>=.90) calibration residual on same dates, fixed 24h horizon; category and terminal-volume strata descriptive.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_F1",
+    "title": "Gulf flare recovery predicts reopening beliefs",
+    "one_liner": "Insufficient: 553 persistent Gulf cells fixed using 2025 only, avoiding sibling full-history selection. log1p FRP changes delayed 48h after completed observation day; next 1/2/3-day returns. No historical dissemination timestamps; archive revisions and clouds limit interpretation. Only screened Iran/Hormuz reopening/ceasefire/transit questions.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "NASA VIIRS GIBS thermal anomalies",
+        "url": "https://gibs.earthdata.nasa.gov",
+        "access": "Sibling cache read-only; 2025-only hotspot mask for 2026"
+      }
+    ],
+    "mechanism": "Recovery can precede transport normalization; point-in-time source availability and no future hotspot-selection rule required",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. lagged physical change and probability change. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "insufficient",
+        "n": 23,
+        "note": "553 persistent Gulf cells fixed using 2025 only, avoiding sibling full-history selection. log1p FRP changes delayed 48h after completed observation day; next 1/2/3-day returns. No historical dissemination timestamps; archive revisions and clouds limit interpretation. Only screened Iran/Hormuz reopening/ceasefire/transit questions."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 23,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 23,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 23,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 23,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 23,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 23,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig7_family_overview.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "553 persistent Gulf cells fixed using 2025 only, avoiding sibling full-history selection. log1p FRP changes delayed 48h after completed observation day; next 1/2/3-day returns. No historical dissemination timestamps; archive revisions and clouds limit interpretation. Only screened Iran/Hormuz reopening/ceasefire/transit questions.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_F2",
+    "title": "Storm intensification predicts hurricane beliefs",
+    "one_liner": "Blocked: Only two actual weather-hurricane contracts after excluding the Carolina Hurricanes hockey false positive; no validated named-storm/station/landfall alignment with historical wind observations. No arbitrary nearest station substitution.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "NASA VIIRS GIBS thermal anomalies",
+        "url": "https://gibs.earthdata.nasa.gov",
+        "access": "Sibling cache read-only; 2025-only hotspot mask for 2026"
+      }
+    ],
+    "mechanism": "Same named storm and contract geography required",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. wind change vs future price return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "Only two actual weather-hurricane contracts after excluding the Carolina Hurricanes hockey false positive; no validated named-storm/station/landfall alignment with historical wind observations. No arbitrary nearest station substitution."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig7_family_overview.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "Only two actual weather-hurricane contracts after excluding the Carolina Hurricanes hockey false positive; no validated named-storm/station/landfall alignment with historical wind observations. No arbitrary nearest station substitution.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  },
+  {
+    "id": "P2_F3",
+    "title": "Temperature anomaly innovations predict record-heat beliefs",
+    "one_liner": "Blocked: No publication-vintage running global temperature anomaly series; final monthly revisions cannot stand in for an available-at-the-time signal.",
+    "datasets": [
+      {
+        "name": "Polymarket cached Gamma catalogue and CLOB histories",
+        "url": "https://docs.polymarket.com/api-reference/markets/get-prices-history",
+        "access": "Keyless public; cached original responses and normalized Parquet"
+      },
+      {
+        "name": "NOAA GHCNh station archives",
+        "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+        "access": "Keyless official station-year PSV/Parquet"
+      },
+      {
+        "name": "Open-Meteo previous model runs",
+        "url": "https://open-meteo.com/en/docs/previous-runs-api",
+        "access": "Keyless GFS previous_day3, cached"
+      },
+      {
+        "name": "NASA VIIRS GIBS thermal anomalies",
+        "url": "https://gibs.earthdata.nasa.gov",
+        "access": "Sibling cache read-only; 2025-only hotspot mask for 2026"
+      }
+    ],
+    "mechanism": "Publication-vintage temperature estimate required; final revised anomaly is inadmissible",
+    "method": "Frozen prereg.json; SHA256 66078147538650598444da4f25b34006d6231ce55beffbe6fa89665ee17bea26. anomaly change vs future price return. 10,000 resamples; time holdout; BH includes all 22 slots.",
+    "results": [
+      {
+        "metric": "test status",
+        "value": "blocked",
+        "n": 0,
+        "note": "No publication-vintage running global temperature anomaly series; final monthly revisions cannot stand in for an available-at-the-time signal."
+      },
+      {
+        "metric": "BH q, family size 22",
+        "value": 1.0,
+        "n": 0,
+        "note": "Unavailable/insufficient p=1 included in multiplicity denominator."
+      },
+      {
+        "metric": "held-out effect",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% lower",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "95% upper",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "80% power MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      },
+      {
+        "metric": "family-conservative MDE",
+        "value": null,
+        "n": 0,
+        "note": "Missing means not estimable, never a measured zero. Date means equally weighted."
+      }
+    ],
+    "controls": "Date clustering, fixed sign-flip placebos, 7-day block sensitivity for means; max-statistic lag null for correlations; explicit publication timing and source checks.",
+    "verdict": "partial",
+    "known_or_novel": "Replication / source-specific diagnostic; no novelty priority claim. Local station-source mismatch audit adds dataset-specific evidence.",
+    "prior_art": [
+      "https://arxiv.org/abs/2602.19520",
+      "https://arxiv.org/abs/2606.04217"
+    ],
+    "figures": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/figures/fig7_family_overview.png"
+    ],
+    "scripts": [
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/analyze.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/weather_panel.py",
+      "/Users/tomalmog/projects/kingdom/explore/polymarket/statistics.py"
+    ],
+    "caveats": [
+      "No publication-vintage running global temperature anomaly series; final monthly revisions cannot stand in for an available-at-the-time signal.",
+      "Historical bid/ask spread, fees and executable size are not reconstructed. No supported trading-profit claim.",
+      "Final archives are not publication-vintage data; source revision and timestamp uncertainty remain.",
+      "AI-assisted hackathon research, not investment advice."
+    ]
+  }
+]

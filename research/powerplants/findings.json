@@ -1,0 +1,1421 @@
+[
+ {
+  "id": "s2_plume_us_onoff",
+  "title": "Sentinel-2 steam plumes reveal whether a US power plant is running (leave-whole-plants-out)",
+  "one_liner": "On plants the model never saw, a label-free plume detector separates on/off with AUC 0.86 (537 off-scenes, 41 plants) and ranks load with Spearman 0.57.",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   },
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   },
+   {
+    "name": "EIA-860 cooling equipment / plants (PUDL)",
+    "url": "s3://pudl.catalyst.coop/nightly/_core_eia860__cooling_equipment.parquet",
+    "access": "anonymous"
+   },
+   {
+    "name": "OpenStreetMap cooling towers / chimneys via Overpass mirrors",
+    "url": "https://overpass.private.coffee/api/interpreter",
+    "access": "keyless; overpass-api.de returned 406, mirrors worked"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "Wet cooling towers and wet-FGD stacks emit water vapour roughly in proportion to heat rejected; it condenses into a visible white plume whose size depends on load and on ambient temperature/humidity.",
+  "method": "46 US plants chosen from EIA-860 cooling data (26 natural-draft, 15 mechanical-draft, 5 once-through), 3 years of Sentinel-2 (9,276 chips at 20 m, TCI+SCL). Plume = bright whiteness anomaly (vs rolling 30th-percentile clear reference) in connected components attached to OSM cooling-tower/chimney locations; cloud guards: SCL cloud fraction away from source <10%, bright-away <3%, snow <20%, reject >0.8 km2 plumes touching chip border; shadow-displacement feature. Monotone gradient-boosted model on 7 image + 5 weather features, GroupKFold by plant (6 folds). Label = CEMS gross load in the overpass hour / 99.5th pct load.",
+  "results": [
+   {
+    "metric": "on/off AUC, all tower+FGD plants, image+weather model",
+    "value": 0.858,
+    "n": 2590,
+    "note": "537 off scenes; raw plume area/GW AUC 0.814; on/off classifier AUC 0.880"
+   },
+   {
+    "metric": "on/off AUC, natural-draft plants only",
+    "value": 0.893,
+    "n": 1613,
+    "note": "411 off scenes"
+   },
+   {
+    "metric": "average precision for the OFF class (natural-draft)",
+    "value": 0.669,
+    "n": 1613,
+    "note": "off base rate ~25%"
+   },
+   {
+    "metric": "Spearman(model, capacity factor), all / natural-draft",
+    "value": 0.565,
+    "n": 2590,
+    "note": "natural-draft 0.653; on-scenes only 0.377"
+   },
+   {
+    "metric": "load-tercile accuracy",
+    "value": 0.552,
+    "n": 2590,
+    "note": "chance 0.334"
+   },
+   {
+    "metric": "median within-plant Spearman",
+    "value": 0.649,
+    "n": 41,
+    "note": ""
+   },
+   {
+    "metric": "usable scenes after cloud guards",
+    "value": 2590.0,
+    "n": 9276,
+    "note": "~28% of chips; ~21 usable scenes per plant-year"
+   },
+   {
+    "metric": "mechanical-draft plants only: on/off AUC (first-pass model)",
+    "value": 0.721,
+    "n": 987,
+    "note": "much weaker than natural draft"
+   }
+  ],
+  "controls": "Weather-only model (no image): AUC 0.56, Spearman 0.14 -> image carries the signal. Australian air-cooled plants (no towers) give Spearman ~0. Plant-bootstrap CIs in s2_us_bootstrap_ci.json.",
+  "verdict": "supported",
+  "known_or_novel": "known (Climate TRACE / WattTime, Carbon Tracker 2018, Hanna 2021); our label-free OSM-anchored detector + leave-plants-out numbers are an independent replication with public data only",
+  "prior_art": [
+   "https://www.mdpi.com/2072-4292/16/7/1290",
+   "https://www.climatechange.ai/papers/neurips2020/11",
+   "https://github.com/HSG-AIML/RemoteSensingCO2Estimation",
+   "https://carbontracker.org/reports/nowhere-to-hide/"
+  ],
+  "figures": [
+   "figs/montage_gavin_us.png",
+   "figs/s2_summary.png"
+  ],
+  "scripts": [
+   "select_plants.py",
+   "cems_fetch2.py",
+   "s2_extract2.py",
+   "osm_towers.py",
+   "weather_fetch.py",
+   "s2_features.py",
+   "s2_model.py",
+   "s2_model2.py",
+   "s2_montage.py",
+   "s2_summary_fig.py"
+  ],
+  "caveats": "Cloud leakage is reduced, not eliminated (clouds sitting on the towers still pass; the border rule also removes some genuine very large cold-weather plumes). Load level within the ON state is weak (Spearman ~0.38-0.43). Only ~4% of plants worldwide have the required structures. Capacity proxy uses CEMS 99.5th-percentile load (nameplate would be used abroad). Validity rule and model form were refined once after seeing first-pass results (both versions saved: s2_model_results.csv, s2_model_results_v2_before_borderrule.csv)."
+ },
+ {
+  "id": "s2_weather_conditioning",
+  "title": "Ambient weather limits plume visibility; conditioning on it helps a little, normalising by it does not",
+  "one_liner": "On/off AUC is 0.97 below 5 C but 0.67 above 25 C; adding ERA5 weather to the model gains +0.070 Spearman (significant) but an explicit weather-normalised plume index gains nothing.",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   },
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "Plume condensation length scales with how far the exhaust is from saturation after mixing: cold/humid air -> long plumes, hot/dry -> plume evaporates within metres.",
+  "method": "Same held-out predictions as s2_plume_us_onoff, split by ERA5 2 m temperature, dew-point depression and season; paired plant-bootstrap (1000x) of model contrasts.",
+  "results": [
+   {
+    "metric": "AUC raw area, T<5C",
+    "value": 0.966,
+    "n": 207,
+    "note": "49 off"
+   },
+   {
+    "metric": "AUC raw area, 5-15C",
+    "value": 0.886,
+    "n": 749,
+    "note": ""
+   },
+   {
+    "metric": "AUC raw area, 15-25C",
+    "value": 0.745,
+    "n": 980,
+    "note": ""
+   },
+   {
+    "metric": "AUC raw area, >25C",
+    "value": 0.674,
+    "n": 654,
+    "note": ""
+   },
+   {
+    "metric": "AUC image+weather model, >25C",
+    "value": 0.761,
+    "n": 654,
+    "note": "model recovers part of the hot-weather loss"
+   },
+   {
+    "metric": "Spearman gain from weather features (mono GBT)",
+    "value": 0.07,
+    "n": 41,
+    "note": "95% CI 0.032..0.104"
+   },
+   {
+    "metric": "AUC gain from weather features (classifier)",
+    "value": 0.017,
+    "n": 41,
+    "note": "95% CI 0.001..0.036"
+   },
+   {
+    "metric": "Spearman gain of weather-normalised area over raw area",
+    "value": 0.011,
+    "n": 41,
+    "note": "95% CI -0.015..0.037 -> null"
+   }
+  ],
+  "controls": "Weather-only model has almost no skill, so the gain is not load seasonality leaking through weather.",
+  "verdict": "partial",
+  "known_or_novel": "known physics; the quantified split by temperature on held-out plants is a modest addition",
+  "prior_art": [
+   "https://www.mdpi.com/2072-4292/16/7/1290"
+  ],
+  "figures": [
+   "figs/s2_summary.png"
+  ],
+  "scripts": [
+   "s2_model2.py"
+  ],
+  "caveats": "The hypothesis 'a weather-conditioned model should clearly beat raw area' is only weakly supported: the gain is real but small; weather mainly tells you WHEN the method can be trusted."
+ },
+ {
+  "id": "s2_zero_shot_australia",
+  "title": "US-trained plume model applied zero-shot to Australian coal plants, verified against AEMO 5-minute SCADA",
+  "one_liner": "Rank transfers (Spearman 0.45 median, 4/7 tower plants >0.4; air-cooled controls ~0) but level does not (capacity factor biased -0.13) and tercile accuracy is no better than baseline.",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   },
+   {
+    "name": "AEMO NEMWEB MMSDM DISPATCH_UNIT_SCADA (5-min per-unit MW)",
+    "url": "https://nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/",
+    "access": "anonymous HTTPS zip, ~30 MB/month"
+   },
+   {
+    "name": "OpenStreetMap cooling towers / chimneys via Overpass mirrors",
+    "url": "https://overpass.private.coffee/api/interpreter",
+    "access": "keyless; overpass-api.de returned 406, mirrors worked"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   },
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   }
+  ],
+  "mechanism": "Same plume physics; Australia never seen in training; different climate, tower designs, no wet FGD.",
+  "method": "7 Australian plants with wet cooling towers + 3 controls (2 air-cooled, 1 once-through lake-cooled); model trained on all 41 US plants; label = mean plant MW over the 25 min before each Sentinel-2 overpass / 99.5th pct. No Australian data touched the model or any threshold.",
+  "results": [
+   {
+    "metric": "pooled Spearman(model, CF), tower plants",
+    "value": 0.373,
+    "n": 503,
+    "note": "raw area 0.380; before border rule 0.41"
+   },
+   {
+    "metric": "Spearman Bayswater (natural_draft)",
+    "value": 0.45,
+    "n": 91,
+    "note": "MAE CF 0.15, bias -0.05"
+   },
+   {
+    "metric": "Spearman Callide (mixed)",
+    "value": 0.306,
+    "n": 94,
+    "note": "MAE CF 0.18, bias -0.11"
+   },
+   {
+    "metric": "Spearman Eraring (once_through_control)",
+    "value": -0.373,
+    "n": 146,
+    "note": "MAE CF 0.27, bias -0.19"
+   },
+   {
+    "metric": "Spearman Kogan Creek (air_cooled_control)",
+    "value": 0.031,
+    "n": 241,
+    "note": "MAE CF 0.36, bias -0.30"
+   },
+   {
+    "metric": "Spearman Loy Yang (natural_draft)",
+    "value": 0.607,
+    "n": 43,
+    "note": "MAE CF 0.24, bias -0.22"
+   },
+   {
+    "metric": "Spearman Millmerran (air_cooled_control)",
+    "value": -0.032,
+    "n": 105,
+    "note": "MAE CF 0.34, bias -0.33"
+   },
+   {
+    "metric": "Spearman Mt Piper (natural_draft)",
+    "value": 0.613,
+    "n": 76,
+    "note": "MAE CF 0.12, bias +0.04"
+   },
+   {
+    "metric": "Spearman Stanwell (natural_draft)",
+    "value": 0.265,
+    "n": 75,
+    "note": "MAE CF 0.16, bias -0.13"
+   },
+   {
+    "metric": "Spearman Tarong (natural_draft)",
+    "value": 0.169,
+    "n": 76,
+    "note": "MAE CF 0.17, bias -0.15"
+   },
+   {
+    "metric": "Spearman Yallourn (natural_draft)",
+    "value": 0.506,
+    "n": 48,
+    "note": "MAE CF 0.17, bias -0.13"
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Bayswater",
+    "value": 0.807,
+    "n": 46,
+    "note": ""
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Callide",
+    "value": 0.76,
+    "n": 48,
+    "note": ""
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Loy Yang",
+    "value": 0.959,
+    "n": 22,
+    "note": ""
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Mt Piper",
+    "value": 0.953,
+    "n": 38,
+    "note": ""
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Stanwell",
+    "value": 0.648,
+    "n": 38,
+    "note": ""
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Tarong",
+    "value": 0.604,
+    "n": 38,
+    "note": ""
+   },
+   {
+    "metric": "lowest-vs-highest load quartile AUC, Yallourn",
+    "value": 0.826,
+    "n": 24,
+    "note": ""
+   },
+   {
+    "metric": "tercile accuracy (US-defined terciles)",
+    "value": 0.581,
+    "n": 503,
+    "note": "majority baseline 0.638 -> no skill"
+   }
+  ],
+  "controls": "No-tower controls: Kogan Creek +0.03, Millmerran -0.03 (as expected ~0); Eraring -0.37 -- a spurious NEGATIVE correlation at a plant with no plume mechanism (sun-angle/rooftop-solar duck-curve confound), which sets the single-plant noise floor at |rho|~0.3.",
+  "verdict": "partial",
+  "known_or_novel": "Climate TRACE validated on Australia with Australian training data; a strict zero-shot US->Australia test with public data is, as far as we found, not published",
+  "prior_art": [
+   "https://www.mdpi.com/2072-4292/16/7/1290"
+  ],
+  "figures": [
+   "figs/montage_loyyang_au.png",
+   "figs/montage_mtpiper_au.png",
+   "figs/s2_summary.png"
+  ],
+  "scripts": [
+   "aemo_fetch.py",
+   "s2_model2.py",
+   "s2_montage.py"
+  ],
+  "caveats": "Whole-plant OFF essentially never happens in the Australian sample (1 scene), so on/off AUC abroad is untestable; Tarong and Stanwell fail (rho<0.3); only ~500 usable tower-plant scenes; first label-free source finder locked onto ash dams and mines and had to be replaced by OSM tower coordinates."
+ },
+ {
+  "id": "no2_daily_per_plant",
+  "title": "Daily TROPOMI NO2 over a single US power plant barely tracks its reported NOx",
+  "one_liner": "Median per-plant daily r = 0.27 over 58 isolated plants and 3 years; wind rotation and flux scaling do not help; 16 of 58 plants are below TROPOMI's detection limit.",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "NOx from the stack forms an NO2 plume a few TROPOMI pixels long; column enhancement downwind minus upwind should scale with emission rate.",
+  "method": "58 isolated CEMS plants (38 coal, 20 'gas' by EIA-860 dominant capacity; neighbours within 60 km emit <25-35% of own NOx). Daily qa>=0.75 composites on a 0.035 deg CONUS grid, 2023-07..2026-06 (1,096 days). Enhancement = mean of 55x24 km downwind box minus upwind median, ERA5 100 m wind at ~13:30 local; label = CEMS NOx over the 3 h before overpass. Ablations: no rotation, enh*u^a (a=0,0.5,1), 2-9 m/s filter.",
+  "results": [
+   {
+    "metric": "simple disc-annulus, all winds",
+    "value": 0.247,
+    "n": 58,
+    "note": "IQR 0.13-0.35; plant-days 28302"
+   },
+   {
+    "metric": "wind-rotated enh, all winds",
+    "value": 0.238,
+    "n": 58,
+    "note": "IQR 0.13-0.33; plant-days 28302"
+   },
+   {
+    "metric": "wind-rotated flux (enh*u), all winds",
+    "value": 0.172,
+    "n": 58,
+    "note": "IQR 0.09-0.29; plant-days 28302"
+   },
+   {
+    "metric": "wind-rotated enh, 2-9 m/s",
+    "value": 0.271,
+    "n": 58,
+    "note": "IQR 0.16-0.34; plant-days 20884"
+   },
+   {
+    "metric": "wind-rotated flux, 2-9 m/s",
+    "value": 0.212,
+    "n": 58,
+    "note": "IQR 0.13-0.30; plant-days 20884"
+   },
+   {
+    "metric": "pooled daily r vs NOx",
+    "value": 0.389,
+    "n": 20884,
+    "note": ""
+   },
+   {
+    "metric": "pooled daily r vs MW",
+    "value": 0.265,
+    "n": 20884,
+    "note": "NOx is decoupled from generation by SCR/low-NOx burners"
+   },
+   {
+    "metric": "plants passing label-free detectability screen",
+    "value": 42.0,
+    "n": 58,
+    "note": "median CEMS NOx passing 1037 lbs/h vs failing 410 lbs/h (literature detection limit ~240-870 lbs/h)"
+   },
+   {
+    "metric": "daily r, coal vs gas-dominant plants",
+    "value": 0.231,
+    "n": 38,
+    "note": "gas 0.17 (n=20)"
+   }
+  ],
+  "controls": "Same pipeline, same plants, three estimator variants; simple unrotated disc-minus-annulus does as well as the wind-rotated box.",
+  "verdict": "rejected",
+  "known_or_novel": "known (literature reports 40-100% single-overpass error); our null on wind rotation is specific to this crude box estimator",
+  "prior_art": [
+   "https://acp.copernicus.org/articles/26/4405/2026/",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC6853767/",
+   "https://essd.copernicus.org/articles/15/3051/2023/"
+  ],
+  "figures": [
+   "figs/no2_us_calibration.png"
+  ],
+  "scripts": [
+   "s5p_region.py",
+   "no2_index.py",
+   "cems_fetch2.py",
+   "no2_calibrate.py"
+  ],
+  "caveats": "Daily composite mixes orbits; overpass time approximated as 13:30 local solar; no AMF/plume-height correction; 0.035 deg regridded product, not native pixels."
+ },
+ {
+  "id": "no2_30day_calibrated_index",
+  "title": "A 30-day TROPOMI NO2 index per plant, with bands calibrated on held-out US plants",
+  "one_liner": "Leave-plants-out: 30-day index vs 30-day CEMS NOx r = 0.48 (n=1108 windows); a real 30-day outage is caught 45% of the time at 5% false alarms (AUC 0.81).",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "Averaging ~10-20 valid overpasses beats down retrieval/meteorological noise; NO2 lifetime varies with temperature, so a temperature coefficient learned on training plants is applied to test plants.",
+  "method": "42 plants passing the label-free detectability screen. Index = 30-day rolling mean of wind-filtered enhancement / plant long-run mean, divided by exp(b*(T-15)), b learned on training plants (GroupKFold 6). Linear calibration to relative CEMS NOx (30-day all-hours mean / plant mean) with 10-90% residual band from training folds; evaluated on non-overlapping windows of held-out plants. Outage = 30-day NOx <30% of plant normal vs >70%.",
+  "results": [
+   {
+    "metric": "held-out pooled r, raw relative index",
+    "value": 0.439,
+    "n": 1108,
+    "note": ""
+   },
+   {
+    "metric": "held-out pooled r, temperature-corrected",
+    "value": 0.476,
+    "n": 1108,
+    "note": ""
+   },
+   {
+    "metric": "median within-plant r, 14 / 30 / 60-day",
+    "value": 0.42,
+    "n": 42,
+    "note": "14-day 0.43; 60-day 0.53"
+   },
+   {
+    "metric": "80% interval coverage on held-out plants",
+    "value": 0.795,
+    "n": 1108,
+    "note": "mean interval width 0.81 (in units of plant-mean NOx)"
+   },
+   {
+    "metric": "RMSE of relative NOx",
+    "value": 0.391,
+    "n": 1108,
+    "note": "vs sd of truth 0.44"
+   },
+   {
+    "metric": "index value when NOx truly unchanged (10-90%)",
+    "value": 0.566,
+    "n": null,
+    "note": "to 1.54: a single plant must fall below ~0.57 of normal before a change is distinguishable"
+   },
+   {
+    "metric": "temperature coefficient of NO2-per-NOx",
+    "value": -0.022,
+    "n": null,
+    "note": "per deg C; ~-2%/C, i.e. 2x more NO2 per unit NOx at 0 C than at 30 C"
+   },
+   {
+    "metric": "calibration: index in (-5.0, 0.25] -> relative NOx median",
+    "value": 0.47,
+    "n": 56,
+    "note": "10-90%: 0.17-0.93"
+   },
+   {
+    "metric": "calibration: index in (0.25, 0.5] -> relative NOx median",
+    "value": 0.576,
+    "n": 97,
+    "note": "10-90%: 0.26-1.09"
+   },
+   {
+    "metric": "calibration: index in (0.5, 0.75] -> relative NOx median",
+    "value": 0.858,
+    "n": 188,
+    "note": "10-90%: 0.47-1.30"
+   },
+   {
+    "metric": "calibration: index in (0.75, 1.0] -> relative NOx median",
+    "value": 0.978,
+    "n": 245,
+    "note": "10-90%: 0.56-1.41"
+   },
+   {
+    "metric": "calibration: index in (1.0, 1.25] -> relative NOx median",
+    "value": 1.059,
+    "n": 226,
+    "note": "10-90%: 0.72-1.38"
+   },
+   {
+    "metric": "calibration: index in (1.25, 1.5] -> relative NOx median",
+    "value": 1.128,
+    "n": 131,
+    "note": "10-90%: 0.73-1.56"
+   },
+   {
+    "metric": "calibration: index in (1.5, 2.0] -> relative NOx median",
+    "value": 1.239,
+    "n": 135,
+    "note": "10-90%: 0.88-1.80"
+   },
+   {
+    "metric": "calibration: index in (2.0, 9.0] -> relative NOx median",
+    "value": 1.378,
+    "n": 30,
+    "note": "10-90%: 1.04-2.02"
+   },
+   {
+    "metric": "outage detection AUC 14/30/60-day (uncorrected)",
+    "value": 0.776,
+    "n": 147,
+    "note": "14-day 0.76, 60-day 0.75"
+   },
+   {
+    "metric": "outage detection rate at 5% FA, 30-day, temp-corrected",
+    "value": 0.449,
+    "n": 147,
+    "note": "threshold index<0.42 of plant mean"
+   }
+  ],
+  "controls": "Seasonality placebo: the index correlates with THIS year's NOx (median r 0.52) much better than with the same dates one year later/earlier (median r 0.21); actual > lagged at 33/35 plants.",
+  "verdict": "supported",
+  "known_or_novel": "method known (Beirle, Goldberg); the leave-plants-out 'how much does an X move imply, with coverage-checked band, and outage detection power' product is our addition",
+  "prior_art": [
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC6853767/",
+   "https://pubs.acs.org/doi/abs/10.1021/acs.est.9b04488",
+   "https://acp.copernicus.org/articles/26/4405/2026/"
+  ],
+  "figures": [
+   "figs/no2_us_calibration.png"
+  ],
+  "scripts": [
+   "no2_calibrate.py",
+   "no2_placebo.py",
+   "no2_fig.py"
+  ],
+  "caveats": "Bands are wide: index at 50% of normal is consistent with NOx anywhere from ~25% to ~110% of normal. Index does not reach zero in real outages (median 0.48) because of background/neighbour NO2. Detectability thresholds (mean enh >= 2 umol/m2, t >= 8) were set after seeing that undetectable plants destroy the pooled relation. Tracks NOx, not MW (r vs MW ~0.3)."
+ },
+ {
+  "id": "no2_regional_aggregation",
+  "title": "Summing NO2 enhancements over a balancing authority does not generally rescue the weak daily signal",
+  "one_liner": "Median r vs EIA-930 fossil generation across 13 BAs: daily 0.25, weekly 0.23, monthly 0.40 (deseasonalised 0.21); it works only in rural coal-heavy regions (SWPP 0.65, WACM 0.64) and fails in urban ones (PJM 0.06, NYIS -0.21).",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "EIA-930 hourly net generation by energy source (PUDL)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_eia930__hourly_net_generation_by_energy_source.parquet",
+    "access": "anonymous"
+   },
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "Independent per-plant noise should average down across many plants in a region; regional fossil generation is published hourly by EIA-930.",
+  "method": "All CEMS plants with 2024 NOx >= 100 lbs/h (229 plants in 13 BAs with >= 4 plants). Per plant-day: mean NO2 within 15 km minus 50-100 km annulus median; BA index = mean over plants with valid data (>= 50% of plants), temperature-corrected with the plant-level coefficient; compared with EIA-930 coal+gas+oil and coal-only generation at daily/weekly/monthly means; control: remove month-of-year climatology from both series.",
+  "results": [
+   {
+    "metric": "CPLE (4 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.458,
+    "n": 36,
+    "note": "daily 0.30 (n=556), weekly 0.46; raw monthly 0.52; deseasonalised 0.06"
+   },
+   {
+    "metric": "DUK (5 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.479,
+    "n": 34,
+    "note": "daily 0.25 (n=505), weekly 0.43; raw monthly 0.27; deseasonalised -0.15"
+   },
+   {
+    "metric": "ERCO (30 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.044,
+    "n": 35,
+    "note": "daily 0.25 (n=596), weekly 0.13; raw monthly -0.29; deseasonalised 0.55"
+   },
+   {
+    "metric": "FPC (4 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.282,
+    "n": 36,
+    "note": "daily 0.10 (n=620), weekly 0.08; raw monthly -0.18; deseasonalised -0.02"
+   },
+   {
+    "metric": "FPL (5 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.01,
+    "n": 23,
+    "note": "daily 0.01 (n=368), weekly -0.08; raw monthly -0.23; deseasonalised 0.16"
+   },
+   {
+    "metric": "MISO (63 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.416,
+    "n": 31,
+    "note": "daily 0.27 (n=436), weekly 0.23; raw monthly 0.07; deseasonalised 0.56"
+   },
+   {
+    "metric": "NYIS (6 plants) monthly r vs fossil gen, temp-corrected",
+    "value": -0.211,
+    "n": 35,
+    "note": "daily 0.05 (n=493), weekly 0.01; raw monthly -0.32; deseasonalised 0.24"
+   },
+   {
+    "metric": "PACE (7 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.501,
+    "n": 36,
+    "note": "daily 0.41 (n=582), weekly 0.47; raw monthly 0.32; deseasonalised 0.20"
+   },
+   {
+    "metric": "PJM (40 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.058,
+    "n": 29,
+    "note": "daily 0.15 (n=370), weekly 0.04; raw monthly -0.10; deseasonalised 0.30"
+   },
+   {
+    "metric": "SOCO (10 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.005,
+    "n": 32,
+    "note": "daily 0.07 (n=487), weekly 0.06; raw monthly -0.07; deseasonalised 0.45"
+   },
+   {
+    "metric": "SWPP (41 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.653,
+    "n": 36,
+    "note": "daily 0.49 (n=658), weekly 0.55; raw monthly 0.14; deseasonalised 0.21"
+   },
+   {
+    "metric": "TVA (7 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.402,
+    "n": 35,
+    "note": "daily 0.17 (n=473), weekly 0.26; raw monthly 0.29; deseasonalised -0.10"
+   },
+   {
+    "metric": "WACM (7 plants) monthly r vs fossil gen, temp-corrected",
+    "value": 0.641,
+    "n": 33,
+    "note": "daily 0.31 (n=561), weekly 0.41; raw monthly 0.45; deseasonalised 0.55"
+   },
+   {
+    "metric": "median across BAs, coal-only target, monthly",
+    "value": 0.493,
+    "n": 11,
+    "note": "daily 0.25, weekly 0.36, deseasonalised 0.28"
+   }
+  ],
+  "controls": "Deseasonalised monthly correlation; coal-only vs all-fossil target; raw vs temperature-corrected (without the correction the monthly r is ~0 because NO2 lifetime seasonality opposes summer load peaks).",
+  "verdict": "partial",
+  "known_or_novel": "novel as a test against EIA-930 as far as we found; the conclusion (urban NOx swamps power-sector NOx) is unsurprising",
+  "prior_art": [
+   "https://essd.copernicus.org/articles/15/3051/2023/"
+  ],
+  "figures": [],
+  "scripts": [
+   "no2_regional.py"
+  ],
+  "caveats": "No wind rotation at regional scale; traffic/industry NOx is not separated; n=29-36 months per BA so monthly r has CI of roughly +-0.3; BA footprints overlap geographically."
+ },
+ {
+  "id": "no2_war_window_gulf_iran",
+  "title": "NO2 over Iranian and Gulf power-plant sites fell sharply in the 28 Feb-8 Apr 2026 war window -- but so did NO2 over the cities, so it is not a power-plant signal",
+  "one_liner": "Index vs the same weeks of 2025: Iranian plants x0.60 (all 11/11 with placebo p<0.05), Gulf plants x0.79; Iranian cities x0.54, Gulf cities x0.70, far-from-theatre cities x1.26.",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "WRI Global Power Plant Database v1.3",
+    "url": "https://github.com/wri/global-power-plant-database",
+    "access": "keyless CSV; frozen 2021"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   },
+   {
+    "name": "GeoNames cities15000",
+    "url": "https://download.geonames.org/export/dump/cities15000.zip",
+    "access": "keyless"
+   },
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   }
+  ],
+  "mechanism": "Strikes, fuel disruption, evacuation and industrial shutdown reduce combustion of all kinds; TROPOMI sees total NOx within ~10-50 km, not the plant alone.",
+  "method": "41 GPPD sites >= 1 GW hand-checked on Sentinel-2 contact sheet; daily wind-rotated NO2 enhancement 2025-01-01..2026-09-10 from s3://meeo-s5p; index relative to pre-war mean with the US-learned temperature coefficient; war window vs same calendar window 2025, vs prior/following 60 days, and vs all 40-day placebo windows in the pre-war record; US-calibrated implied NOx band; 16 control sites (Iranian, Gulf, and far-from-theatre city centres) run through the identical pipeline. Contamination flags: stronger NO2 peak within 45 km, city >300k within 30 km, other GPPD thermal capacity within 30 km, manual notes (refineries, smelters).",
+  "results": [
+   {
+    "metric": "sites detectable / flagged contaminated / clean+detectable",
+    "value": 39.0,
+    "n": 41,
+    "note": "35 contaminated; only 5 clean (Shirvan, Kazeroon, Shoaiba, Riyadh PP11-12, Shuqaiq)"
+   },
+   {
+    "metric": "Iran plants: median war-window index (1 = pre-war mean)",
+    "value": 0.495,
+    "n": 11,
+    "note": "same window 2025 0.82, prior 60 d 0.89, following 60 d 0.81"
+   },
+   {
+    "metric": "Gulf plants: median war-window index",
+    "value": 0.637,
+    "n": 23,
+    "note": "same window 2025 0.82, following 60 d 0.99; 10 plants with placebo p<0.05"
+   },
+   {
+    "metric": "Iraq plants: median war-window index",
+    "value": 0.457,
+    "n": 5,
+    "note": ""
+   },
+   {
+    "metric": "US-calibrated implied NOx for the median Iranian plant (relative to normal)",
+    "value": 0.787,
+    "n": null,
+    "note": "80% band 0.38-1.19; single-plant no-change band for the index is 0.57-1.54"
+   },
+   {
+    "metric": "CONTROL Iranian city centres war/2025 ratio (median of 7)",
+    "value": 0.537,
+    "n": 7,
+    "note": "Tehran 0.54, Tabriz 0.37, Qom 0.47, Ahvaz 0.50, Mashhad 1.00"
+   },
+   {
+    "metric": "CONTROL Gulf city centres ratio (median of 4)",
+    "value": 0.701,
+    "n": 4,
+    "note": ""
+   },
+   {
+    "metric": "CONTROL far-from-theatre cities ratio (Jeddah, Medina, Muscat, Ashgabat)",
+    "value": 1.259,
+    "n": 4,
+    "note": "no dip -> not a retrieval or seasonal artefact"
+   },
+   {
+    "metric": "June 2025 12-day war: median index, Iranian plants",
+    "value": 1.097,
+    "n": 10,
+    "note": "no dip detectable in a 12-day window"
+   },
+   {
+    "metric": "Erbil Gas (IRQ) war index",
+    "value": 0.178,
+    "n": 8,
+    "note": "2025 same window 1.05; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Damavand CC (IRN) war index",
+    "value": 0.294,
+    "n": 11,
+    "note": "2025 same window 0.33; placebo p 0.03; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Kazeroon CC (IRN) war index",
+    "value": 0.294,
+    "n": 11,
+    "note": "2025 same window 0.96; placebo p 0.00; clean"
+   },
+   {
+    "metric": "Sabiya (KWT) war index",
+    "value": 0.313,
+    "n": 17,
+    "note": "2025 same window 0.90; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Riyadh PP10 (SAU) war index",
+    "value": 0.32,
+    "n": 19,
+    "note": "2025 same window 0.42; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Shatt Al-Basra (IRQ) war index",
+    "value": 0.335,
+    "n": 19,
+    "note": "2025 same window 0.69; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Al Dur (BHR) war index",
+    "value": 0.345,
+    "n": 17,
+    "note": "2025 same window 1.14; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Mesaieed+Qatalum (QAT) war index",
+    "value": 0.351,
+    "n": 16,
+    "note": "2025 same window 1.03; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Qassim Central (SAU) war index",
+    "value": 0.366,
+    "n": 22,
+    "note": "2025 same window 0.32; placebo p 0.10; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Kerman CC (IRN) war index",
+    "value": 0.447,
+    "n": 16,
+    "note": "2025 same window 0.82; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Neka (Shahid Salimi) (IRN) war index",
+    "value": 0.45,
+    "n": 11,
+    "note": "2025 same window 0.67; placebo p 0.00; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   },
+   {
+    "metric": "Az Zour S+N (KWT) war index",
+    "value": 0.456,
+    "n": 19,
+    "note": "2025 same window 0.69; placebo p 0.08; CONTAMINATED: <Flags(allows_duplicate_labels=True)>"
+   }
+  ],
+  "controls": "Same-calendar-window 2025; placebo windows; city-centre and far-site controls through the identical pipeline; US no-change band.",
+  "verdict": "partial",
+  "known_or_novel": "novel for this event as far as we found (we did not find published TROPOMI analyses of the 2026 war); the COVID-lockdown NO2 literature is the obvious analogue",
+  "prior_art": [
+   "https://www.iranintl.com/en/202606115946",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC6853767/"
+  ],
+  "figures": [
+   "figs/foreign_no2_index.png",
+   "figs/contact_foreign.png"
+  ],
+  "scripts": [
+   "s5p_region.py",
+   "no2_index.py",
+   "no2_foreign.py",
+   "no2_controls.py",
+   "s2_contact.py",
+   "weather_fetch.py"
+  ],
+  "caveats": "WHAT WE CAN SAY: a theatre-wide 30-50% drop in NO2 near large combustion sites during the war window, recovering by May-June in the Gulf and only partly in Iran. WHAT WE CANNOT SAY: that any individual power plant reduced output -- 35 of 39 detectable sites share their TROPOMI footprint with a city, refinery, smelter or another plant, and city centres fell as much as plant sites. Only 8-25 valid days per site in the window. Placebo distribution has ~40 overlapping windows from a single pre-war year. GPPD coordinates are off by 1-3 km at several sites (Qurayyah, Faras) and unverifiable at 3 (Al-Anbar, Al-Shemal, Jazan)."
+ },
+ {
+  "id": "s2_iran_winter_plumes",
+  "title": "Sentinel-2 stack plumes at Iranian/Iraqi plants: the visible ones kept running through the 2026 war window",
+  "one_liner": "6 of 17 plants show plumes in >50% of cold-weather scenes (Shahid Rajaee 0.92, Montazeri, Shazand, Ramin, Mussaib, Al-Anbar); in the war window their plume rate was 0.79 vs 0.46 a year earlier -- no detectable shutdown, n=5-9 scenes each.",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   },
+   {
+    "name": "OpenStreetMap cooling towers / chimneys via Overpass mirrors",
+    "url": "https://overpass.private.coffee/api/interpreter",
+    "access": "keyless; overpass-api.de returned 406, mirrors worked"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   },
+   {
+    "name": "WRI Global Power Plant Database v1.3",
+    "url": "https://github.com/wri/global-power-plant-database",
+    "access": "keyless CSV; frozen 2021"
+   }
+  ],
+  "mechanism": "Iranian plateau plants use dry (Heller) cooling towers, so the visible plume is flue gas from the stacks condensing in cold air (reportedly with heavy-fuel-oil firing in winter); presence of a plume means the unit is firing.",
+  "method": "Same label-free plume detector anchored on OSM chimneys/towers, 12 Iranian + 5 Iraqi plants, 2024-10..2026-09 (3,337 chips); plume present = attached bright area > 0.01 km2; war window vs same window 2025 with ERA5 temperature; Mann-Whitney on plume area.",
+  "results": [
+   {
+    "metric": "IRN_MONTAZERI: plume rate war window",
+    "value": 0.857,
+    "n": 7,
+    "note": "same window 2025 0.43 (n=7); T war 13C vs 14C; MWU p=0.65"
+   },
+   {
+    "metric": "IRN_RAJAEE: plume rate war window",
+    "value": 1.0,
+    "n": 5,
+    "note": "same window 2025 0.71 (n=7); T war 10C vs 14C; MWU p=0.88"
+   },
+   {
+    "metric": "IRN_RAMIN: plume rate war window",
+    "value": 0.286,
+    "n": 7,
+    "note": "same window 2025 0.00 (n=5); T war 20C vs 18C; MWU p=0.09"
+   },
+   {
+    "metric": "IRN_SHAZAND: plume rate war window",
+    "value": 0.8,
+    "n": 5,
+    "note": "same window 2025 0.50 (n=6); T war 9C vs 14C; MWU p=0.12"
+   },
+   {
+    "metric": "IRQ_ANBAR: plume rate war window",
+    "value": 0.5,
+    "n": 6,
+    "note": "same window 2025 0.00 (n=3)"
+   },
+   {
+    "metric": "IRQ_MUSSAIB: plume rate war window",
+    "value": 0.778,
+    "n": 9,
+    "note": "same window 2025 0.86 (n=7); T war 19C vs 22C; MWU p=0.43"
+   },
+   {
+    "metric": "plants with essentially no visible plume (gas CCGT / hot sites)",
+    "value": 5.0,
+    "n": 17,
+    "note": "Kerman, Fars, Damavand, Kazeroon, Aliabad: method blind"
+   }
+  ],
+  "controls": "Same calendar window one year earlier with temperature recorded (war window was 2-5 C colder, which by itself favours plume visibility).",
+  "verdict": "partial",
+  "known_or_novel": "novel application; no ground truth",
+  "prior_art": [
+   "https://www.mdpi.com/2072-4292/16/7/1290"
+  ],
+  "figures": [
+   "figs/iran_s2_plume_index.png",
+   "s2_foreign_montage.png"
+  ],
+  "scripts": [
+   "s2_extract2.py",
+   "osm_towers.py",
+   "s2_features.py",
+   "s2_iran.py"
+  ],
+  "caveats": "No labels anywhere: this is on/off evidence only, for ~6 plants, with 5-9 clear scenes each in the window. Montazeri shows a constant ~0.04 km2 'plume' in summer that is a ground artefact. The US-trained load model was NOT applied here because stack plumes from dry-cooled oil/gas units are outside its training distribution."
+ },
+ {
+  "id": "so2_fuel_discrimination",
+  "title": "TROPOMI SO2 separates oil-burning from gas-burning plants in the Gulf/Iran/Iraq",
+  "one_liner": "SO2 plume t-statistic: median 13.9 at GPPD 'Oil' plants vs 1.1 at 'Gas' plants; AUC 0.95 (14 vs 27). Shahid Rajaee, listed as gas, shows a strong SO2 plume.",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "WRI Global Power Plant Database v1.3",
+    "url": "https://github.com/wri/global-power-plant-database",
+    "access": "keyless CSV; frozen 2021"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "Heavy fuel oil / crude burned without FGD emits percent-level sulphur; pipeline gas emits almost none.",
+  "method": "Same wind-rotated box estimator on the L2 SO2 total vertical column COGs (qa>=0.5), 2025-01..2026-09, ~530 valid days per site; t = mean/SE of daily enhancement; label = GPPD primary_fuel.",
+  "results": [
+   {
+    "metric": "AUC, SO2 t-stat, Oil vs Gas",
+    "value": 0.947,
+    "n": 41,
+    "note": ""
+   },
+   {
+    "metric": "AUC, NO2 t-stat, Oil vs Gas (control)",
+    "value": 0.696,
+    "n": 41,
+    "note": "NO2 does not discriminate fuel nearly as well"
+   },
+   {
+    "metric": "plants with SO2 t > 5",
+    "value": 19.0,
+    "n": 41,
+    "note": ""
+   },
+   {
+    "metric": "Shahid Rajaee (GPPD: Gas) SO2 t-stat",
+    "value": 13.626,
+    "n": null,
+    "note": "consistent with liquid-fuel firing; also visible dark stack plumes in Sentinel-2"
+   },
+   {
+    "metric": "Iranian oil/dual-fuel plants: winter (DJF) vs summer (JJA) SO2 enhancement, median ratio",
+    "value": 1.942,
+    "n": 5,
+    "note": "CONFOUNDED: SO2 lifetime is also ~2x longer in winter"
+   },
+   {
+    "metric": "SO2-detectable plants: war window / same window 2025",
+    "value": 0.823,
+    "n": 19,
+    "note": ""
+   }
+  ],
+  "controls": "NO2 t-stat as a control discriminator; gas plants as the negative class.",
+  "verdict": "supported",
+  "known_or_novel": "known that TROPOMI sees Gulf oil-fired plants (Fioletov SO2 catalogue); fuel-label AUC on a plant list is a small addition (catalogue reference not re-checked this round)",
+  "prior_art": [],
+  "figures": [],
+  "scripts": [
+   "no2_index.py",
+   "so2_analysis.py",
+   "no2_foreign.py"
+  ],
+  "caveats": "GPPD fuel labels are 2021-vintage and dual-fuel plants are common; refineries next to several 'oil' plants (Rabigh, Montazeri, Shazand) also emit SO2; no US test possible because US plants are scrubbed."
+ },
+ {
+  "id": "no2_index_australia",
+  "title": "The 30-day NO2 index also tracks Australian plant output (AEMO), with the same modest skill as in the US",
+  "one_liner": "Median r between the 30-day index and 30-day mean MW = 0.44 across 10 plants (range -0.09 to 0.87); daily r median 0.31.",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "AEMO NEMWEB MMSDM DISPATCH_UNIT_SCADA (5-min per-unit MW)",
+    "url": "https://nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/",
+    "access": "anonymous HTTPS zip, ~30 MB/month"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   }
+  ],
+  "mechanism": "Australian coal units have no SCR, so NOx should follow generation more closely than in the US.",
+  "method": "Same estimator and US-learned temperature coefficient, Australia grid 2024-07..2026-06; label = AEMO plant MW (daily mean; 11-13h AEST for daily test); one value per 30-day block.",
+  "results": [
+   {
+    "metric": "AU_BAYSWATER 30-day r",
+    "value": 0.357,
+    "n": 18,
+    "note": "daily r 0.32 (n=188); CV of 30-day MW 0.13"
+   },
+   {
+    "metric": "AU_CALLIDE 30-day r",
+    "value": 0.783,
+    "n": 19,
+    "note": "daily r 0.33 (n=232); CV of 30-day MW 0.30"
+   },
+   {
+    "metric": "AU_ERARING 30-day r",
+    "value": 0.519,
+    "n": 19,
+    "note": "daily r 0.22 (n=212); CV of 30-day MW 0.16"
+   },
+   {
+    "metric": "AU_KOGAN 30-day r",
+    "value": 0.31,
+    "n": 23,
+    "note": "daily r 0.29 (n=289); CV of 30-day MW 0.22"
+   },
+   {
+    "metric": "AU_LOYYANG 30-day r",
+    "value": 0.715,
+    "n": 12,
+    "note": "daily r 0.45 (n=143); CV of 30-day MW 0.10"
+   },
+   {
+    "metric": "AU_MILLMERRAN 30-day r",
+    "value": 0.343,
+    "n": 24,
+    "note": "daily r 0.23 (n=271); CV of 30-day MW 0.14"
+   },
+   {
+    "metric": "AU_MTPIPER 30-day r",
+    "value": 0.689,
+    "n": 17,
+    "note": "daily r 0.38 (n=168); CV of 30-day MW 0.20"
+   },
+   {
+    "metric": "AU_STANWELL 30-day r",
+    "value": 0.87,
+    "n": 23,
+    "note": "daily r 0.29 (n=252); CV of 30-day MW 0.13"
+   },
+   {
+    "metric": "AU_TARONG 30-day r",
+    "value": -0.094,
+    "n": 19,
+    "note": "daily r 0.26 (n=218); CV of 30-day MW 0.14"
+   },
+   {
+    "metric": "AU_YALLOURN 30-day r",
+    "value": 0.331,
+    "n": 12,
+    "note": "daily r 0.41 (n=149); CV of 30-day MW 0.15"
+   }
+  ],
+  "controls": "None beyond the US seasonality placebo; Australian load and NO2 lifetime both peak in winter, so part of r may be seasonal.",
+  "verdict": "partial",
+  "known_or_novel": "novel as a check; small n",
+  "prior_art": [],
+  "figures": [],
+  "scripts": [
+   "no2_au.py"
+  ],
+  "caveats": "12-24 independent windows per plant (95% CI on r roughly +-0.4); Tarong again fails (r=-0.09); Loy Yang and Yallourn share a TROPOMI footprint; Eraring sits next to Newcastle/Vales Point."
+ },
+ {
+  "id": "orphan_nox_sources",
+  "title": "Persistent NO2 hot spots with no (or token) entry in the WRI plant database: Indonesian nickel parks and Iranian industrial zones",
+  "one_liner": "Sulawesi/Halmahera box: 8 hot spots, 4 with zero GPPD capacity within 25 km; Morowali is the brightest at 98 umol/m2 -- several times the enhancement of any US plant in our sample (box-mean max 20 umol/m2; metrics not identical) -- against 280 MW listed.",
+  "datasets": [
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "WRI Global Power Plant Database v1.3",
+    "url": "https://github.com/wri/global-power-plant-database",
+    "access": "keyless CSV; frozen 2021"
+   },
+   {
+    "name": "GeoNames cities15000",
+    "url": "https://download.geonames.org/export/dump/cities15000.zip",
+    "access": "keyless"
+   },
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   }
+  ],
+  "mechanism": "Captive coal plants and smelters built after ~2018 are missing from the 2021-frozen GPPD but emit NOx continuously.",
+  "method": "12-month (IDN) / 20-month (Middle East) mean NO2 on 0.035 deg grid minus 120-km median background; local maxima with enhancement > 6 umol/m2 and t > 5; matched to GPPD thermal plants within 25 km and GeoNames cities > 100k within 30 km; top candidates eyeballed on Sentinel-2.",
+  "results": [
+   {
+    "metric": "IDN hot spot -2.83,122.15",
+    "value": 98.2,
+    "n": 51,
+    "note": "GPPD MW within 25 km: 280; city: none"
+   },
+   {
+    "metric": "IDN hot spot -2.02,121.41",
+    "value": 37.0,
+    "n": 153,
+    "note": "GPPD MW within 25 km: 0; city: none"
+   },
+   {
+    "metric": "IDN hot spot 0.46,127.99",
+    "value": 33.0,
+    "n": 63,
+    "note": "GPPD MW within 25 km: 0; city: none"
+   },
+   {
+    "metric": "IDN hot spot -3.88,122.43",
+    "value": 25.8,
+    "n": 104,
+    "note": "GPPD MW within 25 km: 0; city: Kendari(351k)"
+   },
+   {
+    "metric": "IDN hot spot -5.14,119.52",
+    "value": 20.7,
+    "n": 135,
+    "note": "GPPD MW within 25 km: 513; city: Makassar(1474k)"
+   },
+   {
+    "metric": "IDN hot spot -2.27,121.73",
+    "value": 19.0,
+    "n": 133,
+    "note": "GPPD MW within 25 km: 0; city: none"
+   },
+   {
+    "metric": "IDN hot spot -1.53,127.47",
+    "value": 8.5,
+    "n": 54,
+    "note": "GPPD MW within 25 km: 0; city: none"
+   },
+   {
+    "metric": "IDN sites where Sentinel-2 shows a large industrial complex at the hot spot",
+    "value": 4.0,
+    "n": 5,
+    "note": "Morowali (-2.83,122.15), Weda Bay (0.46,127.99), -2.02/121.41 (N. Morowali), Kendari-Morosi (-3.88,122.43); -2.27/121.73 unclear"
+   },
+   {
+    "metric": "Middle East orphan hot spots (no GPPD plant, no city>100k)",
+    "value": 122.0,
+    "n": 367,
+    "note": "top: 27.73N 52.18E (Asaluyeh/South Pars coast, 124 umol/m2), 29.13N 55.37E (Sirjan mining/steel complex), 32.35N 53.76E; first three show industrial complexes in Sentinel-2, next three unverified"
+   }
+  ],
+  "controls": "City filter; GPPD match; visual check.",
+  "verdict": "partial",
+  "known_or_novel": "known to specialists (CREA/GEM track Indonesian captive coal); the automatic keyless screen is ours",
+  "prior_art": [
+   "https://globalenergymonitor.org/projects/global-coal-plant-tracker/"
+  ],
+  "figures": [
+   "orphans_idn.png",
+   "figs/orphans_idn_s2.png",
+   "orphans_me.png",
+   "figs/orphans_me_s2.png"
+  ],
+  "scripts": [
+   "no2_orphans.py",
+   "s2_contact.py"
+  ],
+  "caveats": "Site identities (IMIP, IWIP, GNI, VDNI, South Pars, Gol Gohar) are the author's belief from location, NOT verified against a dataset. 122 Middle-East 'orphans' are mostly oil/gas fields, cement and towns under 100k -- a long speculative list; only the top 3 were looked at. Tropical cloud leaves 50-150 valid days/yr."
+ },
+ {
+  "id": "label_free_source_finder",
+  "title": "Finding the plume source without any map (recurring-bright-anomaly hot spot) does not work",
+  "one_liner": "The unsupervised source locator locked onto ash dams, mine faces and coal piles at 6 of 8 Australian plants; OSM cooling-tower/chimney coordinates were required.",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   },
+   {
+    "name": "OpenStreetMap cooling towers / chimneys via Overpass mirrors",
+    "url": "https://overpass.private.coffee/api/interpreter",
+    "access": "keyless; overpass-api.de returned 406, mirrors worked"
+   }
+  ],
+  "mechanism": "Anything whose brightness changes often looks like a plume source to a frequency map.",
+  "method": "Frequency map of bright whiteness anomalies across clear scenes; visual audit on 8 Australian plants (figs/debug_au.png).",
+  "results": [
+   {
+    "metric": "plants where the auto-located source was the cooling towers",
+    "value": 2.0,
+    "n": 8,
+    "note": "Yallourn, partly Loy Yang"
+   },
+   {
+    "metric": "plants (of 73) with OSM cooling towers or chimneys mapped",
+    "value": 72.0,
+    "n": 73,
+    "note": "only Al-Anbar (Iraq) had neither"
+   }
+  ],
+  "controls": "Visual audit.",
+  "verdict": "rejected",
+  "known_or_novel": "novel negative result",
+  "prior_art": [],
+  "figures": [
+   "figs/debug_au.png"
+  ],
+  "scripts": [
+   "s2_features.py",
+   "s2_debug_fig.py"
+  ],
+  "caveats": "The fallback is still used for mechanical-draft towers (not mapped in OSM) restricted to 800 m around mapped chimneys, which is probably why mechanical-draft results are poor."
+ },
+ {
+  "id": "keyless_data_access",
+  "title": "Everything needed is reachable anonymously, but two 'obvious' hosts are not",
+  "one_liner": "CEMS (PUDL S3), TROPOMI NO2/SO2 COGs (meeo-s5p), Sentinel-2 COGs (Earth Search), AEMO 5-min SCADA, ERA5 via Open-Meteo, OSM via Overpass mirrors, GPPD and GeoNames all worked without accounts; Copernicus Data Space assets, usgs-landsat, Earth Engine and Earthdata do not.",
+  "datasets": [
+   {
+    "name": "EPA CEMS hourly (PUDL core_epacems__hourly_emissions)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_epacems__hourly_emissions.parquet",
+    "access": "anonymous S3/HTTPS, duckdb predicate pushdown; data through 2026-06-30"
+   },
+   {
+    "name": "EIA-860 cooling equipment / plants (PUDL)",
+    "url": "s3://pudl.catalyst.coop/nightly/_core_eia860__cooling_equipment.parquet",
+    "access": "anonymous"
+   },
+   {
+    "name": "EIA-930 hourly net generation by energy source (PUDL)",
+    "url": "s3://pudl.catalyst.coop/nightly/core_eia930__hourly_net_generation_by_energy_source.parquet",
+    "access": "anonymous"
+   },
+   {
+    "name": "Sentinel-2 L2A COGs (TCI + SCL)",
+    "url": "https://earth-search.aws.element84.com/v1 -> s3://sentinel-cogs",
+    "access": "anonymous STAC + HTTPS range reads"
+   },
+   {
+    "name": "Sentinel-5P TROPOMI NO2/SO2 L2 as COGs (MEEO)",
+    "url": "s3://meeo-s5p/COGT/OFFL/",
+    "access": "anonymous S3, windowed COG reads"
+   },
+   {
+    "name": "AEMO NEMWEB MMSDM DISPATCH_UNIT_SCADA (5-min per-unit MW)",
+    "url": "https://nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/",
+    "access": "anonymous HTTPS zip, ~30 MB/month"
+   },
+   {
+    "name": "ERA5 hourly weather via Open-Meteo archive API",
+    "url": "https://archive-api.open-meteo.com/v1/archive",
+    "access": "keyless; hourly rate limit hit once (HTTP 429)"
+   },
+   {
+    "name": "OpenStreetMap cooling towers / chimneys via Overpass mirrors",
+    "url": "https://overpass.private.coffee/api/interpreter",
+    "access": "keyless; overpass-api.de returned 406, mirrors worked"
+   },
+   {
+    "name": "WRI Global Power Plant Database v1.3",
+    "url": "https://github.com/wri/global-power-plant-database",
+    "access": "keyless CSV; frozen 2021"
+   },
+   {
+    "name": "GeoNames cities15000",
+    "url": "https://download.geonames.org/export/dump/cities15000.zip",
+    "access": "keyless"
+   }
+  ],
+  "mechanism": "n/a",
+  "method": "Every source was exercised by the scripts in this directory from a laptop.",
+  "results": [
+   {
+    "metric": "TROPOMI CONUS daily composites, 36 months",
+    "value": 1096.0,
+    "n": null,
+    "note": "~0.5 GB streamed and ~70 s per month when uncontended; 1.1 GB stored as float16"
+   },
+   {
+    "metric": "Sentinel-2 chips extracted (TCI+SCL, 20 m, 4 km)",
+    "value": 14969,
+    "n": null,
+    "note": "~1 chip/s per plant thread; 10 m single bands were 10x slower because COG blocks are 1024 px"
+   },
+   {
+    "metric": "AEMO months downloaded",
+    "value": 37.0,
+    "n": null,
+    "note": "~30 MB each, file naming changed mid-2024"
+   },
+   {
+    "metric": "CEMS remote query, 46-58 plants x 3.5 yr",
+    "value": 1000.0,
+    "n": null,
+    "note": "seconds; whole-US 2024 aggregate ~10 min"
+   }
+  ],
+  "controls": "n/a",
+  "verdict": "supported",
+  "known_or_novel": "known",
+  "prior_art": [],
+  "figures": [],
+  "scripts": [
+   "s5p_region.py",
+   "s2_extract2.py",
+   "aemo_fetch.py",
+   "cems_fetch2.py",
+   "weather_fetch.py",
+   "osm_towers.py"
+  ],
+  "caveats": "Open-Meteo hourly rate limit was hit once (resumable fetcher added); overpass-api.de returned HTTP 406, two mirrors worked; Taipower and India NPP were NOT tested this round; roughly 50-70 GB was streamed in total (estimate, not metered)."
+ }
+]

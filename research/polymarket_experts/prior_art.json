@@ -1,0 +1,41 @@
+[
+  {
+    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6617059",
+    "title": "Gomez-Cram et al., Prediction Market Accuracy: Crowd Wisdom or Informed Minority?",
+    "date": "2026-06-25 revision",
+    "read_scope": "Public abstract; not a full-paper replication",
+    "relevance": "Prior research reports persistent skill concentrated in a minority; smart-money hypothesis is not novel."
+  },
+  {
+    "url": "https://hashdive.com/",
+    "title": "Hashdive",
+    "read_scope": "Public product description",
+    "relevance": "Historical-performance smart scores and wallet analytics already exist; product claims are not validation."
+  },
+  {
+    "url": "https://www.polytrackhq.app/",
+    "title": "PolyTrack",
+    "read_scope": "Public product description only; no login or wallet",
+    "relevance": "Whale monitoring and leaderboard following already commercialized."
+  },
+  {
+    "url": "https://predictionpro.app/",
+    "title": "Prediction Pro",
+    "read_scope": "Public product description",
+    "relevance": "Aggregates profitable wallets weighted by exposure; close conceptual prior art."
+  },
+  {
+    "url": "https://arxiv.org/abs/2605.11640",
+    "title": "Fill-Side Non-Retail Trading on Polymarket",
+    "date": "2026-05-12",
+    "read_scope": "Abstract",
+    "relevance": "Separates fill-side behavior from unavailable wallet-level quote lifecycles; market-maker labels need caution."
+  },
+  {
+    "url": "https://arxiv.org/abs/2606.04217",
+    "title": "Polymarket-v1 Database",
+    "date": "2026-06",
+    "read_scope": "Abstract",
+    "relevance": "Trade direction and settlement microstructure matter for measurement."
+  }
+]

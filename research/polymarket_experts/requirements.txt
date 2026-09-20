@@ -1,0 +1,9 @@
+numpy==2.5.3
+pandas==3.0.6
+pyarrow==25.0.1
+scipy==1.18.1
+matplotlib==3.11.2
+requests==2.34.2
+pytest==8.3.5
+ruff==0.11.13
+pycryptodome==3.22.0

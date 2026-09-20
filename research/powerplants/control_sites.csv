@@ -1,0 +1,17 @@
+plant_id_eia,plant_name_eia,state,latitude,longitude,kind
+CITY_TEHRAN,Tehran,IRN,35.69,51.39,iran_city
+CITY_MASHHAD,Mashhad,IRN,36.30,59.60,iran_city
+CITY_ISFAHAN,Isfahan,IRN,32.65,51.67,iran_city
+CITY_SHIRAZ,Shiraz,IRN,29.60,52.53,iran_city
+CITY_TABRIZ,Tabriz,IRN,38.08,46.29,iran_city
+CITY_AHVAZ,Ahvaz,IRN,31.32,48.67,iran_city
+CITY_QOM,Qom,IRN,34.64,50.88,iran_city
+CITY_BAGHDAD,Baghdad,IRQ,33.31,44.37,iraq_city
+CITY_KUWAIT,Kuwait City,KWT,29.37,47.98,gulf_city
+CITY_RIYADH,Riyadh,SAU,24.71,46.68,gulf_city
+CITY_DOHA,Doha,QAT,25.29,51.53,gulf_city
+CITY_DUBAI,Dubai,ARE,25.20,55.27,gulf_city
+CITY_JEDDAH,Jeddah,SAU,21.54,39.17,far_city
+CITY_MEDINA,Medina,SAU,24.47,39.61,far_city
+CITY_MUSCAT,Muscat,OMN,23.59,58.41,far_city
+CITY_ASHGABAT,Ashgabat,TKM,37.95,58.38,far_city

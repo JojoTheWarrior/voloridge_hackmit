@@ -1,0 +1,996 @@
+{
+ "meta": {
+  "frozen_at": "2026-09-20T02:20:10",
+  "prior_exploration_disclosed": [
+   "scout round 2 (another agent) already looked at Yunnan reservoir area vs aluminium next-3-month return: r=0.06, n=144 (null). Counted as 1 prior look; our version is still run as specified below.",
+   "wardamage round 1 looked at a Gulf flare index vs Brent/TTF in levels and 5-day diffs over Jan-Jul 2026 (perm p=0.20 Brent). Counted as 2 prior looks.",
+   "scout reports Kariba satellite area does not track level (steep lake) -> Kariba excluded a priori, Itezhi-Tezhi used for Zambia.",
+   "scout reports Western-Interconnection monthly hydro vs fossil generation anomalies slope -0.85, R2=0.64, n=89 -> our P5/P6 are replications of a known link, the new leg is the price/market leg."
+  ],
+  "statistic": "Pearson r between signal x_t and target y_{t+L+k}; test statistic = max over the pre-registered lags k of |r_k| (two-sided). A test is 'supported' only if BH q<=0.05 AND the sign at the best lag equals expected_sign (expected_sign 0 = no directional prior).",
+  "null": "10,000 surrogates of the signal: random permutation of contiguous blocks (block=6 months / 8 weeks) followed by a random circular shift; the max-|r|-over-lags is recomputed for each surrogate; p=(1+#{null>=obs})/(1+10000). Secondary: exact circular-shift p over all admissible shifts (resolution 1/n, reported, not used for BH).",
+  "multiplicity": "Benjamini-Hochberg across ALL tests in 'family' (both tiers) on the max-stat p. Placebos/controls/exploratory are outside the family and reported separately.",
+  "oos": "Chronological split of each test's overlapping sample: first 60% train, last 40% test. Lag k* and sign are chosen on train; report r_test at k* and its one-sided block-permutation p (10,000).",
+  "frequency_and_timing": {
+   "monthly_satellite": "GWW area: monthly median per reservoir. Value for month m is assumed knowable at the END of month m+1 (L=1). Market-tier lags k in {1,2,3}: target month = m+1+k.",
+   "monthly_ground_truth": "ONS EAR / EIA-930 are published within days: L=0, k in {1,2,3}.",
+   "weekly_flares_glofas": "Signal weeks end THURSDAY (VIIRS night data available ~1 day later, i.e. before Friday close); returns are Friday-close to Friday-close; L=0, k in {1,2,3,4} -> first target week starts at the Friday close after the signal week ended.",
+   "weekly_nve": "NVE publishes week w filling on Wednesday of w+1 -> L=1, k in {1,2,3,4}.",
+   "physical_link_tier": "Targets are non-traded physical/administrative quantities; purpose is nowcast validity, so L=0 and k in {0,1,2} (k in {0..4} weekly)."
+  },
+  "transforms": {
+   "z": "per-reservoir anomaly = monthly value minus EXPANDING month-of-year mean (>=min_years prior values of that calendar month), divided by expanding std of past anomalies; composite = mean of member z. No full-sample statistics enter the signal.",
+   "dz3": "z_m - z_{m-3}",
+   "QC": "drop single-image areas < 0.4 x reservoir median (partial/cloudy scenes); monthly median; linear interpolation of gaps <= 2 months.",
+   "flare_index": "night VIIRS S-NPP FRP summed over persistent flare cells (0.02 deg cells lit on >=5% of nights 2012-2026; geography only) per day; weekly value = mean of the 3 largest daily sums in the Fri-Thu week (clear-sky proxy); log; minus expanding week-of-year mean (>=3 yrs); signal = 2-week change.",
+   "rhine_stress": "weekly mean GloFAS discharge Q at Kaub; stress = max(0, log(q10/Q)) with q10 = expanding 10th percentile of daily Q (>=10 yrs); signal = 1-week change in stress.",
+   "nve": "Norway total filling (% of capacity) minus expanding week-of-year median (>=5 yrs); signal = 1-week change.",
+   "targets": "log returns from month-end / Friday closes. Equities are in excess of the stated local index (difference of log returns). CMO: log(1+CMO SE/CO R$/MWh) monthly mean. Generation targets: deseasonalised (full-sample month-of-year mean; target side only) share or MWh anomaly. Physical-link monthly tests use 3-month changes on both sides (dz3 vs d3 target)."
+  },
+  "controls": {
+   "partial": "re-run every market-tier test with the target residualised on contemporaneous factor returns [^SPGSCI, DX-Y.NYB] (+ 000001.SS for aluminium/copper, + HG=F for USDZMW); report r_partial, p_partial.",
+   "placebo_reservoirs": "Argyle (AUS), Guri (VEN), Volta (GHA), Toktogul (KGZ): same transforms, same targets, same procedure for every reservoir market-tier test. Expect ~5% with p<0.05.",
+   "year_shuffle": "signal with whole calendar years permuted (10,000), monthly tests; p_yearshuffle.",
+   "flare_placebo": "Algeria (Hassi Messaoud/Hassi R'Mel) flare index vs Brent; Rhine placebos: Danube at Budapest, Loire at Saumur vs BAS.DE."
+  },
+  "economic": "Only for BH survivors in the market tier: position = expected_sign*sign(x) (flat if |z|<0.5 for z signals), held one period at the train-selected lag, 10 bps per unit turnover, test segment only; mean return with 10,000-draw stationary-bootstrap CI and n position changes.",
+  "not_tested_and_why": {
+   "TROPOMI NO2 / S2 plumes": "only Apr-Sep 2025 (6 months) exists -> no time series long enough",
+   "Kariba area": "known-bad physical proxy (scout)",
+   "Eurobond/sovereign spreads, Brent-Dubai, PLD (CCEE), TTF/CAISO prices, coal barge rates": "no keyless series found or not attempted; ONS CMO used as the PLD proxy (PLD = CMO with floor/cap)",
+   "Iraq/Libya/Nigeria FX": "pegged or managed currencies"
+  }
+ },
+ "reservoir_signals": {
+  "yunnan_area": {
+   "gww": {
+    "Xiaowan": "89601",
+    "Nuozhadu": "90084"
+   },
+   "start": "2015-01",
+   "min_years": 3,
+   "note": "both reservoirs fully impounded by 2014"
+  },
+  "brazil_seco_area": {
+   "gww": {
+    "Furnas": "91951",
+    "SerraDaMesa": "91687",
+    "TresMarias": "91678",
+    "Emborcacao": "90065",
+    "Itumbiara": "90348",
+    "NovaPonte": "90286",
+    "AguaVermelha": "90540",
+    "IlhaSolteira": "91947",
+    "Marimbondo": "90312"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  },
+  "zambia_itt_area": {
+   "gww": {
+    "ItezhiTezhi": "90229"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  },
+  "uswest_area": {
+   "gww": {
+    "Shasta": "89304",
+    "Oroville": "88197",
+    "NewMelones": "87879",
+    "DonPedro": "87987",
+    "Mead": "90554",
+    "Powell": "89454"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  },
+  "placebo_argyle": {
+   "gww": {
+    "Argyle": "90627"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  },
+  "placebo_guri": {
+   "gww": {
+    "Guri": "92390"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  },
+  "placebo_volta": {
+   "gww": {
+    "Volta": "92429"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  },
+  "placebo_toktogul": {
+   "gww": {
+    "Toktogul": "89729"
+   },
+   "start": "2000-01",
+   "min_years": 5
+  }
+ },
+ "family": [
+  {
+   "id": "Y1_z",
+   "signal": "yunnan_area",
+   "transform": "z",
+   "target": "SHFE_AL",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Low Lancang storage -> Yunnan hydro deficit -> smelter curtailment (Yunnan ~12% of China Al capacity) -> tighter metal -> SHFE aluminium up"
+  },
+  {
+   "id": "Y1_dz3",
+   "signal": "yunnan_area",
+   "transform": "dz3",
+   "target": "SHFE_AL",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Low Lancang storage -> Yunnan hydro deficit -> smelter curtailment (Yunnan ~12% of China Al capacity) -> tighter metal -> SHFE aluminium up"
+  },
+  {
+   "id": "Y2_z",
+   "signal": "yunnan_area",
+   "transform": "z",
+   "target": "ALI=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "same, COMEX/LME-linked aluminium future"
+  },
+  {
+   "id": "Y2_dz3",
+   "signal": "yunnan_area",
+   "transform": "dz3",
+   "target": "ALI=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "same, COMEX/LME-linked aluminium future"
+  },
+  {
+   "id": "Y3_z",
+   "signal": "yunnan_area",
+   "transform": "z",
+   "target": "000807.SZ-000001.SS",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Yunnan Aluminium loses volume when curtailed (volume loss assumed to dominate price gain)"
+  },
+  {
+   "id": "Y3_dz3",
+   "signal": "yunnan_area",
+   "transform": "dz3",
+   "target": "000807.SZ-000001.SS",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Yunnan Aluminium loses volume when curtailed (volume loss assumed to dominate price gain)"
+  },
+  {
+   "id": "Y4_z",
+   "signal": "yunnan_area",
+   "transform": "z",
+   "target": "AA-^GSPC",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "non-Chinese producer gains from Chinese supply loss"
+  },
+  {
+   "id": "Y4_dz3",
+   "signal": "yunnan_area",
+   "transform": "dz3",
+   "target": "AA-^GSPC",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "non-Chinese producer gains from Chinese supply loss"
+  },
+  {
+   "id": "Y5_z",
+   "signal": "yunnan_area",
+   "transform": "z",
+   "target": "NHY.OL-OSEBX.OL",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "non-Chinese producer gains from Chinese supply loss"
+  },
+  {
+   "id": "Y5_dz3",
+   "signal": "yunnan_area",
+   "transform": "dz3",
+   "target": "NHY.OL-OSEBX.OL",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "non-Chinese producer gains from Chinese supply loss"
+  },
+  {
+   "id": "B1_z",
+   "signal": "brazil_seco_area",
+   "transform": "z",
+   "target": "AXIA3.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Eletrobras/Axia is hydro-long: low storage -> GSF deficit, buys at high PLD"
+  },
+  {
+   "id": "B1_dz3",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "AXIA3.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Eletrobras/Axia is hydro-long: low storage -> GSF deficit, buys at high PLD"
+  },
+  {
+   "id": "B2_z",
+   "signal": "brazil_seco_area",
+   "transform": "z",
+   "target": "CMIG4.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "hydro-heavy integrated utility, same GSF exposure"
+  },
+  {
+   "id": "B2_dz3",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "CMIG4.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "hydro-heavy integrated utility, same GSF exposure"
+  },
+  {
+   "id": "B3_z",
+   "signal": "brazil_seco_area",
+   "transform": "z",
+   "target": "EGIE3.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "hydro-heavy generator"
+  },
+  {
+   "id": "B3_dz3",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "EGIE3.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "hydro-heavy generator"
+  },
+  {
+   "id": "B4_z",
+   "signal": "brazil_seco_area",
+   "transform": "z",
+   "target": "ENEV3.SA-^BVSP",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "gas-fired generator dispatched more when storage is low"
+  },
+  {
+   "id": "B4_dz3",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "ENEV3.SA-^BVSP",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "gas-fired generator dispatched more when storage is low"
+  },
+  {
+   "id": "B5_z",
+   "signal": "brazil_seco_area",
+   "transform": "z",
+   "target": "ENGI11.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "distributor: low storage -> costly thermal energy / rationing risk"
+  },
+  {
+   "id": "B5_dz3",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "ENGI11.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "distributor: low storage -> costly thermal energy / rationing risk"
+  },
+  {
+   "id": "Z1_z",
+   "signal": "zambia_itt_area",
+   "transform": "z",
+   "target": "HG=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Kafue hydro deficit -> load-shedding at Copperbelt mines -> less copper (Zambia ~3% of world supply; weak prior)"
+  },
+  {
+   "id": "Z1_dz3",
+   "signal": "zambia_itt_area",
+   "transform": "dz3",
+   "target": "HG=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "Kafue hydro deficit -> load-shedding at Copperbelt mines -> less copper (Zambia ~3% of world supply; weak prior)"
+  },
+  {
+   "id": "Z2_z",
+   "signal": "zambia_itt_area",
+   "transform": "z",
+   "target": "FM.TO-^GSPTSE",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "First Quantum's Kansanshi/Sentinel depend on ZESCO power"
+  },
+  {
+   "id": "Z2_dz3",
+   "signal": "zambia_itt_area",
+   "transform": "dz3",
+   "target": "FM.TO-^GSPTSE",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "First Quantum's Kansanshi/Sentinel depend on ZESCO power"
+  },
+  {
+   "id": "Z3_z",
+   "signal": "zambia_itt_area",
+   "transform": "z",
+   "target": "USDZMW",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "drought -> power imports, lost copper exports, food imports -> weaker kwacha (USDZMW up)"
+  },
+  {
+   "id": "Z3_dz3",
+   "signal": "zambia_itt_area",
+   "transform": "dz3",
+   "target": "USDZMW",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "drought -> power imports, lost copper exports, food imports -> weaker kwacha (USDZMW up)"
+  },
+  {
+   "id": "U1_z",
+   "signal": "uswest_area",
+   "transform": "z",
+   "target": "NG=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "low western hydro -> more gas burn (known at interconnection scale) -> Henry Hub up (weak prior: West is small vs US gas market)"
+  },
+  {
+   "id": "U1_dz3",
+   "signal": "uswest_area",
+   "transform": "dz3",
+   "target": "NG=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "low western hydro -> more gas burn (known at interconnection scale) -> Henry Hub up (weak prior: West is small vs US gas market)"
+  },
+  {
+   "id": "U2_z",
+   "signal": "uswest_area",
+   "transform": "z",
+   "target": "PCG-XLU",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "PG&E owns hydro; drought also raises wildfire liability"
+  },
+  {
+   "id": "U2_dz3",
+   "signal": "uswest_area",
+   "transform": "dz3",
+   "target": "PCG-XLU",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "PG&E owns hydro; drought also raises wildfire liability"
+  },
+  {
+   "id": "U3_z",
+   "signal": "uswest_area",
+   "transform": "z",
+   "target": "EIX-XLU",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "drought -> wildfire liability, procurement cost"
+  },
+  {
+   "id": "U3_dz3",
+   "signal": "uswest_area",
+   "transform": "dz3",
+   "target": "EIX-XLU",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "drought -> wildfire liability, procurement cost"
+  },
+  {
+   "id": "G1_z",
+   "signal": "brazil_ear_seco",
+   "transform": "z",
+   "target": "AXIA3.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "UPPER BOUND: official ONS stored-energy (what a perfect satellite would measure) vs the same equities"
+  },
+  {
+   "id": "G1_dz3",
+   "signal": "brazil_ear_seco",
+   "transform": "dz3",
+   "target": "AXIA3.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "UPPER BOUND: official ONS stored-energy (what a perfect satellite would measure) vs the same equities"
+  },
+  {
+   "id": "G2_z",
+   "signal": "brazil_ear_seco",
+   "transform": "z",
+   "target": "ENEV3.SA-^BVSP",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "UPPER BOUND: official ONS stored-energy (what a perfect satellite would measure) vs the same equities"
+  },
+  {
+   "id": "G2_dz3",
+   "signal": "brazil_ear_seco",
+   "transform": "dz3",
+   "target": "ENEV3.SA-^BVSP",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "UPPER BOUND: official ONS stored-energy (what a perfect satellite would measure) vs the same equities"
+  },
+  {
+   "id": "G3_z",
+   "signal": "brazil_ear_seco",
+   "transform": "z",
+   "target": "CMIG4.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "UPPER BOUND: official ONS stored-energy (what a perfect satellite would measure) vs the same equities"
+  },
+  {
+   "id": "G3_dz3",
+   "signal": "brazil_ear_seco",
+   "transform": "dz3",
+   "target": "CMIG4.SA-^BVSP",
+   "expected_sign": 1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "UPPER BOUND: official ONS stored-energy (what a perfect satellite would measure) vs the same equities"
+  },
+  {
+   "id": "P1",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "d3_EAR_SECO_anom",
+   "expected_sign": 1,
+   "tier": "physical",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2
+   ],
+   "mechanism": "validation: satellite area composite should track official stored energy"
+  },
+  {
+   "id": "P2",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "d3_logCMO_SE",
+   "expected_sign": -1,
+   "tier": "physical",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2
+   ],
+   "mechanism": "storage down -> water value up -> marginal operating cost (basis of PLD spot price) up"
+  },
+  {
+   "id": "P3",
+   "signal": "brazil_seco_area",
+   "transform": "dz3",
+   "target": "d3_thermal_share_SIN",
+   "expected_sign": -1,
+   "tier": "physical",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2
+   ],
+   "mechanism": "storage down -> thermal dispatch up"
+  },
+  {
+   "id": "P4",
+   "signal": "brazil_ear_seco",
+   "transform": "dz3",
+   "target": "d3_logCMO_SE",
+   "expected_sign": -1,
+   "tier": "physical",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2
+   ],
+   "mechanism": "UPPER BOUND for P2 with official storage"
+  },
+  {
+   "id": "P5",
+   "signal": "uswest_area",
+   "transform": "dz3",
+   "target": "d3_WECC_hydro_anom",
+   "expected_sign": 1,
+   "tier": "physical",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2
+   ],
+   "mechanism": "reservoir area -> western hydro generation (EIA-930)"
+  },
+  {
+   "id": "P6",
+   "signal": "uswest_area",
+   "transform": "dz3",
+   "target": "d3_WECC_fossil_anom",
+   "expected_sign": -1,
+   "tier": "physical",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2
+   ],
+   "mechanism": "reservoir area -> western gas+coal generation fills the gap"
+  },
+  {
+   "id": "P7",
+   "signal": "wecc_hydro_anom",
+   "transform": "dz3",
+   "target": "NG=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "M",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3
+   ],
+   "mechanism": "price leg of the known hydro->gas-burn link, using ground-truth EIA-930 hydro anomaly as the signal (upper bound for the satellite)"
+  },
+  {
+   "id": "P8",
+   "signal": "nve_fill",
+   "transform": "d1",
+   "target": "dlog_NordPool_SYS",
+   "expected_sign": -1,
+   "tier": "physical",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "hydro balance is the textbook driver of Nordic system price (ground-truth signal, not satellite)"
+  },
+  {
+   "id": "N1",
+   "signal": "nve_fill",
+   "transform": "d1",
+   "target": "NHY.OL-OSEBX.OL",
+   "expected_sign": 0,
+   "tier": "market",
+   "freq": "W",
+   "latency": 1,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "Hydro is both a hydropower seller and a smelter power buyer: sign ambiguous"
+  },
+  {
+   "id": "F1",
+   "signal": "libya_flare",
+   "transform": "d2",
+   "target": "BZ=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "flaring collapse = field shut-in (blockades 2013-14, 2020, 2022, 2024) -> supply loss -> Brent up"
+  },
+  {
+   "id": "F2",
+   "signal": "libya_flare",
+   "transform": "d2",
+   "target": "d_BZ-CL_spread",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "Libyan light-sweet loss tightens Brent-linked grades vs WTI"
+  },
+  {
+   "id": "F3",
+   "signal": "libya_flare",
+   "transform": "d2",
+   "target": "TANKERS(FRO,DHT)-^GSPC",
+   "expected_sign": 0,
+   "tier": "market",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "fewer Med cargoes vs longer-haul replacement: ambiguous"
+  },
+  {
+   "id": "F4",
+   "signal": "basra_flare",
+   "transform": "d2",
+   "target": "BZ=F",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "Basra flaring tracks southern Iraq output (~3-4 mb/d)"
+  },
+  {
+   "id": "F5",
+   "signal": "basra_flare",
+   "transform": "d2",
+   "target": "TANKERS(FRO,DHT)-^GSPC",
+   "expected_sign": 0,
+   "tier": "market",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "Gulf export disruption: fewer cargoes vs rate spike, ambiguous"
+  },
+  {
+   "id": "R1",
+   "signal": "rhine_stress",
+   "transform": "d1",
+   "target": "BAS.DE-^GDAXI",
+   "expected_sign": -1,
+   "tier": "market",
+   "freq": "W",
+   "latency": 0,
+   "lags": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "mechanism": "Kaub low water -> barge light-loading -> BASF Ludwigshafen logistics cost/curtailment (2018: ~EUR250m)"
+  }
+ ],
+ "family_size": 53,
+ "case_study_events": {
+  "yunnan_curtailments": {
+   "2021-05": "power rationing, smelters cut from mid-May 2021",
+   "2021-09": "further cuts (energy dual-control + hydro)",
+   "2022-09": "10% then 20-30% cuts",
+   "2023-02": "cuts deepened to ~40% (approx. 0.65-0.8 Mt)",
+   "2023-11": "dry-season cuts 9-40% at four smelters (~1.15 Mt)"
+  },
+  "libya": {
+   "2013-07": "port/field blockades begin (to mid-2014)",
+   "2020-01-18": "LNA blockade (to 2020-09-18)",
+   "2022-04-17": "Sharara/El Feel + ports shut",
+   "2024-08-26": "central-bank dispute shut-in"
+  },
+  "gulf": {
+   "2019-09-14": "Abqaiq attack",
+   "2026-03-04": "Hormuz closure"
+  }
+ }
+}

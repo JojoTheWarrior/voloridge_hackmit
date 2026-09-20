@@ -1,0 +1,32 @@
+{
+  "status": "blocked_data",
+  "rows": 0,
+  "reason": "Incomplete lifecycle/opening-state history, unverified payout-finality coverage, no contemporaneous bid/ask panel, and no independent full-wallet PnL reconciliation.",
+  "columns": {
+    "market": "string",
+    "event_id": "string",
+    "category": "string",
+    "horizon": "string",
+    "signal_timestamp": "int64",
+    "resolution_timestamp": "int64",
+    "market_price": "float64",
+    "expert_prob_equal": "float64",
+    "expert_prob_pnl": "float64",
+    "expert_prob_size": "float64",
+    "expert_prob_pnl_size": "float64",
+    "expert_prob_roi_shrunk": "float64",
+    "expert_prob_hit_rate_shrunk": "float64",
+    "expert_prob": "float64",
+    "blend_prob": "float64",
+    "n_experts": "int64",
+    "total_expert_exposure": "float64",
+    "divergence": "float64",
+    "outcome": "float64",
+    "quality_status": "string"
+  },
+  "units": {
+    "total_expert_exposure": "gross outcome shares",
+    "market_price": "verified historical midpoint, USD/share"
+  },
+  "warning": "Empty is not zero experts, a null effect, or evidence against the hypothesis."
+}

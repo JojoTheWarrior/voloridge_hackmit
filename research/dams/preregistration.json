@@ -1,0 +1,33 @@
+{
+  "written_before": "any reservoir time series beyond Lake Mead had been pulled, any model fitted, or any alert evaluated (2026-09-20 ~02:30 EDT)",
+  "storage_filter": {
+    "rule": "keep a reservoir iff (a) GWW polygon area >= 1 km2, (b) >= 120 valid monthly area values 2001-2025, (c) coefficient of variation of the cleaned monthly area series >= 0.03. Pumped-storage plants excluded.",
+    "note": "satellite-only and label-free, so it can be applied abroad. HydroLAKES residence time is reported as a covariate, not used as a gate, because it is missing for OSM-sourced reservoirs. Validate the filter against Brazil ONS's own run-of-river / storage labels."
+  },
+  "anomaly_definitions": {
+    "area_anom": "(area_t - clim_area[month]) / mean(clim_area), climatology from training years only in forward tests, expanding-window (prior years only) in the alert test",
+    "gen_anom": "(gen_t - clim_gen[month]) / mean(clim_gen), same convention"
+  },
+  "model_validation": {
+    "forward": "train on months <= 2018-12, test on months >= 2019-01; climatologies from <= 2018 only",
+    "leave_dams_out": "5-fold GroupKFold by reservoir, climatology per dam from all years (the label climatology is needed only to score, never as a feature)",
+    "baselines": [
+      "climatology (anomaly = 0)",
+      "persistence of generation anomaly at lag 1 and lag 3 (label-dependent; unavailable abroad)",
+      "area anomaly only (univariate linear)"
+    ],
+    "primary_metric": "pooled R2 and median per-dam Pearson r of monthly generation ANOMALIES on held-out data; annual anomalies as secondary"
+  },
+  "alert_rule": {
+    "deficit_z": "z_t = (area_t - mean_m) / sd_m where mean_m, sd_m are that calendar month's mean and sd over PRIOR years only (>= 8 prior years required); sd floored at 2% of mean area",
+    "onset": "alert starts the first month where z <= -1.5 for 2 consecutive months; it ends after z > -0.75 for 2 consecutive months; a new alert cannot start within 12 months of the previous alert's end",
+    "generation_event_truth": "12-month trailing generation <= 80% of that dam's prior-years mean 12-month generation (expanding window). An alert is a HIT if an event month occurs within [0, +12] months after onset, else a FALSE ALARM. An event with no alert in the preceding 12 months through event onset is a MISS.",
+    "news_event_truth": "monthly GDELT share-of-coverage for (load shedding | power cuts | blackout | power rationing | electricity rationing + local-language equivalents) AND country; spike = month >= 3x the trailing 24-month median and >= 90th percentile of the country's own history; lead = spike month - alert onset month; hit if a spike falls within [0, +12] months of an alert",
+    "applied_to": "every monitored reservoir and the full history; hit rate, false-alarm rate, median lead all reported"
+  },
+  "addendum_1_written_before_any_alert_or_news_data": {
+    "country_news_test_scope": "countries whose hydro share of generation (Ember yearly, mean 2015-2023) >= 40% AND with >= 1 monitored storage reservoir passing the storage filter AND GDELT coverage >= 24 months with nonzero counts. Country deficit index = capacity-weighted mean of reservoir z-scores; country alert rule identical to the reservoir rule applied to that index.",
+    "country_generation_truth": "Ember national hydro generation: event year = annual hydro TWh <= 85% of the mean of the previous 5 years. Country alert is a HIT if its onset year or the following year is an event year.",
+    "gdelt_query": "(\"load shedding\" OR loadshedding OR \"power cuts\" OR \"power rationing\" OR \"electricity rationing\" OR blackouts OR \"power outages\") AND <country name>; metric = article count / total monitored articles, monthly mean; GDELT DOC API covers 2017-01 onward only, so earlier episodes are scored against Ember generation only."
+  }
+}

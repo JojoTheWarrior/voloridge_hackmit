@@ -1,0 +1,1601 @@
+[
+ {
+  "id": "dams-01-scale-matching",
+  "title": "Hydro plants can be matched to satellite-monitored reservoirs at scale with a label-free geometric rule",
+  "one_liner": "707 US plants (78% of US hydro capacity), 107 Brazilian and 1141 rest-of-world plants matched to Global Water Watch reservoirs; 1365 storage reservoirs in 105 countries are monitored.",
+  "datasets": [
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "HydroLAKES v1.0 pour points",
+    "url": "https://data.hydrosheds.org/file/hydrolakes/HydroLAKES_points_v10_shp.zip",
+    "access": "direct download, CC-BY 4.0"
+   },
+   {
+    "name": "GloHydroRes v1 (Shah et al. 2025)",
+    "url": "https://zenodo.org/records/14526360",
+    "access": "Zenodo, CC-BY 4.0"
+   },
+   {
+    "name": "Brazil ONS open data: hourly generation per plant, reservoir registry, daily hydrology",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   }
+  ],
+  "mechanism": "A powerhouse sits at its dam; HydroLAKES pour points mark the lake outlet, which disambiguates the upstream reservoir from the downstream one in cascades.",
+  "method": "Plant lat/lon -> largest HydroLAKES lake whose pour point is within 3 km -> GWW id; fallback: largest GWW polygon within 1 km (flagged). Cross-checked against GloHydroRes' curated plant->HydroLAKES links.",
+  "results": [
+   {
+    "metric": "US plants matched (count share)",
+    "value": 0.462,
+    "n": 707,
+    "note": ""
+   },
+   {
+    "metric": "US capacity matched",
+    "value": 0.777,
+    "n": null,
+    "note": "64.6 GW"
+   },
+   {
+    "metric": "agreement with GloHydroRes curated link where both exist",
+    "value": 0.965,
+    "n": 1202,
+    "note": ""
+   },
+   {
+    "metric": "rest-of-world plants >=30 MW matched",
+    "value": 0.438,
+    "n": 1141,
+    "note": "478 GW"
+   },
+   {
+    "metric": "reservoirs passing pre-registered storage filter",
+    "value": 1391.0,
+    "n": 1718,
+    "note": ""
+   }
+  ],
+  "controls": "Independent curated links (GloHydroRes) for match accuracy; ONS run-of-river/storage labels and GloHydroRes plant type for the storage filter.",
+  "verdict": "supported",
+  "known_or_novel": "known (GloHydroRes, GRanD-based linkages exist); the EIA/ONS-truth panel on GWW ids is new plumbing",
+  "prior_art": [
+   "https://zenodo.org/records/14526360",
+   "https://www.nature.com/articles/s41598-022-17074-6"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/world_map_latest.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/03_match_plants.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/06_build_panel.py"
+  ],
+  "caveats": "52% of US plants (19% of capacity) have no reservoir in range: small run-of-river, canal and diversion plants. 651 fallback polygon matches are ambiguous in cascades (e.g. mid-Columbia) and show ~zero area signal. The pre-registered area-CV>=3% filter is a poor run-of-river discriminator (passes 27 of 45 ONS run-of-river reservoirs): noise alone produces CV."
+ },
+ {
+  "id": "dams-02-area-alone-weak-at-scale",
+  "title": "Reservoir area ALONE barely predicts generation anomalies at scale; the scout's five dams were top-decile cases",
+  "one_liner": "Across 399 US dams the median area-vs-generation anomaly correlation is 0.12 (Hoover 0.61, Shasta 0.57 replicate); forward out-of-sample skill of area-only models is ~0.",
+  "datasets": [
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   }
+  ],
+  "mechanism": "Most hydro plants have little storage relative to flow: generation follows inflow, and the pool is held near-constant. Area carries information only where storage is drawn down and refilled over seasons/years.",
+  "method": "Monthly generation and area anomalies vs each dam's own seasonal normal; pooled linear and LightGBM models; forward (train<=2018/test 2019-25), leave-dams-out and strict (both) validation; cluster-bootstrap CIs.",
+  "results": [
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; area_linear_pooled]",
+    "value": -0.009,
+    "n": 327,
+    "note": "95% CI -0.041..0.020; median per-dam r 0.16; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; gbm_area]",
+    "value": -0.008,
+    "n": 327,
+    "note": "95% CI -0.051..0.030; median per-dam r 0.17; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; leave-dams-out; area_linear_pooled]",
+    "value": 0.062,
+    "n": 399,
+    "note": "95% CI 0.046..0.078; median per-dam r 0.12; 95155 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; leave-dams-out; gbm_area]",
+    "value": 0.103,
+    "n": 399,
+    "note": "95% CI 0.082..0.124; median per-dam r 0.19; 95155 dam-months"
+   },
+   {
+    "metric": "median per-dam r(area anomaly, generation anomaly), all pre-registered US storage dams",
+    "value": 0.121,
+    "n": 399,
+    "note": ""
+   },
+   {
+    "metric": "same, carry-over subset (res. time >=100 d, >=10 km2; exploratory)",
+    "value": 0.37,
+    "n": 124,
+    "note": ""
+   },
+   {
+    "metric": "share of dams with r > 0.5",
+    "value": 0.105,
+    "n": 399,
+    "note": ""
+   }
+  ],
+  "controls": "Placebo pairings: far reservoir (>1500 km) r=-0.02; nearest other reservoir r=0.08 (all) / 0.19 (carry-over) vs own 0.12 / 0.37 -> about half of the carry-over signal is regional drought, half is dam-specific. Causal vs centred despike filter: 0.34 vs 0.37.",
+  "verdict": "partial",
+  "known_or_novel": "novel as a measured negative-at-scale; the positive single-dam correlations are known",
+  "prior_art": [
+   "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2022WR033026",
+   "https://hess.copernicus.org/articles/26/3785/2022/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/where_the_signal_lives.png",
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/skill_vs_baseline.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/08_model.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/20_robustness.py"
+  ],
+  "caveats": "Anomaly skill, not level skill. GWW area noise (a few % of area) is comparable to the true signal for low-variability pools. Fallback-matched cascades dilute the pooled number."
+ },
+ {
+  "id": "dams-03-area-plus-climate-skill",
+  "title": "Area + upstream-basin climate gives real but modest zero-shot skill; basin rainfall carries more of it than orbit does",
+  "one_liner": "On unseen dams AND unseen years: skill 0.12 (all) / 0.17 (carry-over), median per-dam r 0.44; climate-only gets 0.14; last month's label gets 0.52.",
+  "datasets": [
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "HydroBASINS level 7",
+    "url": "https://data.hydrosheds.org/file/hydrobasins/standard/",
+    "access": "direct download"
+   },
+   {
+    "name": "NOAA PREC/L precipitation 1 deg + GHCN-CAMS 2 m temperature 0.5 deg (monthly)",
+    "url": "https://downloads.psl.noaa.gov/Datasets/",
+    "access": "direct download"
+   },
+   {
+    "name": "HydroLAKES v1.0 pour points",
+    "url": "https://data.hydrosheds.org/file/hydrolakes/HydroLAKES_points_v10_shp.zip",
+    "access": "direct download, CC-BY 4.0"
+   }
+  ],
+  "mechanism": "Generation = efficiency x head x release; release tracks inflow (basin precipitation/snow over 3-24 months), storage state modulates it where there is carry-over.",
+  "method": "LightGBM on label-free features: area anomaly (level, lags, change, fullness), HydroBASINS-upstream PREC/L precipitation anomalies (1-24 mo), cold-season precipitation, temperature, seasonal phase relative to the reservoir's own area peak, statics. Target: anomaly vs the dam's own seasonal normal.",
+  "results": [
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; damped_persistence_lag1]",
+    "value": 0.517,
+    "n": 327,
+    "note": "95% CI 0.488..0.546; median per-dam r 0.64; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; damped_persistence_lag3]",
+    "value": 0.163,
+    "n": 327,
+    "note": "95% CI 0.133..0.196; median per-dam r 0.20; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; area_linear_pooled]",
+    "value": -0.009,
+    "n": 327,
+    "note": "95% CI -0.041..0.020; median per-dam r 0.16; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; gbm_area]",
+    "value": -0.008,
+    "n": 327,
+    "note": "95% CI -0.051..0.030; median per-dam r 0.17; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; gbm_climate]",
+    "value": 0.136,
+    "n": 327,
+    "note": "95% CI 0.112..0.160; median per-dam r 0.36; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; gbm_area+climate]",
+    "value": 0.116,
+    "n": 327,
+    "note": "95% CI 0.082..0.151; median per-dam r 0.37; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [prereg; strict; gbm_persist3+area+climate]",
+    "value": 0.243,
+    "n": 327,
+    "note": "95% CI 0.207..0.278; median per-dam r 0.38; 26379 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; damped_persistence_lag1]",
+    "value": 0.507,
+    "n": 112,
+    "note": "95% CI 0.464..0.552; median per-dam r 0.65; 9124 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; damped_persistence_lag3]",
+    "value": 0.166,
+    "n": 112,
+    "note": "95% CI 0.122..0.210; median per-dam r 0.24; 9124 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; area_linear_pooled]",
+    "value": 0.086,
+    "n": 112,
+    "note": "95% CI 0.043..0.118; median per-dam r 0.30; 9124 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; gbm_area]",
+    "value": 0.08,
+    "n": 112,
+    "note": "95% CI 0.009..0.137; median per-dam r 0.30; 9124 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; gbm_climate]",
+    "value": 0.154,
+    "n": 112,
+    "note": "95% CI 0.102..0.196; median per-dam r 0.39; 9124 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; gbm_area+climate]",
+    "value": 0.172,
+    "n": 112,
+    "note": "95% CI 0.099..0.233; median per-dam r 0.44; 9124 dam-months"
+   },
+   {
+    "metric": "anomaly skill vs seasonal normal [carryover; strict; gbm_persist3+area+climate]",
+    "value": 0.272,
+    "n": 112,
+    "note": "95% CI 0.219..0.327; median per-dam r 0.42; 9124 dam-months"
+   },
+   {
+    "metric": "level R2 within dam, seasonal normal only (leave-dams-out)",
+    "value": 0.184,
+    "n": 399,
+    "note": "'it's April'"
+   },
+   {
+    "metric": "level R2 within dam, area+climate (leave-dams-out)",
+    "value": 0.345,
+    "n": 399,
+    "note": ""
+   },
+   {
+    "metric": "6-month-ahead forecast skill, area+climate, carry-over, strict",
+    "value": 0.16,
+    "n": 112,
+    "note": ""
+   },
+   {
+    "metric": "6-month-ahead, damped persistence of a 3-month-old label",
+    "value": 0.132,
+    "n": 112,
+    "note": ""
+   }
+  ],
+  "controls": "Baselines: seasonal normal, raw and damped label persistence at lag 1 and lag 3 (EIA-923 publishes ~2-3 months late), area-only, climate-only. Forward, leave-dams-out and strict splits agree.",
+  "verdict": "partial",
+  "known_or_novel": "partly known (Dong et al. 2023 predict ungauged hydropower from remote sensing + hydrologic model); a generation-label-trained, zero-shot, 400-dam benchmark with honest baselines was not found",
+  "prior_art": [
+   "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2022WR033026",
+   "https://www.mdpi.com/1996-1073/17/20/5163"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/skill_vs_baseline.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/07_basin_climate.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/features.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/08_model.py"
+  ],
+  "caveats": "The strongest feature family (PREC/L) is gauge-based, not orbital. Where labels exist with <=1 month lag, persistence wins outright. With a realistic 3-month label lag, satellite+climate roughly doubles skill (0.16 -> 0.24-0.27 when combined). The carry-over subset was defined after seeing the pre-registered filter under-perform (statics-only rule, but exploratory). GloFAS was NOT used at scale: the keyless Open-Meteo Flood API costs ~700 weighted calls per dam-history against a 10k/day cap."
+ },
+ {
+  "id": "dams-04-brazil-zero-shot",
+  "title": "US-trained model transfers zero-shot to Brazil, scored against ONS per-plant generation; Brazil's run-of-river label is a clean negative control",
+  "one_liner": "ONS storage reservoirs: skill 0.29, median per-dam r 0.56, annual r 0.71 - better than in the US; ONS run-of-river: area-only skill -0.02.",
+  "datasets": [
+   {
+    "name": "Brazil ONS open data: hourly generation per plant, reservoir registry, daily hydrology",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "NOAA PREC/L precipitation 1 deg + GHCN-CAMS 2 m temperature 0.5 deg (monthly)",
+    "url": "https://downloads.psl.noaa.gov/Datasets/",
+    "access": "direct download"
+   },
+   {
+    "name": "HydroBASINS level 7",
+    "url": "https://data.hydrosheds.org/file/hydrobasins/standard/",
+    "access": "direct download"
+   }
+  ],
+  "mechanism": "Brazil's large multi-year reservoirs are centrally dispatched on stored energy, so storage state drives plant output more tightly than in the US.",
+  "method": "Models frozen on US data; features built from Brazilian area/climate only; scored on ONS hourly generation aggregated to months (2000-2026).",
+  "results": [
+   {
+    "metric": "skill [all filtered storage reservoirs; gbm_area]",
+    "value": 0.138,
+    "n": 68,
+    "note": "median per-dam r 0.37; annual r 0.50"
+   },
+   {
+    "metric": "skill [all filtered storage reservoirs; gbm_climate]",
+    "value": 0.163,
+    "n": 68,
+    "note": "median per-dam r 0.45; annual r 0.52"
+   },
+   {
+    "metric": "skill [all filtered storage reservoirs; gbm_area+climate]",
+    "value": 0.234,
+    "n": 68,
+    "note": "median per-dam r 0.54; annual r 0.59"
+   },
+   {
+    "metric": "skill [ONS label = RESERVATÓRIO COM USINA; gbm_area]",
+    "value": 0.226,
+    "n": 41,
+    "note": "median per-dam r 0.49; annual r 0.64"
+   },
+   {
+    "metric": "skill [ONS label = RESERVATÓRIO COM USINA; gbm_climate]",
+    "value": 0.153,
+    "n": 41,
+    "note": "median per-dam r 0.42; annual r 0.55"
+   },
+   {
+    "metric": "skill [ONS label = RESERVATÓRIO COM USINA; gbm_area+climate]",
+    "value": 0.289,
+    "n": 41,
+    "note": "median per-dam r 0.56; annual r 0.71"
+   },
+   {
+    "metric": "skill [ONS label = FIO DAGUA; gbm_area]",
+    "value": -0.019,
+    "n": 27,
+    "note": "median per-dam r 0.14; annual r 0.16"
+   },
+   {
+    "metric": "skill [ONS label = FIO DAGUA; gbm_climate]",
+    "value": 0.181,
+    "n": 27,
+    "note": "median per-dam r 0.53; annual r 0.48"
+   },
+   {
+    "metric": "skill [ONS label = FIO DAGUA; gbm_area+climate]",
+    "value": 0.136,
+    "n": 27,
+    "note": "median per-dam r 0.52; annual r 0.40"
+   },
+   {
+    "metric": "median r, satellite area vs ONS gauge useful-volume, storage reservoirs",
+    "value": 0.88,
+    "n": 41,
+    "note": ""
+   },
+   {
+    "metric": "same, run-of-river reservoirs",
+    "value": 0.14,
+    "n": 27,
+    "note": ""
+   }
+  ],
+  "controls": "ONS's own FIO D'AGUA (run-of-river) class as negative control: area carries no information there (median r 0.13) while climate still does.",
+  "verdict": "supported",
+  "known_or_novel": "novel (zero-shot cross-country scoring against plant-level truth not found)",
+  "prior_art": [
+   "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2022WR033026"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_brazil_tres_marias.png",
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/where_the_signal_lives.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/02_ons_pull.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/10_transfer_brazil.py"
+  ],
+  "caveats": "Area climatology uses the full record (not an issue for zero-shot validity, but not real-time). 53 ONS plants (42 GW, mostly Amazon run-of-river: Belo Monte, Jirau, Santo Antonio) have no GWW reservoir. Furnas fails the >=120-month filter in GWW."
+ },
+ {
+  "id": "dams-05-national-transfer",
+  "title": "Capacity-weighted satellite index tracks national hydro output in most of 47 countries",
+  "one_liner": "Median r = 0.50 monthly / 0.64 annual vs Ember national hydro capacity-factor anomalies; 41 of 47 countries above 0.3; fails in Canada, Japan, Nigeria, Tajikistan.",
+  "datasets": [
+   {
+    "name": "Ember monthly + yearly electricity data",
+    "url": "https://ember-energy.org/data/",
+    "access": "direct CSV download, CC-BY 4.0"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "GloHydroRes v1 (Shah et al. 2025)",
+    "url": "https://zenodo.org/records/14526360",
+    "access": "Zenodo, CC-BY 4.0"
+   },
+   {
+    "name": "NOAA PREC/L precipitation 1 deg + GHCN-CAMS 2 m temperature 0.5 deg (monthly)",
+    "url": "https://downloads.psl.noaa.gov/Datasets/",
+    "access": "direct download"
+   },
+   {
+    "name": "Norway NVE reservoir statistics",
+    "url": "https://biapi.nve.no/magasinstatistikk/",
+    "access": "keyless API"
+   }
+  ],
+  "mechanism": "Dam-level noise averages out across a fleet; national hydro anomalies are driven by basin-scale wet/dry years that both storage and rainfall see.",
+  "method": "US-trained predictions for every monitored storage reservoir, capacity-weighted per country, vs Ember monthly hydro TWh converted to capacity factor (fleet growth removed) and deseasonalised.",
+  "results": [
+   {
+    "metric": "median r monthly, area+climate",
+    "value": 0.497,
+    "n": 47,
+    "note": ""
+   },
+   {
+    "metric": "median r monthly, area only",
+    "value": 0.372,
+    "n": 47,
+    "note": ""
+   },
+   {
+    "metric": "median r monthly, climate only",
+    "value": 0.446,
+    "n": 47,
+    "note": ""
+   },
+   {
+    "metric": "median r annual, area+climate",
+    "value": 0.639,
+    "n": 24,
+    "note": ""
+   },
+   {
+    "metric": "median r monthly excluding USA",
+    "value": 0.489,
+    "n": 46,
+    "note": ""
+   },
+   {
+    "metric": "annual-only countries: median r (Ember yearly)",
+    "value": 0.426,
+    "n": 35,
+    "note": "noisy: 1-3 dams per country, some Ember series back-filled"
+   },
+   {
+    "metric": "Norway: satellite area anomaly vs NVE national filling, ice-free months",
+    "value": 0.472,
+    "n": 92,
+    "note": ""
+   },
+   {
+    "metric": "Norway: same, winter (ice)",
+    "value": -0.138,
+    "n": 26,
+    "note": "optical water detection fails under ice"
+   }
+  ],
+  "controls": "Area-only and climate-only variants per country; winter/ice split in Norway.",
+  "verdict": "supported",
+  "known_or_novel": "novel as a multi-country zero-shot scoreboard",
+  "prior_art": [
+   "https://ember-energy.org/data/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/transfer_national.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/11_transfer_national.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/19_transfer_norway_storage.py"
+  ],
+  "caveats": "Monitored dams are a minority of national capacity in most countries. Ember's recent-year values for several African countries are estimates (Zambia 2022-24 is flat at 17.1 TWh through a known drought), so exactly the cases of interest lack trustworthy truth. National correlation partly reflects rainfall common to everything."
+ },
+ {
+  "id": "dams-06-alert-rule",
+  "title": "Pre-registered reservoir-deficit alert: better than chance, but coincident - not an early warning",
+  "one_liner": "674 alerts on 471 reservoirs: precision 63% vs 43% base rate, recall 16%, median lead -3 months (alert fires after the generation shortfall starts).",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Brazil ONS open data: hourly generation per plant, reservoir registry, daily hydrology",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Ember monthly + yearly electricity data",
+    "url": "https://ember-energy.org/data/",
+    "access": "direct CSV download, CC-BY 4.0"
+   },
+   {
+    "name": "GDELT DOC 2.0 API",
+    "url": "https://api.gdeltproject.org/api/v2/doc/doc",
+    "access": "keyless; hard 1 req/5 s per IP, shared-IP 429s"
+   }
+  ],
+  "mechanism": "Generation falls as soon as inflow falls; storage integrates the deficit, so a high-threshold area alarm trips late. Cross-correlation shows area and generation anomalies are coincident (best lag 0-1 month; +2 in Brazil).",
+  "method": "Rule fixed in preregistration.json before any series were pulled: expanding-window z<=-1.5 two months running; scored against 12-month generation <=80% of normal within 12 months, on every reservoir with truth, full history; country index vs Ember shortfall years and GDELT news spikes.",
+  "results": [
+   {
+    "metric": "hit_rate_precision [all storage reservoirs with truth (US+Brazil)]",
+    "value": 0.629,
+    "n": 674,
+    "note": ""
+   },
+   {
+    "metric": "base_rate_random_month [all storage reservoirs with truth (US+Brazil)]",
+    "value": 0.428,
+    "n": 674,
+    "note": ""
+   },
+   {
+    "metric": "recall [all storage reservoirs with truth (US+Brazil)]",
+    "value": 0.157,
+    "n": 674,
+    "note": ""
+   },
+   {
+    "metric": "median_lead_months [all storage reservoirs with truth (US+Brazil)]",
+    "value": -3.0,
+    "n": 674,
+    "note": ""
+   },
+   {
+    "metric": "share_hits_with_positive_lead [all storage reservoirs with truth (US+Brazil)]",
+    "value": 0.351,
+    "n": 674,
+    "note": ""
+   },
+   {
+    "metric": "hit_rate_precision [US]",
+    "value": 0.617,
+    "n": 572,
+    "note": ""
+   },
+   {
+    "metric": "base_rate_random_month [US]",
+    "value": 0.414,
+    "n": 572,
+    "note": ""
+   },
+   {
+    "metric": "recall [US]",
+    "value": 0.141,
+    "n": 572,
+    "note": ""
+   },
+   {
+    "metric": "median_lead_months [US]",
+    "value": -4.0,
+    "n": 572,
+    "note": ""
+   },
+   {
+    "metric": "share_hits_with_positive_lead [US]",
+    "value": 0.326,
+    "n": 572,
+    "note": ""
+   },
+   {
+    "metric": "hit_rate_precision [Brazil]",
+    "value": 0.696,
+    "n": 102,
+    "note": ""
+   },
+   {
+    "metric": "base_rate_random_month [Brazil]",
+    "value": 0.519,
+    "n": 102,
+    "note": ""
+   },
+   {
+    "metric": "recall [Brazil]",
+    "value": 0.254,
+    "n": 102,
+    "note": ""
+   },
+   {
+    "metric": "median_lead_months [Brazil]",
+    "value": 0.0,
+    "n": 102,
+    "note": ""
+   },
+   {
+    "metric": "share_hits_with_positive_lead [Brazil]",
+    "value": 0.479,
+    "n": 102,
+    "note": ""
+   },
+   {
+    "metric": "hit_rate_precision [exploratory: carry-over subset]",
+    "value": 0.741,
+    "n": 266,
+    "note": ""
+   },
+   {
+    "metric": "base_rate_random_month [exploratory: carry-over subset]",
+    "value": 0.479,
+    "n": 266,
+    "note": ""
+   },
+   {
+    "metric": "recall [exploratory: carry-over subset]",
+    "value": 0.232,
+    "n": 266,
+    "note": ""
+   },
+   {
+    "metric": "median_lead_months [exploratory: carry-over subset]",
+    "value": -1.0,
+    "n": 266,
+    "note": ""
+   },
+   {
+    "metric": "share_hits_with_positive_lead [exploratory: carry-over subset]",
+    "value": 0.386,
+    "n": 266,
+    "note": ""
+   },
+   {
+    "metric": "hit_rate_precision [43 hydro-dependent countries]",
+    "value": 0.176,
+    "n": 51,
+    "note": ""
+   },
+   {
+    "metric": "base_rate_random_month [43 hydro-dependent countries]",
+    "value": 0.15,
+    "n": 51,
+    "note": ""
+   },
+   {
+    "metric": "recall [43 hydro-dependent countries]",
+    "value": 0.25,
+    "n": 51,
+    "note": ""
+   },
+   {
+    "metric": "hit_rate_precision [5 hydro-dependent countries with GDELT coverage]",
+    "value": 0.5,
+    "n": 6,
+    "note": ""
+   },
+   {
+    "metric": "recall [5 hydro-dependent countries with GDELT coverage]",
+    "value": 0.111,
+    "n": 6,
+    "note": ""
+   },
+   {
+    "metric": "median_lead_months [5 hydro-dependent countries with GDELT coverage]",
+    "value": 6.0,
+    "n": 6,
+    "note": ""
+   },
+   {
+    "metric": "share_hits_with_positive_lead [5 hydro-dependent countries with GDELT coverage]",
+    "value": 1.0,
+    "n": 6,
+    "note": ""
+   },
+   {
+    "metric": "median best lag, area vs generation anomaly (months; +ve = area leads)",
+    "value": 1.0,
+    "n": 201,
+    "note": ""
+   }
+  ],
+  "controls": "Base rate from the same reservoirs' own history; misses counted; negative-lead hits reported rather than dropped.",
+  "verdict": "rejected",
+  "known_or_novel": "novel negative result",
+  "prior_art": [],
+  "figures": [],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/preregistration.json",
+   "/Users/tomalmog/projects/kingdom/explore/dams/13_alerts.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/14_leadlag.py"
+  ],
+  "caveats": "The generation-shortfall truth (trailing 12 months) is itself lagging; a looser threshold would trade precision for lead. News-lead scoring depends on GDELT coverage (2017+, English-biased) and was rate-limited; see alert_scores.csv for whichever countries completed."
+ },
+ {
+  "id": "dams-07-headline-cases",
+  "title": "Headline blackout cases: clear wins at Guri 2016, Mtera 2015, Tres Marias 2014-15, Itezhi-Tezhi 2024; misses at Kariba, Yunnan, Vietnam, Turkey",
+  "one_liner": "Of 22 hydrological reservoir-episodes with data, 7 showed an area deficit of >=10% at onset and 4 had a pre-registered alert before onset; Venezuela's 2019 grid-fault blackout correctly shows NO deficit.",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "Sentinel-2 L2A COGs via Element84 Earth Search",
+    "url": "https://earth-search.aws.element84.com/v1",
+    "access": "anonymous STAC + COG reads"
+   },
+   {
+    "name": "Ember monthly + yearly electricity data",
+    "url": "https://ember-energy.org/data/",
+    "access": "direct CSV download, CC-BY 4.0"
+   },
+   {
+    "name": "GDELT DOC 2.0 API",
+    "url": "https://api.gdeltproject.org/api/v2/doc/doc",
+    "access": "keyless; hard 1 req/5 s per IP, shared-IP 429s"
+   }
+  ],
+  "mechanism": "Works where the reservoir is shallow/wide and is the binding constraint; fails for steep gorges (Yunnan cascade, Hoa Binh), recently filled reservoirs with no stable climatology, very large multi-tile lakes (GWW noise at Kariba/Volta/Nasser), and demand- or policy-driven curtailments.",
+  "method": "Same pipeline and US-trained model applied to 29 headline reservoirs; curated month-dated episodes (data/known_events.csv); area anomaly and z at t-6/t-3/t0; first pre-registered alert in [-18,+6] months.",
+  "results": [
+   {
+    "metric": "Zambia/Zimbabwe 2015-16 / Itezhi-Tezhi: area anomaly at onset",
+    "value": -0.029,
+    "n": null,
+    "note": "pred gen anomaly -0.16; alert lead 18.0 mo"
+   },
+   {
+    "metric": "Zambia/Zimbabwe 2019 / Itezhi-Tezhi: area anomaly at onset",
+    "value": -0.046,
+    "n": null,
+    "note": "pred gen anomaly -0.02; alert lead -1.0 mo"
+   },
+   {
+    "metric": "Zambia/Zimbabwe 2022-23 / Kariba: area anomaly at onset",
+    "value": -0.056,
+    "n": null,
+    "note": "pred gen anomaly -0.11; alert lead 0.0 mo"
+   },
+   {
+    "metric": "Zambia 2024 / Kariba: area anomaly at onset",
+    "value": 0.082,
+    "n": null,
+    "note": "pred gen anomaly -0.14; alert lead 15.0 mo"
+   },
+   {
+    "metric": "Zambia 2024 / Itezhi-Tezhi: area anomaly at onset",
+    "value": -0.22,
+    "n": null,
+    "note": "pred gen anomaly -0.17; alert lead -1.0 mo"
+   },
+   {
+    "metric": "Venezuela 2016 / Guri: area anomaly at onset",
+    "value": -0.231,
+    "n": null,
+    "note": "pred gen anomaly -0.33; alert lead 15.0 mo"
+   },
+   {
+    "metric": "Venezuela 2019 / Guri: area anomaly at onset",
+    "value": 0.076,
+    "n": null,
+    "note": "pred gen anomaly -0.09; alert lead nan mo"
+   },
+   {
+    "metric": "Kyrgyzstan 2021 / Toktogul: area anomaly at onset",
+    "value": -0.052,
+    "n": null,
+    "note": "pred gen anomaly -0.00; alert lead nan mo"
+   },
+   {
+    "metric": "Kyrgyzstan 2023 / Toktogul: area anomaly at onset",
+    "value": -0.083,
+    "n": null,
+    "note": "pred gen anomaly -0.28; alert lead nan mo"
+   },
+   {
+    "metric": "Yunnan 2021 / Nuozhadu: area anomaly at onset",
+    "value": 0.136,
+    "n": null,
+    "note": "pred gen anomaly +0.05; alert lead nan mo"
+   },
+   {
+    "metric": "Yunnan 2022-23 / Nuozhadu: area anomaly at onset",
+    "value": 0.014,
+    "n": null,
+    "note": "pred gen anomaly -0.04; alert lead nan mo"
+   },
+   {
+    "metric": "Yunnan 2022-23 / Xiaowan: area anomaly at onset",
+    "value": -0.11,
+    "n": null,
+    "note": "pred gen anomaly +0.08; alert lead nan mo"
+   },
+   {
+    "metric": "Vietnam 2023 / Hoa Binh: area anomaly at onset",
+    "value": 0.089,
+    "n": null,
+    "note": "pred gen anomaly -0.17; alert lead nan mo"
+   },
+   {
+    "metric": "Tanzania 2015 / Mtera: area anomaly at onset",
+    "value": -0.57,
+    "n": null,
+    "note": "pred gen anomaly -0.67; alert lead 0.0 mo"
+   },
+   {
+    "metric": "Tanzania 2022 / Mtera: area anomaly at onset",
+    "value": 0.027,
+    "n": null,
+    "note": "pred gen anomaly +0.42; alert lead nan mo"
+   },
+   {
+    "metric": "Turkey 2021 / Ataturk: area anomaly at onset",
+    "value": 0.012,
+    "n": null,
+    "note": "pred gen anomaly -0.11; alert lead nan mo"
+   },
+   {
+    "metric": "Turkey 2021 / Keban: area anomaly at onset",
+    "value": 0.011,
+    "n": null,
+    "note": "pred gen anomaly -0.08; alert lead -5.0 mo"
+   },
+   {
+    "metric": "Brazil 2021 / Furnas: area anomaly at onset",
+    "value": -0.101,
+    "n": null,
+    "note": "pred gen anomaly -0.01; alert lead nan mo"
+   },
+   {
+    "metric": "Brazil 2021 / Serra da Mesa: area anomaly at onset",
+    "value": -0.102,
+    "n": null,
+    "note": "pred gen anomaly -0.29; alert lead nan mo"
+   },
+   {
+    "metric": "Brazil 2021 / Tres Marias: area anomaly at onset",
+    "value": -0.049,
+    "n": null,
+    "note": "pred gen anomaly -0.01; alert lead nan mo"
+   },
+   {
+    "metric": "Pakistan 2022 / Tarbela: area anomaly at onset",
+    "value": -0.047,
+    "n": null,
+    "note": "pred gen anomaly +0.19; alert lead nan mo"
+   },
+   {
+    "metric": "Pakistan 2022 / Mangla: area anomaly at onset",
+    "value": -0.172,
+    "n": null,
+    "note": "pred gen anomaly -0.06; alert lead -2.0 mo"
+   },
+   {
+    "metric": "Brazil 2014-15 / Serra da Mesa: area anomaly at onset",
+    "value": -0.057,
+    "n": null,
+    "note": "pred gen anomaly -0.14; alert lead nan mo"
+   },
+   {
+    "metric": "Brazil 2014-15 / Tres Marias: area anomaly at onset",
+    "value": -0.279,
+    "n": null,
+    "note": "pred gen anomaly -0.63; alert lead 13.0 mo"
+   },
+   {
+    "metric": "Brazil 2014-15 / Sobradinho: area anomaly at onset",
+    "value": -0.045,
+    "n": null,
+    "note": "pred gen anomaly -0.18; alert lead nan mo"
+   }
+  ],
+  "controls": "Venezuela March 2019 (transmission failure) as a negative control: area +8%, no alert.",
+  "verdict": "partial",
+  "known_or_novel": "known events; the scoreboard is new",
+  "prior_art": [
+   "https://www.nature.com/articles/s41598-022-17074-6"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_guri_venezuela.png",
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_zambia_itezhitezhi_kariba.png",
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_brazil_tres_marias.png",
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_tanzania_mtera.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/15_case_studies.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/05b_s2_extra.py"
+  ],
+  "caveats": "Episode dates are curated from public reporting (month precision) and were chosen by us: this is illustration, not a hit-rate estimate - the unbiased estimate is dams-06. No keyless plant-level truth exists for these dams. Ecuador/Mazar: own Sentinel-2 extraction is cloud-starved (few clear months) - effectively untested."
+ },
+ {
+  "id": "dams-08-gerd",
+  "title": "GERD filling measured from anonymous Sentinel-2 imagery",
+  "one_liner": "Own MNDWI extraction on ~80 m overviews shows each annual filling step from ~15 km2 of river (2019) upward; GWW does not carry this reservoir.",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs via Element84 Earth Search",
+    "url": "https://earth-search.aws.element84.com/v1",
+    "access": "anonymous STAC + COG reads"
+   }
+  ],
+  "mechanism": "Direct observation of surface water extent.",
+  "method": "Earth Search STAC, clearest scene-date per month, B03/B11 MNDWI>0 with SCL cloud mask, tiles mosaicked on a common grid, last-known-state fill for cloudy pixels.",
+  "results": [
+   {
+    "metric": "water area in window, 2019-04 (km2)",
+    "value": 15.618,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "water area in window, 2020-12 (km2)",
+    "value": 204.297,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "water area in window, 2022-11 (km2)",
+    "value": 738.598,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "water area in window, 2024-05 (km2)",
+    "value": 867.084,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "water area in window, 2026-05 (km2)",
+    "value": 1191.35,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "maximum clear-scene area (km2)",
+    "value": 1530.994,
+    "n": 53,
+    "note": "2025-11"
+   }
+  ],
+  "controls": "Pre-fill 2019 baseline; scene-level vs cloud-filled areas both reported.",
+  "verdict": "supported",
+  "known_or_novel": "known (many groups have tracked GERD filling); ours is a keyless reproducible pipeline",
+  "prior_art": [
+   "https://doi.org/10.3390/RS13040711",
+   "https://www.sciencedirect.com/science/article/pii/S1110982321000922",
+   "https://hess.copernicus.org/articles/27/4057/2023/"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/gerd_filling_sequence.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/s2water.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/05_gerd_s2.py"
+  ],
+  "caveats": "80 m overviews under-count narrow arms; rainy-season months (Jun-Sep) are cloud-gapped; window includes the river and small water bodies (~15 km2 baseline). No generation estimate is attempted: a filling reservoir has no climatology."
+ },
+ {
+  "id": "dams-09-grid-crosscheck",
+  "title": "When hydro falls, thermal fills the gap - and the orbit-side hydro index sees it",
+  "one_liner": "Labels: West US -0.84 MWh fossil per MWh hydro (r=-0.70); Brazil -0.59 (r=-0.72). Satellite-predicted hydro anomaly vs actual THERMAL output: r=-0.39 (US West, unseen dams), r=-0.49 (Brazil, zero-shot).",
+  "datasets": [
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Brazil ONS open data: hourly generation per plant, reservoir registry, daily hydrology",
+    "url": "s3://ons-aws-prod-opendata/dataset/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   }
+  ],
+  "mechanism": "Hydro is the cheapest dispatchable energy; shortfalls are replaced by gas/coal (US West) or thermal + imports (Brazil).",
+  "method": "Year-over-year monthly differences; OLS with HAC (12-lag) errors; wind+solar control; satellite index = sum over dams of predicted anomaly x normal generation.",
+  "results": [
+   {
+    "metric": "US West (11 states, EIA-923) | labels: d12 fossil ~ d12 hydro",
+    "value": -0.704,
+    "n": 288,
+    "note": "slope -0.84 +- 0.06 (HAC), p=3.45e-41"
+   },
+   {
+    "metric": "US West (11 states, EIA-923) | labels: + control d12 wind+solar",
+    "value": -0.704,
+    "n": 288,
+    "note": "slope -0.84 +- 0.06 (HAC), p=6.29e-47"
+   },
+   {
+    "metric": "US West | orbit: d12 fossil ~ d12 satellite-predicted hydro anomaly (area+climate; unseen dams)",
+    "value": -0.388,
+    "n": 204,
+    "note": "slope -1.40 +- 0.32 (HAC), p=9.75e-06"
+   },
+   {
+    "metric": "US West | orbit sanity: d12 actual West hydro ~ d12 satellite-predicted (area+climate)",
+    "value": 0.545,
+    "n": 204,
+    "note": "slope 1.45 +- 0.23 (HAC), p=4.41e-10"
+   },
+   {
+    "metric": "US West | orbit: d12 fossil ~ d12 satellite-predicted hydro anomaly (area only; unseen dams)",
+    "value": -0.285,
+    "n": 204,
+    "note": "slope -3.25 +- 0.82 (HAC), p=8.08e-05"
+   },
+   {
+    "metric": "US West | orbit sanity: d12 actual West hydro ~ d12 satellite-predicted (area only)",
+    "value": 0.366,
+    "n": 204,
+    "note": "slope 3.10 +- 0.79 (HAC), p=8.28e-05"
+   },
+   {
+    "metric": "US West | orbit: d12 fossil ~ d12 satellite-predicted hydro anomaly (climate only; unseen dams)",
+    "value": -0.348,
+    "n": 204,
+    "note": "slope -1.35 +- 0.33 (HAC), p=3.5e-05"
+   },
+   {
+    "metric": "US West | orbit sanity: d12 actual West hydro ~ d12 satellite-predicted (climate only)",
+    "value": 0.538,
+    "n": 204,
+    "note": "slope 1.46 +- 0.23 (HAC), p=2.18e-10"
+   },
+   {
+    "metric": "Brazil SIN (ONS) | labels: d12 thermal ~ d12 hydro",
+    "value": -0.723,
+    "n": 308,
+    "note": "slope -0.58 +- 0.11 (HAC), p=4.01e-08"
+   },
+   {
+    "metric": "Brazil SIN (ONS) | labels: + control d12 wind+solar",
+    "value": -0.723,
+    "n": 308,
+    "note": "slope -0.59 +- 0.11 (HAC), p=6.27e-08"
+   },
+   {
+    "metric": "Brazil SIN | orbit: d12 thermal ~ d12 satellite-predicted hydro anomaly (area+climate; zero-shot US model)",
+    "value": -0.49,
+    "n": 121,
+    "note": "slope -1.50 +- 0.38 (HAC), p=9.08e-05"
+   },
+   {
+    "metric": "Brazil SIN | orbit sanity: d12 actual SIN hydro ~ d12 satellite-predicted (area+climate)",
+    "value": 0.477,
+    "n": 121,
+    "note": "slope 1.58 +- 0.40 (HAC), p=7.94e-05"
+   },
+   {
+    "metric": "Brazil SIN | orbit: d12 thermal ~ d12 satellite-predicted hydro anomaly (area only; zero-shot US model)",
+    "value": -0.401,
+    "n": 121,
+    "note": "slope -1.10 +- 0.32 (HAC), p=0.000556"
+   },
+   {
+    "metric": "Brazil SIN | orbit sanity: d12 actual SIN hydro ~ d12 satellite-predicted (area only)",
+    "value": 0.327,
+    "n": 121,
+    "note": "slope 0.89 +- 0.27 (HAC), p=0.00108"
+   }
+  ],
+  "controls": "Wind+solar control; area-only and climate-only indices; sanity regressions of actual hydro on the satellite index.",
+  "verdict": "supported",
+  "known_or_novel": "known on the label side (hydro-gas substitution is textbook); orbit-to-thermal link is a small novel add",
+  "prior_art": [
+   "https://www.eia.gov/todayinenergy/detail.php?id=18271",
+   "https://www.utilitydive.com/news/california-drought-could-halve-summer-hydropower-share-leading-to-more-nat/624489/"
+  ],
+  "figures": [],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/18_grid_crosscheck.py"
+  ],
+  "caveats": "Satellite NO2 side NOT attempted: the sibling TROPOMI pipeline found daily SNR ~1 and only Apr-Sep 2025 is extracted; a multi-year interconnection-scale pull plus 2021 wildfire NOx made a clean test unlikely within budget. Satellite index covers a subset of the fleet (slope > 1)."
+ },
+ {
+  "id": "dams-11-regional-aggregation",
+  "title": "Aggregated to a region, the label-free prediction tracks ALL hydro output - California r=0.85-0.90 - and beats 3-month-old official data",
+  "one_liner": "Summing unseen-dam predictions by region and scoring against every EIA-923 hydro plant in the region (monitored or not): California r=0.90 (unseen dams) / 0.85 (unseen dams and 2019-25); Southeast 0.80/0.66; Plains 0.71/0.73; but Pacific Northwest 0.52/0.15 and Colorado basin 0.55/0.35.",
+  "datasets": [
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "NOAA PREC/L precipitation 1 deg + GHCN-CAMS 2 m temperature 0.5 deg (monthly)",
+    "url": "https://downloads.psl.noaa.gov/Datasets/",
+    "access": "direct download"
+   },
+   {
+    "name": "HydroBASINS level 7",
+    "url": "https://data.hydrosheds.org/file/hydrobasins/standard/",
+    "access": "direct download"
+   }
+  ],
+  "mechanism": "Dam-level noise (operations, outages, area retrieval error) is idiosyncratic and averages out; the regional water-year signal is common to storage and rainfall.",
+  "method": "Leave-dams-out and strict predictions x each dam's normal generation, summed per region, as % of regional normal; truth = all EIA-923 conventional hydro in those states; compared with damped persistence of a 3-month-old label.",
+  "results": [
+   {
+    "metric": "r vs ALL regional hydro [leave_dams_out; California; area+climate]",
+    "value": 0.901,
+    "n": 272,
+    "note": "area only 0.73; climate only 0.90; 3-month-old label 0.66; monitored share of MWh 30%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [leave_dams_out; Pacific Northwest; area+climate]",
+    "value": 0.52,
+    "n": 201,
+    "note": "area only 0.50; climate only 0.52; 3-month-old label 0.32; monitored share of MWh 44%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [leave_dams_out; Colorado basin / Southwest; area+climate]",
+    "value": 0.55,
+    "n": 179,
+    "note": "area only 0.62; climate only 0.32; 3-month-old label 0.60; monitored share of MWh 76%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [leave_dams_out; Southeast (TVA + Carolinas + AL/GA); area+climate]",
+    "value": 0.801,
+    "n": 214,
+    "note": "area only 0.62; climate only 0.80; 3-month-old label 0.42; monitored share of MWh 42%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [leave_dams_out; Missouri / Plains; area+climate]",
+    "value": 0.713,
+    "n": 251,
+    "note": "area only 0.67; climate only 0.67; 3-month-old label 0.36; monitored share of MWh 41%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [leave_dams_out; Northeast; area+climate]",
+    "value": 0.661,
+    "n": 155,
+    "note": "area only 0.36; climate only 0.67; 3-month-old label 0.26; monitored share of MWh 16%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [strict; California; area+climate]",
+    "value": 0.853,
+    "n": 84,
+    "note": "area only 0.70; climate only 0.82; 3-month-old label 0.52; monitored share of MWh 31%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [strict; Pacific Northwest; area+climate]",
+    "value": 0.152,
+    "n": 81,
+    "note": "area only 0.29; climate only 0.12; 3-month-old label 0.07; monitored share of MWh 42%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [strict; Colorado basin / Southwest; area+climate]",
+    "value": 0.35,
+    "n": 75,
+    "note": "area only 0.50; climate only 0.21; 3-month-old label 0.28; monitored share of MWh 75%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [strict; Southeast (TVA + Carolinas + AL/GA); area+climate]",
+    "value": 0.657,
+    "n": 84,
+    "note": "area only 0.49; climate only 0.64; 3-month-old label 0.41; monitored share of MWh 45%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [strict; Missouri / Plains; area+climate]",
+    "value": 0.727,
+    "n": 72,
+    "note": "area only 0.56; climate only 0.74; 3-month-old label 0.48; monitored share of MWh 43%"
+   },
+   {
+    "metric": "r vs ALL regional hydro [strict; Northeast; area+climate]",
+    "value": 0.541,
+    "n": 76,
+    "note": "area only -0.01; climate only 0.72; 3-month-old label 0.30; monitored share of MWh 9%"
+   }
+  ],
+  "controls": "Strict design (unseen dams AND 2019-2025, climatology from <=2018); truth includes unmonitored plants; persistence-with-publication-lag baseline.",
+  "verdict": "partial",
+  "known_or_novel": "novel framing (label-free regional hydro nowcast beating publication-lagged official data); regional drought-hydro links are known",
+  "prior_art": [
+   "https://www.eia.gov/todayinenergy/detail.php?id=18271"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/regional_aggregate.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/22_regional_aggregate.py"
+  ],
+  "caveats": "Fails for the Pacific Northwest (run-of-river Columbia cascade, Canadian storage, snowmelt timing) and is weak for the Colorado basin in 2019-25 (model over-predicts the 2021-23 shortfall: Reclamation held releases above what storage alone implied). In California almost all the skill is available from basin climate alone (0.82 vs 0.85); area adds most in the Colorado basin (0.50 vs 0.21)."
+ },
+ {
+  "id": "dams-12-kariba-shallow-sector",
+  "title": "The 'Kariba trap' is a retrieval problem: a shallow-shore Sentinel-2 sector recovers the droughts the whole-lake series misses",
+  "one_liner": "GWW's whole-lake Kariba series is sparse/noisy (r=0.17 vs Zambian load-shedding news); our own Sentinel-2 extraction over the gently sloping Matusadona-Sanyati shore shows the 2019, Dec-2022 and 2024 drawdowns (r=0.52).",
+  "datasets": [
+   {
+    "name": "Sentinel-2 L2A COGs via Element84 Earth Search",
+    "url": "https://earth-search.aws.element84.com/v1",
+    "access": "anonymous STAC + COG reads"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "GDELT DOC 2.0 API",
+    "url": "https://api.gdeltproject.org/api/v2/doc/doc",
+    "access": "keyless; hard 1 req/5 s per IP, shared-IP 429s"
+   }
+  ],
+  "mechanism": "On a steep-sided lake most shoreline barely moves per metre of level; a low-gradient shore sector maximises d(area)/d(level). Very large lakes also suffer partial-tile coverage in whole-lake products.",
+  "method": "MNDWI water area in a 0.55 x 0.30 degree window, clearest scene per month 2017-2026, valid>=97%, scene cloud<10%; anomaly vs own seasonal mean; correlation with log GDELT share at lags.",
+  "results": [
+   {
+    "metric": "Kariba whole-lake (GWW): r vs log news at lag -4 months (+ve = reservoir leads)",
+    "value": 0.362,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba whole-lake (GWW): r vs log news at lag -2 months (+ve = reservoir leads)",
+    "value": 0.285,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba whole-lake (GWW): r vs log news at lag +0 months (+ve = reservoir leads)",
+    "value": 0.167,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba whole-lake (GWW): r vs log news at lag +2 months (+ve = reservoir leads)",
+    "value": 0.095,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba whole-lake (GWW): r vs log news at lag +4 months (+ve = reservoir leads)",
+    "value": 0.029,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba whole-lake (GWW): r vs log news at lag +6 months (+ve = reservoir leads)",
+    "value": -0.151,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba shallow sector (own Sentinel-2): r vs log news at lag -4 months (+ve = reservoir leads)",
+    "value": 0.527,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba shallow sector (own Sentinel-2): r vs log news at lag -2 months (+ve = reservoir leads)",
+    "value": 0.576,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba shallow sector (own Sentinel-2): r vs log news at lag +0 months (+ve = reservoir leads)",
+    "value": 0.523,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba shallow sector (own Sentinel-2): r vs log news at lag +2 months (+ve = reservoir leads)",
+    "value": 0.475,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba shallow sector (own Sentinel-2): r vs log news at lag +4 months (+ve = reservoir leads)",
+    "value": 0.35,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Kariba shallow sector (own Sentinel-2): r vs log news at lag +6 months (+ve = reservoir leads)",
+    "value": 0.224,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Itezhi-Tezhi (GWW): r vs log news at lag -4 months (+ve = reservoir leads)",
+    "value": 0.334,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Itezhi-Tezhi (GWW): r vs log news at lag -2 months (+ve = reservoir leads)",
+    "value": 0.305,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Itezhi-Tezhi (GWW): r vs log news at lag +0 months (+ve = reservoir leads)",
+    "value": 0.199,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Itezhi-Tezhi (GWW): r vs log news at lag +2 months (+ve = reservoir leads)",
+    "value": 0.072,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Itezhi-Tezhi (GWW): r vs log news at lag +4 months (+ve = reservoir leads)",
+    "value": -0.0,
+    "n": 110,
+    "note": ""
+   },
+   {
+    "metric": "Itezhi-Tezhi (GWW): r vs log news at lag +6 months (+ve = reservoir leads)",
+    "value": -0.123,
+    "n": 110,
+    "note": ""
+   }
+  ],
+  "controls": "Same news series, three reservoir series; GWW whole-lake as the baseline.",
+  "verdict": "supported",
+  "known_or_novel": "novel as a practical screen (choose the most level-sensitive shore sector); physics is textbook hypsometry",
+  "prior_art": [
+   "https://www.nature.com/articles/s41598-022-17074-6"
+  ],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_zambia_itezhitezhi_kariba.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/05b_s2_extra.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/23_news_leadlag.py"
+  ],
+  "caveats": "Sector chosen by eye from the map (one try, not tuned against outcomes). Only 9 years of Sentinel-2, so no pre-registered z-score alert is possible; no keyless lake-level truth was found (ZRA publishes levels on web pages; not scraped). Correlation peaks when NEWS leads by ~2 months."
+ },
+ {
+  "id": "dams-13-news-lead-null",
+  "title": "No lead over the news: reservoir deficits are coincident with or lag power-shortage coverage",
+  "one_liner": "Across 10 hydro-dependent countries with GDELT series so far, median r(deficit, news) = 0.02 at lag 0 and 0.19 at the best lag; only 10% reach r>=0.3. Even the best series (Kariba shallow sector, r=0.58) peaks with news leading by 2 months.",
+  "datasets": [
+   {
+    "name": "GDELT DOC 2.0 API",
+    "url": "https://api.gdeltproject.org/api/v2/doc/doc",
+    "access": "keyless; hard 1 req/5 s per IP, shared-IP 429s"
+   },
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "Sentinel-2 L2A COGs via Element84 Earth Search",
+    "url": "https://earth-search.aws.element84.com/v1",
+    "access": "anonymous STAC + COG reads"
+   }
+  ],
+  "mechanism": "Utilities announce rationing on forecasts and lake levels they already hold; monthly optical area with cloud gaps cannot beat a press release. Orbit adds magnitude, persistence and independent verification, not timing.",
+  "method": "Country deficit index = capacity-weighted area anomaly of all monitored storage reservoirs (3-month mean); log GDELT share-of-coverage, de-trended by trailing 24-month median; cross-correlation at -6..+12 months.",
+  "results": [
+   {
+    "metric": "MWI: r at lag 0 / best lag",
+    "value": 0.249,
+    "n": 116,
+    "note": "best lag -3 mo, r_best 0.36; 2 reservoirs; hydro share 91%"
+   },
+   {
+    "metric": "PAK: r at lag 0 / best lag",
+    "value": 0.308,
+    "n": 116,
+    "note": "best lag -1 mo, r_best 0.31; 5 reservoirs; hydro share 24%"
+   },
+   {
+    "metric": "TUR: r at lag 0 / best lag",
+    "value": 0.172,
+    "n": 116,
+    "note": "best lag 10 mo, r_best 0.30; 20 reservoirs; hydro share 23%"
+   },
+   {
+    "metric": "TZA: r at lag 0 / best lag",
+    "value": 0.218,
+    "n": 112,
+    "note": "best lag 3 mo, r_best 0.29; 2 reservoirs; hydro share 33%"
+   },
+   {
+    "metric": "BRA: r at lag 0 / best lag",
+    "value": 0.216,
+    "n": 116,
+    "note": "best lag 2 mo, r_best 0.26; 68 reservoirs; hydro share 62%"
+   },
+   {
+    "metric": "GHA: r at lag 0 / best lag",
+    "value": 0.113,
+    "n": 94,
+    "note": "best lag 9 mo, r_best 0.24; 1 reservoirs; hydro share 40%"
+   },
+   {
+    "metric": "KEN: r at lag 0 / best lag",
+    "value": 0.208,
+    "n": 116,
+    "note": "best lag -1 mo, r_best 0.24; 6 reservoirs; hydro share 31%"
+   },
+   {
+    "metric": "COL: r at lag 0 / best lag",
+    "value": 0.061,
+    "n": 115,
+    "note": "best lag -6 mo, r_best 0.22; 7 reservoirs; hydro share 68%"
+   },
+   {
+    "metric": "VEN: r at lag 0 / best lag",
+    "value": -0.022,
+    "n": 116,
+    "note": "best lag 10 mo, r_best 0.19; 3 reservoirs; hydro share 68%"
+   },
+   {
+    "metric": "ZMB: r at lag 0 / best lag",
+    "value": 0.066,
+    "n": 114,
+    "note": "best lag -3 mo, r_best 0.19; 3 reservoirs; hydro share 88%"
+   },
+   {
+    "metric": "VNM: r at lag 0 / best lag",
+    "value": 0.123,
+    "n": 116,
+    "note": "best lag 11 mo, r_best 0.16; 25 reservoirs; hydro share 34%"
+   },
+   {
+    "metric": "ZWE: r at lag 0 / best lag",
+    "value": -0.335,
+    "n": 95,
+    "note": "best lag -6 mo, r_best 0.09; 1 reservoirs; hydro share 55%"
+   },
+   {
+    "metric": "ECU: r at lag 0 / best lag",
+    "value": -0.061,
+    "n": 98,
+    "note": "best lag 12 mo, r_best 0.05; 1 reservoirs; hydro share 70%"
+   },
+   {
+    "metric": "KGZ: r at lag 0 / best lag",
+    "value": -0.277,
+    "n": 116,
+    "note": "best lag 12 mo, r_best 0.04; 4 reservoirs; hydro share 88%"
+   },
+   {
+    "metric": "MOZ: r at lag 0 / best lag",
+    "value": -0.165,
+    "n": 113,
+    "note": "best lag 1 mo, r_best -0.15; 1 reservoirs; hydro share 83%"
+   }
+  ],
+  "controls": "All countries with data reported, not only the famous ones; pre-registered country scope (hydro share >= 40%).",
+  "verdict": "rejected",
+  "known_or_novel": "novel negative result (agrees with the scout's Zambia null)",
+  "prior_art": [],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/case_zambia_itezhitezhi_kariba.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/12_gdelt.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/23_news_leadlag.py",
+   "/Users/tomalmog/projects/kingdom/explore/dams/13_alerts.py"
+  ],
+  "caveats": "GDELT DOC covers 2017+ only and is English-heavy; the shared IP was rate-limited (HTTP 429) so only part of the 47-country list completed - see results/news_leadlag.csv for the exact set. Country indices are dominated by the largest reservoir, which for Zambia/Zimbabwe is the noisy whole-lake Kariba series."
+ },
+ {
+  "id": "dams-10-dam-removal-detection",
+  "title": "Side effect: the latest-state table flags drained reservoirs (Klamath and Elwha removals, Edenville failure, Kakhovka)",
+  "one_liner": "Largest negative area anomalies in dams_latest.csv are Iron Gate (-88%), Copco 2 (-90%), Glines Canyon (-70%), Edenville (-92%) and the Dnipro/Kakhovka pool (-95%).",
+  "datasets": [
+   {
+    "name": "Global Water Watch reservoir surface area (Landsat + Sentinel-2)",
+    "url": "https://api.globalwaterwatch.earth",
+    "access": "keyless REST API; licence/rate limits not stated - cached, <=3 concurrent"
+   },
+   {
+    "name": "PUDL EIA-923 / EIA-860 (Catalyst Cooperative)",
+    "url": "s3://pudl.catalyst.coop/nightly/",
+    "access": "anonymous S3"
+   },
+   {
+    "name": "GloHydroRes v1 (Shah et al. 2025)",
+    "url": "https://zenodo.org/records/14526360",
+    "access": "Zenodo, CC-BY 4.0"
+   }
+  ],
+  "mechanism": "A removed or breached dam has no reservoir.",
+  "method": "Sort dams_latest.csv by area anomaly.",
+  "results": [
+   {
+    "metric": "Dneipro HPP 2 (Ukraine) latest area anomaly",
+    "value": -0.949,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "Edenville (USA) latest area anomaly",
+    "value": -0.924,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "Copco 2 (USA) latest area anomaly",
+    "value": -0.901,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "Iron Gate (USA) latest area anomaly",
+    "value": -0.884,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "Hpp vidraru CORB12 - Vidraru Hydroelectric Power Station Romania (Romania) latest area anomaly",
+    "value": -0.717,
+    "n": null,
+    "note": ""
+   },
+   {
+    "metric": "Glines Hydroelectric Project (USA) latest area anomaly",
+    "value": -0.702,
+    "n": null,
+    "note": ""
+   }
+  ],
+  "controls": "None - face validity against public record.",
+  "verdict": "supported",
+  "known_or_novel": "known events; useful as a QA check that the pipeline sees real change",
+  "prior_art": [],
+  "figures": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/figures/world_map_latest.png"
+  ],
+  "scripts": [
+   "/Users/tomalmog/projects/kingdom/explore/dams/17_latest_geojson.py"
+  ],
+  "caveats": "Predicted generation anomalies for such sites are extrapolations."
+ }
+]

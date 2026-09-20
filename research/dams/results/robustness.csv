@@ -1,0 +1,12 @@
+test,n,median_r,value
+A own reservoir,391.0,0.11799486834982274,
+A placebo: nearest other reservoir (<300 km),385.0,0.0784352326715947,
+A placebo: random reservoir >1500 km away,391.0,-0.020787561820998696,
+A own reservoir (carry-over subset),121.0,0.3720352619328818,
+A nearest-other placebo (carry-over subset),121.0,0.18722506180596382,
+"B centred despike filter (production), carry-over",121.0,0.3720352619328818,
+"B strictly causal filter + forward-fill, carry-over",121.0,0.3438454390045883,
+C mean pooled area anomaly 2001-2012 (Landsat 5/7),387.0,,-0.0016659213770203306
+C 2013-2016 (+Landsat 8),395.0,,-0.028816950718504476
+C 2017-2025 (+Sentinel-2),399.0,,0.014026707716658725
+C (for comparison) mean generation anomaly 2017-2025,,,-0.012192032690201852

@@ -1,0 +1,91 @@
+{
+ "yunnan": [
+  {
+   "event_month": "2021-05",
+   "note": "power rationing, smelters cut from mid-May 2021",
+   "z_known_at_event (month m-2)": 1.77,
+   "z_same_month": 0.98,
+   "shfe_al_ret_prev3m_%": 23.6,
+   "shfe_al_ret_event_month_%": -0.9,
+   "shfe_al_ret_next3m_%": 12.8
+  },
+  {
+   "event_month": "2021-09",
+   "note": "further cuts (energy dual-control + hydro)",
+   "z_known_at_event (month m-2)": 0.65,
+   "z_same_month": -0.83,
+   "shfe_al_ret_prev3m_%": 12.8,
+   "shfe_al_ret_event_month_%": 5.4,
+   "shfe_al_ret_next3m_%": -10.2
+  },
+  {
+   "event_month": "2022-09",
+   "note": "10% then 20-30% cuts",
+   "z_known_at_event (month m-2)": 0.95,
+   "z_same_month": -1.02,
+   "shfe_al_ret_prev3m_%": -12.2,
+   "shfe_al_ret_event_month_%": -0.8,
+   "shfe_al_ret_next3m_%": 2.3
+  },
+  {
+   "event_month": "2023-02",
+   "note": "cuts deepened to ~40% (approx. 0.65-0.8 Mt)",
+   "z_known_at_event (month m-2)": -0.98,
+   "z_same_month": -0.9,
+   "shfe_al_ret_prev3m_%": 7.6,
+   "shfe_al_ret_event_month_%": -2.5,
+   "shfe_al_ret_next3m_%": -2.4
+  },
+  {
+   "event_month": "2023-11",
+   "note": "dry-season cuts 9-40% at four smelters (~1.15 Mt)",
+   "z_known_at_event (month m-2)": -0.23,
+   "z_same_month": -0.77,
+   "shfe_al_ret_prev3m_%": 4.4,
+   "shfe_al_ret_event_month_%": -3.3,
+   "shfe_al_ret_next3m_%": 1.7
+  }
+ ],
+ "libya": [
+  {
+   "event": "2013-07-15",
+   "note": "port/field blockades begin (to mid-2014)",
+   "flare_MW_pre8w": 441,
+   "flare_MW_post(2-10w)": 347,
+   "change_%": -21,
+   "first_week_below_half_move": "2013-08-08",
+   "brent_ret_event_week_%": -0.7,
+   "brent_ret_next4w_%": 2.8
+  },
+  {
+   "event": "2020-01-18",
+   "note": "LNA blockade (to 2020-09-18)",
+   "flare_MW_pre8w": 515,
+   "flare_MW_post(2-10w)": 241,
+   "change_%": -53,
+   "first_week_below_half_move": "2020-01-16",
+   "brent_ret_event_week_%": -1.2,
+   "brent_ret_next4w_%": -6.7
+  },
+  {
+   "event": "2022-04-17",
+   "note": "Sharara/El Feel + ports shut",
+   "flare_MW_pre8w": 544,
+   "flare_MW_post(2-10w)": 387,
+   "change_%": -29,
+   "first_week_below_half_move": "2022-04-14",
+   "brent_ret_event_week_%": -3.1,
+   "brent_ret_next4w_%": 3.4
+  },
+  {
+   "event": "2024-08-26",
+   "note": "central-bank dispute shut-in",
+   "flare_MW_pre8w": 673,
+   "flare_MW_post(2-10w)": 647,
+   "change_%": -4,
+   "first_week_below_half_move": "2024-09-05",
+   "brent_ret_event_week_%": -0.3,
+   "brent_ret_next4w_%": -9.1
+  }
+ ]
+}
