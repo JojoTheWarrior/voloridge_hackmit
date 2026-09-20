@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:55:12.127275+00:00",
+  "git_commit": "fefb31f80f3ebcba6d4184320bfcf5f71cf591ee",
+  "folder": "20260920-058-research-lng-crossref-pubs_x_finance-ttf-f-close",
+  "mission_id": "M20260920-9991eb",
+  "hypothesis": "OpenAlex \"liquefied natural gas\" publication counts track TTF gas prices.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.1325885938699687,
+  "perm_p": 0.6487025948103793,
+  "validity": 0.16,
+  "interestingness": 3.16,
+  "unexpectedness": 4.36,
+  "indicator_coverage": {
+    "research.lng.crossref_pubs": "2025-03..current week",
+    "finance.TTF=F.close": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

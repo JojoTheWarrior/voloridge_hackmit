@@ -59,3 +59,4 @@
 | `20260920-055-gdelt-irn-conflict-events_x_research-missile-crossref-pubs` | OpenAlex "missile defense" publication counts increased during the war relative to the 2025 baseline. | ok | 81 | -0.0462049829098654 | 0.7644710578842315 | 0.08 | 3.72 | 5.88 |
 | `20260920-056-gdelt-gkg-hormuz-share_x_research-hormuz-crossref-share` | OpenAlex "Strait of Hormuz" publications spike in the months after the closure. | ok | 81 | -0.005018970118859707 | 0.013972055888223553 | 5.76 | 3.82 | 5.56 |
 | `20260920-057-research-ammonia-crossref-share_x_finance-mos-log-return` | OpenAlex "fertilizer" research volume correlates with fertilizer equity returns (MOS, CF, NTR). | ok | 53 | -0.21000515856608917 | 0.36327345309381237 | 2.0 | 3.54 | 5.7 |
+| `20260920-058-research-lng-crossref-pubs_x_finance-ttf-f-close` | OpenAlex "liquefied natural gas" publication counts track TTF gas prices. | ok | 81 | 0.1325885938699687 | 0.6487025948103793 | 0.16 | 3.16 | 4.36 |
