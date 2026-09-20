@@ -1,0 +1,1 @@
+SHERLOCK | [#8 LNG flares] Houston CAMS CO 20d z-score > 1 (Gulf Coast LNG/petrochemical flaring proxy) leads Cheniere returns by 3 days (+); trade long LNG 3d [airquality.houston.cams_co -> finance.LNG.log_return]

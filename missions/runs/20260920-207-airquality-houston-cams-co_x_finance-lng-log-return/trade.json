@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 48,
+    "hit_rate": 0.5416666666666666,
+    "avg_return": 0.0010969734423723805,
+    "baseline_avg_return": 0.0007636369593699658,
+    "excess_return": 0.0003333364830024147,
+    "sharpe_like": 0.4352585754287959,
+    "max_drawdown": -0.05832397663217215,
+    "total_return": 0.046313234976617546
+  },
+  "fit_pre_war": {
+    "n_trades": 31,
+    "hit_rate": 0.5483870967741935,
+    "avg_return": 0.0017790062506180377,
+    "baseline_avg_return": 0.0007711584549580786,
+    "excess_return": 0.001007847795659959,
+    "sharpe_like": 0.7540564941757728,
+    "max_drawdown": -0.05756418675110275,
+    "total_return": 0.05382798770528496
+  },
+  "test_war": {
+    "n_trades": 17,
+    "hit_rate": 0.5294117647058824,
+    "avg_return": -0.00014673344325205292,
+    "baseline_avg_return": 0.0007503796470024289,
+    "excess_return": -0.0008971130902544818,
+    "sharpe_like": -0.025943428160869395,
+    "max_drawdown": -0.05832397663217226,
+    "total_return": -0.007130910183009043
+  },
+  "n_signal_days": 384,
+  "trade_idea": {
+    "instrument": "LNG",
+    "direction": "long",
+    "entry_rule": "airquality.houston.cams_co rolling_zscore_20d > 1 at close -> long LNG next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5416666666666666,
+    "avg_return": 0.0010969734423723805,
+    "excess_return": 0.0003333364830024147,
+    "n_trades": 48,
+    "sharpe_like": 0.4352585754287959,
+    "max_drawdown": -0.05832397663217215,
+    "oos_n_trades": 17,
+    "oos_avg_return": -0.00014673344325205292,
+    "oos_hit_rate": 0.5294117647058824,
+    "actionability": 4.21,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
