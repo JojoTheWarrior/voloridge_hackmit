@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/c0497275229346f08f1b2010c687af3f",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:19:52Z",
-  "updated_at": "2026-09-20T13:20:03Z",
+  "updated_at": "2026-09-20T13:21:01Z",
   "finished_at": null,
-  "elapsed_s": 11,
+  "elapsed_s": 69,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-265-finance-vix-log-return_x_finance-fdx-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 1.77,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Reversal: VIX log-return spike (20d z > 1) shows no next-day FDX bounce (OOS hit 30%), so test continuation instead (-); trade short FDX 2d at 1d lag [finance.^VIX.log_return -> finance.FDX.log_return] (parent: R2-0176)"
 }
