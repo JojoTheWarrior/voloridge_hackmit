@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/d6f163b16c664ad48a78432db9169d07",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:13:12Z",
-  "updated_at": "2026-09-20T13:13:23Z",
-  "finished_at": null,
-  "elapsed_s": 11,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:14:30Z",
+  "finished_at": "2026-09-20T13:14:30Z",
+  "elapsed_s": 78,
+  "message": "Supported-weak: drone share z>1 -> short JETS/SPY, r=-0.12 (n=389), 30 trades hit 63%, sharpe-like 0.96, OOS 10 trades hit 90%; heuristic validity 0, war likely common cause",
   "run_folder": "missions/runs/20260920-257-gdelt-gkg-drone-share_x_finance-ratio-jets-spy",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 8.16,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Null control: research drone publication share (Crossref, weekly) 20d z-score > 1 should NOT predict JETS/SPY underperformance (-) if the GDELT drone signal is war-news specific; trade short JETS vs SPY 5d at 3d lag [research.drone.crossref_share -> finance.ratio.jets_spy] (parent: R2-0164)"
 }
