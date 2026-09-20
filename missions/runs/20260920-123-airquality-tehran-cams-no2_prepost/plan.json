@@ -1,0 +1,13 @@
+{
+  "indicator_a": "airquality.tehran.cams_no2",
+  "indicator_b": "airquality.tehran.cams_no2",
+  "transform_a": "anomaly",
+  "transform_b": "anomaly",
+  "max_lag_days": 0,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "The requested Iran-affiliated OpenAlex publication-output series is not present in the supplied catalogue, so this single-series event comparison uses the closest visible Iran-localized Tehran indicator as a proxy; lower post-war values relative to the 2025 calendar-week baseline correspond to the hypothesized decline.",
+  "mode": "single"
+}
