@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/494c79b395c449baba0fc6fa9f2351b2",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:48:32Z",
-  "updated_at": "2026-09-20T12:48:37Z",
-  "finished_at": null,
-  "elapsed_s": 5,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:49:13Z",
+  "finished_at": "2026-09-20T12:49:13Z",
+  "elapsed_s": 41,
+  "message": "Not supported: Qatar GKG attention spikes do not predict LNG reversal (r=0.12, best lag -2d; short rule hit 46%, excess -0.09%, actionability 3.9). Follow-up flips to long momentum.",
   "run_folder": "missions/runs/20260920-226-gdelt-gkg-qatar-share_x_finance-lng-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 3.94,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] GDELT Qatar GKG share 20d z-score > 1.5 marks attention that follows LNG strength rather than fading it: LNG log return continues positive over the next 3 days (+); trade long LNG 3d [gdelt.gkg.qatar_share -> finance.LNG.log_return] (parent: R2-0120)"
 }
