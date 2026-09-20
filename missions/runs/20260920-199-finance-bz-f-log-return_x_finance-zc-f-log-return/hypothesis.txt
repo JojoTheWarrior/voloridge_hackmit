@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Brent 5d cumulative log return > 5 pct leads corn futures higher by 3 days (+) via ethanol/input-cost channel; trade long ZC=F 5d [finance.BZ=F.log_return -> finance.ZC=F.log_return]

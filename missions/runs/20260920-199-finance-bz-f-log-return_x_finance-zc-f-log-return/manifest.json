@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:16:30.793016+00:00",
+  "git_commit": "d551b787cf1c62be3648c2e339373407abfe9947",
+  "folder": "20260920-199-finance-bz-f-log-return_x_finance-zc-f-log-return",
   "mission_id": "R2-0099",
-  "title": "Brent 5d surge leads corn 3d",
   "hypothesis": "R2 | [fertilizer-ag] Brent 5d cumulative log return > 5 pct leads corn futures higher by 3 days (+) via ethanol/input-cost channel; trade long ZC=F 5d [finance.BZ=F.log_return -> finance.ZC=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/ec08dc5e49814f30b15a3dbe57a7e346",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:16:21Z",
-  "updated_at": "2026-09-20T04:16:32Z",
-  "finished_at": null,
-  "elapsed_s": 11,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-199-finance-bz-f-log-return_x_finance-zc-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.91
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.15234116324337094,
+  "perm_p": 0.001996007984031936,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.91,
   "trade_idea": {
     "instrument": "ZC=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.91,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "finance.ZC=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
