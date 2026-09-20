@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:25:39.357555+00:00",
+  "git_commit": "11582c6cd7a995cea2c73ce806b6b889a42a82d3",
+  "folder": "20260920-271-gdelt-gkg-drone-share_x_finance-ita-log-return",
   "mission_id": "R2-0184",
-  "title": "Drone GKG share -> short ITA 6d (reversal)",
   "hypothesis": "R2 | [risk-macro-em] Reversal control: GDELT drone GKG share 20d z-score > 1 leads defense ETF returns lower by 4-6 days (-) as drone-heavy news signals cheap asymmetric warfare rather than big-ticket orders; trade short ITA 6d [gdelt.gkg.drone_share -> finance.ITA.log_return]",
-  "parent_mission_id": "R2-0084",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/407b1d1bc1ea4efdbb4cbee90691044d",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:25:30Z",
-  "updated_at": "2026-09-20T13:25:40Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-271-gdelt-gkg-drone-share_x_finance-ita-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.04894795192578041,
+  "perm_p": 0.2375249500998004,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "ITA",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.drone_share": "configured analysis window",
+    "finance.ITA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
