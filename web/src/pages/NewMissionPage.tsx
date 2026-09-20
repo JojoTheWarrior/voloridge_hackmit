@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useApi } from '../api/context'
 import { STARTER_DATASETS, STARTER_IDEAS } from '../examples'
 import { Composer } from '../components/Composer'
-import { ResearchDialog, type ResearchAttachment } from '../components/ResearchDialog'
+import { ContextDialog, type ContextAttachment } from '../components/ContextDialog'
 import { ValidationError } from '../api/index'
 import { useDatasets } from '../hooks/useApiData'
 
@@ -17,7 +17,7 @@ export function NewMissionPage() {
   const submitting = useRef(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const [research, setResearch] = useState<ResearchAttachment>()
+  const [research, setResearch] = useState<ContextAttachment>()
   const [researchOpen, setResearchOpen] = useState(false)
   const [ideaPage, setIdeaPage] = useState(0)
   const [suggestion, setSuggestion] = useState<{ key: number; datasetIds: string[] }>()
@@ -49,13 +49,12 @@ export function NewMissionPage() {
         {error && <p role="alert" className="mt-3 px-1 text-[13px]">{error}</p>}
         <div className="mt-3 flex min-w-0 items-center gap-1 text-[13px] text-muted">
           <button type="button" disabled={busy} onClick={() => setResearchOpen(true)} className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left hover:bg-fill hover:text-ink">
-            <Paperclip size={14} className="shrink-0" aria-hidden="true" /><span className="truncate">{research?.title ?? 'Attach research'}</span>
+            <Paperclip size={14} className="shrink-0" aria-hidden="true" /><span className="truncate">{research?.title ?? 'Attach context'}</span>
           </button>
-          {research && <button type="button" disabled={busy} aria-label="Remove research" onClick={() => setResearch(undefined)} className="shrink-0 rounded-full p-1.5 hover:bg-fill hover:text-ink"><X size={14} /></button>}
+          {research && <button type="button" disabled={busy} aria-label="Remove context" onClick={() => setResearch(undefined)} className="shrink-0 rounded-full p-1.5 hover:bg-fill hover:text-ink"><X size={14} /></button>}
         </div>
-        {researchOpen && <ResearchDialog initial={research} onClose={() => setResearchOpen(false)} onApply={(attachment) => {
+        {researchOpen && <ContextDialog initial={research} onClose={() => setResearchOpen(false)} onApply={(attachment) => {
           setResearch(attachment)
-          if (!prompt.trim()) setPrompt(`Investigate: ${attachment.title}`)
           setResearchOpen(false)
           inputRef.current?.focus()
         }} />}

@@ -1,8 +1,12 @@
 # Research snapshot
 
-## Picker library (2026-09-20)
+## Internal research library (2026-09-20)
 
-`library.json` is the reviewed research picker's authoritative snapshot: 111
+The user-facing library picker has been replaced by text-file/pasted context.
+This snapshot and `/api/research` remain internal compatibility tools; new-mission
+UI does not fetch them. Research can instead be provided as a `.txt` context file.
+
+`library.json` is the internal research API's reviewed snapshot: 111
 findings across 13 collections. It is an exact copy of the separate workspace's
 `explore/packaging/frontend/findings_index.json`, including the finalized clinics,
 tarps, flares, daycare and hazard-creep evidence. This supersedes the older status

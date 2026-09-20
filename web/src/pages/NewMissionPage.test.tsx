@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Route, Routes, useParams } from 'react-router-dom'
 import { seedDatasets } from '../api/fixtures'
@@ -34,8 +34,9 @@ describe('NewMissionPage', () => {
     vi.useRealTimers()
   })
 
-  it('asks the question and focuses the prompt', () => {
+  it('asks the question and focuses the prompt', async () => {
     renderPage()
+    await screen.findByRole('button', { name: 'PUDL power generation' })
     expect(screen.getByRole('heading', { name: 'What should we look into?' })).toBeInTheDocument()
     expect(prompt()).toHaveFocus()
   })
@@ -135,17 +136,20 @@ describe('NewMissionPage', () => {
     expect(createMission).toHaveBeenCalledTimes(2)
   })
 
-  it('searches research and attaches the complete finding to the new mission', async () => {
+  it('uploads text as context without fetching a library or inventing a prompt', async () => {
     const { api, createMission, user } = renderPage()
-    vi.spyOn(api, 'listResearch').mockResolvedValue([
-      { id: 'dams/0', title: 'Reservoirs under stress', summary: 'Look at storage', source: 'dams', verdict: 'partial', reference: 'Full evidence and caveats' },
-      { id: 'air/0', title: 'Air quality', summary: 'Pollution', source: 'air', verdict: 'partial', reference: 'Other evidence' },
-    ])
-    await user.click(screen.getByRole('button', { name: 'Attach research' }))
-    await user.type(await screen.findByRole('textbox', { name: 'Search research' }), 'reservoir')
-    await user.click(await screen.findByRole('button', { name: /Reservoirs under stress/ }))
+    const listResearch = vi.spyOn(api, 'listResearch')
+    await user.click(screen.getByRole('button', { name: 'Attach context' }))
+    expect(screen.queryByText('Research library')).not.toBeInTheDocument()
+    await user.upload(screen.getByLabelText('Choose text file'), new File(['Full evidence and caveats'], 'research.txt', { type: 'text/plain' }))
+    await waitFor(() => expect(screen.getByRole('textbox', { name: 'Context' })).toHaveValue('Full evidence and caveats'))
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach context' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(prompt()).toHaveValue('Investigate: Reservoirs under stress')
+    expect(prompt()).toHaveValue('')
+    expect(screen.getByRole('button', { name: 'research.txt' })).toBeInTheDocument()
+    expect(listResearch).not.toHaveBeenCalled()
+    expect(createMission).not.toHaveBeenCalled()
+    await user.type(prompt(), 'Investigate plant activity')
     await user.click(screen.getByRole('button', { name: 'Start mission' }))
     await screen.findByText('mission m-1')
     expect(createMission.mock.calls[0][0].reference).toBe('Full evidence and caveats')
@@ -154,23 +158,44 @@ describe('NewMissionPage', () => {
   it('attaches pasted notes without replacing a written question, and removes them', async () => {
     const { createMission, user } = renderPage()
     await user.type(prompt(), 'My question')
-    await user.click(screen.getByRole('button', { name: 'Attach research' }))
-    await user.click(screen.getByRole('button', { name: 'Paste notes' }))
-    await user.type(screen.getByRole('textbox', { name: 'Notes, findings, or source links' }), 'Prior evidence')
-    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach research' }))
+    await user.click(screen.getByRole('button', { name: 'Attach context' }))
+    await user.type(screen.getByRole('textbox', { name: 'Context' }), 'Prior evidence')
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach context' }))
     expect(prompt()).toHaveValue('My question')
-    await user.click(screen.getByRole('button', { name: 'Remove research' }))
+    await user.click(screen.getByRole('button', { name: 'Remove context' }))
     await user.click(screen.getByRole('button', { name: 'Start mission' }))
     await screen.findByText('mission m-1')
     expect(createMission.mock.calls[0][0]).not.toHaveProperty('reference')
   })
 
-  it('recovers a failed library load', async () => {
-    const { api, user } = renderPage()
-    vi.spyOn(api, 'listResearch').mockRejectedValueOnce(new Error('offline')).mockResolvedValue([])
-    await user.click(screen.getByRole('button', { name: 'Attach research' }))
-    expect(await screen.findByRole('alert')).toHaveTextContent('library couldn’t load')
-    await user.click(screen.getByRole('button', { name: 'Try again' }))
-    expect(await screen.findByRole('status')).toHaveTextContent('No research in the library yet')
+  it('lets the user review and edit attached context before starting', async () => {
+    const { createMission, user } = renderPage()
+    await user.type(prompt(), 'My question')
+    await user.click(screen.getByRole('button', { name: 'Attach context' }))
+    await user.type(screen.getByRole('textbox', { name: 'Context' }), 'First draft')
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach context' }))
+    await user.click(screen.getByRole('button', { name: 'Context notes' }))
+    expect(screen.getByRole('textbox', { name: 'Context' })).toHaveValue('First draft')
+    fireEvent.change(screen.getByRole('textbox', { name: 'Context' }), { target: { value: 'Reviewed evidence' } })
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach context' }))
+    await user.click(screen.getByRole('button', { name: 'Start mission' }))
+    await screen.findByText('mission m-1')
+    expect(createMission.mock.calls[0][0]).toMatchObject({ hypothesis: 'My question', reference: 'Reviewed evidence' })
+  })
+
+  it('rejects unsupported or oversized files without losing pasted text', async () => {
+    const { user } = renderPage()
+    await user.click(screen.getByRole('button', { name: 'Attach context' }))
+    const context = screen.getByRole('textbox', { name: 'Context' })
+    await user.type(context, 'Keep these notes')
+    const input = screen.getByLabelText('Choose text file')
+    fireEvent.change(input, { target: { files: [new File(['pdf'], 'paper.pdf')] } })
+    expect(await screen.findByRole('alert')).toHaveTextContent('Choose a .txt or .md')
+    fireEvent.change(input, { target: { files: [new File(['x'.repeat(400_001)], 'large.txt')] } })
+    expect(await screen.findByRole('alert')).toHaveTextContent('400 KB')
+    expect(context).toHaveValue('Keep these notes')
+    fireEvent.change(context, { target: { value: 'x'.repeat(100_001) } })
+    expect(within(screen.getByRole('dialog')).getByRole('button', { name: 'Attach context' })).toBeDisabled()
+    expect(screen.getByRole('alert')).toHaveTextContent('100,000 characters')
   })
 })
