@@ -1,8 +1,10 @@
 import json
 
+import pytest
+
 from server.app import create_app
 from server.devin import FakeDevin
-from server.research import MAX_REFERENCE_CHARS, list_findings
+from server.research import MAX_REFERENCE_CHARS, RESEARCH_DIR, list_findings
 from server.store import Store
 
 
@@ -52,3 +54,46 @@ def test_oversized_reference_does_not_create_a_mission(tmp_path):
     assert response.status_code == 422
     assert response.get_json()["field"] == "reference"
     assert store.list_missions() == []
+
+
+def test_reviewed_index_supersedes_legacy_and_preserves_evidence(tmp_path):
+    write_findings(tmp_path, "fixlist_flares", [{"title": "Old 38-site claim"}])
+    finding = {"id": "fixlist_flares:priority", "mission": "fixlist_flares",
+               "title": "37 sites", "verdict": "partial", "source_verdict": None,
+               "source_evidence": {"results": {"sites": 37}, "caveats": ["Not exposure"]}}
+    (tmp_path / "library.json").write_text(json.dumps([
+        finding, finding, None, {"title": "Missing identity"},
+        {**finding, "id": "large", "extra": "x" * MAX_REFERENCE_CHARS},
+    ]))
+    row, = list_findings(tmp_path)
+    assert row["id"] == finding["id"]
+    assert row["source"] == "fixlist_flares"
+    assert row["verdict"] == "partial"
+    assert json.loads(row["reference"]) == finding
+
+
+@pytest.mark.parametrize("content", ["{bad", '{}', '[]'])
+def test_present_index_never_silently_resurrects_legacy_claims(tmp_path, content):
+    write_findings(tmp_path, "old", [{"title": "Stale claim"}])
+    (tmp_path / "library.json").write_text(content)
+    assert list_findings(tmp_path) == []
+
+
+def test_shipped_library_coverage_and_top_prospects_reach_devin(tmp_path):
+    packaged = json.loads((RESEARCH_DIR / "library.json").read_text())
+    store = Store(tmp_path / "kingdom.db")
+    client = create_app(store, FakeDevin(), demo=True).test_client()
+    rows = client.get("/api/research").get_json()
+    assert len(rows) == len(packaged) == 111
+    assert len({row["source"] for row in rows}) == 13
+    assert len({row["id"] for row in rows}) == len(rows)
+    assert [json.loads(row["reference"]) for row in rows] == packaged
+    for source in ("powerplants", "markets", "fixlist_darkclinics", "fixlist_tarps", "fixlist_flares"):
+        row = next(row for row in rows if row["source"] == source)
+        response = client.post("/api/missions", json={
+            "hypothesis": row["title"], "reference": row["reference"],
+        })
+        assert response.status_code == 201
+        saved = store.get_mission(response.get_json()["id"])
+        assert saved.reference == row["reference"]
+        assert row["reference"] in saved.prompt

@@ -124,10 +124,15 @@ record, including methods, source URLs and caveats; it fills an empty prompt
 without replacing a question already written. Edit the question, remove the
 attachment, or reopen it before submitting. Devin receives it as research
 context and must rerun the analysis; the reference is not added to the thread.
-The library reads `research/*/findings.json` through `GET /api/research`, skips
-archives and malformed entries, and caps each reference at 100,000 characters.
+The library reads the reviewed `research/library.json` through `GET /api/research`.
+It contains 111 findings from 13 collections, including clinics, tarps, flares,
+daycares, hazard-creep dams, methane and Zone Zero. Complete evidence, normalized
+verdicts and caveats are retained in each attachment; no raw household files are
+imported. The index supersedes older per-folder findings rather than duplicating
+them. Without an index, older installations fall back to `research/*/findings.json`.
+Malformed entries are skipped and each reference is capped at 100,000 characters.
 Snapshots may be old and omit raw data; they are starting points, not newly
-verified results. The current snapshot has 82 findings in six collections.
+verified results. See `research/README.md` for the reviewed index's source and refresh.
 
 Two processes. Needs Node 20.19+ or 22.12+ (`node -v`) and the repo's Python
 environment:

@@ -1,5 +1,32 @@
 # Research snapshot
 
+## Picker library (2026-09-20)
+
+`library.json` is the reviewed research picker's authoritative snapshot: 111
+findings across 13 collections. It is an exact copy of the separate workspace's
+`explore/packaging/frontend/findings_index.json`, including the finalized clinics,
+tarps, flares, daycare and hazard-creep evidence. This supersedes the older status
+table below for picker content. The original scripts/reports below remain an
+older snapshot; this import does not update them or claim new validation.
+
+The API retains each complete evidence record as attachment text and uses its
+namespaced ID. Private residence lists/cards and raw caches are not copied.
+Figure and script paths are provenance only, not uploaded files or served links.
+
+To refresh, review the packaging audit and verify the packaged index's SHA-256
+matches `index_sha256` in `explore/packaging/audit.json`, then copy only that index:
+
+```sh
+cp ../explore/packaging/frontend/findings_index.json research/library.json
+```
+
+Do not copy the stale `explore/findings_index.json` or whole research folders for
+this operation. The broad snapshot sync below preserves `library.json`; it does
+not refresh the reviewed picker library. New reviewed copies are read on the next
+API request. A malformed index does not silently fall back to older findings.
+
+## Older code and report snapshot
+
 Code, notes, results and figures from the team's research directory
 (`explore/`, kept next to this repo and not under version control). The
 21 GB of data behind them is deliberately left out; this folder is about 40 MB.
