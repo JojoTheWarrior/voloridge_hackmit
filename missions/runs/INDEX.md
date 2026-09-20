@@ -9,3 +9,4 @@
 | `20260920-005-gdelt-irn-protest-events_x_finance-gc-f-log-return` | Days with more GDELT "protest" events in Iran (Dec 2025-Jan 2026) coincide with higher gold prices. | ok | 251 | 0.07566633103896542 | 0.25149700598802394 | 1.98 | 3.68 | 2.16 |
 | `20260920-006-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Strait of Hormuz" track the Brent-WTI spread. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.32 | 4.46 | 3.56 |
 | `20260920-007-gdelt-irn-events_x_finance-bz-f-log-return` | GDELT mentions of "Hormuz" lead tanker-shipping ETF and Brent moves by one day during blockade phases. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.3 | 4.84 | 3.58 |
+| `20260920-008-weather-tehran-temp-mean_x_gdelt-irn-conflict-events` | Tehran daily mean temperature is unrelated to Iran conflict-event counts (null-hypothesis control mission). | ok | 564 | -0.18245504526481426 | 0.6966067864271457 | 0.08 | 2.4 | 3.96 |
