@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:25:41.808466+00:00",
+  "git_commit": "ba7ee881da61d1654425254b4c05a864d87cbdf9",
+  "folder": "20260920-271-research-lithium-crossref-pubs_x_finance-inda-log-return",
   "mission_id": "R2-0185",
-  "title": "Null control: lithium crossref pubs vs INDA",
   "hypothesis": "R2 | [risk-macro-em] Null control: Crossref lithium weekly pubs 20d z-score > 1 should NOT lead INDA returns by 1-5 days (-); if it matches the hormuz result the crossref->INDA channel is noise; trade short INDA 5d [research.lithium.crossref_pubs -> finance.INDA.log_return] (parent: R2-0087)",
-  "parent_mission_id": "R2-0087",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/eb049b478b0c46a28bbfa8ab3ff97227",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:25:24Z",
-  "updated_at": "2026-09-20T13:25:43Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-271-research-lithium-crossref-pubs_x_finance-inda-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 8.29
-  },
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.03827573113212109,
+  "perm_p": 0.9760479041916168,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 8.29,
   "trade_idea": {
     "instrument": "INDA",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 8.29,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.lithium.crossref_pubs": "2025-03..current week",
+    "finance.INDA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
