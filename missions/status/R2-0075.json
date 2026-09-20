@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:02:48Z",
-  "updated_at": "2026-09-20T04:03:33Z",
+  "updated_at": "2026-09-20T04:03:48Z",
   "finished_at": "2026-09-20T04:03:33Z",
-  "elapsed_s": 45,
+  "elapsed_s": 60,
   "message": "Not supported: Brent +3pct spikes do not reverse into CCL; contemporaneous r=-0.30 (perm p=0.018) but lag 1-4 r~0; long-CCL rule 50 trades, hit 48pct, excess -0.45pct, sharpe -0.94, OOS hit 37.5pct; actionability 0.3",
   "run_folder": "missions/runs/20260920-184-finance-bz-f-log-return_x_finance-ccl-log-return",
   "scores": {
