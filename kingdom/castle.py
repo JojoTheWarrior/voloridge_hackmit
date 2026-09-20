@@ -57,6 +57,7 @@ MAIN, CURRENT, QUEUE, COMPLETED, DETAIL = "main", "current", "queue", "completed
 NOTE, ZOOM = "note", "zoom"
 MENUS = (CURRENT, QUEUE, COMPLETED)
 PANEL = pygame.Rect(50, 35, 380, 200)
+MAIN_PANEL_W = 340
 CHART = pygame.Rect(PANEL.x + 12, PANEL.y + 30, 232, 130)
 ZOOM_VIEW = pygame.Rect(4, 4, LOGICAL_W - 8, LOGICAL_H - 22)
 COPY_BUTTON = pygame.Rect(PANEL.right - 12 - 84, PANEL.y + 10, 84, 12)
@@ -146,7 +147,8 @@ class CastleScene(Scene):
         self._detail_index = self.selected
         self._detail_scroll = self.scroll.offset
         self.detail = mission
-        self.note_panel.set_text(mission.note_text() or "(no note written for this mission)")
+        self.note_panel.set_text(mission.note_text() or "(no note written for this mission)",
+                                 title=mission.hypothesis, subtitle=mission.mission_id)
         self.zoom, self.zoom_center, self._zoom_cache = 1.0, (0.5, 0.5), None
         self.open_menu(DETAIL, 1)
 
@@ -428,7 +430,12 @@ class CastleScene(Scene):
 
     def _draw_main(self, surface, t, dx):
         assets = self.app.assets
-        panel = pygame.Rect(LOGICAL_W // 2 - 130, PANEL.y + 10, 260, 172).move(dx, 0)
+        snap = self.app.data.snapshot()
+        counts = f"{len(snap.active)} active   {len(snap.queue)} queued   {len(snap.completed)} done"
+        if snap.counts["live"] > 0:
+            counts += f"   {snap.counts['live']} live"
+        pw = max(MAIN_PANEL_W, text_size(counts, "small")[0] + 32)
+        panel = pygame.Rect(LOGICAL_W // 2 - pw // 2, PANEL.y + 10, pw, 172).move(dx, 0)
         draw_panel(surface, assets, panel)
         draw_sprite_or_box(surface, assets, "crest", panel.centerx - 16, panel.y - 14, (32, 32), t, (122, 47, 47))
         draw_text(surface, "GREAT HALL", (panel.centerx, panel.y + 20), GOLD_LIGHT, kind="title", shadow=OUTLINE, align="center")
@@ -437,10 +444,6 @@ class CastleScene(Scene):
             button.draw(surface, assets, i == self.selected, t, dx, 0)
         sel = self.buttons[self.selected].rect.move(dx, 0)
         draw_cursor_hand(surface, assets, sel.x - 4, sel.centery, t)
-        snap = self.app.data.snapshot()
-        counts = f"{len(snap.active)} active   {len(snap.queue)} queued   {len(snap.completed)} done"
-        if snap.counts["live"] > 0:
-            counts += f"   {snap.counts['live']} live"
         draw_text(surface, counts, (panel.centerx, panel.bottom - 24), TEXT_DIM, kind="small", align="center")
         draw_text(surface, "Esc: leave the castle", (panel.centerx, panel.bottom - 13), TEXT_FAINT, kind="small", align="center")
 
@@ -505,7 +508,7 @@ class CastleScene(Scene):
             progress = m.progress if m.progress is not None else min(0.95, elapsed / MISSION_SECONDS)
             signal = m.signal()
             draw_sprite_or_box(surface, assets, "icon_hammer", card.x + 8, ty - 2, (16, 16), t)
-            bar = pygame.Rect(card.x + 28, ty, card.w - 28 - 6 - 40, 12)
+            bar = pygame.Rect(card.x + 28, ty, card.w - 28 - 6 - 48, 12)
             ProgressBar.draw(surface, assets, bar, progress, signal_color(signal), t, shimmer=True, pulse=signal is None)
             draw_text(surface, fmt_elapsed(elapsed), (card.right - 6, ty + 2), INK, align="right")
             ty += 12 + 4

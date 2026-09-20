@@ -8,7 +8,7 @@ import time
 import pygame
 
 from .app import LOGICAL_H, LOGICAL_W, Scene
-from .text import draw_text
+from .text import draw_text, text_size
 
 TILE_W, TILE_H = 32, 16
 MAP_R = 16
@@ -45,6 +45,31 @@ FALLBACKS = {
 }
 
 NEIGHBORS_NESW = ((0, -1), (1, 0), (0, 1), (-1, 0))
+
+
+HUD_PAD_X = 10
+HUD_LINE_H = 10
+HUD_MIN_W = 140
+
+
+def hud_lines(active: int, queued: int, ok: int, failed: int, runtime: float) -> list[str]:
+    return [
+        f"Active   {active}",
+        f"Queued   {queued}",
+        f"Done     {ok} ok",
+        f"Failed   {failed}",
+        f"Runtime  {max(0, int(runtime))}s",
+    ]
+
+
+def hud_size(lines: list[str], tag_line: str = "") -> tuple[int, int]:
+    """(w, h) of the HUD box: fits the widest line (and the tag line) plus padding."""
+    widths = [text_size(line)[0] for line in lines]
+    if tag_line:
+        widths.append(text_size(tag_line, "small")[0])
+    w = max(HUD_MIN_W, max(widths, default=0) + 2 * (HUD_PAD_X - 4) + 2)
+    h = 10 + (len(lines) + (1 if tag_line else 0)) * HUD_LINE_H
+    return w, h
 
 
 def iso(tx: float, ty: float) -> tuple[float, float]:
@@ -473,18 +498,7 @@ class FieldScene(Scene):
     def _draw_hud(self, surface, snap, t):
         failed = len(snap.failed) + sum(1 for m in snap.completed if m.failed)
         ok = sum(1 for m in snap.completed if not m.failed)
-        lines = [
-            f"Active  {len(snap.active)}",
-            f"Queued  {len(snap.queue)}",
-            f"Done    {ok} ok  {failed} failed",
-        ]
-        panel = pygame.Rect(4, 4, 118, 10 + len(lines) * 10)
-        shade = pygame.Surface(panel.size, pygame.SRCALPHA)
-        shade.fill((27, 31, 40, 200))
-        surface.blit(shade, panel.topleft)
-        pygame.draw.rect(surface, (27, 31, 40), panel, 2)
-        for i, line in enumerate(lines):
-            draw_text(surface, line, (10, 8 + i * 10), shadow=(10, 12, 18))
+        lines = hud_lines(len(snap.active), len(snap.queue), ok, failed, t)
         tags = []
         sync = getattr(self.app, "sync", None)
         if sync is not None and sync.status != "off":
@@ -497,9 +511,16 @@ class FieldScene(Scene):
         http = getattr(self.app, "http", None)
         if http is not None and http.status != "off":
             tags.append("net err" if http.status == "error" else ("net ok" if http.last_ok else "net ..."))
-        if tags:
-            draw_text(surface, "  ".join(tags), (114, panel.bottom - 10), (122, 131, 154),
-                      kind="small", align="right")
+        tag_line = "  ".join(tags)
+        panel = pygame.Rect(4, 4, *hud_size(lines, tag_line))
+        shade = pygame.Surface(panel.size, pygame.SRCALPHA)
+        shade.fill((27, 31, 40, 200))
+        surface.blit(shade, panel.topleft)
+        pygame.draw.rect(surface, (27, 31, 40), panel, 2)
+        for i, line in enumerate(lines):
+            draw_text(surface, line, (HUD_PAD_X, 8 + i * HUD_LINE_H), shadow=(10, 12, 18))
+        if tag_line:
+            draw_text(surface, tag_line, (HUD_PAD_X, 8 + len(lines) * HUD_LINE_H), (122, 131, 154), kind="small")
         alpha = int(140 + 90 * math.sin(t * 1.5))
         hint = pygame.Surface((LOGICAL_W, 14), pygame.SRCALPHA)
         draw_text(hint, "Click the castle or press Enter", (LOGICAL_W // 2, 2), (238, 240, 244),

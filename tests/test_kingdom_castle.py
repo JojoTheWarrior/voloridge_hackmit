@@ -15,6 +15,7 @@ from kingdom.app import App, Scene  # noqa: E402
 from kingdom.castle import (  # noqa: E402
     CHART, COMPLETED, COPY_BUTTON, CURRENT, DETAIL, MAIN, NOTE, QUEUE, ZOOM, CastleScene,
 )
+from kingdom.text import draw_text  # noqa: E402
 from kingdom.ui import (  # noqa: E402
     ScrollList, ThumbnailCache, clean_markdown, clip_lines, fmt_elapsed, scaled_region, signal_color,
 )
@@ -252,3 +253,76 @@ def test_completed_sort_toggles(app):
     for _ in range(len(SORT_KEYS) - 1):
         scene.handle_event(key(pygame.K_t))
     assert scene.sort_index == 0
+
+
+def test_format_note_fields_bold_rounded_and_spaced():
+    from kingdom.note import format_note, round_numbers
+    text = ("# M1\n\n| Field | Value |\n|---|---|\n| r | 0.23010761412759506 |\n| n_obs | 29 |\n"
+            "| Scores | {'validity': 6.04, 'supported_prob': 0.123456789} |\n\n"
+            "**Verdict:** supported (r=0.23010761412759506, n=29).\n\nSecond paragraph.\n")
+    lines = format_note(text, title="Helium papers rose after the strike.", subtitle="M1")
+    assert (lines[0].bold, lines[0].text) == ("M1", "")
+    assert lines[1].blank and lines[2].text == "Helium papers rose after the strike."
+    fields = {ln.bold: ln.text for ln in lines if ln.bold}
+    assert fields["r:"] == "0.23011"
+    assert fields["n_obs:"] == "29"
+    assert fields["Verdict:"] == "supported (r=0.23011, n=29)."
+    assert fields["Scores:"] == ""
+    json_lines = [ln for ln in lines if ln.indent]
+    assert json_lines[0].text == "{" and json_lines[0].indent == 2
+    assert any(ln.text == '"supported_prob": 0.12346' and ln.indent == 4 for ln in json_lines)
+    # exactly one blank line between consecutive blocks, none doubled
+    blanks = [ln.blank for ln in lines]
+    assert not any(a and b for a, b in zip(blanks, blanks[1:]))
+    assert blanks.count(True) >= 6
+    assert not lines[-1].blank
+    assert round_numbers("x=1.5e-07 y=42 z=0.100000001 w=2.5") == "x=1.5e-07 y=42 z=0.1 w=2.5"
+
+
+def test_format_note_bad_dict_falls_back_to_raw():
+    from kingdom.note import format_note
+    lines = format_note("| Scores | {'validity': 6.04, oops |")
+    assert [(ln.bold, ln.text) for ln in lines] == [("Scores:", "{'validity': 6.04, oops")]
+
+
+def test_text_panel_bold_prefix_and_indented_wrap(app):
+    from kingdom.ui import TextPanel
+    panel = TextPanel(pygame.Rect(0, 0, 200, 100))
+    panel.set_text("| Folder | " + "a" * 80 + " |\n\nProse.", title="Title", subtitle="M1")
+    lines = panel.lines
+    assert lines[0] == "M1" and lines[0].bold_end == 2
+    folder = [i for i, ln in enumerate(lines) if ln.startswith("Folder:")][0]
+    assert lines[folder].bold_end == len("Folder:")
+    assert lines[folder + 1].startswith("  a") and lines[folder + 1].bold_end == 0
+    assert "" in lines and lines[-1] == "Prose."
+    panel.draw(app.canvas, app.assets)
+    plain = draw_text(app.canvas, "M1", (0, 0))
+    bold = draw_text(app.canvas, "M1", (0, 0), bold=True)
+    assert bold.w == plain.w + 1
+
+
+def test_note_panel_shows_title_and_bold_attributes(app):
+    scene = CastleScene(app, menu="completed")
+    app.push(scene, fade=False)
+    open_first_detail(app, scene)
+    joined = "\n".join(scene.note_panel.lines)
+    assert "Alpha leads beta by two days." in joined
+    assert scene.note_panel.lines[0] == "M20260920-000001"
+    r_line = next(ln for ln in scene.note_panel.lines if ln.startswith("r:"))
+    assert r_line == "r: 0.1234" and r_line.bold_end == 2
+
+
+def test_format_note_keeps_list_items_separate():
+    from kingdom.note import format_note
+    text = ("## Trade idea (Round 2 rubric)\n\n- **long BZ=F**, hold 3d\n- Entry: z>1\n- Exit: close after 3d\n"
+            "- n_trades=12 hit_rate=0.583333333 avg_return=0.0123456789\n- Actionability: 8.76\n")
+    lines = format_note(text)
+    assert [(ln.bold, ln.text) for ln in lines] == [
+        ("Trade idea (Round 2 rubric)", ""),
+        ("", ""),
+        ("long BZ=F", ", hold 3d"),
+        ("Entry:", "z>1"),
+        ("Exit:", "close after 3d"),
+        ("", "n_trades=12 hit_rate=0.58333 avg_return=0.01235"),
+        ("Actionability:", "8.76"),
+    ]
