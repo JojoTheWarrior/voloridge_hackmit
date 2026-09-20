@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "return"
+  },
+  "all": {
+    "n_trades": 5,
+    "hit_rate": 1.0,
+    "avg_return": 0.020156825811004798,
+    "baseline_avg_return": 0.019616621055349164,
+    "excess_return": 0.0005402047556556343,
+    "sharpe_like": 2.993954675270374,
+    "max_drawdown": 0.0,
+    "total_return": 0.10433365729452881
+  },
+  "fit_pre_war": {
+    "n_trades": 0,
+    "hit_rate": null,
+    "avg_return": null,
+    "baseline_avg_return": null,
+    "excess_return": null,
+    "sharpe_like": null,
+    "max_drawdown": null,
+    "total_return": null
+  },
+  "test_war": {
+    "n_trades": 5,
+    "hit_rate": 1.0,
+    "avg_return": 0.020156825811004798,
+    "baseline_avg_return": 0.019616621055349164,
+    "excess_return": 0.0005402047556556343,
+    "sharpe_like": 2.993954675270374,
+    "max_drawdown": 0.0,
+    "total_return": 0.10433365729452881
+  },
+  "n_signal_days": 72,
+  "trade_idea": {
+    "instrument": "FRO",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.hormuz_share rolling_zscore_20d > 1 at close -> long FRO next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 1.0,
+    "avg_return": 0.020156825811004798,
+    "excess_return": 0.0005402047556556343,
+    "n_trades": 5,
+    "sharpe_like": 2.993954675270374,
+    "max_drawdown": 0.0,
+    "oos_n_trades": 5,
+    "oos_avg_return": 0.020156825811004798,
+    "oos_hit_rate": 1.0,
+    "actionability": 9.1,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
