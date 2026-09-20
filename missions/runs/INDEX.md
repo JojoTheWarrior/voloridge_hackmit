@@ -89,3 +89,4 @@
 | `20260920-085-finance-ttf-f-log-return_x_finance-ng-f-log-return` | TTF gas and Henry Hub correlation increased after Qatar LNG shutdown. | ok | 391 | 0.12440302398959983 | 0.12574850299401197 | 4.08 | 4.64 | 2.02 |
 | `20260920-086-finance-fred-dcoilbrenteu_x_finance-hyg-close` | High-yield credit (HYG) drawdowns coincide with oil-price spikes during the war. | ok | 137 | -0.4777183802129654 | 0.001996007984031936 | 7.8 | 3.74 | 3.08 |
 | `20260920-087-gdelt-gkg-hormuz-share_x_finance-spread-brent-wti` | Brent-WTI spread widened when Hormuz news volume rose. | ok | 140 | 0.21951036323518971 | 0.001996007984031936 | 7.72 | 4.46 | 3.64 |
+| `20260920-088-finance-bz-f-log-return_x_gdelt-gkg-oil-share` | Oil futures fell sharply on days with suspicious pre-announcement trading (Mar 23, Apr 7, Apr 17); test whether GDELT news volume rises abnormally after those days. | ok | 140 | 0.0008056061176601598 | 0.3852295409181637 | 2.0 | 3.62 | 6.86 |

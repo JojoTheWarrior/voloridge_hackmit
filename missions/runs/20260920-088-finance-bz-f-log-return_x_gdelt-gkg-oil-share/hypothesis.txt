@@ -1,0 +1,1 @@
+Oil futures fell sharply on days with suspicious pre-announcement trading (Mar 23, Apr 7, Apr 17); test whether GDELT news volume rises abnormally after those days.

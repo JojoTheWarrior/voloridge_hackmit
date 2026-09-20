@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.BZ=F.log_return",
+  "indicator_b": "gdelt.gkg.oil_share",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "market",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Brent futures log returns to identify the sharp down days around the suspicious pre-announcement trading dates and test whether subsequent abnormal increases in global oil-related GDELT GKG news volume (oil_share anomaly vs 2025 baseline) follow within a few days during the war period."
+}
