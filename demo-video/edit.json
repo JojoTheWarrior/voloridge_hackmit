@@ -1,0 +1,19 @@
+{
+  "title": "Kingdom",
+  "duration_seconds": 120,
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "theme": "monochrome",
+  "status": "awaiting_user_missions",
+  "scenes": [
+    {"id":"opening","start":0,"end":9,"purpose":"Hook: ask a question worth investigating","asset":null,"required":false},
+    {"id":"question","start":9,"end":23,"purpose":"Real mission composer and selected data sources","asset":null,"required":true},
+    {"id":"investigation","start":23,"end":42,"purpose":"Actual research steps and evidence; visibly edited for time","asset":null,"required":true},
+    {"id":"finding","start":42,"end":60,"purpose":"One verified result and what it changes","asset":null,"required":true},
+    {"id":"explorer","start":60,"end":88,"purpose":"Actual explorer interactions: selection, comparison, evidence","asset":null,"required":true},
+    {"id":"report","start":88,"end":103,"purpose":"Supported recommendation with an important limitation","asset":null,"required":true},
+    {"id":"breadth","start":103,"end":113,"purpose":"Two brief supporting missions, only if completed","asset":null,"required":false},
+    {"id":"ending","start":113,"end":120,"purpose":"Kingdom brand close","asset":null,"required":false}
+  ]
+}
