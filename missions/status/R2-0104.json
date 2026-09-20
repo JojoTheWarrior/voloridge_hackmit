@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0104",
+  "title": "[oil-shipping] Iran conflict event 20d z-score > 1 leads DHT log returns by 1 da",
+  "hypothesis": "R2 | [oil-shipping] Iran conflict event 20d z-score > 1 leads DHT log returns by 1 day (+), null control: same rule on XLE should show weaker edge; trade long DHT 6d [gdelt.irn.conflict_events -> finance.DHT.log_return] (parent: R2-0004)",
+  "parent_mission_id": "R2-0004",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:17:45Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
