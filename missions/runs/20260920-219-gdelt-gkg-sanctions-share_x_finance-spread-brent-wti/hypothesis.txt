@@ -1,0 +1,1 @@
+R2 | [oil-shipping] null control: GDELT sanctions GKG share 20d z-score > 1 leads Brent-WTI spread wider by 6 days (+); trade long spread 6d [gdelt.gkg.sanctions_share -> finance.spread.brent_wti] (parent: R2-0008)

@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:42:03.898499+00:00",
+  "git_commit": "5888d0a5acf28ab469adb775a5b11f1c3d5a2e92",
+  "folder": "20260920-219-gdelt-gkg-sanctions-share_x_finance-spread-brent-wti",
   "mission_id": "R2-0107",
-  "title": "Null control: sanctions share z>1 leads Brent-WTI spread 6d",
   "hypothesis": "R2 | [oil-shipping] null control: GDELT sanctions GKG share 20d z-score > 1 leads Brent-WTI spread wider by 6 days (+); trade long spread 6d [gdelt.gkg.sanctions_share -> finance.spread.brent_wti] (parent: R2-0008)",
-  "parent_mission_id": "R2-0008",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/ff37424da4d9404389992452e380bb8d",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:41:44Z",
-  "updated_at": "2026-09-20T12:42:05Z",
-  "finished_at": null,
-  "elapsed_s": 21,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-219-gdelt-gkg-sanctions-share_x_finance-spread-brent-wti",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.58
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.11231786990274643,
+  "perm_p": 0.25149700598802394,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.58,
   "trade_idea": {
     "instrument": "spread:brent_wti",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.58,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.spread.brent_wti": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
