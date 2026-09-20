@@ -1,4 +1,3 @@
-R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1.5 precedes cruise-line fuel-cost derating (-); trade short CCL 4d at 4d lag [gdelt.gkg.oil_share -> finance.CCL.log_return]
 R2 | [fuel-airspace-losers] GDELT sanctions GKG share 20d z-score > 1 signals prolonged supply stress hitting discretionary travel (-); trade short RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return]
 R2 | [fuel-airspace-losers] GDELT qatar GKG share 20d z-score > 1 flags Gulf hub disruption that penalizes Lufthansa Gulf routes (-); trade short LHA.DE 3d at 2d lag [gdelt.gkg.qatar_share -> finance.LHA.DE.log_return]
 R2 | [fuel-airspace-losers] Abu Dhabi CAMS AOD 20d z-score > 1.5 marks dust or smoke episodes that cut Gulf flight volumes (-); trade short IAG.L 2d at 1d lag [airquality.abu_dhabi.cams_aod -> finance.IAG.L.log_return]
