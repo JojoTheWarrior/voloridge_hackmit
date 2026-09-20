@@ -1,4 +1,4 @@
-import { formatElapsed, formatP, formatSynced } from './format'
+import { formatCorrelation, formatElapsed, formatLag, formatP, formatSynced } from './format'
 
 describe('formatElapsed', () => {
   it.each([
@@ -46,5 +46,26 @@ describe('formatSynced', () => {
 
   it('treats future timestamps as just now', () => {
     expect(formatSynced(ago(-60_000), now)).toBe('just now')
+  })
+})
+
+describe('formatCorrelation', () => {
+  it.each([
+    [0.414, '0.41'],
+    [-0.5, '−0.50'],
+    [0, '0.00'],
+    [-0.001, '−0.00'],
+  ])('%f -> %s', (r, expected) => {
+    expect(formatCorrelation(r)).toBe(expected)
+  })
+})
+
+describe('formatLag', () => {
+  it.each([
+    [0, 'Same day'],
+    [1, '1 day'],
+    [7, '7 days'],
+  ])('%i -> %s', (days, expected) => {
+    expect(formatLag(days)).toBe(expected)
   })
 })
