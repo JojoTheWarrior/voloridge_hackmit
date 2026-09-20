@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:08:00Z",
-  "updated_at": "2026-09-20T13:08:28Z",
+  "updated_at": "2026-09-20T13:08:41Z",
   "finished_at": "2026-09-20T13:08:28Z",
-  "elapsed_s": 28,
+  "elapsed_s": 41,
   "message": "Null control holds: Tokyo precip z-score vs ZW=F returns is noise (perm p=0.63, Bonferroni p=1.0, best lag r=0.10, OOS hit rate 29%); no trade.",
   "run_folder": "missions/runs/20260920-251-weather-tokyo-precip_x_finance-zw-f-log-return",
   "scores": {
