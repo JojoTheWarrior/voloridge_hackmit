@@ -61,3 +61,4 @@
 | `20260920-057-research-ammonia-crossref-share_x_finance-mos-log-return` | OpenAlex "fertilizer" research volume correlates with fertilizer equity returns (MOS, CF, NTR). | ok | 53 | -0.21000515856608917 | 0.36327345309381237 | 2.0 | 3.54 | 5.7 |
 | `20260920-058-research-lng-crossref-pubs_x_finance-ttf-f-close` | OpenAlex "liquefied natural gas" publication counts track TTF gas prices. | ok | 81 | 0.1325885938699687 | 0.6487025948103793 | 0.16 | 3.16 | 4.36 |
 | `20260920-059-finance-fred-dcoilbrenteu_x_research-solar-crossref-share` | OpenAlex "photovoltaic" publication share rose as oil prices rose (energy substitution research response). | ok | 29 | 0.015473350826726968 | 0.4750499001996008 | 1.9 | 4.76 | 3.18 |
+| `20260920-060-research-lithium-crossref-share_x_finance-hg-f-log-return` | OpenAlex "lithium battery" publication counts correlate with copper futures. | ok | 81 | 0.013116053733957031 | 0.015968063872255488 | 5.88 | 3.94 | 4.18 |

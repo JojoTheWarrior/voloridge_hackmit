@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.lithium.crossref_share",
+  "indicator_b": "finance.HG=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use weekly lithium-related publication intensity (as a proxy for lithium battery research activity) and daily COMEX copper futures log returns aggregated to the same weekly frequency, testing whether periods of elevated lithium research interest align with or slightly lead stronger copper performance due to copper\u2019s role in EVs and battery supply chains; OpenAlex-specific series are unavailable so Crossref lithium serves as the closest proxy."
+}

@@ -1,0 +1,1 @@
+OpenAlex "lithium battery" publication counts correlate with copper futures.
