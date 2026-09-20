@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:42:29.699669+00:00",
+  "git_commit": "ae12775ed4d637af2401edf46f41fbc74835cd15",
+  "folder": "20260920-220-airquality-kuwait-cams-no2_x_finance-spread-gasoline-crack",
   "mission_id": "R2-0111",
-  "title": "Kuwait NO2 -> gasoline crack",
   "hypothesis": "R2 | [oil-shipping] Kuwait CAMS NO2 10d z-score > 1 (refinery combustion ramp) leads gasoline crack narrower by 4 days (-); trade short RB=F 4d [airquality.kuwait.cams_no2 -> finance.spread.gasoline_crack] (parent: R2-0014)",
-  "parent_mission_id": "R2-0014",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/6da24f2080d04b72b34923dd3fc8afdf",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:42:02Z",
-  "updated_at": "2026-09-20T12:42:32Z",
-  "finished_at": null,
-  "elapsed_s": 30,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-220-airquality-kuwait-cams-no2_x_finance-spread-gasoline-crack",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 6.04
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.009726130775985553,
+  "perm_p": 0.08982035928143713,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 6.04,
   "trade_idea": {
     "instrument": "spread:gasoline_crack",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 6.04,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.kuwait.cams_no2": "2025-03..2026-09 archive window",
+    "finance.spread.gasoline_crack": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
