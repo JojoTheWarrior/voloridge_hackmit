@@ -14,6 +14,7 @@ from server.devin import (
     DevinUnavailable,
     FakeDevin,
     SessionRef,
+    SessionSnapshot,
 )
 from server.explorer import unpack
 from server.poller import Poller
@@ -43,6 +44,9 @@ class StubDevin:
         if self.send_error:
             raise self.send_error
         self.sent.append((session_id, text))
+
+    def get_session(self, session_id):
+        return SessionSnapshot("running", None, None)
 
     def list_attachments(self, session_id):
         if self.attachments_error:

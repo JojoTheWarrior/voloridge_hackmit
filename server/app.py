@@ -8,6 +8,7 @@ from urllib.parse import quote, urlsplit
 from flask import Flask, Response, jsonify, request, send_file
 from werkzeug.exceptions import HTTPException
 
+from server.artifacts import devin_image_name, image_sources, proxy_artifact_images
 from server.autonomy import CONTINUE
 from server.brief import (
     OUTPUT_SCHEMA,
@@ -18,6 +19,7 @@ from server.brief import (
     session_title,
 )
 from server.devin import (
+    Attachment,
     AttachmentRejected,
     DevinClient,
     DevinUnavailable,
@@ -272,6 +274,16 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
             # Only files Devin attached to this mission's own session are ever fetched.
             listed = client.list_attachments(mission.session_id) if mission.session_id else []
             match = next((item for item in listed if item.name == name), None)
+            if match is None and mission.session_id:
+                # Screenshot links can be present in the session output but absent from its
+                # attachment listing. Only accept links actually referenced by this mission.
+                artifacts = [e["artifact"] for e in store.list_events(mission_id) if e["kind"] == "artifact"]
+                source = _referenced_image(artifacts, name)
+                if source is None:
+                    snapshot = client.get_session(mission.session_id)
+                    source = _referenced_image((snapshot.structured_output or {}).get("artifacts", []), name)
+                if source:
+                    match = Attachment(name, source)
             if match is None:
                 raise NotFound("Attachment not found")
             data, content_type = client.download(match)
@@ -358,5 +370,16 @@ def _mission(store: Store, mission_id: str) -> dict:
             "builtAt": build["builtAt"],
         }
     body["explorerPending"] = mission.explorer_pending
-    body["events"] = store.list_events(mission_id)
+    body["events"] = [
+        {**event, "artifact": proxy_artifact_images(event["artifact"], mission_id)}
+        if event["kind"] == "artifact" else event
+        for event in store.list_events(mission_id)
+    ]
     return body
+
+
+def _referenced_image(artifacts: list, name: str) -> str | None:
+    if not isinstance(artifacts, list):
+        return None
+    return next((src for artifact in artifacts if isinstance(artifact, dict)
+                 for src in image_sources(artifact) if devin_image_name(src) == name), None)

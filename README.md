@@ -83,6 +83,11 @@ it live — its thinking as prose, its steps, and visual artifacts (charts, imag
 samples, join diagrams, tables, stats) as they are produced. Reply to steer it
 like a chat, and mark the mission done when you are satisfied.
 
+Private Devin report images load through Kingdom's authenticated attachment
+endpoint, including images in already-saved reports. Screenshot links missing
+from Devin's attachment listing are recovered only from that mission's own
+stored artifacts or current session output.
+
 Missions pursue an insight that changes a user's understanding or decision.
 The initial brief asks Devin to identify that decision, challenge a candidate
 insight, and explain how each result changes it. Conclusions and report openings

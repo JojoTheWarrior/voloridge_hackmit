@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import math
 from collections.abc import Callable, Collection
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 log = logging.getLogger(__name__)
 
@@ -75,7 +75,44 @@ def _resolve_src(src: object, mission_id: str, attachments: Collection[str]) -> 
             return None
         return f"/api/missions/{mission_id}/attachments/{quote(name)}"
     parts = urlsplit(src)
-    return src if parts.scheme == "https" and parts.netloc else None
+    if parts.scheme == "https" and parts.netloc:
+        return proxy_devin_image(src, mission_id)
+    return None
+
+
+def devin_image_name(src: object) -> str | None:
+    """Recognize private Devin attachment links without accepting arbitrary download URLs."""
+    if not isinstance(src, str):
+        return None
+    parts = urlsplit(src)
+    if parts.scheme != "https" or parts.hostname not in ("app.devin.ai", "api.devin.ai"):
+        return None
+    segments = parts.path.split("/")
+    if len(segments) != 4 or segments[1] != "attachments" or not segments[2]:
+        return None
+    name = unquote(segments[3])
+    return name if name and name not in (".", "..") and not any(c in name for c in ("/", "\\", "\0")) else None
+
+
+def proxy_devin_image(src: str, mission_id: str) -> str:
+    name = devin_image_name(src)
+    return f"/api/missions/{mission_id}/attachments/{quote(name, safe='')}" if name else src
+
+
+def image_sources(artifact: dict) -> list[str]:
+    items = artifact.get("items", []) if artifact.get("type") == "images" else [artifact] if artifact.get("type") == "image" else []
+    if not isinstance(items, list):
+        return []
+    return [i["src"] for i in items if isinstance(i, dict) and isinstance(i.get("src"), str)]
+
+
+def proxy_artifact_images(artifact: dict, mission_id: str) -> dict:
+    """Also repair reports already saved before private-link normalization was added."""
+    if artifact.get("type") == "image":
+        return {**artifact, "src": proxy_devin_image(artifact["src"], mission_id)}
+    if artifact.get("type") == "images":
+        return {**artifact, "items": [{**item, "src": proxy_devin_image(item["src"], mission_id)} for item in artifact["items"]]}
+    return artifact
 
 
 def _chart(raw: dict, resolve: SrcResolver) -> dict | None:

@@ -110,6 +110,11 @@ Done and working:
   `GET /v3/organizations/{org}/attachments/{id}/{name}` → 307 to signed S3,
   followed without credentials. Devin's raw `ATTACHMENT:{…}` chat lines are
   stripped from the thread.
+- **Private report images fixed.** Both new artifacts and existing saved reports
+  route private Devin image links through Kingdom's authenticated attachment
+  endpoint. Devin sometimes omits screenshots from its attachment listing; the
+  endpoint can recover their links from the same mission's stored artifacts or
+  current session output. Arbitrary unreferenced files remain inaccessible.
 
 ### Resolved: the explorer map now renders inside the sandbox
 
