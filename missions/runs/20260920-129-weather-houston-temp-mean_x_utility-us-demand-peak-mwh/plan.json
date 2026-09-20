@@ -1,0 +1,13 @@
+{
+  "indicator_a": "weather.houston.temp_mean",
+  "indicator_b": "utility.us.demand_peak_mwh",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 0,
+  "rationale": "Heuristic keyword overlap with source-diverse catalogue entries.",
+  "mode": "pair"
+}
