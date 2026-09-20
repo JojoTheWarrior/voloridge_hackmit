@@ -1,4 +1,4 @@
-import { buildResult, EXAMPLE_PROMPTS, seedDatasets, seedMissions } from './fixtures'
+import { buildResult, seedDatasets, seedMissions } from './fixtures'
 
 describe('buildResult', () => {
   it('is deterministic per hypothesis', () => {
@@ -51,9 +51,5 @@ describe('seeds', () => {
       expect(Boolean(m.result)).toBe(m.status === 'done')
       expect(Boolean(m.error)).toBe(m.status === 'failed')
     }
-  })
-
-  it('offer three example prompts', () => {
-    expect(EXAMPLE_PROMPTS).toHaveLength(3)
   })
 })

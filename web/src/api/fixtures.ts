@@ -8,12 +8,6 @@ const DAY_MS = 86_400_000
 // Daily series are autocorrelated, so far fewer than N_DAYS observations are independent.
 const EFFECTIVE_N = N_DAYS / 4
 
-export const EXAMPLE_PROMPTS = [
-  'Does wind speed in Tehran predict PM2.5 in Dubai two days later?',
-  'Do protest events in Iran move gold futures?',
-  'Does a Houston heat anomaly lead Henry Hub gas prices?',
-]
-
 function hash(text: string): number {
   let h = 2166136261
   for (let i = 0; i < text.length; i++) {

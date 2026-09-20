@@ -67,7 +67,7 @@ describe('Sidebar', () => {
     const api = createMockApi({ stepMs: 100, seed: { missions: [running], datasets: [] } })
     renderWithApp(<Sidebar />, { api })
     await screen.findByRole('group', { name: 'Running' })
-    await act(() => vi.advanceTimersByTimeAsync(1000))
+    await act(() => vi.advanceTimersByTimeAsync(100 * 8 * 5))
     expect(within(screen.getByRole('group', { name: 'Done' })).getByText('Nearly there')).toBeInTheDocument()
     expect(screen.queryByRole('group', { name: 'Running' })).not.toBeInTheDocument()
   })

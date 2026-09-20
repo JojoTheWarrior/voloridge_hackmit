@@ -6,6 +6,8 @@ import { ValidationError, type Api } from './index'
 const TITLE_MAX = 48
 // Mock time: each step pretends to have taken this long, whatever stepMs is.
 const SECONDS_PER_STEP = 53
+// Seeded missions tick slower than new ones so a demo keeps something in Running for a while.
+export const SEED_SLOWDOWN = 8
 
 interface MockOptions {
   stepMs?: number
@@ -36,13 +38,13 @@ export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
 
   const notify = () => listeners.forEach((listener) => listener())
 
-  function advance(mission: Mission) {
+  function advance(mission: Mission, delay: number) {
     const active = mission.steps.findIndex((s) => s.state === 'active')
     const next = STEP_KEYS[active + 1]
     mission.elapsedSeconds += SECONDS_PER_STEP
     mission.steps = stepsAt(next)
     if (next) {
-      setTimeout(() => advance(mission), stepMs)
+      setTimeout(() => advance(mission, delay), delay)
     } else {
       mission.status = 'done'
       mission.result = buildResult(mission.hypothesis)
@@ -50,7 +52,8 @@ export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
     notify()
   }
 
-  missions.filter((m) => m.status === 'running').forEach((m) => setTimeout(() => advance(m), stepMs))
+  const seedDelay = stepMs * SEED_SLOWDOWN
+  missions.filter((m) => m.status === 'running').forEach((m) => setTimeout(() => advance(m, seedDelay), seedDelay))
 
   return {
     async listMissions() {
@@ -75,7 +78,7 @@ export function createMockApi({ stepMs = 2500, seed }: MockOptions = {}): Api {
         steps: stepsAt('plan'),
       }
       missions.unshift(mission)
-      setTimeout(() => advance(mission), stepMs)
+      setTimeout(() => advance(mission, stepMs), stepMs)
       notify()
       return structuredClone(mission)
     },

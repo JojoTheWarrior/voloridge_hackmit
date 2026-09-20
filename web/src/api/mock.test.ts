@@ -1,6 +1,6 @@
 import { STEP_KEYS } from '../steps'
 import { ValidationError } from './index'
-import { createMockApi } from './mock'
+import { createMockApi, SEED_SLOWDOWN } from './mock'
 
 const STEP_MS = 1000
 
@@ -82,8 +82,9 @@ describe('mock api', () => {
     const running = (await api.listMissions()).filter((m) => m.status === 'running')
     expect(running.length).toBeGreaterThan(0)
     vi.advanceTimersByTime(STEP_MS * 5)
-    const after = await api.listMissions()
-    expect(after.filter((m) => m.status === 'running')).toHaveLength(0)
+    expect((await api.listMissions()).filter((m) => m.status === 'running')).toHaveLength(running.length)
+    vi.advanceTimersByTime(STEP_MS * 5 * SEED_SLOWDOWN)
+    expect((await api.listMissions()).filter((m) => m.status === 'running')).toHaveLength(0)
   })
 
   it('notifies subscribers until they unsubscribe', async () => {
