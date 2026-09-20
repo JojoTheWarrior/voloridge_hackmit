@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/713ef6752dca4003ac39d01743109f7f",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "done",
+  "stage": "done",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:46:01Z",
-  "updated_at": "2026-09-20T03:47:16Z",
+  "updated_at": "2026-09-20T03:47:53Z",
   "finished_at": "2026-09-20T03:46:22Z",
-  "elapsed_s": 75,
-  "message": "committing run folder",
+  "elapsed_s": 112,
+  "message": "Not supported: crossref ammonia cache unavailable, swapped to gdelt.gkg.fertilizer_share; r=-0.10 (n=390), perm_p=0.45, long-MOS rule hit 40%, sharpe -1.9, actionability 0",
   "run_folder": "missions/runs/20260920-164-gdelt-gkg-fertilizer-share_x_finance-mos-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] GDELT fertilizer news share 20d z-score > 1 leads MOS log returns by 5 days (-) as fertilizer headlines mark local price exhaustion; fade with short MOS 5d [gdelt.gkg.fertilizer_share -> finance.MOS.log_return] (parent: R2-0047)"
 }
