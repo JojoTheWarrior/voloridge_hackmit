@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/15eca1e629d54cc3a4391bc05b2775b7",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:58:03Z",
-  "updated_at": "2026-09-20T03:58:20Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:59:06Z",
+  "finished_at": "2026-09-20T03:59:06Z",
+  "elapsed_s": 63,
+  "message": "Short RCL on sanctions-share z>1 at 5d lag loses money: hit 42%, avg -0.50%/trade, n=26, OOS flips positive; weak 5d lag r=-0.14; actionability 2.3 - not tradeable.",
   "run_folder": "missions/runs/20260920-180-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 2.32,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Reversal test: GDELT sanctions GKG share 20d z-score > 1 marks peak-fear, after which cruise operators rebound (+); trade long RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return] (parent: R2-0068)"
 }
