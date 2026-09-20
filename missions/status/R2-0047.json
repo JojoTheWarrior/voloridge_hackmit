@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:46:01Z",
-  "updated_at": "2026-09-20T03:47:53Z",
+  "updated_at": "2026-09-20T03:48:08Z",
   "finished_at": "2026-09-20T03:46:22Z",
-  "elapsed_s": 112,
+  "elapsed_s": 127,
   "message": "Not supported: crossref ammonia cache unavailable, swapped to gdelt.gkg.fertilizer_share; r=-0.10 (n=390), perm_p=0.45, long-MOS rule hit 40%, sharpe -1.9, actionability 0",
   "run_folder": "missions/runs/20260920-164-gdelt-gkg-fertilizer-share_x_finance-mos-log-return",
   "scores": {
