@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0128",
+  "title": "[gas-lng] Doha CAMS SO2 20d z-score < -1 (Ras Laffan train outage proxy) leads T",
+  "hypothesis": "R2 | [gas-lng] Doha CAMS SO2 20d z-score < -1 (Ras Laffan train outage proxy) leads TTF log returns by 2 days (+) via tighter European supply; trade long TTF=F 3d [airquality.doha.cams_so2 -> finance.TTF=F.log_return] (parent: R2-0029)",
+  "parent_mission_id": "R2-0029",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:51:05Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
