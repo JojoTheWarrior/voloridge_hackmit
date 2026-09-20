@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:55:44.455014+00:00",
+  "git_commit": "a865891943cc2fe285ed43ed81e7f6dff9171b8d",
+  "folder": "20260920-062-gdelt-gkg-cyber-share_x_research-cybersecurity-crossref-share",
+  "mission_id": "M20260920-df8c0f",
+  "hypothesis": "OpenAlex \"cyberattack\" research increased after Iranian cyberattacks on US water systems were reported.",
+  "status": "ok",
+  "n_obs": 29,
+  "r": 0.04936206931275797,
+  "perm_p": 0.9121756487025948,
+  "validity": 0.22,
+  "interestingness": 3.48,
+  "unexpectedness": 4.22,
+  "indicator_coverage": {
+    "gdelt.gkg.cyber_share": "configured analysis window",
+    "research.cybersecurity.crossref_share": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
