@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT fertilizer news share z-score > 1.5 leads MOS log returns by 7 days (+) since sulfuric acid is the phosphate input bottleneck; trade long MOS 7d [gdelt.gkg.fertilizer_share -> finance.MOS.log_return]

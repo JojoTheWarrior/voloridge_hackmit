@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:47:14.671729+00:00",
+  "git_commit": "a9727d3184d7b6c784ce92cc2e22e90dbdba537d",
+  "folder": "20260920-164-gdelt-gkg-fertilizer-share_x_finance-mos-log-return",
   "mission_id": "R2-0047",
-  "title": "Crossref sulfur pubs lead MOS returns",
   "hypothesis": "R2 | [fertilizer-ag] GDELT fertilizer news share z-score > 1.5 leads MOS log returns by 7 days (+) since sulfuric acid is the phosphate input bottleneck; trade long MOS 7d [gdelt.gkg.fertilizer_share -> finance.MOS.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/713ef6752dca4003ac39d01743109f7f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:46:01Z",
-  "updated_at": "2026-09-20T03:47:16Z",
-  "finished_at": "2026-09-20T03:46:22Z",
-  "elapsed_s": 75,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-164-gdelt-gkg-fertilizer-share_x_finance-mos-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.09550171460422124,
+  "perm_p": 0.4471057884231537,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "MOS",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.fertilizer_share": "configured analysis window",
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
