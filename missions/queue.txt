@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] REVERSAL: GLD 3-day cumulative return > 3 pct mean-reverts over the next 5 days (-); fade the gold spike short GLD 5d [finance.GLD.log_return -> finance.GLD.log_return]
 R2 | [risk-macro-em] Brent single-day log return > 3 pct leads India ETF returns lower by 1-2 days (-); trade short INDA 2d [finance.BZ=F.log_return -> finance.INDA.log_return]
 R2 | [risk-macro-em] 10-year yield 20d z-score > 1 leads gold ETF returns lower by 2-3 days (-) via real-rate drag even in wartime; trade short GLD 3d [finance.^TNX.close -> finance.GLD.log_return]
 R2 | [gas-lng] GDELT helium GKG share 20d z-score > 1 leads Venture Global log returns by 3 days (+) as Qatar helium/LNG co-production halts; trade long VG 5d [gdelt.gkg.helium_share -> finance.VG.log_return]

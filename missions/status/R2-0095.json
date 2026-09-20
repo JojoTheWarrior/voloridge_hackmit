@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0095",
+  "title": "[risk-macro-em] REVERSAL: GLD 3-day cumulative return > 3 pct mean-reverts over ",
+  "hypothesis": "R2 | [risk-macro-em] REVERSAL: GLD 3-day cumulative return > 3 pct mean-reverts over the next 5 days (-); fade the gold spike short GLD 5d [finance.GLD.log_return -> finance.GLD.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:13:09Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
