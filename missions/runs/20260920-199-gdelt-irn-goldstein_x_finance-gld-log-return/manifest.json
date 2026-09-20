@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:16:23.281311+00:00",
+  "git_commit": "d0c7d4c52b601185f2a73c5313b2034c1e66c641",
+  "folder": "20260920-199-gdelt-irn-goldstein_x_finance-gld-log-return",
   "mission_id": "R2-0100",
-  "title": "Iran Goldstein hostility -> gold",
   "hypothesis": "R2 | [risk-macro-em] GDELT Iran Goldstein 20d z-score below -1.5 (hostile actions) leads gold higher by 1-2 days (+); trade long GLD 3d [gdelt.irn.goldstein -> finance.GLD.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/889604fc12d54b9680ce886b813a2643",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:16:14Z",
-  "updated_at": "2026-09-20T04:16:24Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-199-gdelt-irn-goldstein_x_finance-gld-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.62
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.03394952351303365,
+  "perm_p": 0.6646706586826348,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.62,
   "trade_idea": {
     "instrument": "GLD",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 2.62,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.goldstein": "configured analysis window",
+    "finance.GLD.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

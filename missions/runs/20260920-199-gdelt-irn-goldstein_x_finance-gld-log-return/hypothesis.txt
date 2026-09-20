@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT Iran Goldstein 20d z-score below -1.5 (hostile actions) leads gold higher by 1-2 days (+); trade long GLD 3d [gdelt.irn.goldstein -> finance.GLD.log_return]
