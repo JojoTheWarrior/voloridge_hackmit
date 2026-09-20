@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] Reversal control: Iran GDELT Goldstein 20d z-score > 1 (de-escalation) leads defense ETF returns by 1-3 days (-); trade short ITA 1d [gdelt.irn.goldstein -> finance.ITA.log_return] (parent: R2-0080)
 R2 | [risk-macro-em] Reversal: GDELT ceasefire GKG share 20d z-score > 1 predicts negative Saudi ETF returns over next 1-3 days (-) (fade the ceasefire headline); trade short KSA 3d [gdelt.gkg.ceasefire_share -> finance.KSA.log_return] (parent: R2-0079)
 R2 | [risk-macro-em] Iran fight-event count 20d z-score > 1 leads UAE ETF returns lower by 1-3 days (-); tighter subset of conflict events, trade short UAE 3d [gdelt.irn.fight_events -> finance.UAE.log_return] (parent: R2-0081)
 R2 | [risk-macro-em] Reversal check: DX-Y.NYB daily log return leads US GDELT tone by 1-3 days (+), i.e. dollar moves drive US news tone rather than tone leading USD; null control for R2-0082 [finance.DX-Y.NYB.log_return -> gdelt.usa.tone] (parent: R2-0082)
