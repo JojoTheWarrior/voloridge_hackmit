@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/6d1c2945255b45e9bebed452658813cc",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:38:08Z",
-  "updated_at": "2026-09-20T03:38:30Z",
-  "finished_at": null,
-  "elapsed_s": 22,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:40:16Z",
+  "finished_at": "2026-09-20T03:40:16Z",
+  "elapsed_s": 128,
+  "message": "Not supported: r=0.09 (n=392), best lag -3d r=0.12; short BAS.DE rule 0/5 hits, avg -1.8%/trade, actionability 0 - story not a rule",
   "run_folder": "missions/runs/20260920-155-gdelt-gkg-hormuz-share_x_finance-bas-de-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] GDELT hormuz GKG share 20d z-score > 1 leads BASF returns by 3 days (+) as war-period Hormuz spikes were followed by BASF relief rallies (reversal of R2-0034, 0/5 hits short); trade long BAS.DE 3d [gdelt.gkg.hormuz_share -> finance.BAS.DE.log_return] (parent: R2-0034)"
 }
