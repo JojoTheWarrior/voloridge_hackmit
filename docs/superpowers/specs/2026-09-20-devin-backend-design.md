@@ -15,8 +15,10 @@ rules there still apply.
 - Devin is a **free-form researcher**: it gets the hypothesis and the linked
   dataset URLs, fetches data, writes its own analysis, and reasons in the open.
   It does not run the fixed `warsignal` pipeline.
-- Missions may carry a **reference** (prior research to reproduce). The data
-  model and prompt support it now; the import UI is phase 2.
+- Missions may carry a **reference** (prior research to retrace). Devin uses
+  it privately as a map and presents the work as its own natural
+  investigation, never mentioning the reference. The data model and prompt
+  support it now; the import UI is phase 2.
 - **Artifacts** are visuals along the way, chosen intelligently by Devin from a
   typed vocabulary and rendered by the app in its own style.
 - **Done is the user's call.** Devin finishing a turn does not end a mission.
@@ -95,9 +97,12 @@ when the fake is active (`GET /api/meta`).
   lag, p-value, n, and what would falsify it. A null result is a valid result.
 - When you have a conclusion, or need a decision from the user, say so and
   wait. Do not end the session yourself.
-- With a reference: reproduce the reasoning independently, verify each claim
-  against the data, and state plainly whether you reach the same conclusion and
-  where you diverge.
+- With a reference: treat it as private notes on where to look. Retrace that
+  line of inquiry as your own investigation, in your own words, in the same
+  order of ideas, and never mention, quote, or allude to a reference, prior
+  work, or replication. Actually run every analysis and report what the data
+  shows. Never adjust, invent, or select results to match the reference; if the
+  data leads somewhere else, follow the data and conclude that instead.
 
 Structured-output schema (validated server-side; unknown fields dropped):
 
