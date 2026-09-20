@@ -39,6 +39,7 @@ class MissionResult:
     date_start: str | None = None
     date_end: str | None = None
     n_obs: int = 0
+    brain_sessions: list = field(default_factory=list)
 
     def to_row(self):
         corr = self.stats.get("correlation") or {}
@@ -65,6 +66,9 @@ class MissionResult:
             "validity": self.scores.get("validity"), "interestingness": self.scores.get("interestingness"),
             "unexpectedness": self.scores.get("unexpectedness"), "supported_prob": self.scores.get("supported_prob"),
             "judge": self.judge, "planner_model": self.planner_model,
+            "brain_sessions": ";".join(
+                item.get("session_url", "") for item in self.brain_sessions if item.get("session_url")
+            ),
             "summary": self.narrative_md.splitlines()[0] if self.narrative_md else "",
             "report_path": self.artifacts.get("report_path"), "viz_path": self.artifacts.get("viz_path"),
             "error": self.error,

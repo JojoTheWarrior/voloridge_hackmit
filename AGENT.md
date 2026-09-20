@@ -5,12 +5,22 @@
 Create `.env` from `.env.example`. Supported secrets include:
 
 - `OPENAI_API_KEY`: planner, narrative, and OpenAI judge fallback.
+- `DEVIN_API_KEY`: default child-session brain for planner, narrative, and
+  visualization reasoning. Sessions are discoverable at app.devin.ai with the
+  `warsignal` tag; OpenAI is used when Devin is unavailable.
 - `TYPESAFE_API_KEY`: Jev/System One (`console.typesafe.ai`).
 - `OPENAQ_API_KEY`: optional API discovery; the anonymous S3 archive is used
   for the long scan when possible.
 - `OPENALEX_API_KEY`: optional API count queries; parquet sampling is primary.
 
 Never print, commit, or include secret values in reports or logs.
+
+## Brain workflow
+
+The default `WARSIGNAL_BRAIN=devin` creates a tagged Devin session for each
+planner, narrative, and visualization call. Use `--brain devin|openai|heuristic`
+on `mission` or `queue` to override the environment. Session metadata is
+recorded in each run manifest, results CSV, and `missions/runs/INDEX.md`.
 
 ## Fetch workflows
 

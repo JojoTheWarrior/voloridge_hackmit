@@ -52,6 +52,9 @@ shape of each source:
     callable context but removed from planner catalogue selection.
 12. Preserved weekly alignment and made lag units explicit (`days`, `weeks`,
     or `months`) in reports and visualizations.
+13. Added Devin child-session brain integration with OpenAI and heuristic
+    fallbacks. Planner, narrative, and visualization calls retain backend
+    metadata in run manifests and result indexes.
 
 ## Download snapshot
 

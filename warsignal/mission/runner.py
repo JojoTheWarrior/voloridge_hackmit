@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import inspect
 import math
 import shutil
 import secrets
@@ -8,8 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from warsignal.ai.jev_client import JevClient
+from warsignal.ai.brain import think_text
 from warsignal.ai.prompts import JEV_QUESTIONS, NARRATIVE_SYSTEM
-from warsignal.ai.openai_client import chat_text
 from warsignal.analysis.stats import align, apply_window, run_all, run_single, transform
 from warsignal.config import START, END
 from warsignal.indicators import get_series
@@ -25,11 +26,37 @@ def _json_default(value):
     return to_jsonable(value)
 
 
-def _narrative(hypothesis, plan, stats, use_ai):
-    if use_ai:
+def _narrative(hypothesis, plan, stats, use_ai, mission_id="mission", brain_backend=None, brain_sessions=None):
+    if use_ai and brain_backend != "heuristic":
         try:
-            return chat_text(NARRATIVE_SYSTEM, json.dumps({"hypothesis": hypothesis, "plan": plan.__dict__, "stats": stats}),
-                             model=__import__("warsignal.config", fromlist=["env"]).env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))[0]
+            compact_stats = dict(stats)
+            lagged = compact_stats.get("lagged")
+            if isinstance(lagged, dict):
+                compact_stats["lagged"] = {
+                    key: value for key, value in lagged.items() if key not in {"lags", "r"}
+                }
+            event_study = compact_stats.get("event_study")
+            if isinstance(event_study, dict):
+                compact_stats["event_study"] = {
+                    key: value for key, value in event_study.items() if key != "per_event"
+                }
+            text, meta = think_text(
+                NARRATIVE_SYSTEM,
+                json.dumps(
+                    {"hypothesis": hypothesis, "plan": plan.__dict__, "stats": compact_stats},
+                    default=_json_default,
+                ),
+                purpose="narrative",
+                mission_id=mission_id,
+                backend=brain_backend,
+            )
+            if brain_sessions is not None:
+                brain_sessions.append({
+                    "purpose": "narrative",
+                    "backend": meta.get("backend"),
+                    "session_url": meta.get("session_url"),
+                })
+            return text
         except Exception:
             pass
     corr = (stats.get("correlation") or {}).get("pearson_r")
@@ -83,13 +110,21 @@ def _heuristic_judge(plan, stats):
     }
 
 
-def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False, publish=False):
+def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False, publish=False, brain_backend=None):
     mission_id = mission_id or f"M{datetime.now().strftime('%Y%m%d')}-{secrets.token_hex(3)}"
     created = datetime.now(timezone.utc).isoformat()
     raw_a = raw_b = transformed_a = transformed_b = None
     judge = {}
+    brain_sessions = []
     try:
-        plan, planner_model = plan_mission(hypothesis, use_ai=use_ai)
+        planner_args = {"use_ai": use_ai}
+        if "mission_id" in inspect.signature(plan_mission).parameters:
+            planner_args.update(
+                mission_id=mission_id,
+                brain_backend=brain_backend,
+                brain_sessions=brain_sessions,
+            )
+        plan, planner_model = plan_mission(hypothesis, **planner_args)
         a = raw_a = get_series(plan.indicator_a, START, END)
         if plan.mode == "single":
             b = None
@@ -114,7 +149,15 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
             if use_ai else _heuristic_judge(plan, stats)
         )
         result = MissionResult(mission_id, created, hypothesis, plan, stats, judge.get("scores", {}),
-                               _narrative(hypothesis, plan, stats, use_ai), judge=judge.get("judge", ""),
+                               _narrative(
+                                   hypothesis,
+                                   plan,
+                                   stats,
+                                   use_ai,
+                                   mission_id,
+                                   brain_backend,
+                                   brain_sessions,
+                               ), judge=judge.get("judge", ""),
                                planner_model=planner_model, data_sources=[plan.indicator_a] if plan.mode == "single" else [plan.indicator_a, plan.indicator_b],
                                date_start=stats.get("coverage_start"), date_end=stats.get("coverage_end"), n_obs=stats.get("n_obs", 0))
         result.scores["supported_prob"] = judge.get("supported_prob")
@@ -125,7 +168,14 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
         failed_plan = locals().get("plan", None)
         if failed_plan is None:
             try:
-                failed_plan, failed_model = plan_mission(hypothesis, use_ai=use_ai)
+                failed_args = {"use_ai": use_ai}
+                if "mission_id" in inspect.signature(plan_mission).parameters:
+                    failed_args.update(
+                        mission_id=mission_id,
+                        brain_backend=brain_backend,
+                        brain_sessions=brain_sessions,
+                    )
+                failed_plan, failed_model = plan_mission(hypothesis, **failed_args)
             except Exception:
                 failed_plan, failed_model = heuristic_plan(hypothesis), "heuristic"
         else:
@@ -135,6 +185,7 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
             planner_model=failed_model,
             data_sources=[failed_plan.indicator_a] if failed_plan.mode == "single" else [failed_plan.indicator_a, failed_plan.indicator_b],
         )
+    result.brain_sessions = brain_sessions
     reports = ROOT / "missions" / "reports"
     reports.mkdir(parents=True, exist_ok=True)
     report_path = reports / f"{mission_id}.md"
@@ -155,7 +206,7 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
         from warsignal.viz.agent import design_viz
         from warsignal.viz.pygame_viz import render
 
-        spec = design_viz(result)
+        spec = design_viz(result, brain_backend=brain_backend, brain_sessions=brain_sessions)
         viz_path = reports / f"{mission_id}.png"
         render(spec, json_path, viz_path, interactive=False)
         result.artifacts["viz_path"] = str(viz_path)

@@ -86,16 +86,21 @@ def _write_index():
     lines = [
         "# Mission Runs",
         "",
-        "| Folder | Hypothesis | Status | n | r | perm_p | Validity | Interest | Unexpected |",
-        "|---|---|---:|---:|---:|---:|---:|---:|---:|",
+        "| Folder | Hypothesis | Status | n | r | perm_p | Validity | Interest | Unexpected | Brain |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---|",
     ]
     for row in rows:
         hypothesis = str(row.get("hypothesis", "")).replace("|", "\\|").replace("\n", " ")
+        brain = "<br>".join(
+            "[{}]({})".format(item.get("purpose", "brain"), item["session_url"])
+            for item in row.get("brain_sessions", [])
+            if item.get("session_url")
+        )
         lines.append(
             f"| `{row['folder']}` | {hypothesis} | {row.get('status', '')} | "
             f"{row.get('n_obs', '')} | {row.get('r', '')} | {row.get('perm_p', '')} | "
             f"{row.get('validity', '')} | {row.get('interestingness', '')} | "
-            f"{row.get('unexpectedness', '')} |"
+            f"{row.get('unexpectedness', '')} | {brain} |"
         )
     (RUNS / "INDEX.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -172,6 +177,7 @@ def write_run_folder(result, raw_a=None, raw_b=None, transformed_a=None, transfo
         "validity": result.scores.get("validity"),
         "interestingness": result.scores.get("interestingness"),
         "unexpectedness": result.scores.get("unexpectedness"),
+        "brain_sessions": result.brain_sessions,
         "indicator_coverage": {
             result.plan.indicator_a: _coverage(result.plan.indicator_a),
             **({} if result.plan.mode == "single" else {

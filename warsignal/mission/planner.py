@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import re
 
-from warsignal.ai.openai_client import AIUnavailable, chat_json
+from warsignal.ai.brain import think_json
 from warsignal.ai.prompts import PLANNER_SYSTEM
 from warsignal.config import CITIES, env
 from warsignal.indicators import REGISTRY, catalogue_text
@@ -158,24 +158,67 @@ def heuristic_plan(hypothesis):
                        "Heuristic keyword overlap with source-diverse catalogue entries.")
 
 
-def plan_mission(hypothesis, use_ai=True):
-    if not use_ai or not env("OPENAI_API_KEY"):
+def plan_mission(hypothesis, use_ai=True, mission_id="planning", brain_backend=None, brain_sessions=None):
+    if not use_ai or brain_backend == "heuristic":
         return _validate_plan(hypothesis, _semantic_adjust(hypothesis, heuristic_plan(hypothesis))), "heuristic"
+    catalogue = catalogue_text()
+    if len(catalogue) > 24000:
+        terms = set(re.findall(r"[a-z0-9_]+", hypothesis.lower()))
+        selected = [
+            line for line in catalogue.splitlines()
+            if any(term in line.lower() for term in terms if len(term) > 2)
+        ]
+        compact = "\n".join(selected)
+        catalogue = (compact + "\n" + catalogue)[:24000]
     prompt = (
         f"MISSION:\n{hypothesis}\n\n"
         "COVERAGE GUIDANCE: Prefer indicators whose coverage spans 2025-03..2026-09. "
         "ISD-only series stop in 2025-08. Event-count indicators are sparse 0/1 "
         "timeline markers for event studies, not correlation inputs.\n\n"
-        f"CATALOGUE:\n{catalogue_text()}"
+        f"CATALOGUE:\n{catalogue}"
     )
     last_error = None
+    schema = {
+        "type": "object",
+        "properties": {
+            "indicator_a": {"type": "string"},
+            "indicator_b": {"type": "string"},
+            "transform_a": {"type": "string"},
+            "transform_b": {"type": "string"},
+            "max_lag_days": {"type": "integer"},
+            "window": {"type": "string"},
+            "event_category": {"type": ["string", "null"]},
+            "is_null_control": {"type": "boolean"},
+            "expected_sign": {"type": "integer"},
+            "rationale": {"type": "string"},
+            "mode": {"type": "string"},
+        },
+        "required": [
+            "indicator_a", "indicator_b", "transform_a", "transform_b", "max_lag_days",
+            "window", "event_category", "is_null_control", "expected_sign", "rationale", "mode",
+        ],
+    }
     for attempt in range(2):
         try:
-            result = chat_json(PLANNER_SYSTEM, prompt, model=env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
+            result = think_json(
+                PLANNER_SYSTEM,
+                prompt,
+                schema,
+                purpose="planner",
+                mission_id=mission_id,
+                backend=brain_backend,
+            )
+            if brain_sessions is not None and result.get("_meta"):
+                brain_sessions.append({
+                    "purpose": "planner",
+                    "backend": result["_meta"].get("backend"),
+                    "session_url": result["_meta"].get("session_url"),
+                })
             fields = {key: result[key] for key in MissionPlan.__dataclass_fields__ if key in result}
             plan = MissionPlan(**fields)
             plan = _validate_plan(hypothesis, _semantic_adjust(hypothesis, plan))
-            return plan, result.get("_meta", {}).get("model", env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
+            meta = result.get("_meta", {})
+            return plan, meta.get("model") or meta.get("backend", env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
         except Exception as exc:
             last_error = exc
             print(f"[planner] ai plan rejected: {exc}", flush=True)

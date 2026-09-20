@@ -7,9 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from warsignal.ai.openai_client import chat_json
+from warsignal.ai.brain import think_json
 from warsignal.ai.prompts import VIZ_SYSTEM
-from warsignal.config import env
 from warsignal.indicators import REGISTRY
 
 
@@ -90,7 +89,7 @@ def _valid(spec, result):
     return spec
 
 
-def _codegen(result, spec, allow_exec):
+def _codegen(result, spec, allow_exec, brain_backend=None, brain_sessions=None):
     mission_id = _as_dict(result).get("mission_id", "mission")
     target = Path("missions/viz_generated") / f"{mission_id}.py"
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -100,7 +99,24 @@ def _codegen(result, spec, allow_exec):
         f"Mission visualization spec: {json.dumps(spec, default=str)}"
     )
     try:
-        generated = chat_json(VIZ_SYSTEM, prompt, model=env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"))
+        generated = think_json(
+            VIZ_SYSTEM,
+            prompt,
+            {
+                "type": "object",
+                "properties": {"code": {"type": "string"}},
+                "required": ["code"],
+            },
+            purpose="viz_codegen",
+            mission_id=mission_id,
+            backend=brain_backend,
+        )
+        if brain_sessions is not None and generated.get("_meta"):
+            brain_sessions.append({
+                "purpose": "viz_codegen",
+                "backend": generated["_meta"].get("backend"),
+                "session_url": generated["_meta"].get("session_url"),
+            })
         source = generated.get("code", "")
         if not isinstance(source, str) or "def draw(" not in source:
             return None
@@ -116,22 +132,36 @@ def _codegen(result, spec, allow_exec):
         return None
 
 
-def design_viz(mission_result, codegen=False, allow_exec=False):
+def design_viz(mission_result, codegen=False, allow_exec=False, brain_backend=None, brain_sessions=None):
     """Return a validated VizSpec; generated code is never executed without both flags."""
     fallback = default_spec(mission_result)
-    if not env("OPENAI_API_KEY"):
-        if codegen:
-            _codegen(mission_result, fallback, allow_exec and codegen)
-        return fallback
     try:
-        response = chat_json(
+        response = think_json(
             VIZ_SYSTEM,
             json.dumps(_compact(mission_result), default=str),
-            model=env("WARSIGNAL_PLANNER_MODEL", "gpt-5.1"),
+            {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string"},
+                    "panels": {"type": "array"},
+                    "events": {"type": "array"},
+                    "highlight_dates": {"type": "array"},
+                    "color_theme": {"type": "string"},
+                },
+            },
+            purpose="viz_design",
+            mission_id=_as_dict(mission_result).get("mission_id", "mission"),
+            backend=brain_backend,
         )
+        if brain_sessions is not None and response.get("_meta"):
+            brain_sessions.append({
+                "purpose": "viz_design",
+                "backend": response["_meta"].get("backend"),
+                "session_url": response["_meta"].get("session_url"),
+            })
         spec = _valid(response, mission_result)
     except Exception:
         spec = fallback
     if codegen:
-        _codegen(mission_result, spec, allow_exec and codegen)
+        _codegen(mission_result, spec, allow_exec and codegen, brain_backend, brain_sessions)
     return spec

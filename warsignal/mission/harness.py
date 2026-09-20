@@ -21,20 +21,20 @@ def requeue_failed_missions():
     return requeue_failed()
 
 
-def run_queue(n=None, use_ai=True, stop_on_error=False, viz=False, max_retries=1, publish=False):
+def run_queue(n=None, use_ai=True, stop_on_error=False, viz=False, max_retries=1, publish=False, brain_backend=None):
     results = []
     while n is None or len(results) < n:
         line = pop_next()
         if line is None:
             break
-        result = run_mission(line, use_ai=use_ai, viz=viz, publish=publish)
+        result = run_mission(line, use_ai=use_ai, viz=viz, publish=publish, brain_backend=brain_backend)
         if (
             result.status == "failed"
             and use_ai
             and max_retries > 0
             and "insufficient overlap" in (result.error or "")
         ):
-            retry_result = run_mission(line, use_ai=False, viz=viz, publish=publish)
+            retry_result = run_mission(line, use_ai=False, viz=viz, publish=publish, brain_backend=brain_backend)
             if retry_result.status == "failed":
                 retry_result.error = f"{retry_result.error}; retried with heuristic plan"
             result = retry_result

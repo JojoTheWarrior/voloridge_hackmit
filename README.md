@@ -20,6 +20,17 @@ python main.py ui
 python main.py queue --n 5
 ```
 
+### Brain backends
+
+WarSignal uses Devin child sessions as the default brain for planner
+reasoning, narrative notes, and visualization design/code generation. Put
+`DEVIN_API_KEY` in `.env`, then find the mission sessions at
+`https://app.devin.ai` by filtering for the `warsignal` tag. Each session is
+also tagged with its purpose and mission ID. If Devin is unavailable, WarSignal
+logs the fallback and uses OpenAI; select a backend explicitly with
+`--brain devin`, `--brain openai`, or `--brain heuristic` on `mission` and
+`queue`. The heuristic option disables LLM calls.
+
 ### Mission protocol
 
 Every mission writes a self-contained, reproducible folder under
@@ -38,8 +49,8 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | --- | --- |
 | `python main.py fetch --quick` / `--all` | Fetch configured public datasets |
 | `python main.py indicators [--source X]` | List the indicator catalogue |
-| `python main.py mission "..." [--no-ai] [--dry-run] [--viz] [--show]` | Plan or run one mission |
-| `python main.py queue [--n N] [--no-ai] [--viz]` | Run queued hypotheses |
+| `python main.py mission "..." [--no-ai] [--brain X] [--dry-run] [--viz] [--show]` | Plan or run one mission |
+| `python main.py queue [--n N] [--no-ai] [--brain X] [--viz]` | Run queued hypotheses |
 | `python main.py queue --reset` | Restore `missions/queue.txt` from its backup |
 | `python main.py queue --requeue-failed` | Put failed hypotheses back in the queue |
 | `python main.py viz M... [--headless]` | Render a mission visualization |
