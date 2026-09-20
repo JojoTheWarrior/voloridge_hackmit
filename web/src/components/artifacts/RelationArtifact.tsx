@@ -4,10 +4,11 @@ import { EmptyBody } from './EmptyBody'
 import { LABEL_CHAR, layoutRelation } from './relationLayout'
 import { asText } from './text'
 
-const INK = '#0a0a0a'
-const MUTED = '#8c8c8c'
-const FAINT = '#bdbdbd'
-const WHITE = '#ffffff'
+const INK = 'var(--color-ink)'
+const MUTED = 'var(--color-muted)'
+const FAINT = 'var(--color-faint)'
+// Theme tokens rather than hex, so the diagram turns over with dark mode.
+const PAPER = 'var(--color-paper)'
 const KNOCKOUT_PAD = 5
 
 export function RelationArtifact({ artifact }: { artifact: RelationSpec }) {
@@ -43,7 +44,7 @@ export function RelationArtifact({ artifact }: { artifact: RelationSpec }) {
                   y={edge.labelY - 8}
                   width={edge.label.length * LABEL_CHAR + KNOCKOUT_PAD * 2}
                   height="16"
-                  fill={WHITE}
+                  fill={PAPER}
                 />
                 <text x={edge.labelX} y={edge.labelY} textAnchor="middle" dominantBaseline="central" fontSize="11" fill={MUTED} className="font-mono">
                   {edge.label}
@@ -54,7 +55,7 @@ export function RelationArtifact({ artifact }: { artifact: RelationSpec }) {
         {layout.nodes.map((node) => (
           <g key={node.id}>
             {node.fullLabel !== node.label && <title>{node.fullLabel}</title>}
-            <rect x={node.x} y={node.y} width={node.width} height={node.height} rx={node.height / 2} fill={WHITE} stroke={INK} strokeWidth="1" />
+            <rect x={node.x} y={node.y} width={node.width} height={node.height} rx={node.height / 2} fill={PAPER} stroke={INK} strokeWidth="1" />
             <text x={node.x + node.width / 2} y={node.y + node.height / 2} textAnchor="middle" dominantBaseline="central" fontSize="12" fill={INK}>
               {node.label}
             </text>

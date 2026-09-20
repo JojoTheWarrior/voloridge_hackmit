@@ -5,10 +5,11 @@ import { useMeta, useMissions } from '../hooks/useApiData'
 import type { MissionSummary } from '../types'
 import { CastleLogo } from './CastleLogo'
 import { StatusDot } from './StatusDot'
+import { ThemeToggle } from './ThemeToggle'
 
 const rowClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] transition-colors duration-150 ${
-    isActive ? 'bg-[#f0f0f0] text-ink' : 'hover:bg-fill'
+    isActive ? 'bg-hover text-ink' : 'hover:bg-fill'
   }`
 
 function MissionGroup({ label, missions, onNavigate }: { label: string; missions: MissionSummary[]; onNavigate?: () => void }) {
@@ -53,7 +54,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <Link
         to="/"
         onClick={onNavigate}
-        className="flex items-center justify-center gap-1.5 rounded-lg border border-line bg-white px-2.5 py-1.5 text-[13px] transition-colors duration-150 hover:border-faint"
+        className="flex items-center justify-center gap-1.5 rounded-lg border border-line bg-paper px-2.5 py-1.5 text-[13px] transition-colors duration-150 hover:border-faint"
       >
         <Plus size={14} strokeWidth={1.75} aria-hidden="true" />
         New mission
@@ -69,7 +70,10 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           <Database size={14} strokeWidth={1.75} aria-hidden="true" />
           Datasets
         </NavLink>
-        {meta?.demo && <p className="px-2.5 pt-2 pb-0.5 text-xs text-muted">Demo mode</p>}
+        <div className="flex min-h-7 items-center justify-between pt-1.5 pl-2.5">
+          <p className="text-xs text-muted">{meta?.demo ? 'Demo mode' : ''}</p>
+          <ThemeToggle />
+        </div>
       </div>
     </nav>
   )
