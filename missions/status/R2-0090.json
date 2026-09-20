@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/a8c74e118efb44d6a26f27870c36218b",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:10:33Z",
-  "updated_at": "2026-09-20T04:10:52Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:11:30Z",
+  "finished_at": "2026-09-20T04:11:30Z",
+  "elapsed_s": 57,
+  "message": "Weakly supported: r=0.09 (n=391), best lag -1d r=0.13; long-VIX rule hit rate 42%, sharpe-like 0.07, actionability 2.78 - not tradeable",
   "run_folder": "missions/runs/20260920-194-gdelt-isr-conflict-events_x_finance-vix-close",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 2.78,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Israel fight-event count 20d z-score > 2 leads VIX log-return higher by 1 day (+); tighter threshold, trade long VIX exposure 1d [gdelt.isr.fight_events -> finance.^VIX.log_return] (parent: R2-0090)"
 }
