@@ -23,3 +23,6 @@ data/raw/*
 !data/cache/
 data/cache/*
 !data/cache/gdelt_daily.parquet
+
+# Claude Code worktrees and local launch config
+.claude/
