@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/b4c71c7b7922427491353e360dc172a7",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:19:48Z",
-  "updated_at": "2026-09-20T04:20:07Z",
+  "updated_at": "2026-09-20T04:20:32Z",
   "finished_at": null,
-  "elapsed_s": 19,
+  "elapsed_s": 44,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-204-gdelt-omn-events_x_finance-bz-f-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 6.74,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Oman GDELT conflict-event count 20d z-score > 1.0 (tension only, excluding diplomacy) leads Brent higher by 2 days (+) and should beat the all-events rule out-of-sample; trade long BZ=F 2d [gdelt.omn.conflict_events -> finance.BZ=F.log_return] (parent: R2-0105)"
 }
