@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:51:54Z",
-  "updated_at": "2026-09-20T12:52:40Z",
+  "updated_at": "2026-09-20T12:54:52Z",
   "finished_at": "2026-09-20T12:52:40Z",
-  "elapsed_s": 46,
-  "message": "Not supported at lag 2 with z<-1 (r=-0.017, n=390); auto trade rule z>+1 long TTF 6d gives hit 55%, sharpe-like 1.36, OOS hit 62% (n=13) - weak, actionability 3.6",
+  "elapsed_s": 178,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-230-airquality-doha-cams-so2_x_finance-ttf-f-log-return",
   "scores": {
     "validity": 0,
