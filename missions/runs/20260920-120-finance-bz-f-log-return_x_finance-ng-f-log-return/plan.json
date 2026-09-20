@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.BZ=F.log_return",
+  "indicator_b": "finance.NG=F.log_return",
+  "transform_a": "log_return",
+  "transform_b": "log_return",
+  "max_lag_days": 10,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "No PUDL EIA-923 delivered coal cost series is present in the visible catalogue, so the closest proxy is the war-driven Brent shock (diesel/rail transport cost and cross-fuel substitution) leading US natural gas prices, whose post-March 2026 coupling to oil would indicate the same fuel-substitution channel that would lift delivered coal cost despite coal not transiting Hormuz; confounders include the war as common cause, seasonality of gas demand and small post-war n.",
+  "mode": "pair"
+}

@@ -1,0 +1,40 @@
+{
+  "created_at": "2026-09-20T02:30:12.147342+00:00",
+  "git_commit": "3f10d5a78ccd38011824f21ee91c1a188c6e1555",
+  "folder": "20260920-120-finance-bz-f-log-return_x_finance-ng-f-log-return",
+  "mission_id": "M20260920-8d4551",
+  "hypothesis": "Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz.",
+  "status": "ok",
+  "n_obs": 39,
+  "r": -0.21179258001903334,
+  "perm_p": 0.5249500998003992,
+  "validity": 0.12,
+  "interestingness": 3.26,
+  "unexpectedness": 5.98,
+  "brain_sessions": [
+    {
+      "purpose": "planner",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/c1a0e505b33145e6a60ccd91491cc816"
+    },
+    {
+      "purpose": "narrative",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/fd7101e65fc748809134f239bff4aeea"
+    },
+    {
+      "purpose": "viz_design",
+      "backend": "devin",
+      "session_url": "https://app.devin.ai/sessions/f6603f6c9a6f4140ae795c97f126e751"
+    }
+  ],
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "finance.NG=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
