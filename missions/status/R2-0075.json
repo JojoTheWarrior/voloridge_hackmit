@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/788e0399c5e34eb894ba9aed1bdb2360",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:02:48Z",
-  "updated_at": "2026-09-20T04:03:07Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T04:03:33Z",
+  "finished_at": "2026-09-20T04:03:33Z",
+  "elapsed_s": 45,
+  "message": "Not supported: Brent +3pct spikes do not reverse into CCL; contemporaneous r=-0.30 (perm p=0.018) but lag 1-4 r~0; long-CCL rule 50 trades, hit 48pct, excess -0.45pct, sharpe -0.94, OOS hit 37.5pct; actionability 0.3",
   "run_folder": "missions/runs/20260920-184-finance-bz-f-log-return_x_finance-ccl-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.3,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] Brent log-return spikes hit cruise names contemporaneously (r=-0.30 at lag 0) with no reversal at 1-4d; test whether the drop continues: trade short CCL 2d at 1d lag (-) [finance.BZ=F.log_return -> finance.CCL.log_return] (parent: R2-0075)"
 }
