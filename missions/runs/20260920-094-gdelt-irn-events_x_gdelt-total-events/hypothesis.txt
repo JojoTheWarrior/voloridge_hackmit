@@ -1,0 +1,1 @@
+Global GDELT event counts (all countries) dropped when Iran shut down its internet.

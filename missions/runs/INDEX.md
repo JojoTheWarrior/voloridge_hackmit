@@ -95,3 +95,4 @@
 | `20260920-091-gdelt-gkg-hormuz-share_x_finance-fred-dcoilbrenteu` | Oil-price reaction to Hormuz events decayed over successive closures (market desensitization). | ok | 142 | 0.08445454010193726 | 0.24750499001996007 | 1.98 | 3.3 | 4.86 |
 | `20260920-092-gdelt-irn-negotiate-events_x_gdelt-irn-mentions` | GDELT news volume about Iran decays faster after diplomatic events than after military events. | ok | 568 | 0.8759763877357523 | 0.011976047904191617 | 6.18 | 1.16 | 2.8 |
 | `20260920-093-gdelt-irn-tone_x_finance-gspc-log-return` | GDELT average tone about Iran predicts next-day S&P 500 returns during the war. | ok | 140 | 0.12543146493088086 | 0.021956087824351298 | 6.02 | 4.06 | 5.32 |
+| `20260920-094-gdelt-irn-events_x_gdelt-total-events` | Global GDELT event counts (all countries) dropped when Iran shut down its internet. | ok | 204 | 0.4579545226214894 | 0.033932135728542916 | 6.0 | 1.26 | 4.6 |

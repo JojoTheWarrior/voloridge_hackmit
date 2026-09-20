@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:00:18.617184+00:00",
+  "git_commit": "a29e7017c223819d7d539195a49eb03660dcd65d",
+  "folder": "20260920-094-gdelt-irn-events_x_gdelt-total-events",
+  "mission_id": "M20260920-1edd43",
+  "hypothesis": "Global GDELT event counts (all countries) dropped when Iran shut down its internet.",
+  "status": "ok",
+  "n_obs": 204,
+  "r": 0.4579545226214894,
+  "perm_p": 0.033932135728542916,
+  "validity": 6.0,
+  "interestingness": 1.26,
+  "unexpectedness": 4.6,
+  "indicator_coverage": {
+    "gdelt.irn.events": "configured analysis window",
+    "gdelt.total_events": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
