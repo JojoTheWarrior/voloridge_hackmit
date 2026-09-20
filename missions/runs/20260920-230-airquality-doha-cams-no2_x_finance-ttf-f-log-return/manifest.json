@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:52:02.606809+00:00",
+  "git_commit": "0cf83bfe84ddcf549589d1b1be0efdf92a56206b",
+  "folder": "20260920-230-airquality-doha-cams-no2_x_finance-ttf-f-log-return",
   "mission_id": "R2-0126",
-  "title": "Doha NO2 z>1 leads TTF +3d (long reversal)",
   "hypothesis": "R2 | [gas-lng] Doha CAMS NO2 20d z-score > 1 (reversal control: Ras Laffan activity proxy was a losing short in the war test) leads TTF log returns by 3 days (+); trade long TTF=F 3d [airquality.doha.cams_no2 -> finance.TTF=F.log_return] (parent: R2-0028)",
-  "parent_mission_id": "R2-0028",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/35053167aae1475592db4b999794e1f2",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:51:48Z",
-  "updated_at": "2026-09-20T12:52:04Z",
-  "finished_at": null,
-  "elapsed_s": 16,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-230-airquality-doha-cams-no2_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 3.9
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.06566589118462474,
+  "perm_p": 0.7744510978043913,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 3.9,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 3.9,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.doha.cams_no2": "2025-03..2026-09 archive window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
