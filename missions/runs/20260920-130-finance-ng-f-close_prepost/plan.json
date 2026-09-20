@@ -1,0 +1,13 @@
+{
+  "indicator_a": "finance.NG=F.close",
+  "indicator_b": "finance.NG=F.close",
+  "transform_a": "pct_change",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "The catalogue as delivered is truncated before any PUDL/EIA-923 coal-share series, so no coal generation indicator name can be verified; this returns the driver leg only (Henry Hub NG=F, pre- vs post-war level shift) and should be re-run with the exact PUDL monthly coal-share series (freq=M) as indicator_b, with max_lag ~30 days for monthly dispatch response and seasonality (summer load, hydro) as key confounders.",
+  "mode": "single"
+}
