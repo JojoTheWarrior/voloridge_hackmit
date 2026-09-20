@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.us.demand_anomaly",
+  "indicator_b": "finance.fred.DHHNGSP",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily US electricity demand anomalies (proxy for heating/cooling-driven gas burn) against Henry Hub natural gas price log-returns during the active war period to test whether unexpected load spikes coincided with upward gas price moves, allowing gas prices to react within about a week."
+}

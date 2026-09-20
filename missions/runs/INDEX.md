@@ -30,3 +30,4 @@
 | `20260920-026-weather-tehran-precip_x_gdelt-irn-events` | Tehran precipitation days show lower Iran-related GDELT event counts. | ok | 564 | 0.13470390492496237 | 0.13972055888223553 | 3.7 | 3.74 | 6.94 |
 | `20260920-027-FAILED-open-meteo-shortwave-radiation-in` | Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control). | failed | 0 | None | None | None | None | None |
 | `20260920-028-FAILED-open-meteo-shortwave-radiation-in` | Open-Meteo shortwave radiation in Gulf cities correlates with PUDL-independent solar-generation proxies in US data (control). | failed | 0 | None | None | None | None | None |
+| `20260920-029-utility-us-demand-anomaly_x_finance-fred-dhhngsp` | US hourly electricity demand (EIA-930) anomalies correlate with natural gas price moves during the war. | ok | 127 | 0.0077213705945525105 | 0.5968063872255489 | 0.02 | 2.86 | 0.82 |

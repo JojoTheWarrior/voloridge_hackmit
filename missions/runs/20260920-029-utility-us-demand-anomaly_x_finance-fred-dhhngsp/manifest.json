@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:51:31.392501+00:00",
+  "git_commit": "f4a83e30195543c6ce1abccfd4f4db2f8623953b",
+  "folder": "20260920-029-utility-us-demand-anomaly_x_finance-fred-dhhngsp",
+  "mission_id": "M20260920-e1a73e",
+  "hypothesis": "US hourly electricity demand (EIA-930) anomalies correlate with natural gas price moves during the war.",
+  "status": "ok",
+  "n_obs": 127,
+  "r": 0.0077213705945525105,
+  "perm_p": 0.5968063872255489,
+  "validity": 0.02,
+  "interestingness": 2.86,
+  "unexpectedness": 0.82,
+  "indicator_coverage": {
+    "utility.us.demand_anomaly": "configured analysis window",
+    "finance.fred.DHHNGSP": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
