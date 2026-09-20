@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0084",
+  "title": "[risk-macro-em] GDELT drone GKG share 20d z-score > 1 leads Northrop returns by ",
+  "hypothesis": "R2 | [risk-macro-em] GDELT drone GKG share 20d z-score > 1 leads Northrop returns by 3-5 days (+) on air-defense order expectations; trade long NOC 5d [gdelt.gkg.drone_share -> finance.NOC.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:06:24Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
