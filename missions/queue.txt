@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] GDELT cyber GKG share 20d z-score > 2 leads Nasdaq ETF returns lower by 1-2 days (-); trade short QQQ 2d [gdelt.gkg.cyber_share -> finance.QQQ.log_return]
 R2 | [risk-macro-em] GDELT drone GKG share 20d z-score > 1 leads Northrop returns by 3-5 days (+) on air-defense order expectations; trade long NOC 5d [gdelt.gkg.drone_share -> finance.NOC.log_return]
 R2 | [risk-macro-em] Crossref missile_defense weekly counts 8-week z-score > 1 lead defense ETF returns by 5-10 days (+); trade long ITA 10d [research.missile.crossref_pubs -> finance.ITA.log_return]
 R2 | [risk-macro-em] Crossref sanctions weekly counts 8-week z-score > 1 lead Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [research.sanctions.crossref_pubs -> finance.TUR.log_return]
