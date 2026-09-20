@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/c8418972eac14e819cdca617f64bbbb9",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:31:43Z",
-  "updated_at": "2026-09-20T03:31:53Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:32:48Z",
+  "finished_at": "2026-09-20T03:32:48Z",
+  "elapsed_s": 65,
+  "message": "Not supported: Rotterdam temp anomaly vs TTF log returns r=0.026 (n=388, best lag 2d r=0.13, validity 0/10, supported_prob 0); rubric long rule 39 trades excess -0.03%/trade, OOS war period negative (n=12, avg -0.14%). No tradeable edge.",
   "run_folder": "missions/runs/20260920-148-weather-rotterdam-temp-anomaly_x_finance-ttf-f-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.79,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Rotterdam daily max wind 20d z-score > 1 (North Sea wind surge, more wind power, less gas burn) leads TTF log returns by 2 days (+wind, -price); trade TTF=F 2d [weather.rotterdam.wind_max -> finance.TTF=F.log_return] (parent: R2-0025)"
 }

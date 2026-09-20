@@ -93,3 +93,6 @@ R2 | [gas-lng] GDELT Qatar GKG share 20d z-score > 1.5 marks peak attention that
 ||||||| parent of 4934fb7 (status R2-0024: running)
 R2 | [gas-lng] Null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) leads TTF=F log returns by 2 days (-); trade short TTF=F 2d, expect no edge if R2-0024 rule was noise [gdelt.qat.tone -> finance.TTF=F.log_return] (parent: R2-0024)
 R2 | [gas-lng] Robustness: Qatar GDELT conflict event count 20d z-score > 1 leads Cheniere (LNG) returns by 1 day (+); trade long LNG 4d [gdelt.qat.conflict_events -> finance.LNG.log_return] (parent: R2-0023)
+||||||| parent of 1eb0fa9 (status R2-0025: running)
+||||||| parent of 1edce76 (status R2-0025: running)
+R2 | [gas-lng] Rotterdam daily max wind 20d z-score > 1 (North Sea wind surge, more wind power, less gas burn) leads TTF log returns by 2 days (+wind, -price); trade TTF=F 2d [weather.rotterdam.wind_max -> finance.TTF=F.log_return] (parent: R2-0025)
