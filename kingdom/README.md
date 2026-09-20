@@ -19,6 +19,12 @@ python main.py kingdom --screenshot out.png --frames 120   # headless render
 | `--screenshot PATH` | Run headless (`SDL_VIDEODRIVER=dummy`) and save the last frame |
 | `--frames N` | Stop after N frames (default 120 when headless) |
 | `--root PATH` | Repo root containing `missions/` (default: this repo) |
+| `--no-pull` | Disable the background `git pull` loop |
+| `--pull-interval S` | Seconds between background pulls (default 60) |
+| `--no-http` | Disable the GitHub HTTP poller |
+| `--http-interval S` | Seconds between HTTP fetches (default 30) |
+| `--remote owner/repo` | Repository fetched by the HTTP poller |
+| `--branch NAME` | Branch fetched by the pollers (default `main`) |
 
 Audio is always disabled (`SDL_AUDIODRIVER=dummy`).
 
@@ -43,8 +49,46 @@ Audio is always disabled (`SDL_AUDIODRIVER=dummy`).
 - `runs/<YYYYMMDD>-<NNN>-<slug>/{manifest,stats,judge}.json`, `note.md`,
   `viz.png` and `runs/INDEX.md` → completed missions
 - `failed.txt` → failures
+- `status/<mission_id>.json` → live missions (see below)
 
 Missing files and fields are tolerated everywhere.
+
+## Live missions
+
+GitHub `main` is the source of truth. Every running mission agent writes
+`missions/status/<mission_id>.json` (see `missions/status/SCHEMA.md`) and
+pushes it as it reaches new stages. A daemon thread runs
+`git pull --rebase --autostash` every 60 s (`--pull-interval`) so the castle
+stays fresh; disable it with `--no-pull`. A pull that finishes forces the
+data adapter to refresh on the next frame.
+
+What you see:
+
+- **Current missions** cards show live status files first: the title, the
+  stage (`QUEUED`/`PLANNING`/`STATS`/…), an agent tag (first 8 chars of the
+  session id), the reported `progress` fraction and live `signal` colour,
+  and the latest status `message`. Legacy `in_progress.txt` lines are still
+  shown as a fallback (dropped when a status file carries the same
+  hypothesis).
+- **Queue** rows parse `R2 | R2-0017 | hypothesis` prefixes and show the
+  round + parent mission id next to the hypothesis.
+- **Completed missions** merge `done`/`failed` statuses into their run
+  folders (actionability score, trade idea, agent url, round); statuses
+  without a run folder synthesize a completed row. The stats line gains
+  `A=<actionability>` and the detail view gains a compact TRADE block.
+- The field HUD shows tiny `sync Ns`/`sync err` and `net ok`/`net err`
+  indicators.
+
+### HTTP poller
+
+When `git pull` isn't possible (shallow checkout, no credentials) an HTTP
+poller fetches the same files straight from GitHub: the contents API for
+`missions/status/*.json` and `raw.githubusercontent.com` for `queue.txt`,
+`in_progress.txt` and `failed.txt`. Results land in
+`.kingdom_cache/missions/` and are overlaid on the local `missions/` dir —
+the overlay wins for `status/` entries with an equal-or-later `updated_at`.
+Set `GITHUB_TOKEN` to raise the anonymous API rate limit. Flags:
+`--no-http`, `--http-interval`, `--remote`, `--branch`.
 
 ## Layout
 

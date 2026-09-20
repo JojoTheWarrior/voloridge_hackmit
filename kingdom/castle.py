@@ -18,7 +18,7 @@ from typing import Optional
 import pygame
 
 from .app import LOGICAL_H, LOGICAL_W, Scene
-from .data import CompletedMission
+from .data import CompletedMission, QueueItem
 from .text import draw_text, text_size
 from .ui import (
     GOLD,
@@ -26,6 +26,7 @@ from .ui import (
     GREEN,
     INK,
     OUTLINE,
+    PARCHMENT_DARK,
     RED,
     TEXT,
     TEXT_DIM,
@@ -303,6 +304,8 @@ class CastleScene(Scene):
         draw_cursor_hand(surface, assets, sel.x - 4, sel.centery, t)
         snap = self.app.data.snapshot()
         counts = f"{len(snap.active)} active   {len(snap.queue)} queued   {len(snap.completed)} done"
+        if snap.counts["live"] > 0:
+            counts += f"   {snap.counts['live']} live"
         draw_text(surface, counts, (panel.centerx, panel.bottom - 24), TEXT_DIM, kind="small", align="center")
         draw_text(surface, "Esc: leave the castle", (panel.centerx, panel.bottom - 13), TEXT_FAINT, kind="small", align="center")
 
@@ -339,14 +342,15 @@ class CastleScene(Scene):
         cards = []
         y = 0
         for m in snap.active:
-            lines = clip_lines(m.hypothesis, text_w, 3)
-            h = 8 + len(lines) * LH + 6 + 12 + 8
-            cards.append((m, lines, y, h))
+            lines = clip_lines(m.display_title, text_w, 2)
+            msg = clip_lines(m.message, text_w, 1, "small")[0] if m.message else ""
+            h = 8 + len(lines) * LH + 2 + LH + 6 + 12 + (LH + 4 if msg else 0) + 6
+            cards.append((m, lines, msg, y, h))
             y += h + 4
         self.scroll.set_content_height(max(0, y - 4))
         prev = surface.get_clip()
         surface.set_clip(view)
-        for m, lines, top, h in cards:
+        for m, lines, msg, top, h in cards:
             cy = view.y + top - self.scroll.offset
             if cy > view.bottom or cy + h < view.y:
                 continue
@@ -356,14 +360,22 @@ class CastleScene(Scene):
             for line in lines:
                 draw_text(surface, line, (card.x + 8, ty), INK)
                 ty += LH
-            ty += 4
+            ty += 2
+            stage = "QUEUED" if m.state == "queued" else (m.stage.upper() if m.stage else "IN PROGRESS")
+            draw_text(surface, stage, (card.x + 8, ty), GOLD, kind="small")
+            if m.agent_tag:
+                draw_text(surface, m.agent_tag, (card.right - 8, ty), TEXT_FAINT, kind="small", align="right")
+            ty += LH + 4
             elapsed = m.elapsed(now)
-            progress = min(0.95, elapsed / MISSION_SECONDS)
+            progress = m.progress if m.progress is not None else min(0.95, elapsed / MISSION_SECONDS)
             signal = m.signal()
             draw_sprite_or_box(surface, assets, "icon_hammer", card.x + 8, ty - 2, (16, 16), t)
             bar = pygame.Rect(card.x + 28, ty, card.right - 28 - 40, 12)
             ProgressBar.draw(surface, assets, bar, progress, signal_color(signal), t, shimmer=True, pulse=signal is None)
             draw_text(surface, fmt_elapsed(elapsed), (card.right - 6, ty + 2), INK, align="right")
+            ty += 12 + 4
+            if msg:
+                draw_text(surface, msg, (card.x + 8, ty), PARCHMENT_DARK, kind="small")
         surface.set_clip(prev)
         self.scroll.draw_scrollbar(surface, assets, view.right + 2, t)
 
@@ -382,7 +394,6 @@ class CastleScene(Scene):
         view = self.list_view.move(dx, 0)
         view = pygame.Rect(view.x, view.y + 10, view.w, view.h - 10)
         num_w = text_size(f"{n}.", "small")[0] + 6
-        text_w = view.w - num_w - 8
         row_h = 2 * LH + 5
         self.scroll.viewport = view.move(-dx, 0)
         self.scroll.set_content_height(n * row_h - 3)
@@ -394,8 +405,16 @@ class CastleScene(Scene):
             if i % 2 == 0:
                 pygame.draw.rect(surface, WOOD_DARK, (view.x, y - 2, view.w, row_h - 1))
             draw_text(surface, f"{i + 1}.", (view.x + num_w - 6, y), GOLD, kind="small", align="right")
-            for j, line in enumerate(clip_lines(snap.queue[i], text_w, 2)):
-                draw_text(surface, line, (view.x + num_w, y + j * LH), TEXT if j == 0 else TEXT_DIM)
+            item = snap.queue_items[i] if i < len(snap.queue_items) else QueueItem(snap.queue[i])
+            x = view.x + num_w
+            if item.round:
+                draw_text(surface, item.round, (x, y), GOLD, kind="small")
+                x += text_size(item.round, "small")[0] + 4
+            if item.parent_mission_id:
+                draw_text(surface, item.parent_mission_id, (x, y), TEXT_FAINT, kind="small")
+                x += text_size(item.parent_mission_id, "small")[0] + 4
+            for j, line in enumerate(clip_lines(item.text, view.right - 8 - x, 2)):
+                draw_text(surface, line, (x, y + j * LH), TEXT if j == 0 else TEXT_DIM)
         surface.set_clip(prev)
         self.scroll.draw_scrollbar(surface, assets, view.right + 2, t)
 
@@ -441,6 +460,9 @@ class CastleScene(Scene):
             has_thumb = m.viz_path is not None
             text_right = row.right - thumb_w - 10 if has_thumb else row.right - 6
             row_text_w = max(24, text_right - tx)
+            if m.agent_tag:
+                draw_text(surface, m.agent_tag, (text_right, y + 3), TEXT_FAINT, kind="small", align="right")
+                row_text_w = max(24, text_right - text_size(m.agent_tag, "small")[0] - 6 - tx)
             draw_text(surface, clip_lines(m.folder, row_text_w, 1, "small")[0], (tx, y + 3), TEXT_FAINT, kind="small")
             lines = clip_lines(m.hypothesis or "(no hypothesis)", row_text_w, 2)
             for j, line in enumerate(lines):
@@ -448,6 +470,8 @@ class CastleScene(Scene):
             stats = (f"{m.status}  n={m.n_obs if m.n_obs is not None else '-'}  r={fmt_num(m.r, 3)}  "
                      f"p={fmt_num(m.perm_p, 3)}  V/I/U={fmt_num(m.validity, 1)}/"
                      f"{fmt_num(m.interestingness, 1)}/{fmt_num(m.unexpectedness, 1)}")
+            if m.actionability is not None:
+                stats += f"  A={fmt_num(m.actionability, 1)}"
             draw_text(surface, clip_lines(stats, row_text_w, 1, "small")[0], (tx, y + 3 + LH * 3),
                       lerp_color(tint, GOLD_LIGHT, 0.45), kind="small")
             if has_thumb:
@@ -485,13 +509,39 @@ class CastleScene(Scene):
             ("interest", fmt_num(m.interestingness, 1)),
             ("unexpected", fmt_num(m.unexpectedness, 1)),
         ]
+        if m.actionability is not None:
+            stats.append(("action", fmt_num(m.actionability, 1)))
         col = left.w // 2
         for i, (k, v) in enumerate(stats):
             cx = left.x + (i % 2) * col
             cy = y + (i // 2) * LH
             draw_text(surface, k, (cx, cy), TEXT_DIM, kind="small")
             draw_text(surface, v, (cx + col - 6, cy), GOLD_LIGHT, kind="small", align="right")
-        y += 3 * LH + 4
+        y += ((len(stats) + 1) // 2) * LH + 4
+        if isinstance(m.trade_idea, dict):
+            ti = m.trade_idea
+            inst = ti.get("instrument")
+            direction = ti.get("direction")
+            days = ti.get("holding_days")
+            hit = ti.get("hit_rate")
+            avg = ti.get("avg_return")
+            n_trades = ti.get("n_trades")
+            draw_text(
+                surface,
+                f"TRADE: {inst if isinstance(inst, str) and inst else '-'} "
+                f"{direction if isinstance(direction, str) and direction else '-'}  "
+                f"hold {int(days) if isinstance(days, (int, float)) else '-'}d",
+                (left.x, y), GOLD, kind="small",
+            )
+            y += LH
+            draw_text(
+                surface,
+                f"hit {f'{hit:.0%}' if isinstance(hit, (int, float)) else '-'}  "
+                f"avg {f'{avg:+.2%}' if isinstance(avg, (int, float)) else '-'}  "
+                f"n={int(n_trades) if isinstance(n_trades, (int, float)) else '-'}",
+                (left.x, y), TEXT_DIM, kind="small",
+            )
+            y += LH + 2
         thumb_w, thumb_h = 160, 90
         ty = left.bottom - thumb_h - 2
         hyp_lines = clip_lines(m.hypothesis or "(no hypothesis)", left.w, max(1, (ty - 4 - y) // LH))

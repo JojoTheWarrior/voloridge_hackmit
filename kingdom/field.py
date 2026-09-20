@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 import random
+import time
 
 import pygame
 
@@ -484,6 +485,21 @@ class FieldScene(Scene):
         pygame.draw.rect(surface, (27, 31, 40), panel, 2)
         for i, line in enumerate(lines):
             draw_text(surface, line, (10, 8 + i * 10), shadow=(10, 12, 18))
+        tags = []
+        sync = getattr(self.app, "sync", None)
+        if sync is not None and sync.status != "off":
+            if sync.status == "error":
+                tags.append("sync err")
+            elif sync.last_ok is not None:
+                tags.append(f"sync {int(time.time() - sync.last_ok)}s")
+            else:
+                tags.append("sync ...")
+        http = getattr(self.app, "http", None)
+        if http is not None and http.status != "off":
+            tags.append("net err" if http.status == "error" else ("net ok" if http.last_ok else "net ..."))
+        if tags:
+            draw_text(surface, "  ".join(tags), (114, panel.bottom - 10), (122, 131, 154),
+                      kind="small", align="right")
         alpha = int(140 + 90 * math.sin(t * 1.5))
         hint = pygame.Surface((LOGICAL_W, 14), pygame.SRCALPHA)
         draw_text(hint, "Click the castle or press Enter", (LOGICAL_W // 2, 2), (238, 240, 244),
