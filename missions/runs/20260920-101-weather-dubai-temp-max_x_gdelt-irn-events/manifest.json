@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:01:28.453041+00:00",
+  "git_commit": "bdb65a06d8b2dd31235abdc7f381a5d97718a411",
+  "folder": "20260920-101-weather-dubai-temp-max_x_gdelt-irn-events",
+  "mission_id": "M20260920-49b4d7",
+  "hypothesis": "Hot days in Gulf cities during the war coincide with more Iran-related GDELT events (heat-and-conflict hypothesis).",
+  "status": "ok",
+  "n_obs": 200,
+  "r": -0.07192929113373836,
+  "perm_p": 0.30538922155688625,
+  "validity": 2.04,
+  "interestingness": 3.9,
+  "unexpectedness": 6.46,
+  "indicator_coverage": {
+    "weather.dubai.temp_max": "configured analysis window",
+    "gdelt.irn.events": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
