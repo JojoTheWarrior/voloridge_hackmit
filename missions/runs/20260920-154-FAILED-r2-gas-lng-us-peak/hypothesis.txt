@@ -1,0 +1,1 @@
+R2 | [gas-lng] US peak demand 20d z-score > 1 leads utility ETF returns by 2 days (-) as gas-fired fuel cost squeezes margins; trade short XLU 4d [utility.us.demand_peak_mwh -> finance.XLU.log_return]
