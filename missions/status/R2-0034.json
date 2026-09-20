@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:38:08Z",
-  "updated_at": "2026-09-20T03:40:16Z",
+  "updated_at": "2026-09-20T03:40:56Z",
   "finished_at": "2026-09-20T03:40:16Z",
-  "elapsed_s": 128,
+  "elapsed_s": 168,
   "message": "Not supported: r=0.09 (n=392), best lag -3d r=0.12; short BAS.DE rule 0/5 hits, avg -1.8%/trade, actionability 0 - story not a rule",
   "run_folder": "missions/runs/20260920-155-gdelt-gkg-hormuz-share_x_finance-bas-de-log-return",
   "scores": {
