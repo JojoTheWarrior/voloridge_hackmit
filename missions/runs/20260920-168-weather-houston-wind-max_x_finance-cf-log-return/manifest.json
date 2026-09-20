@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:49:33.968232+00:00",
+  "git_commit": "1e9e6bbc4f48ee35f40c2ec009a3463a19de4074",
+  "folder": "20260920-168-weather-houston-wind-max_x_finance-cf-log-return",
   "mission_id": "R2-0051",
-  "title": "Houston wind -> CF returns",
   "hypothesis": "R2 | [fertilizer-ag] Houston daily max wind 10d z-score > 1.5 leads CF log returns by 1 day (+) via Gulf Coast ammonia plant outage risk; trade long CF 3d [weather.houston.wind_max -> finance.CF.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/88df8b5433b44292bec5f97ac22bcb17",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:49:14Z",
-  "updated_at": "2026-09-20T03:49:35Z",
-  "finished_at": null,
-  "elapsed_s": 21,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-168-weather-houston-wind-max_x_finance-cf-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.35
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.03112391214133923,
+  "perm_p": 0.10179640718562874,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.35,
   "trade_idea": {
     "instrument": "CF",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 2.35,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.houston.wind_max": "configured analysis window",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

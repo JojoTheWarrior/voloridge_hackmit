@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Houston daily max wind 10d z-score > 1.5 leads CF log returns by 1 day (+) via Gulf Coast ammonia plant outage risk; trade long CF 3d [weather.houston.wind_max -> finance.CF.log_return]
