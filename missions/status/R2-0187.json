@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:26:48Z",
-  "updated_at": "2026-09-20T13:27:57Z",
+  "updated_at": "2026-09-20T13:28:23Z",
   "finished_at": "2026-09-20T13:27:57Z",
-  "elapsed_s": 69,
+  "elapsed_s": 95,
   "message": "Not supported: Hormuz GKG share z>1.5 vs USO returns r=0.09 at lags 1-3d (n=390, perm p=0.066); best lag 7d is negative r=-0.22, trade rule only 3 trades - no tradeable edge",
   "run_folder": "missions/runs/20260920-272-gdelt-gkg-hormuz-share_x_finance-uso-log-return",
   "scores": {
