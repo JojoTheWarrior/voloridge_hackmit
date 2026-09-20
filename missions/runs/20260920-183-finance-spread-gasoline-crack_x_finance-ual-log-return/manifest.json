@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:01:38.113277+00:00",
+  "git_commit": "694af9a7577d57cfea21d49a5b39bc8e760be7ec",
+  "folder": "20260920-183-finance-spread-gasoline-crack_x_finance-ual-log-return",
   "mission_id": "R2-0073",
-  "title": "Gasoline crack z>1 -> short UAL 3d",
   "hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 compresses airline margins with a one-day delay (-); trade short UAL 3d at 1d lag [finance.spread.gasoline_crack -> finance.UAL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/0241dd8c817544b8b07f611552d381c8",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:01:21Z",
-  "updated_at": "2026-09-20T04:01:39Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-183-finance-spread-gasoline-crack_x_finance-ual-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.08
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.04222873991552367,
+  "perm_p": 0.24151696606786427,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.08,
   "trade_idea": {
     "instrument": "UAL",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 0.08,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.spread.gasoline_crack": "configured analysis window",
+    "finance.UAL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

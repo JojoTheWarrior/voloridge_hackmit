@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score > 1 compresses airline margins with a one-day delay (-); trade short UAL 3d at 1d lag [finance.spread.gasoline_crack -> finance.UAL.log_return]

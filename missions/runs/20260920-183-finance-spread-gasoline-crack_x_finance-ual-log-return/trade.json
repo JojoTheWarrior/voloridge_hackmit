@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 48,
+    "hit_rate": 0.4583333333333333,
+    "avg_return": -0.004124805402936182,
+    "baseline_avg_return": -0.00159923272185617,
+    "excess_return": -0.002525572681080012,
+    "sharpe_like": -1.2072685097789446,
+    "max_drawdown": -0.24265048941243983,
+    "total_return": -0.19100163340573217
+  },
+  "fit_pre_war": {
+    "n_trades": 28,
+    "hit_rate": 0.4642857142857143,
+    "avg_return": -0.004687811255500682,
+    "baseline_avg_return": -0.002033953519762266,
+    "excess_return": -0.0026538577357384163,
+    "sharpe_like": -1.0516693003457769,
+    "max_drawdown": -0.15944135016151317,
+    "total_return": -0.13010364846493438
+  },
+  "test_war": {
+    "n_trades": 20,
+    "hit_rate": 0.45,
+    "avg_return": -0.003336597209345882,
+    "baseline_avg_return": -0.0008486356607233426,
+    "excess_return": -0.0024879615486225392,
+    "sharpe_like": -0.6278496707042768,
+    "max_drawdown": -0.11137014856580962,
+    "total_return": -0.07000602408934542
+  },
+  "n_signal_days": 380,
+  "trade_idea": {
+    "instrument": "UAL",
+    "direction": "short",
+    "entry_rule": "finance.spread.gasoline_crack rolling_zscore_20d > 1 at close -> short UAL next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4583333333333333,
+    "avg_return": -0.004124805402936182,
+    "excess_return": -0.002525572681080012,
+    "n_trades": 48,
+    "sharpe_like": -1.2072685097789446,
+    "max_drawdown": -0.24265048941243983,
+    "oos_n_trades": 20,
+    "oos_avg_return": -0.003336597209345882,
+    "oos_hit_rate": 0.45,
+    "actionability": 0.08,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
