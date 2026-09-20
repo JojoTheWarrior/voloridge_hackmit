@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/67c0d6a983c448b4948acc3df9845e6d",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:58Z",
-  "updated_at": "2026-09-20T03:25:08Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:25:33Z",
+  "finished_at": "2026-09-20T03:25:33Z",
+  "elapsed_s": 35,
+  "message": "Not supported: Bandar Abbas temp anomaly vs XOP/SPY ratio r=-0.005 (n=386), best lag 10d r=-0.085 (wrong sign); z>1 long rule 21 trades, hit 57%, excess +0.7%/trade, OOS 6 trades hit 50% - indistinguishable from noise",
   "run_folder": "missions/runs/20260920-140-weather-bandar-abbas-temp-anomaly_x_finance-ratio-xop-spy",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 6.37,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Null control: Bandar Abbas temp anomaly 20d z-score > 1.5 leads SPY log returns by 5 days (+); trade long SPY 5d - if this also \"works\", the XOP/SPY result is market beta not heat stress [weather.bandar_abbas.temp_anomaly -> finance.SPY.log_return] (parent: R2-0012)"
 }
