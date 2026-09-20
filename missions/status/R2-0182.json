@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/ecdf4d466ae7411d91065cf95f122fd7",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T13:24:27Z",
-  "updated_at": "2026-09-20T13:24:46Z",
+  "updated_at": "2026-09-20T13:25:15Z",
   "finished_at": null,
-  "elapsed_s": 19,
+  "elapsed_s": 48,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-269-finance-dx-y-nyb-log-return_x_gdelt-usa-tone",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 3.35,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Dollar volatility rather than direction: DX-Y.NYB absolute daily return leads US GDELT tone lower by 1-3 days (-), i.e. large USD moves in either direction sour US news tone [finance.DX-Y.NYB.abs_return -> gdelt.usa.tone] (parent: R2-0182)"
 }
