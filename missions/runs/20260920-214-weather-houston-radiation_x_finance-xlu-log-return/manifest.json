@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:29:35.637822+00:00",
+  "git_commit": "075933ebbbcb44410cfadee705acab934769f56f",
+  "folder": "20260920-214-weather-houston-radiation_x_finance-xlu-log-return",
+  "mission_id": "S-0010",
+  "hypothesis": "SHERLOCK | [#4 clouds] Houston shortwave radiation 20d z-score > 1 (Texas cloud/solar-output proxy) leads utilities ETF returns by 3 days (+); trade long XLU 3d [weather.houston.radiation -> finance.XLU.log_return]",
+  "status": "ok",
+  "n_obs": 387,
+  "r": -0.034121727403109384,
+  "perm_p": 0.9201596806387226,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.94,
+  "trade_idea": {
+    "instrument": "XLU",
+    "direction": "long",
+    "entry_rule": "weather.houston.radiation rolling_zscore_20d > 1 at close -> long XLU next session",
+    "exit_rule": "close after 9 trading days (no overlapping entries)",
+    "holding_days": 9,
+    "hit_rate": 0.5789473684210527,
+    "avg_return": 0.0017661425428615771,
+    "excess_return": -0.00024627384293147135,
+    "n_trades": 19,
+    "sharpe_like": 0.4246200650870146,
+    "max_drawdown": -0.0920651473592351,
+    "oos_n_trades": 8,
+    "oos_avg_return": -0.011886956152983727,
+    "oos_hit_rate": 0.25,
+    "actionability": 1.94,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.houston.radiation": "configured analysis window",
+    "finance.XLU.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

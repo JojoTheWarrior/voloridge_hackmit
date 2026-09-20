@@ -1,0 +1,1 @@
+SHERLOCK | [#4 clouds] Houston shortwave radiation 20d z-score > 1 (Texas cloud/solar-output proxy) leads utilities ETF returns by 3 days (+); trade long XLU 3d [weather.houston.radiation -> finance.XLU.log_return]
