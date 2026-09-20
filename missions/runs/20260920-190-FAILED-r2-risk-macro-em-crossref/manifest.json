@@ -1,0 +1,26 @@
+{
+  "created_at": "2026-09-20T04:08:30.529738+00:00",
+  "git_commit": "0bb99bb32e66d89b521fc8808e25d2613cceb7f7",
+  "folder": "20260920-190-FAILED-r2-risk-macro-em-crossref",
+  "mission_id": "R2-0085",
+  "hypothesis": "R2 | [risk-macro-em] Crossref missile_defense weekly counts 8-week z-score > 1 lead defense ETF returns by 5-10 days (+); trade long ITA 10d [research.missile.crossref_pubs -> finance.ITA.log_return]",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "actionability": null,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "research.missile.crossref_pubs": "2025-03..current week",
+    "finance.ITA.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
