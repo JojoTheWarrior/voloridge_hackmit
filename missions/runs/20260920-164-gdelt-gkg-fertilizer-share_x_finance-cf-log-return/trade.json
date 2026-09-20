@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 8,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 20,
+    "hit_rate": 0.5,
+    "avg_return": -0.00282622597231062,
+    "baseline_avg_return": -0.013676999872714436,
+    "excess_return": 0.010850773900403815,
+    "sharpe_like": -0.21167190668968258,
+    "max_drawdown": -0.2812241618215017,
+    "total_return": -0.08851839842278575
+  },
+  "fit_pre_war": {
+    "n_trades": 11,
+    "hit_rate": 0.45454545454545453,
+    "avg_return": 0.004941077861033039,
+    "baseline_avg_return": -0.013415612672045059,
+    "excess_return": 0.018356690533078097,
+    "sharpe_like": 0.30170178736665043,
+    "max_drawdown": -0.11370192813534108,
+    "total_return": 0.03901526386641763
+  },
+  "test_war": {
+    "n_trades": 9,
+    "hit_rate": 0.5555555555555556,
+    "avg_return": -0.012319597324175091,
+    "baseline_avg_return": -0.014162150358805328,
+    "excess_return": 0.0018425530346302364,
+    "sharpe_like": -0.5734785872429424,
+    "max_drawdown": -0.08577292242285162,
+    "total_return": -0.12274474372457345
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "CF",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.fertilizer_share rolling_zscore_20d > 1 at close -> short CF next session",
+    "exit_rule": "close after 8 trading days (no overlapping entries)",
+    "holding_days": 8,
+    "hit_rate": 0.5,
+    "avg_return": -0.00282622597231062,
+    "excess_return": 0.010850773900403815,
+    "n_trades": 20,
+    "sharpe_like": -0.21167190668968258,
+    "max_drawdown": -0.2812241618215017,
+    "oos_n_trades": 9,
+    "oos_avg_return": -0.012319597324175091,
+    "oos_hit_rate": 0.5555555555555556,
+    "actionability": 4.9,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

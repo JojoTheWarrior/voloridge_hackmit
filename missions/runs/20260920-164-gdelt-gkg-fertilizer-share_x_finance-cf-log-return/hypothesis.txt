@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT fertilizer attention share 20d z-score > 1 leads CF log returns by 10 days (-) as media attention lags the price peak; fade with short CF 8d [gdelt.gkg.fertilizer_share -> finance.CF.log_return]
