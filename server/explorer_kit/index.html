@@ -233,13 +233,13 @@
       if (selectedId) setThreshold(Math.min(Number($('threshold').value), thresholdFor(byId.get(selectedId))))
       render()
 
-      // The panel is already useful if the map cannot start (no WebGL, no network).
+      // The panel is already useful if the map cannot start (no network).
       map = await Kingdom.map($('map'), { center: [36.2304, 49.9935], zoom: 11.5 })
       const label = (building) => `${building.address} · ${fmt.pct(building.score)}`
       heat = map.heat([])
       points = map.points([], { tooltip: label, onSelect: (building) => select(building.id) })
       map.fit(buildings)
-      if (selectedId) map.gl.jumpTo({ center: [byId.get(selectedId).lon, byId.get(selectedId).lat], zoom: 15.5 })
+      if (selectedId) map.flyTo(byId.get(selectedId), 15.5, { animate: false })
       map.onMove(renderList)
       render()
     }

@@ -16,7 +16,7 @@ Some findings are things, not statistics: buildings, clinics, parcels, ships, do
 | File | What it is |
 | --- | --- |
 | `kit/kit.css` | Kingdom's design system: tokens for light and dark, fonts, and component classes (`k-…`). |
-| `kit/kit.js` | Optional helpers on one global, `Kingdom`: theme sync, `loadData`, a MapLibre map with matching basemaps, scored-point and heatmap layers, `fmt.pct / num / date`, `el`, `state`, `evidence`, `rankedList`. Short; read it. |
+| `kit/kit.js` | Optional helpers on one global, `Kingdom`: theme sync, `loadData`, a Leaflet map with matching gray basemaps, scored-point and heatmap layers, `fmt.pct / num / date`, `el`, `state`, `evidence`, `rankedList`. Short; read it. |
 | `index.html` + `data.json` | One complete worked example (likely asbestos-cement roofs on a map). Copy its structure, not its content. |
 
 The kit is a starting point. Restructure the example or replace it entirely when the finding has another shape. What may not change is the look, and the rules below.
@@ -43,7 +43,8 @@ The kit is a starting point. Restructure the example or replace it entirely when
 - The frame is sandboxed with an **opaque origin**: no `localStorage`, `sessionStorage`, cookies, IndexedDB or service workers (they throw), and nothing that assumes `allow-same-origin`. Keep state in memory and, if it is worth keeping, in the URL hash. No forms that submit, no `alert`/`confirm`, no top-level navigation.
 - Every external link opens a new tab (`target="_blank" rel="noopener"`); `kit.js` also enforces this for you.
 - Put text into the page with `Kingdom.el(...)` or `textContent`. Never build HTML strings from data.
-- For maps use `Kingdom.map`. It loads MapLibre GL 5 (version 4 draws nothing inside a sandboxed frame), a basemap drawn from the kit's tokens on OpenFreeMap tiles, and Esri satellite imagery; all keyless. `map.gl` is the raw MapLibre map if you need more. Keep the attribution control.
+- **WebGL map libraries do not work here.** In the opaque-origin sandbox, libraries that draw with WebGL and web workers (MapLibre GL, Mapbox GL, deck.gl) show a blank map and can hang the frame. For maps use `Kingdom.map`, or another approach with no workers (Leaflet, SVG, 2D canvas). `Kingdom.map` loads Leaflet 1.9 with Esri's keyless raster tiles: a gray basemap that follows the theme, place names above the marks, and satellite imagery. It gives you `points` (scored marks on one canvas, smooth into the thousands), `heat`, `setBasemap`, `fit`, `flyTo`, `inView` and `onMove`; items carry `lat` and `lon`. `map.leaflet` is the raw Leaflet map if you need more (it takes `[lat, lon]`). Check any other tile service without a key first: CARTO's raster basemaps now watermark every tile. Keep the attribution control.
+- **Verify inside a sandboxed frame, not only as a top-level page.** Many things work when `index.html` is opened directly and fail in the product. Test with a host page containing `<iframe sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" src="index.html">`, served over http.
 - Keep it modest: aim for under 5 MB in total and under about 5,000 rows or features in the browser; the archive limit is 200 files and 40 MB. Downsample or aggregate huge datasets and say in the description that you did. Resize images (around 800px wide, JPEG or WebP). **Precompute in your session, not in the browser**: ship scores, ranks, bins and joins ready to draw.
 - Allowed file types: `html css js mjs json geojson csv txt png jpg jpeg webp gif svg woff2`.
 
@@ -60,7 +61,7 @@ Keep the frame (quiet header, stage, side panel with a detail view and a ranked 
 
 ## Before you deliver
 
-1. Open it with `?theme=light` and `?theme=dark`. Both look designed; nothing is invisible, nothing is coloured.
+1. Open it inside a sandboxed frame (see the technical rules) with `?theme=light` and `?theme=dark`. Both look designed; nothing is invisible, nothing is coloured, the map draws.
 2. Narrow the window to 375px. Nothing overflows sideways; the panel is a usable bottom sheet.
 3. The console is clean: no errors, no CSP violations, no failed requests.
 4. Use it with the keyboard only. Select something, clear it, change every control.

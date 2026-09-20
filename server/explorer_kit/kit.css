@@ -89,8 +89,8 @@ a, button, input { transition: color 150ms, background-color 150ms, border-color
 .k-header h1 { font-size: 13px; letter-spacing: 0; white-space: nowrap; }
 .k-header p { flex: 1; color: var(--color-muted); }
 .k-stage { grid-area: stage; position: relative; min-width: 0; min-height: 0; background: var(--color-fill); }
-/* Doubled class: MapLibre's own stylesheet loads later and would set position back to relative. */
-.k-map.k-map { position: absolute; inset: 0; }
+/* z-index: 0 keeps Leaflet's panes and controls (z-index up to 1000) beneath the overlays. */
+.k-map { position: absolute; inset: 0; z-index: 0; }
 .k-map > .k-state { height: 100%; }
 .k-panel {
   grid-area: panel;
@@ -199,30 +199,32 @@ a, button, input { transition: color 150ms, background-color 150ms, border-color
 @keyframes k-fade-in { from { opacity: 0; } }
 .k-fade-in { animation: k-fade-in 150ms ease-out; }
 
-.k-tooltip { position: absolute; z-index: 3; top: 0; left: 0; pointer-events: none; max-width: 240px; border-radius: 6px; background: var(--color-ink); color: var(--color-paper); padding: 4px 8px; font-size: 12px; line-height: 1.4; white-space: nowrap; }
+/* The kit's tooltip, and Leaflet's own (bindTooltip) made to look the same. */
+.k-tooltip, .k-map .leaflet-tooltip { pointer-events: none; border: 0; border-radius: 6px; background: var(--color-ink); color: var(--color-paper); padding: 4px 8px; box-shadow: none; font-size: 12px; line-height: 1.4; white-space: nowrap; }
+.k-tooltip { position: absolute; z-index: 1100; top: 0; left: 0; }
 
-/* MapLibre, restyled to match. Every rule starts with .maplibregl-map so it outranks MapLibre's stylesheet, which loads later. */
-.maplibregl-map.maplibregl-map { font: inherit; }
-.maplibregl-map .maplibregl-canvas:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -2px; }
-.maplibregl-map .maplibregl-ctrl-top-right .maplibregl-ctrl { margin: 12px 12px 0 0; }
-.maplibregl-map .maplibregl-ctrl-group, .maplibregl-map .maplibregl-ctrl-group:not(:empty) { overflow: hidden; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); box-shadow: none; }
-.maplibregl-map .maplibregl-ctrl-group button { width: 30px; height: 30px; }
-.maplibregl-map .maplibregl-ctrl-group button + button { border-top: 1px solid var(--color-line-soft); }
-.maplibregl-map .maplibregl-ctrl-group button:not(:disabled):hover { background: var(--color-fill); }
-.maplibregl-map .maplibregl-ctrl-group button:focus-visible { outline-offset: -2px; box-shadow: none; }
-.maplibregl-map .maplibregl-ctrl-icon { opacity: 0.8; }
-[data-theme="dark"] .maplibregl-map .maplibregl-ctrl-icon { filter: invert(1); }
-.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib { margin: 0 8px 8px 0; border-radius: 999px; background: color-mix(in srgb, var(--color-paper) 82%, transparent); color: var(--color-muted); font-size: 10px; line-height: 16px; }
-.maplibregl-map .maplibregl-ctrl-attrib a { color: inherit; }
-.maplibregl-map .maplibregl-ctrl-attrib a:hover { color: var(--color-ink); text-decoration: none; }
-.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact { min-height: 24px; padding: 4px 28px 4px 10px; }
-.maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) { padding: 0; background: var(--color-paper); }
-.maplibregl-map .maplibregl-ctrl-attrib-button { border-radius: 50%; background-color: transparent; opacity: 0.55; }
-[data-theme="dark"] .maplibregl-map .maplibregl-ctrl-attrib-button { filter: invert(1); }
-.maplibregl-map .maplibregl-popup-content { border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); color: var(--color-ink); padding: 12px 14px; box-shadow: none; font-size: 13px; }
-.maplibregl-map .maplibregl-popup-tip { display: none; }
-.maplibregl-map .maplibregl-popup-close-button { top: 4px; right: 6px; color: var(--color-muted); font-size: 16px; }
-.maplibregl-map .maplibregl-popup-close-button:hover { background: none; color: var(--color-ink); }
+/* Leaflet, restyled to match. kit.js puts Leaflet's stylesheet first in <head>, so these rules come later and win. */
+.k-map.leaflet-container { background: var(--color-side); font: inherit; outline-offset: -2px; }
+/* The basemap only, never the marks: no tint, toned to sit beside the paper in each theme, place names kept quiet. */
+.k-map .k-gray { filter: grayscale(1) brightness(1.06); }
+[data-theme="dark"] .k-map .k-gray { filter: grayscale(1) brightness(0.6) contrast(1.2); }
+.k-map .leaflet-k-labels-pane .k-gray { filter: grayscale(1); opacity: 0.6; }
+.k-map .leaflet-top.leaflet-right .leaflet-control { margin: 12px 12px 0 0; }
+.k-map .leaflet-bar { overflow: hidden; border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); box-shadow: none; }
+.k-map .leaflet-bar a { width: 30px; height: 30px; border-bottom: 1px solid var(--color-line-soft); border-radius: 0; background: none; color: var(--color-ink); font: 400 17px/28px var(--font-sans); text-indent: 0; }
+.k-map .leaflet-bar a:last-child { border-bottom: 0; }
+.k-map .leaflet-bar a:hover { background: var(--color-fill); }
+.k-map .leaflet-bar a.leaflet-disabled { background: none; color: var(--color-faint); }
+.k-map .leaflet-bar a:focus-visible { outline-offset: -2px; }
+.k-map .leaflet-control-attribution, .k-credits-toggle { margin: 0 8px 8px 0; border-radius: 999px; background: color-mix(in srgb, var(--color-paper) 85%, transparent); padding: 0 8px; color: var(--color-muted); font-size: 10px; line-height: 18px; }
+.k-map .leaflet-control-attribution a { color: inherit; text-decoration: none; }
+.k-map .leaflet-control-attribution a:hover { color: var(--color-ink); }
+.k-credits-toggle { display: none; width: 24px; height: 24px; border: 1px solid var(--color-line); padding: 0; background: var(--color-paper); font: 500 12px/22px var(--font-sans); text-align: center; }
+.k-map .leaflet-popup-content-wrapper { border: 1px solid var(--color-line); border-radius: 10px; background: var(--color-paper); color: var(--color-ink); box-shadow: none; }
+.k-map .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.5; }
+.k-map .leaflet-popup-tip-container, .k-map .leaflet-tooltip::before { display: none; }
+.k-map a.leaflet-popup-close-button { color: var(--color-muted); font: 400 16px/24px var(--font-sans); }
+.k-map a.leaflet-popup-close-button:hover { color: var(--color-ink); }
 
 /* Narrow: the panel becomes a bottom sheet. The handle toggles data-open on .k-app. */
 @media (max-width: 640px) {
@@ -233,8 +235,10 @@ a, button, input { transition: color 150ms, background-color 150ms, border-color
   .k-header p { order: 3; flex-basis: 100%; font-size: 12px; }
   .k-panel { border-left: 0; border-top: 1px solid var(--color-line); }
   .k-section { padding: 16px; }
-  /* Open credits would run under the legend in .k-bl, so they open above it. */
-  .maplibregl-map .maplibregl-ctrl-attrib.maplibregl-compact-show { margin-bottom: 56px; }
+  /* The credits would run under the legend in .k-bl, so they fold behind a button and open above it. */
+  .k-credits-toggle { display: block; }
+  .k-map .leaflet-control-attribution { display: none; margin: 0 8px 26px; border-radius: 10px; line-height: 16px; padding: 3px 8px; }
+  .k-map .leaflet-control-attribution.k-open { display: block; }
   .k-sheet-handle { position: sticky; top: 0; z-index: 1; display: block; width: 100%; height: 18px; background: var(--color-paper); }
   .k-sheet-handle::before { content: ""; display: block; width: 32px; height: 3px; margin: 0 auto; border-radius: 3px; background: var(--color-line); }
   .k-sheet-handle:hover::before { background: var(--color-faint); }

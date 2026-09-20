@@ -4,16 +4,14 @@
 (function () {
   'use strict'
 
-  // 5.x on purpose: MapLibre 4 drops its own worker messages inside a sandboxed frame (opaque origin), so nothing draws.
-  const MAPLIBRE = 'https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl'
-  const BASE_TILES = 'https://tiles.openfreemap.org/planet' // OpenStreetMap data in the OpenMapTiles schema; free, no key
-  const GLYPHS = 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf'
-  const LABEL_FONT = ['Noto Sans Regular'] // the font to use if you add your own symbol layers
-  const IMAGERY = {
-    type: 'raster', tileSize: 256, maxzoom: 18,
-    tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-    attribution: 'Imagery © <a href="https://www.esri.com">Esri</a>, Maxar, Earthstar Geographics, and the GIS User Community',
-  }
+  // Leaflet draws with <img> tiles and a 2D canvas. WebGL map libraries need web workers, which do not survive the sandboxed frame.
+  const LEAFLET = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet'
+  const LEAFLET_HASH = { css: 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=', js: 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=' }
+  // Esri's raster tiles, all free and keyless: the gray canvas (base and place names apart, light and dark) and World Imagery.
+  const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/{service}/MapServer/tile/{z}/{y}/{x}'
+  const ESRI_LINK = '<a href="https://www.esri.com">Esri</a>'
+  const BASEMAP_CREDIT = `© ${ESRI_LINK}, HERE, Garmin, © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors`
+  const IMAGERY_CREDIT = `Imagery © ${ESRI_LINK}, Maxar, Earthstar Geographics, and the GIS User Community`
 
   /* ---- Theme ------------------------------------------------------------------------------
      ?theme=light|dark wins, then the host page's postMessage, then the system preference. */
@@ -135,84 +133,59 @@
   }
 
   /* ---- Map --------------------------------------------------------------------------------
-     A MapLibre GL map whose basemap is drawn by us: OpenFreeMap vector tiles painted with the kit's
-     own tokens, so it matches the product in light and dark and repaints when the theme changes.
-     Esri World Imagery sits above it as the 'satellite' basemap. Neither needs a key. */
-  function basemapLayers() {
-    const c = theme.token
-    const width = (...stops) => ['interpolate', ['exponential', 1.5], ['zoom'], ...stops]
-    const base = (id, type, sourceLayer, rest) => ({ id: `k-${id}`, type, source: 'k-base', 'source-layer': sourceLayer, ...rest })
-    const road = (id, classes, minzoom, color, stops) => base(id, 'line', 'transportation', {
-      minzoom, filter: ['all', ['==', ['geometry-type'], 'LineString'], ['in', ['get', 'class'], ['literal', classes]]],
-      layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': color, 'line-width': width(...stops) },
+     A Leaflet map with a gray basemap that follows the theme (Esri's light or dark gray canvas, place names
+     drawn above the marks) and Esri World Imagery as the 'satellite' basemap. Neither needs a key. */
+  let leafletLoading
+  function loadLeaflet() {
+    const load = (node, place) => new Promise((resolve, reject) => {
+      Object.assign(node, { crossOrigin: '', onload: resolve, onerror: () => reject(new Error('Leaflet did not load')) })
+      document.head[place](node)
     })
-    const name = ['coalesce', ['get', 'name_en'], ['get', 'name:latin'], ['get', 'name']]
-    const label = (id, sourceLayer, rest, layout, color) => base(id, 'symbol', sourceLayer, {
-      ...rest, layout: { 'text-field': name, 'text-font': LABEL_FONT, 'text-max-width': 8, ...layout },
-      paint: { 'text-color': color, 'text-halo-color': c('side'), 'text-halo-width': 1.25 },
-    })
-    const places = (classes) => ['in', ['get', 'class'], ['literal', classes]]
-    return [
-      { id: 'k-land', type: 'background', paint: { 'background-color': c('side') } },
-      base('green', 'fill', 'landcover', { paint: { 'fill-color': c('fill') } }),
-      base('park', 'fill', 'park', { paint: { 'fill-color': c('fill') } }),
-      base('water', 'fill', 'water', { paint: { 'fill-color': c('line') } }),
-      base('river', 'line', 'waterway', { paint: { 'line-color': c('line'), 'line-width': width(10, 0.5, 16, 3) } }),
-      base('building', 'fill', 'building', { minzoom: 14, paint: { 'fill-color': c('hover'), 'fill-outline-color': c('line') } }),
-      road('road-minor', ['minor', 'service', 'track'], 12.5, c('series-4'), [13, 0.5, 16, 2.5, 19, 10]),
-      road('rail', ['rail', 'transit'], 11, c('series-3'), [11, 0.5, 16, 1]),
-      road('road-major', ['motorway', 'trunk', 'primary', 'secondary', 'tertiary'], 6, c('series-3'), [8, 0.4, 12, 1.2, 16, 5, 19, 16]),
-      label('label-road', 'transportation_name', { minzoom: 14.5 }, { 'symbol-placement': 'line', 'text-size': 10, 'text-letter-spacing': 0.02 }, c('muted')),
-      label('label-area', 'place', { minzoom: 12.5, filter: places(['suburb', 'quarter', 'neighbourhood', 'village', 'hamlet']) }, { 'text-size': 10.5, 'text-padding': 12, 'text-transform': 'uppercase', 'text-letter-spacing': 0.08 }, c('faint')),
-      label('label-city', 'place', { filter: places(['city', 'town']) }, { 'text-size': ['interpolate', ['linear'], ['zoom'], 6, 11, 12, 15], 'text-letter-spacing': -0.01 }, c('muted')),
-      { id: 'k-satellite', type: 'raster', source: 'k-satellite', layout: { visibility: 'none' } },
-    ]
-  }
-
-  let mapLibre
-  function loadMapLibre() {
-    if (window.maplibregl) return Promise.resolve(window.maplibregl)
-    mapLibre ??= new Promise((resolve, reject) => {
-      document.head.append(
-        el('link', { rel: 'stylesheet', href: `${MAPLIBRE}.css` }),
-        el('script', { src: `${MAPLIBRE}.js`, onload: () => resolve(window.maplibregl), onerror: () => reject(new Error('MapLibre did not load')) }))
-    })
-    return mapLibre
+    // The stylesheet goes first in <head>, so kit.css comes after it and its restyling of Leaflet's chrome wins.
+    leafletLoading ??= Promise.all([
+      load(el('link', { rel: 'stylesheet', href: `${LEAFLET}.css`, integrity: LEAFLET_HASH.css }), 'prepend'),
+      load(el('script', { src: `${LEAFLET}.js`, integrity: LEAFLET_HASH.js }), 'append'),
+    ]).then(() => window.L)
+    return leafletLoading
   }
 
   const rgba = (hex, alpha) => `rgba(${[1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16)).join(',')},${alpha})`
-  const position = (item) => [item.lon ?? item.lng, item.lat]
+  const latLng = (item) => [item.lat, item.lon ?? item.lng]
+  const accessor = (score) => (typeof score === 'function' ? score : (item) => Number(item[score]) || 0)
 
-  /** Resolves to a small wrapper; `wrapper.gl` is the real MapLibre map for anything not covered here.
-      opts: { center: [lon, lat], zoom, basemap: 'map' | 'satellite', ...any MapLibre option } */
-  async function map(container, { basemap = 'map', ...options } = {}) {
-    let gl
+  /** Resolves to a small wrapper; `wrapper.leaflet` is the real Leaflet map for anything not covered here.
+      opts: { center: [lon, lat], zoom, basemap: 'map' | 'satellite', ...any Leaflet map option }
+      Items carry `lat` and `lon`. Raw Leaflet calls take [lat, lon], the other way round from `center`. */
+  async function map(container, { basemap = 'map', center = [0, 20], zoom = 2, ...options } = {}) {
+    let lib, leaflet
     try {
-      const lib = await loadMapLibre()
-      gl = new lib.Map({
-        container, center: [0, 20], zoom: 1.5, maxZoom: 19, dragRotate: false, pitchWithRotate: false, attributionControl: false,
-        style: {
-          version: 8,
-          glyphs: GLYPHS,
-          sources: { 'k-base': { type: 'vector', url: BASE_TILES }, 'k-satellite': IMAGERY },
-          layers: basemapLayers(),
-        },
-        ...options,
+      lib = await loadLeaflet()
+      leaflet = lib.map(container, {
+        center: [center[1], center[0]], zoom, minZoom: 2, maxZoom: 18, zoomControl: false, attributionControl: false,
+        preferCanvas: true, renderer: lib.canvas({ padding: 0.5, tolerance: 3 }), ...options,
       })
-      gl.touchZoomRotate.disableRotation()
-      gl.addControl(new lib.NavigationControl({ showCompass: false }), 'top-right')
-      gl.addControl(new lib.AttributionControl({ compact: true }), 'bottom-right')
-      await new Promise((resolve) => gl.once('load', resolve))
-      // MapLibre opens the credits by default; on a narrow stage they would cover the legend, so start them folded.
-      if (container.clientWidth < 640) {
-        const credits = container.querySelector('.maplibregl-ctrl-attrib')
-        credits?.classList.remove('maplibregl-compact-show')
-        credits?.removeAttribute('open')
-      }
     } catch (error) {
-      state(container, { kind: 'error', title: 'The map could not start', text: 'It needs WebGL and a network connection.' })
+      state(container, { kind: 'error', title: 'The map could not start', text: 'It needs a network connection.' })
       throw error
     }
+    lib.control.zoom({ position: 'topright' }).addTo(leaflet)
+    const credits = lib.control.attribution({ prefix: '<a href="https://leafletjs.com">Leaflet</a>' }).addTo(leaflet).getContainer()
+    // Under 640px the credits would cover the legend, so kit.css folds them behind this button.
+    const creditsToggle = el('button', { type: 'button', class: 'leaflet-control k-credits-toggle', 'aria-label': 'Map credits', 'aria-expanded': 'false',
+      onclick: () => creditsToggle.setAttribute('aria-expanded', String(credits.classList.toggle('k-open'))) }, 'i')
+    credits.after(creditsToggle)
+    lib.DomEvent.disableClickPropagation(creditsToggle)
+
+    const pane = (name, zIndex) => {
+      Object.assign(leaflet.createPane(name).style, { zIndex, pointerEvents: 'none' })
+      return name
+    }
+    // The gray canvas stops at zoom 16 and the imagery at 18; beyond that Leaflet enlarges the last tiles.
+    const tiles = (rest) => lib.tileLayer(ESRI, { maxNativeZoom: 16, maxZoom: 20, className: 'k-gray', ...rest })
+    const base = tiles({ attribution: BASEMAP_CREDIT })
+    const labels = tiles({ pane: pane('k-labels', 450) })
+    const imagery = tiles({ service: 'World_Imagery', maxNativeZoom: 18, className: '', attribution: IMAGERY_CREDIT })
+    const heatPane = pane('k-heat', 300)
 
     const tooltip = el('div', { class: 'k-tooltip', hidden: true })
     container.append(tooltip)
@@ -221,116 +194,169 @@
     const inks = () => (basemap === 'satellite' ? { ink: '#ffffff', paper: '#0a0a0a' } : { ink: theme.token('ink'), paper: theme.token('paper') })
 
     function restyle() {
-      for (const layer of basemapLayers()) for (const [property, value] of Object.entries(layer.paint || {})) gl.setPaintProperty(layer.id, property, value)
-      gl.setLayoutProperty('k-satellite', 'visibility', basemap === 'satellite' ? 'visible' : 'none')
+      const satellite = basemap === 'satellite'
+      const canvas = `Canvas/World_${theme.current === 'dark' ? 'Dark' : 'Light'}_Gray_`
+      base.options.service = `${canvas}Base`
+      labels.options.service = `${canvas}Reference`
+      for (const layer of [base, labels]) satellite ? layer.remove() : layer.addTo(leaflet).redraw()
+      satellite ? imagery.addTo(leaflet) : imagery.remove()
       restylers.forEach((apply) => apply())
     }
     theme.onChange(restyle)
     restyle()
 
-    function geojson(items, score) {
-      return { type: 'FeatureCollection', features: items.map((item) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: position(item) }, properties: { id: item.id, score: score(item) } })) }
-    }
-    const accessor = (score) => (typeof score === 'function' ? score : (item) => Number(item[score]) || 0)
-    const setVisible = (ids, visible) => ids.forEach((id) => gl.setLayoutProperty(id, 'visibility', visible ? 'visible' : 'none'))
-
     const wrapper = {
-      gl,
+      leaflet,
       get basemap() { return basemap },
-      /** 'map' (ours, follows the theme) or 'satellite' (Esri World Imagery). */
-      setBasemap(next) { basemap = next; restyle() },
+      /** 'map' (gray, follows the theme) or 'satellite' (Esri World Imagery). */
+      setBasemap(next) {
+        if (next === basemap) return
+        basemap = next
+        restyle()
+      },
 
-      /** Scored points: radius and opacity grow with the score (0..1); ink from the theme; a ring marks the selection.
-          opts: { id, score: key | fn, tooltip: item => text, onSelect: item => void }
+      /** Scored points on one canvas: radius and opacity grow with the score (0..1); ink from the theme; a ring marks the selection.
+          opts: { score: key | fn, tooltip: item => text, onSelect: item => void }
           Returns { setData(items), setVisible(bool), select(id | null) }. */
-      points(items, { id = 'k-points', score = 'score', tooltip: label, onSelect } = {}) {
-        const byId = new Map()
+      points(items, { score = 'score', tooltip: label, onSelect } = {}) {
         const value = accessor(score)
+        const group = lib.featureGroup().addTo(leaflet)
+        const ring = lib.circleMarker([0, 0], { interactive: false, fill: false, weight: 1.5 })
+        const chosen = lib.circleMarker([0, 0], { interactive: false, fillOpacity: 1, weight: 2 })
+        let byId = new Map()
+        let selectedId = null
         // Marks shrink when zoomed out so a city of them still reads as a pattern.
-        const radius = (extra) => ['interpolate', ['linear'], ['zoom'], 11, ['*', 0.45, ['+', 3 + extra, ['*', 7, ['get', 'score']]]], 15, ['+', 3 + extra, ['*', 7, ['get', 'score']]]]
-        const none = ['==', ['get', 'id'], '']
-        gl.addSource(id, { type: 'geojson', data: geojson([], value) })
-        gl.addLayer({ id, type: 'circle', source: id, layout: { 'circle-sort-key': ['get', 'score'] }, paint: { 'circle-radius': radius(0), 'circle-opacity': ['+', 0.14, ['*', 0.76, ['get', 'score']]], 'circle-stroke-width': 1, 'circle-stroke-opacity': 0.9 } })
-        gl.addLayer({ id: `${id}-ring`, type: 'circle', source: id, filter: none, paint: { 'circle-radius': radius(6), 'circle-opacity': 0, 'circle-stroke-width': 1.5 } })
-        gl.addLayer({ id: `${id}-selected`, type: 'circle', source: id, filter: none, paint: { 'circle-radius': radius(0), 'circle-stroke-width': 2 } })
-        const layers = [id, `${id}-ring`, `${id}-selected`]
+        const radius = (item, extra = 0) => Math.min(1, Math.max(0.45, 0.45 + (leaflet.getZoom() - 11) * 0.1375)) * (3 + extra + 7 * value(item))
 
-        restylers.push(() => {
+        function restylePoints() {
           const { ink, paper } = inks()
-          for (const layer of [id, `${id}-selected`]) {
-            gl.setPaintProperty(layer, 'circle-color', ink)
-            gl.setPaintProperty(layer, 'circle-stroke-color', paper)
-          }
-          gl.setPaintProperty(`${id}-ring`, 'circle-stroke-color', ink)
+          group.setStyle({ color: paper, fillColor: ink })
+          chosen.setStyle({ color: paper, fillColor: ink })
+          ring.setStyle({ color: ink })
+        }
+        restylers.push(restylePoints)
+        restylePoints()
+        leaflet.on('zoomend', () => {
+          group.eachLayer((marker) => marker.setRadius(radius(marker.item)))
+          layer.select(selectedId)
         })
-        restylers.at(-1)()
 
-        gl.on('click', id, (event) => onSelect?.(byId.get(String(event.features[0].properties.id))))
-        gl.on('mousemove', id, (event) => {
-          gl.getCanvas().style.cursor = 'pointer'
-          const item = byId.get(String(event.features[0].properties.id))
-          if (!label || !item) return
-          tooltip.textContent = label(item)
+        group.on('click', (event) => onSelect?.(event.propagatedFrom.item))
+        group.on('mouseover mousemove', (event) => {
+          if (!label) return
+          tooltip.textContent = label(event.propagatedFrom.item)
           tooltip.hidden = false
           // Beside the pointer, flipped to its left when it would run off the stage.
-          const flip = event.point.x + tooltip.offsetWidth + 24 > container.clientWidth
-          tooltip.style.transform = `translate(${event.point.x + (flip ? -12 - tooltip.offsetWidth : 12)}px, ${event.point.y + 12}px)`
+          const { x, y } = event.containerPoint
+          const flip = x + tooltip.offsetWidth + 24 > container.clientWidth
+          tooltip.style.transform = `translate(${x + (flip ? -12 - tooltip.offsetWidth : 12)}px, ${y + 12}px)`
         })
-        gl.on('mouseleave', id, () => { gl.getCanvas().style.cursor = ''; tooltip.hidden = true })
+        group.on('mouseout', () => { tooltip.hidden = true })
 
         const layer = {
           setData(next) {
-            byId.clear()
-            next.forEach((item) => byId.set(String(item.id), item))
-            gl.getSource(id).setData(geojson(next, value))
+            tooltip.hidden = true
+            group.clearLayers()
+            byId = new Map(next.map((item) => [String(item.id), item]))
+            const { ink, paper } = inks()
+            // Drawn in score order, so the likeliest marks sit on top and win the hover.
+            for (const item of [...next].sort((a, b) => value(a) - value(b))) {
+              const marker = lib.circleMarker(latLng(item), { radius: radius(item), weight: 1, opacity: 0.9, color: paper, fillColor: ink, fillOpacity: 0.14 + 0.76 * value(item) })
+              group.addLayer(Object.assign(marker, { item }))
+            }
+            layer.select(selectedId)
           },
-          setVisible: (visible) => setVisible(layers, visible),
-          select(selectedId) {
-            const filter = ['==', ['to-string', ['get', 'id']], selectedId == null ? '' : String(selectedId)]
-            gl.setFilter(`${id}-ring`, filter)
-            gl.setFilter(`${id}-selected`, filter)
+          setVisible(visible) {
+            visible ? group.addTo(leaflet) : group.remove()
+            layer.select(selectedId)
+          },
+          select(id) {
+            selectedId = id
+            const item = byId.get(String(id))
+            const shown = item && leaflet.hasLayer(group)
+            for (const [mark, extra] of [[ring, 6], [chosen, 0]]) {
+              if (shown) mark.setLatLng(latLng(item)).setRadius(radius(item, extra)).addTo(leaflet).bringToFront()
+              else mark.remove()
+            }
           },
         }
         layer.setData(items)
         return layer
       },
 
-      /** Density of score in ink tones: faint where little, solid where a lot. Returns { setData, setVisible }. */
-      heat(items, { id = 'k-heat', score = 'score', radius = 1 } = {}) {
+      /** Density of score in ink tones: faint where little, solid where a lot. Returns { setData, setVisible }.
+          A plain canvas of soft ink spots that pile up; redrawn after every move and theme change. */
+      heat(items, { score = 'score', radius = 1 } = {}) {
         const value = accessor(score)
-        gl.addSource(id, { type: 'geojson', data: geojson(items, value) })
-        gl.addLayer({ id, type: 'heatmap', source: id, paint: {
-          'heatmap-weight': ['get', 'score'],
-          'heatmap-radius': ['interpolate', ['exponential', 1.4], ['zoom'], 10, 16 * radius, 16, 72 * radius],
-          'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 10, 0.8, 16, 1.6],
-        } })
-        restylers.push(() => {
+        const canvas = el('canvas', { class: 'leaflet-zoom-animated' })
+        const spot = el('canvas', { width: 64, height: 64 })
+        let data = items
+        let corner
+
+        function draw() {
+          if (!canvas.isConnected) return
+          // Twice the view, so a pan does not run off its edge, at half resolution: it is a blur anyway.
+          const size = leaflet.getSize()
+          const origin = leaflet.containerPointToLayerPoint(size.multiplyBy(-0.5))
+          corner = leaflet.layerPointToLatLng(origin)
+          lib.DomUtil.setPosition(canvas, origin)
+          Object.assign(canvas, { width: size.x, height: size.y })
+          Object.assign(canvas.style, { width: `${size.x * 2}px`, height: `${size.y * 2}px` })
+
           const ink = inks().ink
-          gl.setPaintProperty(id, 'heatmap-color', ['interpolate', ['linear'], ['heatmap-density'], 0, rgba(ink, 0), 0.15, rgba(ink, 0.1), 0.45, rgba(ink, 0.32), 0.75, rgba(ink, 0.58), 1, rgba(ink, 0.82)])
-        })
-        restylers.at(-1)()
-        return { setData: (next) => gl.getSource(id).setData(geojson(next, value)), setVisible: (visible) => setVisible([id], visible) }
+          const paint = spot.getContext('2d')
+          const fade = paint.createRadialGradient(32, 32, 0, 32, 32, 32)
+          for (const [at, alpha] of [[0, 1], [0.2, 0.85], [0.4, 0.55], [0.6, 0.27], [0.8, 0.08], [1, 0]]) fade.addColorStop(at, rgba(ink, alpha))
+          paint.clearRect(0, 0, 64, 64)
+          paint.fillStyle = fade
+          paint.fillRect(0, 0, 64, 64)
+
+          const context = canvas.getContext('2d')
+          const zoom = leaflet.getZoom()
+          const reach = 8 * radius * 1.285 ** (zoom - 10)
+          const strength = Math.min(0.5, 0.2 + 0.04 * (zoom - 10))
+          for (const item of data) {
+            const at = leaflet.latLngToLayerPoint(latLng(item)).subtract(origin).divideBy(2)
+            context.globalAlpha = value(item) * strength
+            context.drawImage(spot, at.x - reach, at.y - reach, reach * 2, reach * 2)
+          }
+        }
+        restylers.push(draw)
+        leaflet.on('moveend resize', draw)
+        leaflet.on('zoomanim', (event) => corner && lib.DomUtil.setTransform(canvas, leaflet._latLngToNewLayerPoint(corner, event.zoom, event.center), leaflet.getZoomScale(event.zoom)))
+
+        const layer = {
+          setData(next) { data = next; draw() },
+          setVisible(visible) {
+            if (visible) leaflet.getPane(heatPane).append(canvas)
+            else canvas.remove()
+            draw()
+          },
+        }
+        layer.setVisible(true)
+        return layer
       },
 
       /** Frames the items. Call once after loading data. */
       fit(items, { padding = 56, animate = false } = {}) {
         if (!items.length) return
-        const lons = items.map((item) => position(item)[0])
-        const lats = items.map((item) => item.lat)
-        gl.fitBounds([[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]], { padding, animate, maxZoom: 16 })
+        // Zoom moves in whole levels, so a small stage gives up some padding rather than a level.
+        const size = leaflet.getSize()
+        const pad = Math.min(padding, Math.min(size.x, size.y) / 16)
+        leaflet.fitBounds(items.map(latLng), { padding: [pad, pad], animate, maxZoom: 16 })
       },
-      /** Flies to one item, zooming in if needed but never out. */
-      flyTo(item, zoom = 16) {
-        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
-        gl.flyTo({ center: position(item), zoom: Math.max(gl.getZoom(), zoom), speed: 1.4, animate: !reduced })
+      /** Flies to one item, zooming in if needed but never out. `animate: false` jumps. */
+      flyTo(item, zoom = 16, { animate = true } = {}) {
+        const still = !animate || matchMedia('(prefers-reduced-motion: reduce)').matches
+        leaflet.flyTo(latLng(item), Math.max(leaflet.getZoom(), zoom), { animate: !still, duration: 0.8 })
       },
       /** The items inside the current view. */
       inView(items) {
-        const bounds = gl.getBounds()
-        return items.filter((item) => bounds.contains(position(item)))
+        const bounds = leaflet.getBounds()
+        return items.filter((item) => bounds.contains(latLng(item)))
       },
       /** Calls `listener` after every pan or zoom settles. */
-      onMove: (listener) => gl.on('moveend', listener),
+      onMove: (listener) => leaflet.on('moveend', listener),
     }
     return wrapper
   }
