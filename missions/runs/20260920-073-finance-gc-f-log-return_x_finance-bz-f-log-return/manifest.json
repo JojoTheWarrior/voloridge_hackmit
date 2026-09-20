@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:57:18.099105+00:00",
+  "git_commit": "98290597d5c0bca1db818210cab1b88b83876c15",
+  "folder": "20260920-073-finance-gc-f-log-return_x_finance-bz-f-log-return",
+  "mission_id": "M20260920-bea6ef",
+  "hypothesis": "Gold and Brent decoupled during the war: gold fell while oil rose.",
+  "status": "ok",
+  "n_obs": 391,
+  "r": -0.1111940992511177,
+  "perm_p": 0.21956087824351297,
+  "validity": 2.3,
+  "interestingness": 4.46,
+  "unexpectedness": 5.1,
+  "indicator_coverage": {
+    "finance.GC=F.log_return": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:02:05.078799+00:00",
+  "git_commit": "f9c2453baa7ebb060d615155eb664a4fdbd9c67b",
+  "folder": "20260920-105-gdelt-irn-mentions_x_research-iran-crossref-pubs",
+  "mission_id": "M20260920-c6d25f",
+  "hypothesis": "OpenAlex Iran-related publication counts correlate with GDELT Iran news volume with a one-month lag.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.011377409664389715,
+  "perm_p": 1.0,
+  "validity": 0.02,
+  "interestingness": 2.46,
+  "unexpectedness": 2.4,
+  "indicator_coverage": {
+    "gdelt.irn.mentions": "configured analysis window",
+    "research.iran.crossref_pubs": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

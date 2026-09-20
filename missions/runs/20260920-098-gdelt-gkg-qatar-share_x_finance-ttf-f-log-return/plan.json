@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.qatar_share",
+  "indicator_b": "finance.TTF=F.log_return",
+  "transform_a": "zscore",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GKG Qatar mention share (z-scored to highlight spikes in news attention) against same-day to short-lag TTF gas futures log returns over the full window to test whether days with unusually intense Qatar coverage\u2014likely linked to LNG supply or diplomacy\u2014coincide with upward jumps in European gas prices."
+}

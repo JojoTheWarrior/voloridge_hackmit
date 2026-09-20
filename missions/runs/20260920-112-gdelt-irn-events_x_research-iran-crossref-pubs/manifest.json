@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:03:12.381114+00:00",
+  "git_commit": "e96e0424f9b90c63e4e15ef2169aa0d7585f5a95",
+  "folder": "20260920-112-gdelt-irn-events_x_research-iran-crossref-pubs",
+  "mission_id": "M20260920-03fd6f",
+  "hypothesis": "Iranian internet shutdown days (GDELT source-country Iran article counts near zero) coincide with lower OpenAlex Iran-affiliated publication activity.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.07398165059100555,
+  "perm_p": 0.5429141716566867,
+  "validity": 0.16,
+  "interestingness": 3.42,
+  "unexpectedness": 0.96,
+  "indicator_coverage": {
+    "gdelt.irn.events": "configured analysis window",
+    "research.iran.crossref_pubs": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

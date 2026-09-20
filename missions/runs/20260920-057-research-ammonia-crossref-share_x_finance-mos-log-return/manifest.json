@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:55:04.204670+00:00",
+  "git_commit": "3dbec9d07ae12b5ea8195abf85c723dc972495a3",
+  "folder": "20260920-057-research-ammonia-crossref-share_x_finance-mos-log-return",
+  "mission_id": "M20260920-4c4a90",
+  "hypothesis": "OpenAlex \"fertilizer\" research volume correlates with fertilizer equity returns (MOS, CF, NTR).",
+  "status": "ok",
+  "n_obs": 53,
+  "r": -0.21000515856608917,
+  "perm_p": 0.36327345309381237,
+  "validity": 2.0,
+  "interestingness": 3.54,
+  "unexpectedness": 5.7,
+  "indicator_coverage": {
+    "research.ammonia.crossref_share": "2025-03..current week",
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

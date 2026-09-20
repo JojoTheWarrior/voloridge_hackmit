@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.ammonia.crossref_share",
+  "indicator_b": "finance.MOS.log_return",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use ammonia-related research share (as a proxy for fertilizer/OpenAlex fertilizer research intensity) to explain subsequent fertilizer producer equity performance, mapping to MOS log returns with a short lead as research buzz may anticipate sector repricing."
+}

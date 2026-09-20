@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.graphite.crossref_pubs",
+  "indicator_b": "research.battery.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 60,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use weekly graphite-related publication counts as a proxy for upstream battery-materials work and total battery-related publication counts as the downstream response, with up to a 1\u20132 month lead to approximate the hypothesised lag from materials-database build activity to battery-materials publications in the absence of direct Materials Project series."
+}

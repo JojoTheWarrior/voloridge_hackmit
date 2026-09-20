@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.drone.crossref_share",
+  "indicator_b": "gdelt.gkg.drone_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use weekly Crossref drone-publication share as the research-side signal and GDELT GKG drone-share as the news-side proxy for drone-attack events, comparing their levels with up-to-30-day leads/lags over the full window to test whether more drone research coincides with more drone-related conflict coverage."
+}

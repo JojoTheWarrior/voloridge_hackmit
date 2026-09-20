@@ -1,0 +1,1 @@
+OpenAlex "air pollution" publications correlate with observed PM2.5 in Gulf cities.

@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.dubai.temp_max",
+  "indicator_b": "gdelt.irn.events",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Dubai daily maximum temperature anomaly during the 2026 war as a proxy for hot days in Gulf cities and test whether unusually hot days coincide with higher global Iran-related GDELT event counts, allowing a short lead/lag and restricting to the active war window to align with the heat-and-conflict hypothesis."
+}

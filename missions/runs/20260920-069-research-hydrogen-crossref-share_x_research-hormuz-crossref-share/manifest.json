@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:56:37.509939+00:00",
+  "git_commit": "e02198086ad80376c86f3c986b915c9ee5aff6fb",
+  "folder": "20260920-069-research-hydrogen-crossref-share_x_research-hormuz-crossref-share",
+  "mission_id": "M20260920-bc169a",
+  "hypothesis": "Materials Project documents containing helium or noble gases are rare and unchanged; use as a null baseline.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.037439470552035184,
+  "perm_p": 0.6866267465069861,
+  "validity": 0.02,
+  "interestingness": 0.3,
+  "unexpectedness": 0.04,
+  "indicator_coverage": {
+    "research.hydrogen.crossref_share": "2025-03..current week",
+    "research.hormuz.crossref_share": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

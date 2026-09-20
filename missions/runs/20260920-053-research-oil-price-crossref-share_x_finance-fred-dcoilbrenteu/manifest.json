@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:54:33.479661+00:00",
+  "git_commit": "638cf169a400ada11de58fd388dde97a31ba9081",
+  "folder": "20260920-053-research-oil-price-crossref-share_x_finance-fred-dcoilbrenteu",
+  "mission_id": "M20260920-384f26",
+  "hypothesis": "OpenAlex \"energy security\" publications correlate with Brent crude at a one-month lag.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.2286097772842761,
+  "perm_p": 0.2714570858283433,
+  "validity": 2.02,
+  "interestingness": 3.88,
+  "unexpectedness": 5.04,
+  "indicator_coverage": {
+    "research.oil_price.crossref_share": "2025-03..current week",
+    "finance.fred.DCOILBRENTEU": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

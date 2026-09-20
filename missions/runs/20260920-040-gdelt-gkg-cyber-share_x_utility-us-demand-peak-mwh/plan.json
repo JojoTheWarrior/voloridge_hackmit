@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.cyber_share",
+  "indicator_b": "utility.us.demand_peak_mwh",
+  "transform_a": "zscore",
+  "transform_b": "diff",
+  "max_lag_days": 7,
+  "window": "compare_pre_post",
+  "event_category": "domestic",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use global news intensity about cyber issues (as a proxy for reported US water-system cyberattacks in Aug 2026) and changes in US daily peak demand to test whether heightened cyber-salience weeks are associated with greater volatility in hourly demand, approximated by larger day-to-day changes in peak load, and whether this relationship strengthens after the attacks are reported."
+}

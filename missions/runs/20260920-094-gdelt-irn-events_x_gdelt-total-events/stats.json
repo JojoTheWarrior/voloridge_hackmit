@@ -1,0 +1,94 @@
+{
+  "n_obs": 204,
+  "coverage_start": "2026-02-28",
+  "coverage_end": "2026-09-19",
+  "correlation": {
+    "n": 204,
+    "pearson_r": 0.4579545226214894,
+    "pearson_p": 5.7012418939205666e-12,
+    "spearman_r": 0.49729876430178,
+    "spearman_p": 3.839844195762175e-14
+  },
+  "lagged": {
+    "lags": [
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "r": [
+      0.21357592763133115,
+      0.09218052392362051,
+      0.07467070627611613,
+      0.12841747079219923,
+      0.28222227806378203,
+      0.45795452262148945,
+      0.41991446412969585,
+      0.29012151669001096,
+      0.1707149831733336,
+      0.10988020256642476,
+      0.10780924550333752
+    ],
+    "best_lag": 0,
+    "best_r": 0.45795452262148945
+  },
+  "perm_p": 0.033932135728542916,
+  "n_lags_tested": 11,
+  "bonferroni_p": 0.3732534930139721,
+  "pre_post": null,
+  "event_study": {
+    "n_events": 2,
+    "mean_pre": null,
+    "mean_post": null,
+    "mean_change": null,
+    "t_stat": null,
+    "p": null,
+    "per_event": [
+      {
+        "date": "2025-12-28",
+        "pre": null,
+        "post": null,
+        "change": null
+      },
+      {
+        "date": "2026-01-08",
+        "pre": null,
+        "post": null,
+        "change": null
+      }
+    ]
+  },
+  "event_study_b": {
+    "n_events": 2,
+    "mean_pre": null,
+    "mean_post": null,
+    "mean_change": null,
+    "t_stat": null,
+    "p": null,
+    "per_event": [
+      {
+        "date": "2025-12-28",
+        "pre": null,
+        "post": null,
+        "change": null
+      },
+      {
+        "date": "2026-01-08",
+        "pre": null,
+        "post": null,
+        "change": null
+      }
+    ]
+  },
+  "window": "war",
+  "lag_unit": "days",
+  "max_lag_steps": 5,
+  "sign_matches_expectation": true
+}

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:54:40.578698+00:00",
+  "git_commit": "54be473d3b34431d84c61612ecdf1481264ff83f",
+  "folder": "20260920-054-research-drone-crossref-share_x_gdelt-gkg-drone-share",
+  "mission_id": "M20260920-dacb37",
+  "hypothesis": "OpenAlex \"drone\" publications track GDELT drone-attack event counts.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.010392567398088302,
+  "perm_p": 0.9760479041916168,
+  "validity": 0.04,
+  "interestingness": 2.24,
+  "unexpectedness": 0.76,
+  "indicator_coverage": {
+    "research.drone.crossref_share": "2025-03..current week",
+    "gdelt.gkg.drone_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

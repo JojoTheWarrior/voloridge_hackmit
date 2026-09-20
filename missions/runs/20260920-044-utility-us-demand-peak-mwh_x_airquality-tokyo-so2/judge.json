@@ -1,0 +1,14 @@
+{
+  "scores": {
+    "validity": 2.891859728460826,
+    "interestingness": 2.197799951643195,
+    "unexpectedness": 2.2472499395539938,
+    "supported_prob": 0.0,
+    "judge_model": "heuristic"
+  },
+  "supported_prob": 0.0,
+  "judge": "heuristic",
+  "model": "heuristic",
+  "confidence": {},
+  "raw": {}
+}

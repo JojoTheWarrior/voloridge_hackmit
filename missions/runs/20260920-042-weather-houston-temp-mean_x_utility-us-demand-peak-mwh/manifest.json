@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:53:14.364016+00:00",
+  "git_commit": "fd1e902149fc28c882a47bdb070305daefe449b2",
+  "folder": "20260920-042-weather-houston-temp-mean_x_utility-us-demand-peak-mwh",
+  "mission_id": "M20260920-eb02f2",
+  "hypothesis": "Texas (ERCOT) demand anomalies correlate with Houston temperature more tightly than the national aggregate does.",
+  "status": "ok",
+  "n_obs": 555,
+  "r": 0.5041912323441746,
+  "perm_p": 0.01996007984031936,
+  "validity": 7.2568666801552,
+  "interestingness": 4.0167649293766985,
+  "unexpectedness": 4.520956161720873,
+  "indicator_coverage": {
+    "weather.houston.temp_mean": "configured analysis window",
+    "utility.us.demand_peak_mwh": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

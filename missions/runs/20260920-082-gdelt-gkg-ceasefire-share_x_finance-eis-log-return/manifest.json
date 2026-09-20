@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:58:36.624337+00:00",
+  "git_commit": "265c8c041b7dc45a0e131f21ad3f74bf1de97dd9",
+  "folder": "20260920-082-gdelt-gkg-ceasefire-share_x_finance-eis-log-return",
+  "mission_id": "M20260920-8c9a2e",
+  "hypothesis": "Turkey ETF (TUR) and Israel ETF (EIS) returns diverged around ceasefire announcements.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.10919060950592346,
+  "perm_p": 0.16167664670658682,
+  "validity": 3.7,
+  "interestingness": 3.86,
+  "unexpectedness": 2.66,
+  "indicator_coverage": {
+    "gdelt.gkg.ceasefire_share": "configured analysis window",
+    "finance.EIS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

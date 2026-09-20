@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "finance.JETS.log_return",
+  "transform_a": "pct_change",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use daily Brent price changes vs. daily JETS ETF returns and compare pre\u2011war vs. war-period correlations to test whether airline equities moved more strongly inverse to oil once the Iran conflict and Hormuz closure drove fuel-price risk."
+}

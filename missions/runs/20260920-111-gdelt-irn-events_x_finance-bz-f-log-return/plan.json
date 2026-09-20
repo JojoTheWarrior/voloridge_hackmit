@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.events",
+  "indicator_b": "finance.BZ=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "diplomacy",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use total GDELT OMN events as a proxy for rising Oman-related diplomatic/media activity ahead of the Iran\u2013Oman Hormuz agreement and test whether higher Oman event counts lead to subsequent Brent crude price declines (negative log returns) during the active war period."
+}

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:53:44.516852+00:00",
+  "git_commit": "a4268ebc2d8a02979ebe8698c8ea76c173a8759c",
+  "folder": "20260920-047-FAILED-fuel-receipt-cost-per-mmbtu",
+  "mission_id": "M20260920-1079c6",
+  "hypothesis": "Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "finance.fred.DCOILBRENTEU": "configured analysis window",
+    "utility.fuel_cost.oil_per_mmbtu": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.BZ=F.log_return",
+  "indicator_b": "finance.^GSPC.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use daily log returns of FRED Brent spot and S&P 500 prices to test whether their return correlation flipped from positive in 2025 to negative after the open war began on 2026-02-28, allowing a few-day lead/lag and explicitly comparing the pre-war and war periods."
+}

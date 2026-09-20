@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "finance.fred.DGS10",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily percent changes in Brent (DCOILBRENTEU) and the 10-year Treasury yield (DGS10) over the active war window to test whether their normally negative or weak relationship turned positively correlated as both rose together, allowing a few days\u2019 lead-lag for cross-market adjustment."
+}

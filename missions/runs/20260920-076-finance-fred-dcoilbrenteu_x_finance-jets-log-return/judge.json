@@ -1,0 +1,93 @@
+{
+  "scores": {
+    "validity": 6.4,
+    "interestingness": 4.84,
+    "unexpectedness": 1.38,
+    "supported_prob": 0.97,
+    "judge_model": "jev-1.13.0"
+  },
+  "supported_prob": 0.97,
+  "judge": "jev",
+  "model": "jev-1.13.0",
+  "confidence": {
+    "validity": 0.86,
+    "interestingness": 0.24,
+    "unexpectedness": 0.65
+  },
+  "raw": {
+    "model": "jev-1.13.0",
+    "answers": {
+      "validity": {
+        "type": "score",
+        "score": 3.2,
+        "confidence": 0.86,
+        "legend": {
+          "0": "Noise: tiny n or |r|<0.1 or perm_p>0.5",
+          "1": "Very weak: |r|<0.15 or perm_p>0.2",
+          "2": "Weak: modest |r|, perm_p between 0.05 and 0.2",
+          "3": "Moderate: perm_p<0.05 but fails Bonferroni or sign unstable across windows",
+          "4": "Strong: perm_p<0.05, passes Bonferroni, plausible lag, n>100",
+          "5": "Robust: strong plus consistent sign in pre-war and war windows and event study agrees"
+        },
+        "probabilities": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.86,
+          "4": 0.08,
+          "5": 0.06
+        }
+      },
+      "interestingness": {
+        "type": "score",
+        "score": 2.42,
+        "confidence": 0.24,
+        "legend": {
+          "0": "Trivial or tautological (same domain, obvious mechanics)",
+          "1": "Mildly interesting but expected",
+          "2": "Somewhat interesting cross-domain link with small effect",
+          "3": "Interesting: clear cross-domain effect or a clean pre/post-war regime change",
+          "4": "Very interesting: sizeable effect a desk would want to investigate",
+          "5": "Striking: novel, sizeable, and actionable"
+        },
+        "probabilities": {
+          "0": 0.17,
+          "1": 0.18,
+          "2": 0.0,
+          "3": 0.38,
+          "4": 0.27,
+          "5": 0.0
+        }
+      },
+      "unexpectedness": {
+        "type": "score",
+        "score": 0.69,
+        "confidence": 0.65,
+        "legend": {
+          "0": "Entirely expected (or a null control that stayed null)",
+          "1": "Mostly expected",
+          "2": "Slightly surprising detail (e.g. lag length)",
+          "3": "Surprising: sign or timing differs from intuition",
+          "4": "Very surprising: robust cross-domain link with no obvious mechanism",
+          "5": "Shocking: contradicts the hypothesis and intuition with strong statistics"
+        },
+        "probabilities": {
+          "0": 0.41,
+          "1": 0.5,
+          "2": 0.08,
+          "3": 0.01,
+          "4": 0.0,
+          "5": 0.0
+        }
+      },
+      "supported": {
+        "type": "noul",
+        "noul": 0.97
+      }
+    },
+    "usage": {
+      "input_tokens": 4024,
+      "output_tokens": 67
+    }
+  }
+}

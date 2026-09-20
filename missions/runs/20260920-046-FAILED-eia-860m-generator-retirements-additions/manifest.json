@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:53:38.252345+00:00",
+  "git_commit": "beec1be0b9dd564d648d571803642b7dc8f587ea",
+  "folder": "20260920-046-FAILED-eia-860m-generator-retirements-additions",
+  "mission_id": "M20260920-54b0a3",
+  "hypothesis": "EIA-860m generator retirements/additions in 2026 shifted toward gas and storage relative to 2025.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "utility.generators.retired_capacity_mw": "configured analysis window",
+    "gdelt.usa.events": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

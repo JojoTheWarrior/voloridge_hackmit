@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.tehran.temp_anomaly",
+  "indicator_b": "gdelt.irn.mentions",
+  "transform_a": "anomaly",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Tehran\u2019s daily temperature anomaly from Open-Meteo as the local weather stressor and total Iran GDELT mentions as a proxy for electricity-stress news, assuming hotter\u2011than\u2011normal days increase Iranian domestic strain and thus raise related news volume within about a week, even though a more specific electricity-stress topic series is not available."
+}

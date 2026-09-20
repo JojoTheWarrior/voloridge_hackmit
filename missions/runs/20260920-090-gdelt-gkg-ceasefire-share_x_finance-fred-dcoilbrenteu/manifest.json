@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:59:43.341017+00:00",
+  "git_commit": "3745396d09f0e7465a9bd47ed8ca1848d4294c5e",
+  "folder": "20260920-090-gdelt-gkg-ceasefire-share_x_finance-fred-dcoilbrenteu",
+  "mission_id": "M20260920-000e84",
+  "hypothesis": "Ceasefire announcements produce larger oil moves than the strikes themselves (event-study comparison).",
+  "status": "ok",
+  "n_obs": 133,
+  "r": -0.21178185970145336,
+  "perm_p": 0.031936127744510975,
+  "validity": 6.02,
+  "interestingness": 4.06,
+  "unexpectedness": 3.82,
+  "indicator_coverage": {
+    "gdelt.gkg.ceasefire_share": "configured analysis window",
+    "finance.fred.DCOILBRENTEU": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DHHNGSP",
+  "indicator_b": "utility.fuel_cost.gas_per_mmbtu",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Henry Hub spot (DHHNGSP) and delivered gas fuel cost as levels to test if their normally positive relationship weakens or shows larger residuals in 2026 vs 2025, consistent with contract stickiness causing greater divergence after the war shocks."
+}

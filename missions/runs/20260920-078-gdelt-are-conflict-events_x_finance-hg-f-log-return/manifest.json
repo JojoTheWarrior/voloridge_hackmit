@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:58:03.176722+00:00",
+  "git_commit": "7a9d7fcbfc102f7ab3ecb396945565eb8617f040",
+  "folder": "20260920-078-gdelt-are-conflict-events_x_finance-hg-f-log-return",
+  "mission_id": "M20260920-254b5b",
+  "hypothesis": "Copper and aluminum futures responded to the March 28 strike on Emirates Global Aluminium.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": -0.11215927692535835,
+  "perm_p": 0.2435129740518962,
+  "validity": 2.0,
+  "interestingness": 3.34,
+  "unexpectedness": 5.14,
+  "indicator_coverage": {
+    "gdelt.are.conflict_events": "configured analysis window",
+    "finance.HG=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

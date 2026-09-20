@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.oil_price.crossref_share",
+  "indicator_b": "airquality.dubai.cams_pm25",
+  "transform_a": "level",
+  "transform_b": "anomaly",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Using oil_price-related Crossref publication share as the closest available proxy for OpenAlex 'air pollution' papers and Dubai CAMS PM2.5 anomalies as representative Gulf air-pollution conditions, we test whether weeks with more pollution-adjacent research attention coincide with above-baseline particulate levels."
+}

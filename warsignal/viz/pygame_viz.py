@@ -151,6 +151,23 @@ def _draw_timeseries(surface, pygame, font, rect, panel, series, start, end, res
             pygame.draw.aalines(surface, PALETTE["series"][index % len(PALETTE["series"])], False, points)
         label = font.render(name, True, PALETTE["series"][index % len(PALETTE["series"])])
         surface.blit(label, (rect.left + 8, rect.top + 6 + index * font.get_height()))
+    if (result.get("plan") or {}).get("mode") == "single":
+        means = result.get("stats", {}).get("pre_post") or {}
+        raw_values = next(iter(series.values()))
+        mean = float(raw_values.mean())
+        std = float(raw_values.std(ddof=0))
+        for key, color, label in (
+            ("pre", PALETTE["series"][2], "pre mean"),
+            ("post", PALETTE["series"][3], "post mean"),
+        ):
+            value = (means.get(key) or {}).get("mean")
+            if value is None:
+                continue
+            value = (float(value) - mean) / std if normalize and std else float(value)
+            y = _y(value, low, high, rect)
+            for x0 in range(rect.left, rect.right, 12):
+                pygame.draw.line(surface, color, (x0, y), (min(x0 + 7, rect.right), y), 1)
+            surface.blit(font.render(label, True, color), (rect.right - 90, y - font.get_height() - 2))
     month = start.to_period("M").to_timestamp()
     date_font = pygame.font.SysFont("dejavusans", 10)
     while month <= end:
@@ -219,6 +236,8 @@ def _draw_lagcorr(surface, pygame, font, rect, panel, result):
     lagged = result.get("stats", {}).get("lagged") or {}
     lags, values = lagged.get("lags", []), lagged.get("r", [])
     if not lags:
+        surface.blit(font.render("lag (aligned steps: n/a)", True, PALETTE["muted"]),
+                     (rect.left, rect.centery))
         return
     valid = [float(value) for value in values if value is not None and np.isfinite(value)]
     if not valid:

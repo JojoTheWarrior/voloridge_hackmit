@@ -1,0 +1,29 @@
+{
+  "chart_type": "scatter",
+  "indicators": [
+    "finance.BZ=F.log_return",
+    "finance.^GSPC.log_return"
+  ],
+  "external": [],
+  "needs_custom_code": false,
+  "custom_code_notes": "",
+  "title": "Daily Brent Futures vs S&P 500 Log Returns",
+  "notes": "Scatterplot with Brent front-month futures daily log returns on the x-axis and S&P 500 (^GSPC) daily log returns on the y-axis. Use the intersection of dates where both series have data, and consider adding a fitted regression line and correlation coefficient in annotations.",
+  "rationale": "User requested a scatterplot of Brent returns vs S&P 500 returns. The catalogue provides daily log return series for Brent futures (finance.BZ=F.log_return) and the S&P 500 index (finance.^GSPC.log_return), which are appropriate for a return-vs-return scatter chart to analyze co-movement and correlation.",
+  "x_series": "bz-f-log-return.csv",
+  "y_series": "gspc-log-return.csv",
+  "series": [
+    {
+      "file": "bz-f-log-return.csv",
+      "label": "BZ=F log_return",
+      "indicator": "finance.BZ=F.log_return"
+    },
+    {
+      "file": "gspc-log-return.csv",
+      "label": "^GSPC log_return",
+      "indicator": "finance.^GSPC.log_return"
+    }
+  ],
+  "source_notes": [],
+  "codegen": "template"
+}

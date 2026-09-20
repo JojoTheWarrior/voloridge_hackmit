@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "finance.EEM.log_return",
+  "transform_a": "log_return",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily Brent price log returns from FRED as the driver and EEM daily log returns as the response, allowing for a short lead/lag and comparing pre\u2011war vs. war-period sensitivities to test whether EEM became more tightly co-moved with oil shocks once the Iran conflict and Hormuz closure hit."
+}

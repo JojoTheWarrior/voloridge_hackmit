@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.hormuz_share",
+  "indicator_b": "finance.fred.DCOILBRENTEU",
+  "transform_a": "zscore",
+  "transform_b": "pct_change",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT GKG Hormuz-news intensity as a proxy for successive closure/reopening shocks and compare its z-scored spikes to Brent daily percent changes during the war window to test whether similarly sized Hormuz headlines produce progressively smaller oil-price reactions (desensitization)."
+}

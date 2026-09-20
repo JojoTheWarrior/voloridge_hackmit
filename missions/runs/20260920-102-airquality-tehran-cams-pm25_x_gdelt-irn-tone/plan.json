@@ -1,0 +1,12 @@
+{
+  "indicator_a": "airquality.tehran.cams_pm25",
+  "indicator_b": "gdelt.irn.tone",
+  "transform_a": "anomaly",
+  "transform_b": "zscore",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Tehran CAMS PM2.5 as a proxy for local air pollution and compare same-week-of-year anomalies to standardized daily Iran GDELT tone, allowing up to a week lag to test if unusually high pollution days associate with more negative news tone about Iran."
+}

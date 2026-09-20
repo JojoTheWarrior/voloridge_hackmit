@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.graphite.crossref_pubs",
+  "indicator_b": "finance.HG=F.close",
+  "transform_a": "level",
+  "transform_b": "pct_change",
+  "max_lag_days": 0,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Use weekly graphite-related publication counts as a proxy for materials-science output and LME copper futures prices as the response, comparing raw publication levels to weekly copper price percent changes at zero lag, where we expect essentially no systematic relationship as a null control."
+}

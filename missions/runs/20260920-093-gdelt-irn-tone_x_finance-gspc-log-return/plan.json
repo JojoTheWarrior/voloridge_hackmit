@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.tone",
+  "indicator_b": "finance.^GSPC.log_return",
+  "transform_a": "zscore",
+  "transform_b": "level",
+  "max_lag_days": 1,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT Iran mean tone (standardized) as a daily sentiment proxy and S&P 500 log returns during the active war window, testing whether more positive Iran-related news tone predicts higher next-day US equity returns."
+}

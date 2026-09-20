@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.sanctions.crossref_pubs",
+  "indicator_b": "gdelt.gkg.sanctions_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 14,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use weekly Crossref sanctions-related publication counts as a proxy for OpenAlex output and GDELT GKG sanctions share as the closest available sanctions-related news-events metric; levels with a two-week news lead/lag window test whether more research activity co-moves positively with sanctions coverage in global media."
+}

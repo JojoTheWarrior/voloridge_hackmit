@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "gdelt.gkg.protest_share",
+  "transform_a": "pct_change",
+  "transform_b": "zscore",
+  "max_lag_days": 14,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily Brent crude price changes as a global proxy for gasoline/fuel price shocks and GDELT GKG protest-share (normalized via z-score) as a worldwide protest-intensity measure, testing whether rising oil prices during the 2026 Iran war are followed within about two weeks by elevated protest coverage."
+}

@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.lng_share",
+  "indicator_b": "research.rare_earth.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "We cannot observe OpenAlex helium-specific publications, so we proxy publication interest in constrained industrial gases with research.rare_earth.crossref_pubs and proxy the Ras Laffan LNG strike\u2019s salience with gdelt.gkg.lng_share, expecting more LNG-focused coverage during the war to coincide with increased rare-gas/critical-materials publications within about a month."
+}

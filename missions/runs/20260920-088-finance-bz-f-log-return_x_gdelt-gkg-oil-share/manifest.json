@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:59:22.652648+00:00",
+  "git_commit": "4aa5d270a231200d8593ca85f7de3da37781d2d9",
+  "folder": "20260920-088-finance-bz-f-log-return_x_gdelt-gkg-oil-share",
+  "mission_id": "M20260920-726997",
+  "hypothesis": "Oil futures fell sharply on days with suspicious pre-announcement trading (Mar 23, Apr 7, Apr 17); test whether GDELT news volume rises abnormally after those days.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.0008056061176601598,
+  "perm_p": 0.3852295409181637,
+  "validity": 2.0,
+  "interestingness": 3.62,
+  "unexpectedness": 6.86,
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "gdelt.gkg.oil_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

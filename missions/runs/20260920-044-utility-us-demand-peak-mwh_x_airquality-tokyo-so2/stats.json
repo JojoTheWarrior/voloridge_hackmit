@@ -1,0 +1,32 @@
+{
+  "n_obs": 554,
+  "coverage_start": "2025-03-01",
+  "coverage_end": "2026-09-06",
+  "correlation": {
+    "n": 554,
+    "pearson_r": 0.04944998791079877,
+    "pearson_p": 0.24523686082872065,
+    "spearman_r": 0.03944895332301531,
+    "spearman_p": 0.3540399078344245
+  },
+  "lagged": {
+    "lags": [
+      0
+    ],
+    "r": [
+      0.04944998791079876
+    ],
+    "best_lag": 0,
+    "best_r": 0.04944998791079876
+  },
+  "perm_p": 0.5868263473053892,
+  "n_lags_tested": 1,
+  "bonferroni_p": 0.5868263473053892,
+  "pre_post": null,
+  "event_study": null,
+  "event_study_b": null,
+  "window": "full",
+  "lag_unit": "days",
+  "max_lag_steps": 0,
+  "sign_matches_expectation": true
+}

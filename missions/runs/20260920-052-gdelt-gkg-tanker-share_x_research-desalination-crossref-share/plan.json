@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.tanker_share",
+  "indicator_b": "research.desalination.crossref_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use global news salience of tankers (a proxy for Iranian strikes on Gulf maritime and desalination infrastructure) to see if higher threat-related coverage during and after the 2026 war is associated with increased relative desalination publication share in OpenAlex/Crossref, comparing pre- and post-war periods."
+}

@@ -27,7 +27,8 @@ def default_spec(mission_result):
     result = _as_dict(mission_result)
     plan = result.get("plan") or {}
     a, b = plan.get("indicator_a"), plan.get("indicator_b")
-    panels = [{"kind": "timeseries", "series": [a, b], "normalize": True, "note": "Mission indicators"}]
+    names = [a] if plan.get("mode") == "single" else [a, b]
+    panels = [{"kind": "timeseries", "series": names, "normalize": True, "note": "Mission indicator"}]
     if (result.get("stats", {}).get("lagged") or {}).get("best_lag", 0) != 0:
         panels.append({"kind": "lagcorr", "series": [a, b], "normalize": False, "note": "Lag correlation"})
     if plan.get("event_category"):
@@ -61,6 +62,8 @@ def _valid(spec, result):
     panels = []
     for panel in spec.get("panels", []):
         if not isinstance(panel, dict) or panel.get("kind") not in allowed:
+            continue
+        if (_as_dict(result).get("plan") or {}).get("mode") == "single" and panel.get("kind") == "scatter":
             continue
         names = [name for name in panel.get("series", []) if name in REGISTRY]
         if panel["kind"] == "timeseries":

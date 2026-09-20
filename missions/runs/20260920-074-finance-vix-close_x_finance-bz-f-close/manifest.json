@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:57:31.439435+00:00",
+  "git_commit": "c84bd2af94d6f13780b897886409eda9b1f03cd1",
+  "folder": "20260920-074-finance-vix-close_x_finance-bz-f-close",
+  "mission_id": "M20260920-648242",
+  "hypothesis": "The VIX and Brent implied co-movement peaked in the week of the Hormuz closure.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.3700956087977466,
+  "perm_p": 0.029940119760479042,
+  "validity": 6.02,
+  "interestingness": 1.76,
+  "unexpectedness": 3.44,
+  "indicator_coverage": {
+    "finance.^VIX.close": "configured analysis window",
+    "finance.BZ=F.close": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

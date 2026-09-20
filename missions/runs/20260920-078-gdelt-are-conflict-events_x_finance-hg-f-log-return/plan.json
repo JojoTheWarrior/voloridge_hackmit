@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.are.conflict_events",
+  "indicator_b": "finance.HG=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 3,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT UAE (ARE) material conflict event counts as a proxy for the March 28 strike shock and test whether elevated conflict intensity around that date is associated with positive daily copper futures log-returns during the war window, allowing a short reaction lag."
+}

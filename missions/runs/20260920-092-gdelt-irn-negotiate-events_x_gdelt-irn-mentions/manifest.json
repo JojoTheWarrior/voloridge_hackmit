@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:00:00.431487+00:00",
+  "git_commit": "17cd592133ad4bbbd980199fb3a1c57faafc704a",
+  "folder": "20260920-092-gdelt-irn-negotiate-events_x_gdelt-irn-mentions",
+  "mission_id": "M20260920-ee71ea",
+  "hypothesis": "GDELT news volume about Iran decays faster after diplomatic events than after military events.",
+  "status": "ok",
+  "n_obs": 568,
+  "r": 0.8759763877357523,
+  "perm_p": 0.011976047904191617,
+  "validity": 6.18,
+  "interestingness": 1.16,
+  "unexpectedness": 2.8,
+  "indicator_coverage": {
+    "gdelt.irn.negotiate_events": "configured analysis window",
+    "gdelt.irn.mentions": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

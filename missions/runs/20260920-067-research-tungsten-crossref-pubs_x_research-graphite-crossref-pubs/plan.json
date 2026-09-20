@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.tungsten.crossref_pubs",
+  "indicator_b": "research.graphite.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 0,
+  "window": "pre_war",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Use weekly Crossref tungsten publication counts as a proxy for tungsten-related materials activity and compare their 2025 frequency to another materials keyword (graphite, as the closest available control to aluminum) in levels, restricted to the pre-war window, expecting no systematic difference as a null control for the hypothesised tungsten supply-shock signal."
+}

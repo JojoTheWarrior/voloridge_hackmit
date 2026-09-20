@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.us.demand_anomaly",
+  "indicator_b": "finance.NG=F.log_return",
+  "transform_a": "level",
+  "transform_b": "abs_return",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use US electricity demand anomalies (a proxy for weather-driven load spikes) during the war window to see if days with unusually high demand are associated with larger-magnitude natural-gas futures reactions to Hormuz-related news shocks, proxied by NG=F log-return volatility around Hormuz events."
+}

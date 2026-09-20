@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.food_prices_share",
+  "indicator_b": "finance.ZW=F.log_return",
+  "transform_a": "zscore",
+  "transform_b": "log_return",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT GKG food_prices topic share as a standardized news-volume proxy and daily log returns of CBOT wheat futures (ZW=F) to test whether spikes in food price coverage rose after the fertilizer shock and move positively with wheat price changes, allowing up to a one-week lead."
+}

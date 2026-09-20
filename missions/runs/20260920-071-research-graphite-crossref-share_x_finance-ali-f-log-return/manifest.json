@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:56:57.469850+00:00",
+  "git_commit": "aad2b2095558feec8df9d23d5c709afa1ef05f11",
+  "folder": "20260920-071-research-graphite-crossref-share_x_finance-ali-f-log-return",
+  "mission_id": "M20260920-1fe137",
+  "hypothesis": "Materials Project aluminum-containing entries updated in 2025 predict nothing about 2026 aluminum futures (null control).",
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.15326688891063844,
+  "perm_p": 0.6027944111776448,
+  "validity": 0.1,
+  "interestingness": 1.5,
+  "unexpectedness": 0.86,
+  "indicator_coverage": {
+    "research.graphite.crossref_share": "2025-03..current week",
+    "finance.ALI=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

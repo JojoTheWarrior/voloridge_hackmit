@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:57:09.853812+00:00",
+  "git_commit": "7668b5e6f419dec4b8a5276e528aaef802075083",
+  "folder": "20260920-072-finance-bz-f-log-return_x_finance-gspc-log-return",
+  "mission_id": "M20260920-af4c14",
+  "hypothesis": "Brent crude daily returns and the S&P 500 became negatively correlated after Feb 28 2026 whereas they were positively correlated in 2025.",
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.07426659773764337,
+  "perm_p": 0.08982035928143713,
+  "validity": 4.18,
+  "interestingness": 4.7,
+  "unexpectedness": 4.98,
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "finance.^GSPC.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

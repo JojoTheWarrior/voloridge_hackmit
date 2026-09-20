@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.lng.crossref_pubs",
+  "indicator_b": "finance.TTF=F.close",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Weekly counts of Crossref publications matching LNG (proxy for OpenAlex LNG research activity) should co-move positively with European TTF gas prices over the sample, allowing LNG research intensity (level) to lead TTF price changes (log returns) by up to about a month."
+}

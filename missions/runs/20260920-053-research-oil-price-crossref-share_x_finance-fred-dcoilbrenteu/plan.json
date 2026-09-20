@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.oil_price.crossref_share",
+  "indicator_b": "finance.fred.DCOILBRENTEU",
+  "transform_a": "level",
+  "transform_b": "pct_change",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use weekly Crossref oil_price publication share as a proxy for energy security research intensity and test whether higher publication levels lead higher subsequent Brent price moves over the next month, aggregating Brent to weekly pct_changes to align frequencies."
+}

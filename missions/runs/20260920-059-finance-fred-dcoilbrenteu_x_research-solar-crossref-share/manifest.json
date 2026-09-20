@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:55:19.971593+00:00",
+  "git_commit": "1696e69f2a4c04841815b7b2cc90e8603da60643",
+  "folder": "20260920-059-finance-fred-dcoilbrenteu_x_research-solar-crossref-share",
+  "mission_id": "M20260920-1afe97",
+  "hypothesis": "OpenAlex \"photovoltaic\" publication share rose as oil prices rose (energy substitution research response).",
+  "status": "ok",
+  "n_obs": 29,
+  "r": 0.015473350826726968,
+  "perm_p": 0.4750499001996008,
+  "validity": 1.9,
+  "interestingness": 4.76,
+  "unexpectedness": 3.18,
+  "indicator_coverage": {
+    "finance.fred.DCOILBRENTEU": "configured analysis window",
+    "research.solar.crossref_share": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

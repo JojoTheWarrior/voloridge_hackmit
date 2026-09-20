@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.events",
+  "indicator_b": "gdelt.total_events",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "domestic",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Iran\u2019s own GDELT event counts as a proxy for the impact of an Iranian internet shutdown (a domestic information shock) and test whether days with unusually low Iranian event counts coincide with a contemporaneous or near-contemporaneous drop in global total GDELT events during the war period."
+}

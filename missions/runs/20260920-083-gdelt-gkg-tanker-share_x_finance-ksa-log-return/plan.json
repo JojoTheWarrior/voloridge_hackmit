@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.tanker_share",
+  "indicator_b": "finance.KSA.log_return",
+  "transform_a": "zscore",
+  "transform_b": "log_return",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use global news salience of tankers (a proxy for Gulf shipping/attack coverage) as the Gulf-attack event signal and relate spikes to same-day-to-short-lag KSA ETF returns, expecting higher tanker-attack news intensity to coincide with lower Saudi equity performance during the active war window."
+}

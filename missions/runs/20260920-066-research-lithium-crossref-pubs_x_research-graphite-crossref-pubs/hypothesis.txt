@@ -1,0 +1,1 @@
+Materials Project database growth (documents by last_updated date) correlates with materials-science publication volume in 2025.

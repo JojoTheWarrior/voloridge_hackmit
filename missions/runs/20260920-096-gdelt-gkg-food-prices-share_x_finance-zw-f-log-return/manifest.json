@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:00:38.011531+00:00",
+  "git_commit": "94b5f86f902c216f9c01ee6619c1cbcc43d639c7",
+  "folder": "20260920-096-gdelt-gkg-food-prices-share_x_finance-zw-f-log-return",
+  "mission_id": "M20260920-11b45f",
+  "hypothesis": "News volume about \"food prices\" in GDELT rose after the fertilizer shock and correlates with wheat futures.",
+  "status": "ok",
+  "n_obs": 82,
+  "r": -0.04828647486837595,
+  "perm_p": 0.3213572854291417,
+  "validity": 1.92,
+  "interestingness": 1.98,
+  "unexpectedness": 5.42,
+  "indicator_coverage": {
+    "gdelt.gkg.food_prices_share": "configured analysis window",
+    "finance.ZW=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

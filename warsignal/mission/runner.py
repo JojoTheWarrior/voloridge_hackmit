@@ -10,7 +10,7 @@ from pathlib import Path
 from warsignal.ai.jev_client import JevClient
 from warsignal.ai.prompts import JEV_QUESTIONS, NARRATIVE_SYSTEM
 from warsignal.ai.openai_client import chat_text
-from warsignal.analysis.stats import apply_window, run_all, transform
+from warsignal.analysis.stats import align, apply_window, run_all, run_single, transform
 from warsignal.config import START, END
 from warsignal.indicators import get_series
 from warsignal.util import to_jsonable
@@ -34,6 +34,16 @@ def _narrative(hypothesis, plan, stats, use_ai):
             pass
     corr = (stats.get("correlation") or {}).get("pearson_r")
     lag_unit = stats.get("lag_unit", "days")
+    if plan.mode == "single":
+        change = (stats.get("pre_post") or {}).get("mean_diff")
+        welch_p = (stats.get("pre_post") or {}).get("welch_p")
+        return (
+            f"**Verdict:** {'supported' if stats.get('sign_matches_expectation') else 'not supported'} "
+            f"(mean change={change!s}, n={stats.get('n_obs', 0)}).\n\n"
+            f"The post-boundary mean changed by {change!s}; Welch p={welch_p!s}.\n\n"
+            "This difference is descriptive, not causal; seasonality, common shocks, and boundary selection "
+            "remain possible confounders."
+        )
     return (f"**Verdict:** {'supported' if stats.get('sign_matches_expectation') else 'not supported'} "
             f"(Pearson r={corr!s}, n={stats.get('n_obs', 0)}).\n\n"
             f"The best tested lag was {(stats.get('lagged') or {}).get('best_lag')} {lag_unit} with "
@@ -81,32 +91,36 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
     try:
         plan, planner_model = plan_mission(hypothesis, use_ai=use_ai)
         a = raw_a = get_series(plan.indicator_a, START, END)
-        b = raw_b = get_series(plan.indicator_b, START, END)
-        overlap = __import__("pandas").concat([a.rename("a"), b.rename("b")], axis=1).dropna()
-        if len(overlap) < 20:
+        if plan.mode == "single":
+            b = None
+        else:
+            b = raw_b = get_series(plan.indicator_b, START, END)
+        overlap = a.dropna() if plan.mode == "single" else align(a, b)
+        monthly = len(overlap) > 1 and overlap.index.to_series().diff().median() > __import__("pandas").Timedelta(days=20)
+        if len(overlap) < (12 if monthly else 20):
             def coverage(series):
                 valid = series.dropna()
                 if valid.empty:
                     return "no dates (n=0)"
                 return f"{valid.index.min().date()}..{valid.index.max().date()} (n={len(valid)})"
-            raise ValueError(
-                f"insufficient overlap: {plan.indicator_a} covers {coverage(a)}, "
-                f"{plan.indicator_b} covers {coverage(b)}"
-            )
+            detail = f"{plan.indicator_a} covers {coverage(a)}"
+            if b is not None:
+                detail += f", {plan.indicator_b} covers {coverage(b)}"
+            raise ValueError(f"insufficient overlap: {detail}")
         from warsignal.indicators.events import load_timeline
-        stats = run_all(plan, a, b, load_timeline())
+        stats = run_single(plan, a, load_timeline()) if plan.mode == "single" else run_all(plan, a, b, load_timeline())
         judge = (
             JevClient().judge(_judge_state(hypothesis, plan, stats), JEV_QUESTIONS)
             if use_ai else _heuristic_judge(plan, stats)
         )
         result = MissionResult(mission_id, created, hypothesis, plan, stats, judge.get("scores", {}),
                                _narrative(hypothesis, plan, stats, use_ai), judge=judge.get("judge", ""),
-                               planner_model=planner_model, data_sources=[plan.indicator_a, plan.indicator_b],
+                               planner_model=planner_model, data_sources=[plan.indicator_a] if plan.mode == "single" else [plan.indicator_a, plan.indicator_b],
                                date_start=stats.get("coverage_start"), date_end=stats.get("coverage_end"), n_obs=stats.get("n_obs", 0))
         result.scores["supported_prob"] = judge.get("supported_prob")
         result.scores["judge_model"] = judge.get("model", "")
         transformed_a = apply_window(transform(a, plan.transform_a), plan.window)
-        transformed_b = apply_window(transform(b, plan.transform_b), plan.window)
+        transformed_b = None if plan.mode == "single" else apply_window(transform(b, plan.transform_b), plan.window)
     except Exception as exc:
         failed_plan = locals().get("plan", None)
         if failed_plan is None:
@@ -118,7 +132,8 @@ def run_mission(hypothesis, mission_id=None, use_ai=True, viz=False, show=False,
             failed_model = locals().get("planner_model", "")
         result = MissionResult(
             mission_id, created, hypothesis, failed_plan, status="failed", error=str(exc),
-            planner_model=failed_model, data_sources=[failed_plan.indicator_a, failed_plan.indicator_b],
+            planner_model=failed_model,
+            data_sources=[failed_plan.indicator_a] if failed_plan.mode == "single" else [failed_plan.indicator_a, failed_plan.indicator_b],
         )
     reports = ROOT / "missions" / "reports"
     reports.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:59:35.426287+00:00",
+  "git_commit": "b5871747d9db0a309d50b7ad888da74691c83b3a",
+  "folder": "20260920-089-gdelt-irn-negotiate-events_x_finance-bz-f-abs-return",
+  "mission_id": "M20260920-17b09f",
+  "hypothesis": "Brent daily returns show larger absolute moves on days with diplomatic events than on days with military events.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.28402963661882064,
+  "perm_p": 0.05788423153692615,
+  "validity": 4.04,
+  "interestingness": 4.32,
+  "unexpectedness": 5.2,
+  "indicator_coverage": {
+    "gdelt.irn.negotiate_events": "configured analysis window",
+    "finance.BZ=F.abs_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

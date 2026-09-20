@@ -1,0 +1,12 @@
+{
+  "indicator_a": "airquality.houston.pm25",
+  "indicator_b": "utility.ERCO.demand_mwh",
+  "transform_a": "anomaly",
+  "transform_b": "anomaly",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Houston ground-sensor PM2.5 anomalies as a proxy for regional Texas air quality shocks versus ERCOT electricity demand deviations from seasonal norms during 2026 to test whether bad air days (e.g., smoke or pollution) modestly depress local power demand after controlling for seasonality via same-week baselines."
+}

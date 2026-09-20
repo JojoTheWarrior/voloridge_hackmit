@@ -46,7 +46,11 @@ def _next_folder(result) -> Path:
         number = max(numbers, default=0) + 1
         date = datetime.now(timezone.utc).strftime("%Y%m%d")
         if result.status == "ok":
-            suffix = f"{_slug(result.plan.indicator_a)}_x_{_slug(result.plan.indicator_b)}"
+            suffix = (
+                f"{_slug(result.plan.indicator_a)}_prepost"
+                if result.plan.mode == "single"
+                else f"{_slug(result.plan.indicator_a)}_x_{_slug(result.plan.indicator_b)}"
+            )
         else:
             suffix = _failed_slug(result.hypothesis)
         folder = RUNS / f"{date}-{number:03d}-{suffix}"
@@ -116,30 +120,44 @@ def write_run_folder(result, raw_a=None, raw_b=None, transformed_a=None, transfo
     (folder / "judge.json").write_text(
         json.dumps(to_jsonable(judge_payload), indent=2) + "\n", encoding="utf-8"
     )
+    indicator_table = f"`{result.plan.indicator_a}`"
+    source_table = f"`{result.plan.indicator_a}` ({_coverage(result.plan.indicator_a)})"
+    if result.plan.mode != "single":
+        indicator_table += f" × `{result.plan.indicator_b}`"
+        source_table += f"; `{result.plan.indicator_b}` ({_coverage(result.plan.indicator_b)})"
+    correlation = (result.stats.get("correlation") or {}).get("pearson_r")
+    lag = (result.stats.get("lagged") or {}).get("best_lag")
+    pre_post = result.stats.get("pre_post") or {}
+    change_label = "pre/post mean Δ" if result.plan.mode == "single" else "pre/post Δr"
+    change_value = pre_post.get("mean_diff") if result.plan.mode == "single" else pre_post.get("r_change")
+    test_label = "Welch p" if result.plan.mode == "single" else "Fisher p"
+    test_value = pre_post.get("welch_p") if result.plan.mode == "single" else pre_post.get("fisher_z_p")
     note = (
         f"# {result.mission_id}\n\n"
         "| Field | Value |\n|---|---|\n"
         f"| Mission id | `{result.mission_id}` |\n| Folder | `{folder.name}` |\n"
-        f"| Indicators | `{result.plan.indicator_a}` × `{result.plan.indicator_b}` |\n"
+        f"| Indicators | {indicator_table} |\n"
         f"| n_obs | {result.n_obs} |\n"
-        f"| r | {(result.stats.get('correlation') or {}).get('pearson_r')} |\n"
-        f"| Best lag | {(result.stats.get('lagged') or {}).get('best_lag')} ({result.stats.get('lag_unit', 'days')}) |\n"
+        f"| r | {'' if correlation is None else correlation} |\n"
+        f"| Best lag | {('n/a' if lag is None else lag)} ({result.stats.get('lag_unit', 'days')}) |\n"
         f"| perm_p | {result.stats.get('perm_p')} |\n| Bonferroni | {result.stats.get('bonferroni_p')} |\n"
-        f"| pre/post Δr | {(result.stats.get('pre_post') or {}).get('r_change')} |\n"
-        f"| Fisher p | {(result.stats.get('pre_post') or {}).get('fisher_z_p')} |\n"
+        f"| {change_label} | {'' if change_value is None else change_value} |\n"
+        f"| {test_label} | {'' if test_value is None else test_value} |\n"
         f"| Scores | {result.scores} |\n"
-        f"| Data sources | `{result.plan.indicator_a}` ({_coverage(result.plan.indicator_a)}); "
-        f"`{result.plan.indicator_b}` ({_coverage(result.plan.indicator_b)}) |\n\n"
+        f"| Data sources | {source_table} |\n\n"
         f"{result.narrative_md or result.error or ''}\n"
     )
     (folder / "note.md").write_text(note, encoding="utf-8")
-    for path, series in (("raw_a.csv", raw_a), ("raw_b.csv", raw_b),
-                         ("aligned.csv", None)):
-        if path == "aligned.csv":
-            continue
+    raw_series = [("raw_a.csv", raw_a)]
+    if result.plan.mode != "single":
+        raw_series.append(("raw_b.csv", raw_b))
+    for path, series in raw_series:
         frame = pd.Series(series, dtype="float64") if series is not None else pd.Series(dtype="float64")
         frame.to_csv(folder / "data" / path, index_label="date", header=["value"])
-    aligned = pd.DataFrame({"a": transformed_a, "b": transformed_b}).dropna() if transformed_a is not None and transformed_b is not None else pd.DataFrame(columns=["a", "b"])
+    if result.plan.mode == "single":
+        aligned = pd.DataFrame({"value": transformed_a}).dropna()
+    else:
+        aligned = pd.DataFrame({"a": transformed_a, "b": transformed_b}).dropna() if transformed_a is not None and transformed_b is not None else pd.DataFrame(columns=["a", "b"])
     aligned.to_csv(folder / "data" / "aligned.csv", index_label="date")
     manifest = {
         "created_at": result.created_at,
@@ -156,7 +174,9 @@ def write_run_folder(result, raw_a=None, raw_b=None, transformed_a=None, transfo
         "unexpectedness": result.scores.get("unexpectedness"),
         "indicator_coverage": {
             result.plan.indicator_a: _coverage(result.plan.indicator_a),
-            result.plan.indicator_b: _coverage(result.plan.indicator_b),
+            **({} if result.plan.mode == "single" else {
+                result.plan.indicator_b: _coverage(result.plan.indicator_b),
+            }),
         },
         "versions": {
             "python": platform.python_version(),

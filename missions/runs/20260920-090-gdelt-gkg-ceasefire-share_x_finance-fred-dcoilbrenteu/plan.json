@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.ceasefire_share",
+  "indicator_b": "finance.fred.DCOILBRENTEU",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 2,
+  "window": "war",
+  "event_category": "diplomacy",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use GDELT GKG ceasefire coverage as a proxy for ceasefire announcements and Brent daily log returns as the oil-price response, focusing on the 2026 war window to compare magnitude of returns on high-ceasefire days versus high-conflict-strike days in an event-study framework."
+}

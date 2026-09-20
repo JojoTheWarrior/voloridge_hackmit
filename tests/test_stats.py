@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from warsignal.analysis.stats import align, event_study, lagged_correlation, permutation_pvalue, transform
+from warsignal.analysis.stats import align, event_study, lagged_correlation, permutation_pvalue, run_single, transform
+from warsignal.mission.model import MissionPlan
 
 
 def test_lag_and_align():
@@ -33,3 +34,20 @@ def test_daily_and_weekly_alignment_uses_weekly_steps():
     weekly = pd.Series(np.arange(len(weekly_idx)), index=weekly_idx)
     frame = align(daily, weekly)
     assert 75 <= len(frame) <= 81
+
+
+def test_single_run_detects_step_change():
+    idx = pd.date_range("2025-03-01", "2026-09-19", freq="D")
+    values = np.where(idx >= pd.Timestamp("2026-02-28"), 5.0, 0.0)
+    plan = MissionPlan(
+        "gdelt.irn.tone",
+        "gdelt.irn.tone",
+        window="compare_pre_post",
+        expected_sign=1,
+        mode="single",
+    )
+    result = run_single(plan, pd.Series(values, index=idx), None)
+    assert result["mode"] == "single"
+    assert result["pre_post"]["welch_p"] < 0.01
+    assert result["sign_matches_expectation"]
+    assert result["perm_p"] < 0.05

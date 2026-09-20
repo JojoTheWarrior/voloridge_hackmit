@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:03:02.793825+00:00",
+  "git_commit": "fa1e39c86d95acaea29212c9136598add756a2e4",
+  "folder": "20260920-111-gdelt-irn-events_x_finance-bz-f-log-return",
+  "mission_id": "M20260920-612566",
+  "hypothesis": "The number of GDELT events with Oman as an actor rose before the Iran-Oman Hormuz agreement and correlates with Brent declines.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.10346597355585145,
+  "perm_p": 0.5489021956087824,
+  "validity": 0.22,
+  "interestingness": 3.44,
+  "unexpectedness": 4.22,
+  "indicator_coverage": {
+    "gdelt.irn.events": "configured analysis window",
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

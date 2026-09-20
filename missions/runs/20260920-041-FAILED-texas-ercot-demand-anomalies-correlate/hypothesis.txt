@@ -1,0 +1,1 @@
+Texas (ERCOT) demand anomalies correlate with Houston temperature more tightly than the national aggregate does.

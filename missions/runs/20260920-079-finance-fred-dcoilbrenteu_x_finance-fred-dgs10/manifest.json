@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:58:10.965714+00:00",
+  "git_commit": "20d17cca18bae82a95aa93882a1286e53cc4d5c2",
+  "folder": "20260920-079-finance-fred-dcoilbrenteu_x_finance-fred-dgs10",
+  "mission_id": "M20260920-d3fa92",
+  "hypothesis": "The 10-year Treasury yield rose with Brent during the war, breaking the usual flight-to-safety pattern.",
+  "status": "ok",
+  "n_obs": 142,
+  "r": 0.5240728479826706,
+  "perm_p": 0.015968063872255488,
+  "validity": 6.02,
+  "interestingness": 3.86,
+  "unexpectedness": 6.28,
+  "indicator_coverage": {
+    "finance.fred.DCOILBRENTEU": "configured analysis window",
+    "finance.fred.DGS10": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

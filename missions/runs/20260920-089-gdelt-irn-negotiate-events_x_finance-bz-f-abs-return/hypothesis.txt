@@ -1,0 +1,1 @@
+Brent daily returns show larger absolute moves on days with diplomatic events than on days with military events.

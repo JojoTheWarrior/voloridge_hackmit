@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.fred.DCOILBRENTEU",
+  "indicator_b": "finance.HYG.close",
+  "transform_a": "pct_change",
+  "transform_b": "pct_change",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use daily percent changes in Brent spot prices and HYG to test whether war-period oil price spikes (positive Brent returns) coincide with high-yield credit drawdowns (negative HYG returns), allowing a few days for credit markets to react."
+}

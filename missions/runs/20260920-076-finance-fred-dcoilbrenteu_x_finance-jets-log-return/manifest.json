@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:57:45.851383+00:00",
+  "git_commit": "7681e88a4ca7eddc2ae6aef1c533c49ba762a4f7",
+  "folder": "20260920-076-finance-fred-dcoilbrenteu_x_finance-jets-log-return",
+  "mission_id": "M20260920-8f1fd3",
+  "hypothesis": "Airline stocks (JETS, UAL, DAL) moved inversely to Brent more strongly during the war than before.",
+  "status": "ok",
+  "n_obs": 386,
+  "r": -0.3477563129722114,
+  "perm_p": 0.01996007984031936,
+  "validity": 6.4,
+  "interestingness": 4.84,
+  "unexpectedness": 1.38,
+  "indicator_coverage": {
+    "finance.fred.DCOILBRENTEU": "configured analysis window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

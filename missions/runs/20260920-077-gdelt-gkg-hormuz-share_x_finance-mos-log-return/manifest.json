@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:57:53.754768+00:00",
+  "git_commit": "bcc49a0f6c12a47c732d9eaa18d8a5be3b0cd5cc",
+  "folder": "20260920-077-gdelt-gkg-hormuz-share_x_finance-mos-log-return",
+  "mission_id": "M20260920-fc2b0e",
+  "hypothesis": "Fertilizer stocks (MOS, CF, NTR) rose with Hormuz-related news volume.",
+  "status": "ok",
+  "n_obs": 140,
+  "r": 0.01252988629854001,
+  "perm_p": 0.001996007984031936,
+  "validity": 5.88,
+  "interestingness": 3.62,
+  "unexpectedness": 7.2,
+  "indicator_coverage": {
+    "gdelt.gkg.hormuz_share": "configured analysis window",
+    "finance.MOS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

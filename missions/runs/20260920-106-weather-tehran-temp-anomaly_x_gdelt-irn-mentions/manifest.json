@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:02:12.925878+00:00",
+  "git_commit": "51cb9881eeffd330b8594c15aee39dd3336176b1",
+  "folder": "20260920-106-weather-tehran-temp-anomaly_x_gdelt-irn-mentions",
+  "mission_id": "M20260920-22459e",
+  "hypothesis": "Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT.",
+  "status": "ok",
+  "n_obs": 564,
+  "r": -0.06815122828033127,
+  "perm_p": 0.6387225548902196,
+  "validity": 0.24,
+  "interestingness": 3.26,
+  "unexpectedness": 6.32,
+  "indicator_coverage": {
+    "weather.tehran.temp_anomaly": "configured analysis window",
+    "gdelt.irn.mentions": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

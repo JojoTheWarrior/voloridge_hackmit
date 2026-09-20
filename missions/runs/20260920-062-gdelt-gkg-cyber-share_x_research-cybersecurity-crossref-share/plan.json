@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.cyber_share",
+  "indicator_b": "research.cybersecurity.crossref_share",
+  "transform_a": "zscore",
+  "transform_b": "zscore",
+  "max_lag_days": 30,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT cyber-related news share as a proxy for reported Iranian cyberattacks and test whether spikes during the war period lead to increased relative volume of cybersecurity-related publications in Crossref, comparing standardized anomalies within the 2026 war window."
+}

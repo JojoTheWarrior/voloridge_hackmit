@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:56:30.113500+00:00",
+  "git_commit": "faca02d2f46ba58872a59551a8dd8c5201adb46b",
+  "folder": "20260920-068-research-graphite-crossref-pubs_x_research-lithium-crossref-pubs",
+  "mission_id": "M20260920-2644b1",
+  "hypothesis": "Materials Project thermo-stability updates cluster in months with high OpenAlex materials-science output.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": 0.5513244311058024,
+  "perm_p": 0.06387225548902195,
+  "validity": 4.0,
+  "interestingness": 0.26,
+  "unexpectedness": 1.3,
+  "indicator_coverage": {
+    "research.graphite.crossref_pubs": "2025-03..current week",
+    "research.lithium.crossref_pubs": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
