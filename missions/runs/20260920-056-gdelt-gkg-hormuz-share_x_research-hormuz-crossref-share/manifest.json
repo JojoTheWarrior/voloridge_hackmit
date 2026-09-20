@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:54:56.477582+00:00",
+  "git_commit": "200f22072fd9fe53809fcfb1286e541c1f9bf8e6",
+  "folder": "20260920-056-gdelt-gkg-hormuz-share_x_research-hormuz-crossref-share",
+  "mission_id": "M20260920-cb14ca",
+  "hypothesis": "OpenAlex \"Strait of Hormuz\" publications spike in the months after the closure.",
+  "status": "ok",
+  "n_obs": 81,
+  "r": -0.005018970118859707,
+  "perm_p": 0.013972055888223553,
+  "validity": 5.76,
+  "interestingness": 3.82,
+  "unexpectedness": 5.56,
+  "indicator_coverage": {
+    "gdelt.gkg.hormuz_share": "configured analysis window",
+    "research.hormuz.crossref_share": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

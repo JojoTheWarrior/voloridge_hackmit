@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.hormuz_share",
+  "indicator_b": "research.hormuz.crossref_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use the share of global news mentioning Hormuz as a proxy for attention after the Strait\u2019s closure and test whether heightened media focus is followed, with a lag of up to about a month, by a higher share of Crossref publications mentioning Hormuz, and whether this news\u2013research linkage strengthens after the 2026-03-04 closure."
+}
