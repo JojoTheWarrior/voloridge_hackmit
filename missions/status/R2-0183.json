@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:24:52Z",
-  "updated_at": "2026-09-20T13:25:42Z",
+  "updated_at": "2026-09-20T13:26:04Z",
   "finished_at": "2026-09-20T13:25:42Z",
-  "elapsed_s": 50,
+  "elapsed_s": 72,
   "message": "Not supported: cyber GKG share z>1 vs QQQ abs return r=0.02, perm p=0.47, Bonferroni p=1.0; trade hit_rate 1.0 is an artifact of always-positive abs_return, excess return only +0.26%/10d",
   "run_folder": "missions/runs/20260920-270-gdelt-gkg-cyber-share_x_finance-qqq-abs-return",
   "scores": {
