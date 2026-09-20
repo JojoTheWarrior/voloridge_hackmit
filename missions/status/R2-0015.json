@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0015",
+  "title": "[oil-shipping] Bandar Abbas CAMS AOD 5d z-score > 2 (smoke plumes from struck ve",
+  "hypothesis": "R2 | [oil-shipping] Bandar Abbas CAMS AOD 5d z-score > 2 (smoke plumes from struck vessels) leads DHT log returns by 1 day (+); trade long DHT 3d [airquality.bandar_abbas.cams_aod -> finance.DHT.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:26:13Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
