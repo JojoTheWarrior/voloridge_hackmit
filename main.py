@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 
 
 def main():
@@ -126,7 +127,6 @@ def main():
             print(write_snapshot(monitor, Path(args.snapshot)))
             return
         if args.host not in ("127.0.0.1", "localhost", "::1"):
-            import sys
             print(f"terminal: binding to {args.host} exposes mission data "
                   "without authentication", file=sys.stderr)
         start_refresh_thread(monitor)
