@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Oklahoma City 30d temperature anomaly > 2 C leads ZW=F abs returns by 3 days (+) via HRW wheat stress raising wheat volatility rather than direction [weather.oklahoma_city.temp_anomaly -> finance.ZW=F.abs_return] (parent: R2-0049)
