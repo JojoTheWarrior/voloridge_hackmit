@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT ceasefire GKG share day-over-day jump > 50 pct leads Saudi ETF returns by 1-3 days (+); trade long KSA 5d [gdelt.gkg.ceasefire_share -> finance.KSA.log_return]
