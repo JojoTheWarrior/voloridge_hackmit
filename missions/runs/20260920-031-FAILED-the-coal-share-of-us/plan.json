@@ -1,0 +1,12 @@
+{
+  "indicator_a": "utility.fuel_cost.gas_per_mmbtu",
+  "indicator_b": "utility.generation.coal_share",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use monthly delivered gas fuel cost as a proxy for post\u2011March\u20112026 natural gas price spikes and coal\u2019s generation share as the response, comparing the gas\u2013coal substitution relationship before and after war\u2011driven price shocks."
+}
