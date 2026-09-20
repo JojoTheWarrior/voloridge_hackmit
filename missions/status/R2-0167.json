@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:15:46Z",
-  "updated_at": "2026-09-20T13:16:35Z",
+  "updated_at": "2026-09-20T13:16:52Z",
   "finished_at": "2026-09-20T13:16:35Z",
-  "elapsed_s": 49,
+  "elapsed_s": 66,
   "message": "Not supported: sanctions-fear reversal into RCL fails OOS (war test 8 trades, avg -1.7%, excess -1.3%); pre-war fit +0.6% excess only; validity 0, actionability 3.1",
   "run_folder": "missions/runs/20260920-260-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
   "scores": {
