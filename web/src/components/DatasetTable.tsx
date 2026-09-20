@@ -1,8 +1,6 @@
 import { ArrowUpRight } from 'lucide-react'
-import { formatSynced } from '../format'
+import { formatSynced, hostname } from '../format'
 import type { Dataset } from '../types'
-
-const hostname = (url: string) => new URL(url).hostname.replace(/^www\./, '')
 
 export function DatasetTable({ datasets }: { datasets: Dataset[] }) {
   return (

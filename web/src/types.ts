@@ -140,6 +140,8 @@ export interface Mission extends MissionSummary {
   events: MissionEvent[]
 }
 
+export type DatasetKind = 'events' | 'markets' | 'weather' | 'air' | 'other'
+
 export interface Dataset {
   id: string
   name: string

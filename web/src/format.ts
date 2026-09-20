@@ -42,3 +42,7 @@ export function formatReportDate(iso: string): string {
   if (Number.isNaN(date.getTime())) return ''
   return `${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`
 }
+
+export function hostname(url: string): string {
+  return new URL(url).hostname.replace(/^www\./, '')
+}

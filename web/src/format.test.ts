@@ -1,4 +1,4 @@
-import { formatCorrelation, formatElapsed, formatLag, formatP, formatReportDate, formatSynced, pluralize } from './format'
+import { formatCorrelation, formatElapsed, formatLag, formatP, formatReportDate, formatSynced, hostname, pluralize } from './format'
 
 describe('formatP', () => {
   it.each([
@@ -105,5 +105,11 @@ describe('pluralize', () => {
     [2, '2 steps'],
   ])('%i -> %s', (count, expected) => {
     expect(pluralize(count, 'step')).toBe(expected)
+  })
+})
+
+describe('hostname', () => {
+  it('shows the source host without www or a path', () => {
+    expect(hostname('https://www.gdeltproject.org/data')).toBe('gdeltproject.org')
   })
 })
