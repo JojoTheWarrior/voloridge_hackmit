@@ -1,4 +1,3 @@
-R2 | [fuel-airspace-losers] Crossref missile_defense weekly counts z-score > 1 mark escalation regimes that compress cruise demand (-); trade short RCL 10d at 5d lag [research.missile.crossref_pubs -> finance.RCL.log_return]
 R2 | [fuel-airspace-losers] GDELT tanker GKG share 20d z-score > 1 raises jet-fuel and bunker cost fears for freight (-); trade short FDX 3d at 3d lag [gdelt.gkg.tanker_share -> finance.FDX.log_return]
 R2 | [fuel-airspace-losers] GDELT oil GKG share 20d z-score > 1.5 precedes cruise-line fuel-cost derating (-); trade short CCL 4d at 4d lag [gdelt.gkg.oil_share -> finance.CCL.log_return]
 R2 | [fuel-airspace-losers] GDELT sanctions GKG share 20d z-score > 1 signals prolonged supply stress hitting discretionary travel (-); trade short RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return]
