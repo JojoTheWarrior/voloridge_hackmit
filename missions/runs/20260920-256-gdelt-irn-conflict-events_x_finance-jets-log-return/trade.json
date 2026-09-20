@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 62,
+    "hit_rate": 0.5161290322580645,
+    "avg_return": -0.002110538762829474,
+    "baseline_avg_return": -0.0009142669505591653,
+    "excess_return": -0.0011962718122703088,
+    "sharpe_like": -0.5569356129496584,
+    "max_drawdown": -0.2531530640056293,
+    "total_return": -0.14836145952359314
+  },
+  "fit_pre_war": {
+    "n_trades": 41,
+    "hit_rate": 0.4878048780487805,
+    "avg_return": -0.004494861154984537,
+    "baseline_avg_return": -0.0012217747596681154,
+    "excess_return": -0.0032730863953164212,
+    "sharpe_like": -0.9011290555003046,
+    "max_drawdown": -0.2531530640056293,
+    "total_return": -0.1874467422454792
+  },
+  "test_war": {
+    "n_trades": 21,
+    "hit_rate": 0.5714285714285714,
+    "avg_return": 0.002544566859949458,
+    "baseline_avg_return": -0.0003722567834246849,
+    "excess_return": 0.002916823643374143,
+    "sharpe_like": 0.47434548111599883,
+    "max_drawdown": -0.11534824909954444,
+    "total_return": 0.04810181037227945
+  },
+  "n_signal_days": 385,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "short",
+    "entry_rule": "gdelt.irn.conflict_events rolling_zscore_20d > 1 at close -> short JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5161290322580645,
+    "avg_return": -0.002110538762829474,
+    "excess_return": -0.0011962718122703088,
+    "n_trades": 62,
+    "sharpe_like": -0.5569356129496584,
+    "max_drawdown": -0.2531530640056293,
+    "oos_n_trades": 21,
+    "oos_avg_return": 0.002544566859949458,
+    "oos_hit_rate": 0.5714285714285714,
+    "actionability": 3.66,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
