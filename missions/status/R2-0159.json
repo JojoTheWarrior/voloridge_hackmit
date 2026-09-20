@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/02a7865ac2e64790b2ed5b772b309acb",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:10:52Z",
-  "updated_at": "2026-09-20T13:11:12Z",
-  "finished_at": null,
-  "elapsed_s": 20,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:11:42Z",
+  "finished_at": "2026-09-20T13:11:42Z",
+  "elapsed_s": 50,
+  "message": "Weak support: r=0.06 (p=0.21, perm p=0.17, Bonferroni 1.0), best lag -3d r=0.13 sign as expected; long JETS z>1 1d hold: 29 trades, 52% hit, +23bp excess in-sample but OOS 14 trades 29% hit, -8bp avg. Not tradeable as-is.",
   "run_folder": "missions/runs/20260920-255-gdelt-gkg-ceasefire-share_x_finance-jets-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 4.04,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fuel-airspace-losers] GDELT ceasefire GKG share 20d z-score > 1 leads the JETS/SPY relative-strength ratio by 3 days (+): if ceasefire news moves airlines specifically rather than the whole market, the market-neutral spread should hold where raw JETS returns were in-sample only (OOS hit rate 29%); long JETS/short SPY 3d [gdelt.gkg.ceasefire_share -> finance.ratio.jets_spy] (parent: R2-0159)"
 }
