@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT sanctions GKG share 20d z-score > 1 signals prolonged supply stress hitting discretionary travel (-); trade short RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return]

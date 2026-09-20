@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:58:19.128690+00:00",
+  "git_commit": "2fae0c8e40f17e9194015882e7ab8773e3d31a01",
+  "folder": "20260920-180-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
   "mission_id": "R2-0068",
-  "title": "Sanctions GKG share shorts RCL",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT sanctions GKG share 20d z-score > 1 signals prolonged supply stress hitting discretionary travel (-); trade short RCL 5d at 5d lag [gdelt.gkg.sanctions_share -> finance.RCL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/15eca1e629d54cc3a4391bc05b2775b7",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:58:03Z",
-  "updated_at": "2026-09-20T03:58:20Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-180-gdelt-gkg-sanctions-share_x_finance-rcl-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.32
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.0603254081370455,
+  "perm_p": 0.17564870259481039,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.32,
   "trade_idea": {
     "instrument": "RCL",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 2.32,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.RCL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
