@@ -1,0 +1,1 @@
+R2 | [gas-lng] Henry Hub natural gas log return 20d z-score > 1 leads utility ETF returns by 3 days (+) as gas price spikes pass through to regulated power revenue rather than squeezing margins; trade long XLU 3d [finance.NG=F.log_return -> finance.XLU.log_return] (parent: R2-0032)
