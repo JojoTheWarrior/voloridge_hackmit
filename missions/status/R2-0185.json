@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:25:24Z",
-  "updated_at": "2026-09-20T13:26:34Z",
+  "updated_at": "2026-09-20T13:27:01Z",
   "finished_at": "2026-09-20T13:26:34Z",
-  "elapsed_s": 70,
+  "elapsed_s": 97,
   "message": "Null control holds: lithium crossref pubs do not lead INDA (r=0.04, perm_p=0.98, validity 0); crossref->INDA channel is noise; the n=7 short-INDA rule (act 8.29) is a small-sample artifact, not tradeable.",
   "run_folder": "missions/runs/20260920-271-research-lithium-crossref-pubs_x_finance-inda-log-return",
   "scores": {
