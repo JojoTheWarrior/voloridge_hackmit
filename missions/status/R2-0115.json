@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0115",
+  "title": "[oil-shipping] Brent-WTI spread 20d z-score > 1 leads FRO log returns lower over",
+  "hypothesis": "R2 | [oil-shipping] Brent-WTI spread 20d z-score > 1 leads FRO log returns lower over 3 days (-) as spread spikes fade and tanker rally reverses; trade short FRO 3d [finance.spread.brent_wti -> finance.FRO.log_return] (parent: R2-0019)",
+  "parent_mission_id": "R2-0019",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:45:21Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
