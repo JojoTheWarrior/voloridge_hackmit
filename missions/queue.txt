@@ -1,4 +1,3 @@
-R2 | [fuel-airspace-losers] Doha CAMS NO2 5d mean falling more than 15 pct vs 20d mean flags Gulf flight-cancellation waves (-); trade short LHA.DE 4d at 3d lag [airquality.doha.cams_no2 -> finance.LHA.DE.log_return]
 R2 | [fuel-airspace-losers] Iran-Gulf dyad event count 20d z-score > 1.5 hits US network carriers with Gulf-route exposure (-); trade short AAL 3d at 1d lag [gdelt.irn.conflict_events -> finance.AAL.log_return]
 R2 | [fuel-airspace-losers] GDELT drone GKG share 20d z-score > 1 raises airspace-risk premia before airline selloffs (-); trade short DAL 2d at 2d lag [gdelt.gkg.drone_share -> finance.DAL.log_return]
 R2 | [fuel-airspace-losers] Crossref weekly drone publication counts z-score > 1 precede sustained airline underperformance vs SPY (-); trade short JETS vs SPY 10d at 7d lag [research.drone.crossref_pubs -> finance.ratio.jets_spy]
