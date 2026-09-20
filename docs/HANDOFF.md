@@ -3,6 +3,12 @@
 Updated 2026-09-20 after the local integration and polish pass.
 Pick up on branch **`devin-backend`**.
 
+Sidebar organization: pin missions, filter to **Pinned only**, rename with the
+pencil, or delete from Kingdom. Pins/names persist in SQLite and user names win
+over Devin's generated titles. Deletion hides the local record and stops polling;
+it does not delete or stop the separate Devin session. Metadata lives behind
+`POST /api/missions/:id/settings` and `POST /api/missions/:id/delete`.
+
 ## What Kingdom is
 
 You link datasets, start a **mission** (a question), and Devin researches it

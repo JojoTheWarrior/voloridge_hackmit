@@ -97,7 +97,7 @@ class Poller:
         ], sort_keys=True).encode()).hexdigest()
         with self._store.run_lock(mission.id):
             current = self._store.get_mission(mission.id)
-            if current.revision != mission.revision:
+            if current is None or current.revision != mission.revision:
                 return
             queued = waiting_for_start(mission, snapshot, fingerprint, self._now())
             if queued or (mission.auto_phase and result.status == "waiting"):

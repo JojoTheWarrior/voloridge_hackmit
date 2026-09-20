@@ -10,6 +10,8 @@ export interface Api {
   /** Replying to a done mission reopens it. */
   sendMessage(id: string, text: string): Promise<void>
   markDone(id: string): Promise<void>
+  updateMission(id: string, input: { title?: string; pinned?: boolean }): Promise<void>
+  deleteMission(id: string): Promise<void>
   /** Asks Devin to compile the mission's report; a second request while one is pending does nothing. */
   generateReport(id: string): Promise<void>
   /** Asks Devin to build, or with `instructions` to change, the mission's explorer. No-op while one is pending. */
@@ -21,7 +23,7 @@ export interface Api {
   subscribe(listener: () => void): () => void
 }
 
-export type ValidationField = 'name' | 'url' | 'hypothesis' | 'text' | 'reference'
+export type ValidationField = 'name' | 'url' | 'hypothesis' | 'text' | 'reference' | 'title' | 'pinned'
 
 export class ValidationError extends Error {
   field: ValidationField

@@ -32,8 +32,8 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
-function summaryOf({ id, title, hypothesis, status, createdAt, updatedAt }: Mission): MissionSummary {
-  return { id, title, hypothesis, status, createdAt, updatedAt }
+function summaryOf({ id, title, pinned, hypothesis, status, createdAt, updatedAt }: Mission): MissionSummary {
+  return { id, title, pinned, hypothesis, status, createdAt, updatedAt }
 }
 
 /** In-memory Api that plays a scripted research run into each working mission on a timer. */
@@ -156,6 +156,28 @@ export function createMockApi({ stepMs = 2500, demo = false, seed }: MockOptions
       mission.reportPending = false
       mission.explorerPending = false
       delete mission.needsUser
+      notify()
+    },
+
+    async updateMission(id, input) {
+      const mission = find(id)
+      if (input.title !== undefined) {
+        const title = input.title.trim()
+        if (!title || title.length > 80) throw new ValidationError('title', 'Use a name between 1 and 80 characters')
+        mission.title = title
+      }
+      if (input.pinned !== undefined) mission.pinned = input.pinned
+      mission.updatedAt = new Date().toISOString()
+      notify()
+    },
+
+    async deleteMission(id) {
+      const mission = find(id)
+      clearTimeout(timers.get(id))
+      timers.delete(id)
+      queues.delete(id)
+      settlesDone.delete(id)
+      missions.splice(missions.indexOf(mission), 1)
       notify()
     },
 

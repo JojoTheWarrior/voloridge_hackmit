@@ -23,6 +23,18 @@ describe('http api', () => {
   afterEach(() => vi.unstubAllGlobals())
 
   describe('requests', () => {
+    it('updates mission settings and deletes through the local API, escaping the id', async () => {
+      const fetchMock = stubFetch({
+        'POST /api/missions/a%2Fb/settings': () => json({}),
+        'POST /api/missions/a%2Fb/delete': () => json({}),
+      })
+      const api = createHttpApi()
+      await api.updateMission('a/b', { title: 'Best mission', pinned: true })
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({ title: 'Best mission', pinned: true })
+      await api.deleteMission('a/b')
+      expect(JSON.parse(fetchMock.mock.calls[1][1]?.body as string)).toEqual({})
+    })
+
     it('reads meta, missions and datasets', async () => {
       const mission = makeMission('waiting')
       stubFetch({

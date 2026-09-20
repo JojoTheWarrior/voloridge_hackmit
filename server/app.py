@@ -191,6 +191,29 @@ def create_app(store: Store, client: DevinClient, *, demo: bool, kit_dir: Path =
             store.mark_done(mission_id)
         return jsonify({})
 
+    @app.post("/api/missions/<mission_id>/settings")
+    def mission_settings(mission_id: str):
+        body = _body()
+        title = None
+        if "title" in body:
+            title = " ".join(_text(body["title"]).split())
+            if not title or len(title) > 80:
+                raise Invalid("title", "Use a mission name between 1 and 80 characters")
+        pinned = body.get("pinned")
+        if "pinned" in body and not isinstance(pinned, bool):
+            raise Invalid("pinned", "Pinned must be true or false")
+        with store.run_lock(mission_id):
+            require_mission(mission_id)
+            store.update_settings(mission_id, title=title, pinned=pinned)
+        return jsonify({})
+
+    @app.post("/api/missions/<mission_id>/delete")
+    def delete_mission(mission_id: str):
+        with store.run_lock(mission_id):
+            require_mission(mission_id)
+            store.delete_mission(mission_id)
+        return jsonify({})
+
     @app.post("/api/missions/<mission_id>/report")
     def request_report(mission_id: str):
         mission = require_mission(mission_id)
@@ -308,6 +331,7 @@ def _summary(mission: MissionRow) -> dict:
         "status": mission.status,
         "createdAt": mission.created_at,
         "updatedAt": mission.updated_at,
+        **({"pinned": True} if mission.pinned else {}),
     }
 
 

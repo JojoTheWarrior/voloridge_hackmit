@@ -119,6 +119,7 @@ export interface Explorer {
 export interface MissionSummary {
   id: string
   title: string
+  pinned?: boolean
   hypothesis: string
   status: MissionStatus
   createdAt: string

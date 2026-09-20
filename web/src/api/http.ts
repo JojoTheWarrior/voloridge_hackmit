@@ -86,6 +86,14 @@ export function createHttpApi(baseUrl = ''): Api {
       await change(`/missions/${encodeURIComponent(id)}/done`, {})
     },
 
+    async updateMission(id, input) {
+      await change(`/missions/${encodeURIComponent(id)}/settings`, input)
+    },
+
+    async deleteMission(id) {
+      await change(`/missions/${encodeURIComponent(id)}/delete`, {})
+    },
+
     async generateReport(id) {
       await change(`/missions/${encodeURIComponent(id)}/report`, {})
     },

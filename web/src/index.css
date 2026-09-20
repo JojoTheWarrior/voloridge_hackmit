@@ -54,6 +54,17 @@ body {
 .fade-in { animation: fade-in 150ms ease-out; }
 .slide-in { animation: slide-in 150ms ease-out; }
 
+.mission-sidebar-row > a { padding-right: 5.25rem; }
+
+@media (hover: hover) and (pointer: fine) {
+  .mission-sidebar-row > a { padding-right: 0.625rem; }
+  .mission-sidebar-actions { opacity: 0; pointer-events: none; transition: opacity 120ms ease-out; }
+  .mission-sidebar-row:hover .mission-sidebar-actions,
+  .mission-sidebar-row:focus-within .mission-sidebar-actions { opacity: 1; pointer-events: auto; }
+  .mission-sidebar-row:hover > a,
+  .mission-sidebar-row:focus-within > a { padding-right: 5.25rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

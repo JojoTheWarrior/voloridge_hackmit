@@ -82,6 +82,9 @@ ADDED_MISSION_COLUMNS = (
     ("last_snapshot", "text not null default ''"),
     ("awaiting_at", "text"),
     ("auto_nudges", "integer not null default 0"),
+    ("pinned", "integer not null default 0"),
+    ("custom_title", "integer not null default 0"),
+    ("deleted_at", "text"),
 )
 
 _MISSION_COLUMNS = (
@@ -89,7 +92,7 @@ _MISSION_COLUMNS = (
     "session_id, session_url, needs_user, answered_needs_user, failures, "
     "report, report_pending, report_requested_at, report_restore_done, "
     "explorer, explorer_pending, explorer_requested_at, explorer_restore_done, explorer_seen_version, "
-    "auto_phase, revision, last_snapshot, awaiting_at, auto_nudges"
+    "auto_phase, revision, last_snapshot, awaiting_at, auto_nudges, pinned, custom_title, deleted_at"
 )
 
 
@@ -134,6 +137,9 @@ class MissionRow:
     last_snapshot: str = ""
     awaiting_at: str | None = None
     auto_nudges: int = 0
+    pinned: bool = False
+    custom_title: bool = False
+    deleted_at: str | None = None
 
     @property
     def awaiting(self) -> bool:
@@ -181,13 +187,15 @@ class Store:
     def get_mission(self, mission_id: str) -> MissionRow | None:
         with self._lock:
             row = self._db.execute(
-                f"select {_MISSION_COLUMNS} from missions where id = ?", (mission_id,)
+                f"select {_MISSION_COLUMNS} from missions where id = ? and deleted_at is null", (mission_id,)
             ).fetchone()
         return _mission(row) if row else None
 
     def list_missions(self) -> list[MissionRow]:
         with self._lock:
-            rows = self._db.execute(f"select {_MISSION_COLUMNS} from missions order by seq desc").fetchall()
+            rows = self._db.execute(
+                f"select {_MISSION_COLUMNS} from missions where deleted_at is null order by seq desc"
+            ).fetchall()
         return [_mission(row) for row in rows]
 
     def live_missions(self) -> list[MissionRow]:
@@ -198,6 +206,24 @@ class Store:
     def set_session(self, mission_id: str, session_id: str, session_url: str | None) -> None:
         with self._lock, self._db:
             self._update(mission_id, session_id=session_id, session_url=session_url)
+
+    def update_settings(self, mission_id: str, *, title: str | None = None, pinned: bool | None = None) -> None:
+        with self._lock, self._db:
+            self._require(mission_id)
+            fields = {}
+            if title is not None:
+                fields.update(title=title, custom_title=1)
+            if pinned is not None:
+                fields["pinned"] = int(pinned)
+            if fields:
+                self._update(mission_id, **fields)
+
+    def delete_mission(self, mission_id: str) -> None:
+        """Remove from Kingdom while retaining local artifacts and the separate Devin session."""
+        with self._lock, self._db:
+            mission = self._require(mission_id)
+            self._update(mission_id, deleted_at=self._now(), revision=mission.revision + 1,
+                         auto_phase="complete", report_pending=0, explorer_pending=0)
 
     def fail(self, mission_id: str, message: str) -> None:
         with self._lock, self._db:
@@ -304,8 +330,8 @@ class Store:
         """Persist a sync. `expected_status` is the status the sync was computed from:
         if the user marked the mission done or replied meanwhile, their status wins."""
         with self._lock, self._db:
-            mission = self._require(mission_id)
-            if expected_revision is not None and mission.revision != expected_revision:
+            mission = self.get_mission(mission_id)
+            if mission is None or (expected_revision is not None and mission.revision != expected_revision):
                 return False
             changed = False
             if result.report_settled and mission.report_pending:
@@ -318,7 +344,7 @@ class Store:
                 changed |= self._insert(mission_id, new.event, after=new.after)
             for updated in result.updated_events:
                 changed |= self._replace(mission_id, updated.event, move_to_end=updated.move_to_end)
-            if result.title and result.title != mission.title:
+            if result.title and result.title != mission.title and not mission.custom_title:
                 self._update(mission_id, title=result.title)
                 changed = True
             # A sync only closes a mission to put it back where a report or an explorer request found

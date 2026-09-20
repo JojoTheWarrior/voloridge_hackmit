@@ -1,4 +1,5 @@
-import { act, screen, within } from '@testing-library/react'
+import { act, fireEvent, screen, within } from '@testing-library/react'
+import { useLocation } from 'react-router-dom'
 import { createMockApi } from '../api/mock'
 import { SCRIPT } from '../api/script'
 import { makeMission } from '../test/missions'
@@ -10,7 +11,10 @@ function apiWith(...missions: ReturnType<typeof makeMission>[]) {
 }
 
 describe('Sidebar', () => {
-  beforeEach(() => vi.useFakeTimers({ shouldAdvanceTime: true }))
+  beforeEach(() => {
+    localStorage.clear()
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+  })
   afterEach(() => {
     vi.clearAllTimers()
     vi.useRealTimers()
@@ -106,5 +110,61 @@ describe('Sidebar', () => {
     const link = await screen.findByRole('link', { name: 'Datasets' })
     await act(async () => link.click())
     expect(onNavigate).toHaveBeenCalled()
+  })
+
+  it('pins a mission above other groups and remembers the pinned-only filter', async () => {
+    const api = apiWith(makeMission('done', { title: 'Best result' }), makeMission('done', { title: 'Other result' }))
+    const view = renderWithApp(<Sidebar />, { api })
+    fireEvent.click(await screen.findByRole('button', { name: 'Pin Best result' }))
+    expect(within(await screen.findByRole('group', { name: 'Pinned' })).getByText('Best result')).toBeInTheDocument()
+    expect(within(screen.getByRole('group', { name: 'Done' })).queryByText('Best result')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Pinned only' }))
+    expect(screen.queryByRole('link', { name: /Other result/ })).not.toBeInTheDocument()
+    view.unmount()
+    renderWithApp(<Sidebar />, { api })
+    expect(await screen.findByRole('link', { name: /Best result/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Other result/ })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Unpin Best result' }))
+    expect(await screen.findByText(/Pin your best missions/)).toBeInTheDocument()
+  })
+
+  it('renames without navigating and keeps the research question intact', async () => {
+    const mission = makeMission('done', { title: 'Old name' })
+    const api = apiWith(mission)
+    renderWithApp(<Sidebar />, { api })
+    fireEvent.click(await screen.findByRole('button', { name: 'Rename Old name' }))
+    fireEvent.change(screen.getByRole('textbox', { name: 'Mission name' }), { target: { value: 'New name' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Save name' }))
+    expect(await screen.findByRole('link', { name: /New name/ })).toBeInTheDocument()
+    expect((await api.getMission(mission.id))?.hypothesis).toBe(mission.hypothesis)
+  })
+
+  it('confirms deletion and returns home when deleting the current report', async () => {
+    const mission = makeMission('done', { title: 'Remove me' })
+    const api = apiWith(mission)
+    function Location() { return <output>{useLocation().pathname}</output> }
+    renderWithApp(<><Sidebar /><Location /></>, { api, route: `/missions/${mission.id}/report` })
+    fireEvent.click(await screen.findByRole('button', { name: 'Delete Remove me' }))
+    expect(screen.getByText(/may continue running/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(await api.getMission(mission.id)).toBeDefined()
+    fireEvent.click(screen.getByRole('button', { name: 'Delete Remove me' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Delete mission' }))
+    expect(await screen.findByText('/')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Remove me/ })).not.toBeInTheDocument()
+    expect(await api.getMission(mission.id)).toBeUndefined()
+  })
+
+  it('keeps a rename open after a failed save so it can be retried', async () => {
+    const api = apiWith(makeMission('done', { title: 'Keep me' }))
+    vi.spyOn(api, 'updateMission').mockRejectedValueOnce(new Error('Offline'))
+    renderWithApp(<Sidebar />, { api })
+    fireEvent.click(await screen.findByRole('button', { name: 'Rename Keep me' }))
+    fireEvent.change(screen.getByRole('textbox', { name: 'Mission name' }), { target: { value: 'Retry name' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Save name' }))
+    expect(await screen.findByRole('alert')).toHaveTextContent('Could not rename')
+    expect(screen.getByRole('textbox', { name: 'Mission name' })).toHaveValue('Retry name')
+    fireEvent.click(screen.getByRole('button', { name: 'Save name' }))
+    expect(await screen.findByRole('link', { name: /Retry name/ })).toBeInTheDocument()
   })
 })

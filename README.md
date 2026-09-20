@@ -107,6 +107,13 @@ static sites, served in an opaque-origin sandbox. The Leaflet kit supports maps,
 scored points, heatmaps, satellite imagery, and live light/dark theme changes.
 Dataset cards and a table are available from the view toggle on Datasets.
 
+Use the sidebar pin to collect your best missions, then select **Pinned only**
+to show that collection. Pins and names are saved in SQLite; the pencil renames
+a mission without changing its research question or letting Devin overwrite the
+name later. Delete removes the mission from Kingdom and stops local polling;
+the separate Devin session remains available. Deleted local records and artifacts
+are retained for recovery rather than permanently erased.
+
 **Container demo (recommended).** No host dependency installation or API key is
 needed. This uses a separate database volume and does not touch existing live
 missions:
