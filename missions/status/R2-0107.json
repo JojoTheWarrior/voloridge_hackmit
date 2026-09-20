@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/ff37424da4d9404389992452e380bb8d",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:41:44Z",
-  "updated_at": "2026-09-20T12:42:05Z",
+  "updated_at": "2026-09-20T12:43:16Z",
   "finished_at": null,
-  "elapsed_s": 21,
+  "elapsed_s": 92,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-219-gdelt-gkg-sanctions-share_x_finance-spread-brent-wti",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 0.58,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] GDELT Hormuz GKG share 20d z-score > 1 leads Brent-WTI spread wider by 3 days (+); trade long spread 3d - sanctions share failed as null control, so test the direct chokepoint signal [gdelt.gkg.hormuz_share -> finance.spread.brent_wti] (parent: R2-0107)"
 }
