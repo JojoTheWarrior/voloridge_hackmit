@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:48:32Z",
-  "updated_at": "2026-09-20T12:49:13Z",
+  "updated_at": "2026-09-20T12:49:40Z",
   "finished_at": "2026-09-20T12:49:13Z",
-  "elapsed_s": 41,
+  "elapsed_s": 68,
   "message": "Not supported: Qatar GKG attention spikes do not predict LNG reversal (r=0.12, best lag -2d; short rule hit 46%, excess -0.09%, actionability 3.9). Follow-up flips to long momentum.",
   "run_folder": "missions/runs/20260920-226-gdelt-gkg-qatar-share_x_finance-lng-log-return",
   "scores": {
