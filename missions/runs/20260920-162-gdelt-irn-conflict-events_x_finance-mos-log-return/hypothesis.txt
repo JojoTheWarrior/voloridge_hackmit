@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Iran-Gulf dyad event count 20d z-score > 2 leads MOS log returns by 3 days (+) as buyers hedge Gulf phosphate supply; trade long MOS 5d [gdelt.irn.conflict_events -> finance.MOS.log_return]
