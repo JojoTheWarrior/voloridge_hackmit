@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/bc09ab99337541faa34fa503095954f9",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:26:48Z",
-  "updated_at": "2026-09-20T13:27:11Z",
-  "finished_at": null,
-  "elapsed_s": 23,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T13:27:57Z",
+  "finished_at": "2026-09-20T13:27:57Z",
+  "elapsed_s": 69,
+  "message": "Not supported: Hormuz GKG share z>1.5 vs USO returns r=0.09 at lags 1-3d (n=390, perm p=0.066); best lag 7d is negative r=-0.22, trade rule only 3 trades - no tradeable edge",
   "run_folder": "missions/runs/20260920-272-gdelt-gkg-hormuz-share_x_finance-uso-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 1.2,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Reversal: GDELT Hormuz GKG share 20d z-score > 1.5 leads US crude ETF returns LOWER by 5-7 days (-) as Hormuz headline spikes mark local oil tops that fade; trade short USO 7d [gdelt.gkg.hormuz_share -> finance.USO.log_return] (parent: R2-0187)"
 }
