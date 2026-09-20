@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.dubai.precip",
+  "indicator_b": "finance.LMT.log_return",
+  "transform_a": "anomaly",
+  "transform_b": "log_return",
+  "max_lag_days": 5,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 0,
+  "rationale": "Use daily precipitation in a representative Gulf city (Dubai) with a same-week-2025 anomaly transform against Lockheed Martin daily log returns, expecting no systematic relationship between regional rainfall deviations and a major US defense stock\u2019s returns."
+}

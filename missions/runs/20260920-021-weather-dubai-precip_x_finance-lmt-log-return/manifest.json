@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:50:19.471341+00:00",
+  "git_commit": "ca52e0b07d9b4eb5c725c6fa15378d71b22eabaf",
+  "folder": "20260920-021-weather-dubai-precip_x_finance-lmt-log-return",
+  "mission_id": "M20260920-fc890c",
+  "hypothesis": "Rainfall in the Gulf region is unrelated to defense-stock returns (null control).",
+  "status": "ok",
+  "n_obs": 107,
+  "r": -0.10213469105802785,
+  "perm_p": 0.15169660678642716,
+  "validity": 3.7,
+  "interestingness": 2.6,
+  "unexpectedness": 1.46,
+  "indicator_coverage": {
+    "weather.dubai.precip": "configured analysis window",
+    "finance.LMT.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
