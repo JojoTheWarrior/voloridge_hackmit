@@ -227,3 +227,28 @@ def test_cli_screenshot(tmp_path):
     assert out.is_file() and out.stat().st_size > 0
     img = pygame.image.load(str(out))
     assert img.get_size() == (480, 270)
+
+
+def test_completed_sort_toggles(app):
+    from kingdom.castle import SORT_KEYS, sort_completed
+    from kingdom.data import CompletedMission
+
+    def mk(name, r, lag):
+        return CompletedMission(folder=name, path=app.root / name, r=r, best_lag=lag)
+
+    rows = [mk("a", 0.1, 2), mk("b", -0.9, None), mk("c", 0.5, 0)]
+    assert [m.folder for m in sort_completed(rows, 0, True)] == ["b", "c", "a"]  # |r| desc
+    assert [m.folder for m in sort_completed(rows, 0, False)] == ["a", "c", "b"]
+    assert [m.folder for m in sort_completed(rows, 1, True)] == ["a", "c", "b"]  # lag desc, None last
+    scene = CastleScene(app, menu="completed")
+    app.push(scene, fade=False)
+    run_frames(app, scene, 2)
+    assert (scene.sort_index, scene.sort_desc) == (0, True)
+    scene.handle_event(key(pygame.K_t))
+    assert SORT_KEYS[scene.sort_index][0] == "lag"
+    scene.handle_event(key(pygame.K_d))
+    assert scene.sort_desc is False
+    run_frames(app, scene, 2)
+    for _ in range(len(SORT_KEYS) - 1):
+        scene.handle_event(key(pygame.K_t))
+    assert scene.sort_index == 0
