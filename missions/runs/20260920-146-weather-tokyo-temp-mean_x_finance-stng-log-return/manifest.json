@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:29:36.130762+00:00",
+  "git_commit": "6a06764e6f91889dc8cd6d908f43bfe335d0027f",
+  "folder": "20260920-146-weather-tokyo-temp-mean_x_finance-stng-log-return",
   "mission_id": "R2-0020",
-  "title": "Null control: Tokyo temp vs STNG",
   "hypothesis": "R2 | [oil-shipping] Null control: Tokyo daily mean temperature 20d z-score > 1 has no relation to tanker equity returns at 0-5 day lags (0); no trade [weather.tokyo.temp_mean -> finance.STNG.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/e8eacfccf8694279b14a064dbb8a46d2",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:29:20Z",
-  "updated_at": "2026-09-20T03:29:37Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-146-weather-tokyo-temp-mean_x_finance-stng-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 4.74
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.02121903564330927,
+  "perm_p": 0.43313373253493015,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 4.74,
   "trade_idea": {
     "instrument": "STNG",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 4.74,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.tokyo.temp_mean": "configured analysis window",
+    "finance.STNG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
