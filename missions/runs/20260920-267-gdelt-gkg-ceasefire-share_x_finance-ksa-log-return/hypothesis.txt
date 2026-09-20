@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Reversal: GDELT ceasefire GKG share 20d z-score > 1 predicts negative Saudi ETF returns over next 1-3 days (-) (fade the ceasefire headline); trade short KSA 3d [gdelt.gkg.ceasefire_share -> finance.KSA.log_return] (parent: R2-0079)
