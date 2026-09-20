@@ -110,3 +110,4 @@
 | `20260920-106-weather-tehran-temp-anomaly_x_gdelt-irn-mentions` | Open-Meteo temperature anomalies in Tehran predict Iranian electricity-stress news mentions in GDELT. | ok | 564 | -0.06815122828033127 | 0.6387225548902196 | 0.24 | 3.26 | 6.32 |
 | `20260920-107-finance-fred-dcoilbrenteu_x_utility-us-demand-peak-mwh` | US electricity demand hourly peaks are unrelated to Brent crude (null control). | ok | 394 | -0.01585716549223919 | 0.716566866267465 | 0.06 | 2.1 | 0.18 |
 | `20260920-108-research-graphite-crossref-pubs_x_finance-hg-f-close` | Materials-science publication output correlates with copper prices at zero lag (control mission). | ok | 81 | 0.10648435579986346 | 0.4031936127744511 | 2.0 | 1.12 | 0.02 |
+| `20260920-109-FAILED-us-natural-gas-fuel-cost` | US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness). | failed | 0 | None | None | None | None | None |
