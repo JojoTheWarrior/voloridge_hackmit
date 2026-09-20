@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/a32feb9e265440eb96ff4696af33cdad",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:48Z",
-  "updated_at": "2026-09-20T03:25:02Z",
-  "finished_at": null,
-  "elapsed_s": 14,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:25:45Z",
+  "finished_at": "2026-09-20T03:25:45Z",
+  "elapsed_s": 57,
+  "message": "Not supported: Bandar Abbas wind_max vs STNG log returns r=0.006 (n=387), best lag -1d r=-0.05; rule 53 trades hit 58% but excess -0.10%/trade, OOS 19 trades avg +0.02%; actionability 2.68 (story, not rule)",
   "run_folder": "missions/runs/20260920-139-weather-bandar-abbas-wind-max_x_finance-stng-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 2.68,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Bandar Abbas max wind 20d z-score > 1 (rough seas suppress small-boat harassment, easing tanker risk premium) leads STNG log returns by 3 days (-); trade short STNG 3d [weather.bandar_abbas.wind_max -> finance.STNG.log_return] (parent: R2-0010)"
 }
