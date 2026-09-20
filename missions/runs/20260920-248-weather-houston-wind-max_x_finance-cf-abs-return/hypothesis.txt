@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Houston daily max wind 20d z-score > 1 leads CF absolute returns (volatility) by 3 days (+) via Gulf Coast ammonia outage uncertainty rather than direction; trade long CF straddle-proxy 5d [weather.houston.wind_max -> finance.CF.abs_return] (parent: R2-0051)
