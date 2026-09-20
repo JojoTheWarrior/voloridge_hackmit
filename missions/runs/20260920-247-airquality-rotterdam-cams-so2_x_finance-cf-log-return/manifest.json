@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:05:53.760783+00:00",
+  "git_commit": "d50a3f0ddc631322ff32bdc359d70aaad702e182",
+  "folder": "20260920-247-airquality-rotterdam-cams-so2_x_finance-cf-log-return",
   "mission_id": "R2-0150",
-  "title": "Rotterdam SO2 -> CF Industries 2d",
   "hypothesis": "R2 | [fertilizer-ag] Rotterdam CAMS SO2 20d z-score > 1 leads CF Industries returns by 2 days (+) as a cross-market check of the Yara result; trade long CF 2d [airquality.rotterdam.cams_so2 -> finance.CF.log_return]",
-  "parent_mission_id": "R2-0052",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/f8b675a3384f4b86a0e0bfbb08573613",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:05:32Z",
-  "updated_at": "2026-09-20T13:05:55Z",
-  "finished_at": null,
-  "elapsed_s": 23,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-247-airquality-rotterdam-cams-so2_x_finance-cf-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 2.52
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.04446881085386707,
+  "perm_p": 0.654690618762475,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 2.52,
   "trade_idea": {
     "instrument": "CF",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 2.52,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "airquality.rotterdam.cams_so2": "2025-03..2026-09 archive window",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
