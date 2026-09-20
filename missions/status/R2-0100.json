@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0100",
+  "title": "[risk-macro-em] GDELT Iran Goldstein 20d z-score below -1.5 (hostile actions) le",
+  "hypothesis": "R2 | [risk-macro-em] GDELT Iran Goldstein 20d z-score below -1.5 (hostile actions) leads gold higher by 1-2 days (+); trade long GLD 3d [gdelt.irn.goldstein -> finance.GLD.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:15:28Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
