@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.events",
+  "indicator_b": "research.iran.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 7,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use low daily GDELT Iran event counts (proxies for internet/news blackouts) against weekly Crossref Iran-related publication counts, assuming that weeks containing more shutdown days show fewer Iran-affiliated publications; 7-day lag matches daily-to-weekly aggregation."
+}
