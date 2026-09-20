@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:11:45Z",
-  "updated_at": "2026-09-20T04:12:36Z",
+  "updated_at": "2026-09-20T04:13:05Z",
   "finished_at": "2026-09-20T04:12:36Z",
-  "elapsed_s": 51,
+  "elapsed_s": 80,
   "message": "Noise: dyad-event z>1 short EWY gives r=-0.02 (n=390), hit 37.5%, Sharpe-like -1.1, OOS war-window flat; no tradeable directional edge.",
   "run_folder": "missions/runs/20260920-195-gdelt-iran-usa-dyad-events_x_finance-ewy-log-return",
   "scores": {
