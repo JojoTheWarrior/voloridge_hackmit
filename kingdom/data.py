@@ -111,6 +111,7 @@ class CompletedMission:
     validity: Optional[float] = None
     interestingness: Optional[float] = None
     unexpectedness: Optional[float] = None
+    best_lag: Optional[int] = None
     viz_path: Optional[Path] = None
     note_path: Optional[Path] = None
 
@@ -291,6 +292,8 @@ def read_run(path: Path, index: Optional[dict[str, dict]] = None) -> Optional[Co
     judge = _read_json(path / "judge.json")
     scores = judge.get("scores") if isinstance(judge.get("scores"), dict) else {}
     corr = stats.get("correlation") if isinstance(stats.get("correlation"), dict) else {}
+    lagged = stats.get("lagged") if isinstance(stats.get("lagged"), dict) else {}
+    best_lag = _pick_num(manifest.get("best_lag"), lagged.get("best_lag"), row.get("best_lag"))
     hypothesis = _pick_str(
         manifest.get("hypothesis"),
         row.get("hypothesis"),
@@ -328,6 +331,7 @@ def read_run(path: Path, index: Optional[dict[str, dict]] = None) -> Optional[Co
         validity=_pick_num(manifest.get("validity"), scores.get("validity"), row.get("validity")),
         interestingness=_pick_num(manifest.get("interestingness"), scores.get("interestingness"), row.get("interestingness")),
         unexpectedness=_pick_num(manifest.get("unexpectedness"), scores.get("unexpectedness"), row.get("unexpectedness")),
+        best_lag=int(best_lag) if best_lag is not None else None,
         viz_path=viz_path,
         note_path=note_path,
     )

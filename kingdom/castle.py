@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import math
 import time
-from typing import Optional
+from typing import Callable, Optional
 
 import pygame
 
@@ -21,6 +21,7 @@ from .app import LOGICAL_H, LOGICAL_W, Scene
 from .data import CompletedMission
 from .text import draw_text, text_size
 from .ui import (
+    AMBER,
     GOLD,
     GOLD_LIGHT,
     GREEN,
@@ -63,6 +64,24 @@ COPIED_SECONDS = 1.5
 SLIDE_SECONDS = 0.2
 MISSION_SECONDS = 300.0  # missions take ~3-5 minutes
 LH = 9  # line height of the 8px font
+# (label, key) for the completed list; None values always sort last
+SORT_KEYS: tuple[tuple[str, Callable[[CompletedMission], Optional[float]]], ...] = (
+    ("|r|", lambda m: abs(m.r) if m.r is not None else None),
+    ("lag", lambda m: m.best_lag),
+    ("perm p", lambda m: m.perm_p),
+    ("validity", lambda m: m.validity),
+    ("interest", lambda m: m.interestingness),
+    ("unexpected", lambda m: m.unexpectedness),
+    ("n", lambda m: m.n_obs),
+    ("newest", lambda m: m.created_at),
+)
+
+
+def sort_completed(rows: list[CompletedMission], sort_index: int, descending: bool) -> list[CompletedMission]:
+    key = SORT_KEYS[sort_index % len(SORT_KEYS)][1]
+    known = [m for m in rows if key(m) is not None]
+    unknown = [m for m in rows if key(m) is None]
+    return sorted(known, key=key, reverse=descending) + unknown
 
 
 class CastleScene(Scene):
@@ -84,6 +103,8 @@ class CastleScene(Scene):
         self.zoom = 1.0
         self.zoom_center = (0.5, 0.5)
         self._drag: Optional[tuple[int, int]] = None
+        self.sort_index = 0
+        self.sort_desc = True
         self._zoom_cache: Optional[tuple[tuple, pygame.Surface]] = None
         self._row_tops: list[tuple[int, int]] = []  # (top, height) per row in content coords
         bw, bh = 200, 26
@@ -126,6 +147,19 @@ class CastleScene(Scene):
         self.note_panel.set_text(mission.note_text() or "(no note written for this mission)")
         self.zoom, self.zoom_center, self._zoom_cache = 1.0, (0.5, 0.5), None
         self.open_menu(DETAIL, 1)
+
+    def completed_rows(self) -> list[CompletedMission]:
+        return sort_completed(self.app.data.snapshot().completed, self.sort_index, self.sort_desc)
+
+    def cycle_sort(self):
+        self.sort_index = (self.sort_index + 1) % len(SORT_KEYS)
+        self.selected = 0
+        self.scroll.scroll_to(0)
+
+    def toggle_sort_direction(self):
+        self.sort_desc = not self.sort_desc
+        self.selected = 0
+        self.scroll.scroll_to(0)
 
     def copy_command(self) -> str:
         """Copy a shell command that opens this mission's note in VS Code."""
@@ -181,7 +215,13 @@ class CastleScene(Scene):
         self.scroll.handle_event(event)
 
     def _event_completed(self, event):
-        rows = self.app.data.snapshot().completed
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_t:
+            self.cycle_sort()
+            return
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_d:
+            self.toggle_sort_direction()
+            return
+        rows = self.completed_rows()
         if not rows:
             return
         if event.type == pygame.KEYDOWN and event.key in (pygame.K_UP, pygame.K_DOWN):
@@ -499,9 +539,12 @@ class CastleScene(Scene):
         assets = self.app.assets
         draw_panel(surface, assets, PANEL.move(dx, 0))
         snap = self.app.data.snapshot()
-        rows = snap.completed
-        self._draw_title(surface, "COMPLETED MISSIONS", dx, f"{len(rows)} missions   {len(snap.succeeded)} ok")
-        self._footer(surface, "Enter/click: details   Esc: back", dx)
+        rows = self.completed_rows()
+        arrow = "v" if self.sort_desc else "^"
+        label = SORT_KEYS[self.sort_index][0]
+        self._draw_title(surface, "COMPLETED MISSIONS", dx,
+                         f"{len(rows)} missions   {len(snap.succeeded)} ok   sort: {label} {arrow}")
+        self._footer(surface, "Enter: details   T: sort by   D: asc/desc   Esc: back", dx)
         header_bottom = PANEL.y + 10 + text_size("COMPLETED MISSIONS", "title")[1] + 17
         self.scroll.viewport = pygame.Rect(self.list_view.x, max(self.list_view.y + 10, header_bottom),
                                            self.list_view.w, self.list_view.y + self.list_view.h
@@ -525,7 +568,7 @@ class CastleScene(Scene):
             if y > view.bottom or y + row_h < view.y:
                 continue
             row = pygame.Rect(view.x, y, view.w, row_h)
-            tint = RED if m.failed else GREEN
+            tint = RED if m.failed else GREEN if m.status == "ok" else AMBER
             if i == self.selected:
                 pygame.draw.rect(surface, OUTLINE, row)
                 pygame.draw.rect(surface, lerp_color(WOOD_DARK, GOLD, 0.18), row.inflate(-2, -2))
@@ -536,13 +579,21 @@ class CastleScene(Scene):
             has_thumb = m.viz_path is not None
             text_right = row.right - thumb_w - 10 if has_thumb else row.right - 6
             row_text_w = max(24, text_right - tx)
-            draw_text(surface, clip_lines(m.folder, row_text_w, 1, "small")[0], (tx, y + 3), TEXT_FAINT, kind="small")
+            viu = f"V/I/U={fmt_num(m.validity, 1)}/{fmt_num(m.interestingness, 1)}/{fmt_num(m.unexpectedness, 1)}"
+            viu_w = text_size(viu, "small")[0]
+            draw_text(surface, viu, (tx + row_text_w, y + 3), TEXT_FAINT, kind="small", align="right")
+            draw_text(surface, clip_lines(m.folder, row_text_w - viu_w - 8, 1, "small")[0], (tx, y + 3), TEXT_FAINT,
+                      kind="small")
             lines = clip_lines(m.hypothesis or "(no hypothesis)", row_text_w, 2)
             for j, line in enumerate(lines):
                 draw_text(surface, line, (tx, y + 3 + LH * (j + 1)), TEXT)
-            stats = (f"{m.status}  n={m.n_obs if m.n_obs is not None else '-'}  r={fmt_num(m.r, 3)}  "
-                     f"p={fmt_num(m.perm_p, 3)}  V/I/U={fmt_num(m.validity, 1)}/"
-                     f"{fmt_num(m.interestingness, 1)}/{fmt_num(m.unexpectedness, 1)}")
+            lag = str(m.best_lag) if m.best_lag is not None else "-"
+            stats = (f"n={m.n_obs if m.n_obs is not None else '-'}  r={fmt_num(m.r, 3)}  p={fmt_num(m.perm_p, 3)}  "
+                     f"lag={lag}")
+            if m.failed:
+                stats = "FAILED  " + stats
+            elif m.status != "ok":
+                stats = f"{m.status.upper()}  " + stats
             draw_text(surface, clip_lines(stats, row_text_w, 1, "small")[0], (tx, y + 3 + LH * 3),
                       lerp_color(tint, GOLD_LIGHT, 0.45), kind="small")
             if has_thumb:
