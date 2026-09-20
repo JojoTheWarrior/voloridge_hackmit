@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/256b7f19559a4a9abcccc7d6c9004fe2",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:36:11Z",
-  "updated_at": "2026-09-20T03:36:29Z",
+  "updated_at": "2026-09-20T03:37:51Z",
   "finished_at": null,
-  "elapsed_s": 18,
+  "elapsed_s": 100,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-151-airquality-doha-cams-so2_x_finance-lng-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 4.61,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Doha CAMS SO2 20d z-score < -1 (Ras Laffan train outage proxy) leads TTF log returns by 2 days (+) via tighter European supply; trade long TTF=F 3d [airquality.doha.cams_so2 -> finance.TTF=F.log_return] (parent: R2-0029)"
 }
