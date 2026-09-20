@@ -82,3 +82,4 @@
 | `20260920-078-gdelt-are-conflict-events_x_finance-hg-f-log-return` | Copper and aluminum futures responded to the March 28 strike on Emirates Global Aluminium. | ok | 140 | -0.11215927692535835 | 0.2435129740518962 | 2.0 | 3.34 | 5.14 |
 | `20260920-079-finance-fred-dcoilbrenteu_x_finance-fred-dgs10` | The 10-year Treasury yield rose with Brent during the war, breaking the usual flight-to-safety pattern. | ok | 142 | 0.5240728479826706 | 0.015968063872255488 | 6.02 | 3.86 | 6.28 |
 | `20260920-080-gdelt-iran-usa-dyad-events_x_finance-dx-y-nyb-log-return` | The dollar index rose on days of Iranian retaliation events. | ok | 140 | -0.058461483566070206 | 0.9700598802395209 | 0.02 | 3.38 | 5.3 |
+| `20260920-081-finance-fred-dcoilbrenteu_x_finance-eem-log-return` | Emerging-market ETF (EEM) returns were more sensitive to Brent during the war than in 2025. | ok | 369 | -0.20157803035227068 | 0.03592814371257485 | 6.02 | 4.26 | 5.2 |
