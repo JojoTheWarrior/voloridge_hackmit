@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/fdcbd79d6c594bce8c7f9916c7aeafde",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:50:33Z",
-  "updated_at": "2026-09-20T03:50:42Z",
+  "updated_at": "2026-09-20T03:51:04Z",
   "finished_at": null,
-  "elapsed_s": 9,
+  "elapsed_s": 31,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-169-airquality-doha-cams-no2_x_finance-ntr-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 2.78,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Null control: Doha CAMS SO2 20d z-score < -1.5 leads NTR log returns by 4 days (+); if SO2 matches the weak NO2 result the Qatari industrial-activity channel is not specific; long NTR 6d [airquality.doha.cams_so2 -> finance.NTR.log_return] (parent: R2-0053)"
 }
