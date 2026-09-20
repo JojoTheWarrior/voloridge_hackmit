@@ -1,4 +1,3 @@
-R2 | [fuel-airspace-losers] Iran-Gulf dyad event count 20d z-score > 1.5 hits US network carriers with Gulf-route exposure (-); trade short AAL 3d at 1d lag [gdelt.irn.conflict_events -> finance.AAL.log_return]
 R2 | [fuel-airspace-losers] GDELT drone GKG share 20d z-score > 1 raises airspace-risk premia before airline selloffs (-); trade short DAL 2d at 2d lag [gdelt.gkg.drone_share -> finance.DAL.log_return]
 R2 | [fuel-airspace-losers] Crossref weekly drone publication counts z-score > 1 precede sustained airline underperformance vs SPY (-); trade short JETS vs SPY 10d at 7d lag [research.drone.crossref_pubs -> finance.ratio.jets_spy]
 R2 | [fuel-airspace-losers] Crossref missile_defense weekly counts z-score > 1 mark escalation regimes that compress cruise demand (-); trade short RCL 10d at 5d lag [research.missile.crossref_pubs -> finance.RCL.log_return]
