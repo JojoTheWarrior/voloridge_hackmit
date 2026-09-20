@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:37:15Z",
-  "updated_at": "2026-09-20T03:39:57Z",
+  "updated_at": "2026-09-20T03:41:45Z",
   "finished_at": "2026-09-20T03:37:38Z",
-  "elapsed_s": 162,
-  "message": "NOISE: PUDL peak-demand data unavailable; swapped to Henry Hub close z>1 -> short XLU: r=0.04, perm_p=0.82, validity 0, hit rate 43% (42 trades), OOS negative. No tradeable edge.",
+  "elapsed_s": 270,
+  "message": "NOISE: PUDL peak-demand data unavailable; swapped once to Henry Hub close z>1 -> short XLU: r=0.04, perm_p=0.82, validity 0, hit rate 43% (42 trades), OOS negative. No tradeable edge.",
   "run_folder": "missions/runs/20260920-155-finance-ng-f-close_x_finance-xlu-log-return",
   "scores": {
     "validity": 0,
