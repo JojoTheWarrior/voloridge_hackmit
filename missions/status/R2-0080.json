@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/8d39e901a8604d68bf97da2dd949b3f6",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:05:21Z",
-  "updated_at": "2026-09-20T04:05:31Z",
+  "updated_at": "2026-09-20T04:05:49Z",
   "finished_at": null,
-  "elapsed_s": 10,
+  "elapsed_s": 28,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-187-gdelt-irn-goldstein_x_finance-ita-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 9.2,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] Reversal control: Iran GDELT Goldstein 20d z-score > 1 (de-escalation) leads defense ETF returns by 1-3 days (-); trade short ITA 1d [gdelt.irn.goldstein -> finance.ITA.log_return] (parent: R2-0080)"
 }
