@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:19:51Z",
-  "updated_at": "2026-09-20T04:20:50Z",
+  "updated_at": "2026-09-20T04:21:06Z",
   "finished_at": "2026-09-20T04:20:50Z",
-  "elapsed_s": 59,
+  "elapsed_s": 75,
   "message": "Supported-but-weak: r=-0.003 (n=390, best lag -4d r=-0.057); rule short spread 1d: 57 trades, hit 0.56, excess +0.11pt, OOS 16 trades hit 0.69, but DD -21pt and negative total return -> actionability 7.0 overstates; needs robustness check",
   "run_folder": "missions/runs/20260920-204-gdelt-gkg-oil-share_x_finance-spread-brent-wti",
   "scores": {
