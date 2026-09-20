@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:18:58.664221+00:00",
+  "git_commit": "df3a32adc47cb5b4a34f09050bf726263acc48a8",
+  "folder": "20260920-264-weather-bandar-abbas-temp-mean_x_finance-ual-log-return",
   "mission_id": "R2-0172",
-  "title": "Null control: Bandar Abbas temp vs UAL returns",
   "hypothesis": "R2 | [fuel-airspace-losers] Bandar Abbas mean temperature 20d z-score > 1 is also a null for UAL returns (null control, 0 sign); trade long UAL 5d at 2d lag [weather.bandar_abbas.temp_mean -> finance.UAL.log_return] (parent: R2-0072)",
-  "parent_mission_id": "R2-0072",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/ce732e96a07d4074ad438b858fac6132",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:18:43Z",
-  "updated_at": "2026-09-20T13:19:00Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-264-weather-bandar-abbas-temp-mean_x_finance-ual-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 4.91
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": 0.03932026813905751,
+  "perm_p": 0.5229540918163673,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 4.91,
   "trade_idea": {
     "instrument": "UAL",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 4.91,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.bandar_abbas.temp_mean": "configured analysis window",
+    "finance.UAL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
