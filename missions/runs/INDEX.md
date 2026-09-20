@@ -112,3 +112,4 @@
 | `20260920-108-research-graphite-crossref-pubs_x_finance-hg-f-close` | Materials-science publication output correlates with copper prices at zero lag (control mission). | ok | 81 | 0.10648435579986346 | 0.4031936127744511 | 2.0 | 1.12 | 0.02 |
 | `20260920-109-FAILED-us-natural-gas-fuel-cost` | US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness). | failed | 0 | None | None | None | None | None |
 | `20260920-110-FAILED-us-natural-gas-fuel-cost` | US natural gas fuel cost at power plants in 2026 diverged from Henry Hub more than in 2025 (contract stickiness). | failed | 0 | None | None | None | None | None |
+| `20260920-111-gdelt-irn-events_x_finance-bz-f-log-return` | The number of GDELT events with Oman as an actor rose before the Iran-Oman Hormuz agreement and correlates with Brent declines. | ok | 140 | 0.10346597355585145 | 0.5489021956087824 | 0.22 | 3.44 | 4.22 |
