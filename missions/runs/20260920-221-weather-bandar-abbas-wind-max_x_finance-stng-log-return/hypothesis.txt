@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Bandar Abbas max wind 20d z-score > 1 (rough seas suppress small-boat harassment, easing tanker risk premium) leads STNG log returns by 3 days (-); trade short STNG 3d [weather.bandar_abbas.wind_max -> finance.STNG.log_return] (parent: R2-0010)

@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 8,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 23,
+    "hit_rate": 0.34782608695652173,
+    "avg_return": -0.027031293959015674,
+    "baseline_avg_return": -0.019119278601570804,
+    "excess_return": -0.00791201535744487,
+    "sharpe_like": -2.253310991417577,
+    "max_drawdown": -0.4836465747770753,
+    "total_return": -0.48844243536239684
+  },
+  "fit_pre_war": {
+    "n_trades": 15,
+    "hit_rate": 0.3333333333333333,
+    "avg_return": -0.022398048472701607,
+    "baseline_avg_return": -0.024912597803514458,
+    "excess_return": 0.0025145493308128507,
+    "sharpe_like": -1.7552617274866829,
+    "max_drawdown": -0.29499821086428535,
+    "total_return": -0.30154622648292373
+  },
+  "test_war": {
+    "n_trades": 8,
+    "hit_rate": 0.375,
+    "avg_return": -0.03571862924585455,
+    "baseline_avg_return": -0.008366527052508722,
+    "excess_return": -0.027352102193345825,
+    "sharpe_like": -1.455069619659228,
+    "max_drawdown": -0.23984309997816267,
+    "total_return": -0.2675856527173647
+  },
+  "n_signal_days": 382,
+  "trade_idea": {
+    "instrument": "STNG",
+    "direction": "short",
+    "entry_rule": "weather.bandar_abbas.wind_max rolling_zscore_20d > 1 at close -> short STNG next session",
+    "exit_rule": "close after 8 trading days (no overlapping entries)",
+    "holding_days": 8,
+    "hit_rate": 0.34782608695652173,
+    "avg_return": -0.027031293959015674,
+    "excess_return": -0.00791201535744487,
+    "n_trades": 23,
+    "sharpe_like": -2.253310991417577,
+    "max_drawdown": -0.4836465747770753,
+    "oos_n_trades": 8,
+    "oos_avg_return": -0.03571862924585455,
+    "oos_hit_rate": 0.375,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
