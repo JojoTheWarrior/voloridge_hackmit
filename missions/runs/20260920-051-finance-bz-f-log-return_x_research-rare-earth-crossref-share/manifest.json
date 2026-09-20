@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:54:15.327484+00:00",
+  "git_commit": "253061251559defd8cc17dfc0354959f30ed86ed",
+  "folder": "20260920-051-finance-bz-f-log-return_x_research-rare-earth-crossref-share",
+  "mission_id": "M20260920-dc4a81",
+  "hypothesis": "OpenAlex \"sulfur\" and \"sulfuric acid\" publication counts respond to the Hormuz sulfur supply shock.",
+  "status": "ok",
+  "n_obs": 58,
+  "r": -0.021579359713702014,
+  "perm_p": 0.7305389221556886,
+  "validity": 0.1,
+  "interestingness": 2.7,
+  "unexpectedness": 3.04,
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "research.rare_earth.crossref_share": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}

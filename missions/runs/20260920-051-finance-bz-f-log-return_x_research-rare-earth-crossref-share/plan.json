@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.BZ=F.log_return",
+  "indicator_b": "research.rare_earth.crossref_share",
+  "transform_a": "log_return",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "compare_pre_post",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use Brent crude futures log returns as a proxy for the sulfur/sulfuric-acid supply shock transmitted via oil markets, and weekly rare_earth publication share (closest available OpenAlex-style topical count) as the research response, allowing up to a one\u2011month lag and testing whether the oil\u2013research linkage strengthens after the Hormuz closure."
+}

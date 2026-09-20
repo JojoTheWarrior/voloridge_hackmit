@@ -52,3 +52,4 @@
 | `20260920-048-FAILED-fuel-receipt-cost-per-mmbtu` | Fuel receipt cost per MMBtu for petroleum liquids at US plants tracks Brent with a lag below one month. | failed | 0 | None | None | None | None | None |
 | `20260920-049-gdelt-gkg-lng-share_x_research-rare-earth-crossref-pubs` | OpenAlex publication counts on "helium" rose after Qatar's Ras Laffan LNG complex was struck. | ok | 29 | 0.23010761412759506 | 0.001996007984031936 | 6.04 | 4.46 | 5.64 |
 | `20260920-050-finance-hg-f-close_x_research-tungsten-crossref-pubs` | OpenAlex publications on "tungsten" increased after China export restrictions and the March 2026 price surge. | ok | 81 | -0.01220389286475487 | 0.7145708582834331 | 0.12 | 3.64 | 4.6 |
+| `20260920-051-finance-bz-f-log-return_x_research-rare-earth-crossref-share` | OpenAlex "sulfur" and "sulfuric acid" publication counts respond to the Hormuz sulfur supply shock. | ok | 58 | -0.021579359713702014 | 0.7305389221556886 | 0.1 | 2.7 | 3.04 |
