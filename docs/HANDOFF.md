@@ -83,13 +83,12 @@ Done and working:
   questions that prefill a reply, Copy link, Regenerate, Export PDF (print
   stylesheet forces light). Verified end to end in demo mode only.
 - **Mission tabs** Thread · Report · Explorer, shared header.
-- **Research attachment UI.** New mission → Attach research → search 111 saved
-  findings from 13 collections, or paste notes. Full evidence/caveats travel
-  through `reference`; the question remains editable and the attachment can be
-  removed. `GET /api/research` uses the reviewed `research/library.json`; legacy
-  `research/*/findings.json` is used only when that index is absent. The index is
-  copied from `explore/packaging/frontend/findings_index.json`, not its stale root
-  index. Refresh instructions and snapshot limitations are in `research/README.md`.
+- **Context attachment UI.** New mission → Attach context → upload one `.txt` or
+  `.md` file or paste text. Preview/edit/reopen/remove before starting; the mission
+  prompt stays separate. Browser reads files locally, capped at 400 KB and 100,000
+  text characters; only text travels through the existing `reference` field when
+  the user starts. No library is shown or fetched. The older research API/snapshot
+  is retained internally; Devin reference instructions are unchanged.
 - **Recovery and polish.** Visible submission errors and retry for missions,
   dataset linking and reports; loading/reconnecting states instead of blank
   mission/dataset pages; reduced motion; theme-aware dataset thumbnails.

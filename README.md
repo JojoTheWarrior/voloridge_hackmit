@@ -126,21 +126,14 @@ demo missions. `KINGDOM_API_TARGET` selects the Vite proxy target (defaults to
 `http://127.0.0.1:8030` outside Compose). Forwarded host headers are required for
 the explorer's content security policy.
 
-**Start from research.** On New mission, choose **Attach research** to search
-the saved findings or paste notes. Choosing a finding attaches its complete
-record, including methods, source URLs and caveats; it fills an empty prompt
-without replacing a question already written. Edit the question, remove the
-attachment, or reopen it before submitting. Devin receives it as research
-context and must rerun the analysis; the reference is not added to the thread.
-The library reads the reviewed `research/library.json` through `GET /api/research`.
-It contains 111 findings from 13 collections, including clinics, tarps, flares,
-daycares, hazard-creep dams, methane and Zone Zero. Complete evidence, normalized
-verdicts and caveats are retained in each attachment; no raw household files are
-imported. The index supersedes older per-folder findings rather than duplicating
-them. Without an index, older installations fall back to `research/*/findings.json`.
-Malformed entries are skipped and each reference is capped at 100,000 characters.
-Snapshots may be old and omit raw data; they are starting points, not newly
-verified results. See `research/README.md` for the reviewed index's source and refresh.
+**Attach context.** On New mission, choose **Attach context** to upload one `.txt`
+or `.md` file, or paste background text. Review/edit the text before attaching;
+reopen or remove it before starting. The question remains separate and is never
+automatically filled from the attachment. Files are read in the browser (up to
+400 KB); only their text is sent as `reference` when the mission starts, with a
+100,000-character limit. PDF and Word files are not supported. The existing Devin
+reference instructions are unchanged. The saved research library is no longer
+shown or fetched by this UI; its internal API/snapshot remain for compatibility.
 
 Two processes. Needs Node 20.19+ or 22.12+ (`node -v`) and the repo's Python
 environment:

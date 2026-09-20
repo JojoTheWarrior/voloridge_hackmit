@@ -5,8 +5,9 @@
 - Python checks: `docker compose exec api python -m pytest tests -q`.
 - Web checks: `docker compose exec web npm test`, `docker compose exec web npm run lint`,
   and `docker compose exec web npm run build`.
-- Compose uses the local gitignored `.env` key and caps each mission at 5 ACU.
-  Tom approved this live configuration. For an isolated scripted demo, use
+- Compose uses the local gitignored `.env` key. `KINGDOM_MAX_ACU=0` removes the
+  app's per-mission cap; organization limits still apply. Tom approved this live
+  configuration. For an isolated scripted demo, use
   `docker compose -f compose.yaml -f compose.demo.yaml up -d`; it replaces the
   same API container and uses a separate Docker volume.
   Never bake credentials into images.
