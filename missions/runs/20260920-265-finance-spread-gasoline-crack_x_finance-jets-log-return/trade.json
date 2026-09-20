@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 48,
+    "hit_rate": 0.4583333333333333,
+    "avg_return": 0.003249298017918787,
+    "baseline_avg_return": 0.0009117301376345447,
+    "excess_return": 0.0023375678802842422,
+    "sharpe_like": 1.2496265727562235,
+    "max_drawdown": -0.07221331851848078,
+    "total_return": 0.15947130309234248
+  },
+  "fit_pre_war": {
+    "n_trades": 28,
+    "hit_rate": 0.4642857142857143,
+    "avg_return": 0.0037924817724025966,
+    "baseline_avg_return": 0.0012241751219477552,
+    "excess_return": 0.0025683066504548413,
+    "sharpe_like": 1.0953998693560525,
+    "max_drawdown": -0.07221331851848078,
+    "total_return": 0.10660045701562271
+  },
+  "test_war": {
+    "n_trades": 20,
+    "hit_rate": 0.45,
+    "avg_return": 0.002488840761641453,
+    "baseline_avg_return": 0.0003722567834246849,
+    "excess_return": 0.002116583978216768,
+    "sharpe_like": 0.6342063358297567,
+    "max_drawdown": -0.03675946791784279,
+    "total_return": 0.04777771935799335
+  },
+  "n_signal_days": 380,
+  "trade_idea": {
+    "instrument": "JETS",
+    "direction": "long",
+    "entry_rule": "finance.spread.gasoline_crack rolling_zscore_20d > 1 at close -> long JETS next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4583333333333333,
+    "avg_return": 0.003249298017918787,
+    "excess_return": 0.0023375678802842422,
+    "n_trades": 48,
+    "sharpe_like": 1.2496265727562235,
+    "max_drawdown": -0.07221331851848078,
+    "oos_n_trades": 20,
+    "oos_avg_return": 0.002488840761641453,
+    "oos_hit_rate": 0.45,
+    "actionability": 6.92,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:20:05.895161+00:00",
+  "git_commit": "291b78661c726f88e0741f053af5c6b2a62ac138",
+  "folder": "20260920-265-finance-spread-gasoline-crack_x_finance-jets-log-return",
   "mission_id": "R2-0174",
-  "title": "Gasoline crack z<-1 -> long JETS 5d",
   "hypothesis": "R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score < -1 (fuel-cost collapse after a spike) is the true fade-rally trigger for airlines (+); trade long JETS 5d at 1d lag [finance.spread.gasoline_crack -> finance.JETS.log_return] (parent: R2-0074)",
-  "parent_mission_id": "R2-0074",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/ff77654774b147e9a1219b933f944bf6",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:19:49Z",
-  "updated_at": "2026-09-20T13:20:07Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-265-finance-spread-gasoline-crack_x_finance-jets-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 6.92
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.0532714993348745,
+  "perm_p": 0.32934131736526945,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 6.92,
   "trade_idea": {
     "instrument": "JETS",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 6.92,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.spread.gasoline_crack": "configured analysis window",
+    "finance.JETS.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

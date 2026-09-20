@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Gasoline crack spread 20d z-score < -1 (fuel-cost collapse after a spike) is the true fade-rally trigger for airlines (+); trade long JETS 5d at 1d lag [finance.spread.gasoline_crack -> finance.JETS.log_return] (parent: R2-0074)
