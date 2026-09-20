@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0116",
+  "title": "[oil-shipping] Reversal control: Brent price over-extension (20d z-score of BZ=F",
+  "hypothesis": "R2 | [oil-shipping] Reversal control: Brent price over-extension (20d z-score of BZ=F close > 1) is momentum not mean-reversion: Brent log return continues higher over the next 3 days (+); trade long BZ=F 3d [finance.BZ=F.close -> finance.BZ=F.log_return] (parent: R2-0018)",
+  "parent_mission_id": "R2-0018",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:45:24Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
