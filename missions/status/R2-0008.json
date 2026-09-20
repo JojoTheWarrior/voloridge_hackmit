@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/7c932c2822964554a8ff8eead28fc3e3",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:19:33Z",
-  "updated_at": "2026-09-20T03:19:52Z",
+  "updated_at": "2026-09-20T03:20:18Z",
   "finished_at": "2026-09-20T03:18:52Z",
-  "elapsed_s": 19,
+  "elapsed_s": 45,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-138-gdelt-gkg-sanctions-share_x_finance-spread-gasoline-crack",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 6.96,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] null control: GDELT sanctions GKG share 20d z-score > 1 leads Brent-WTI spread wider by 6 days (+); trade long spread 6d [gdelt.gkg.sanctions_share -> finance.spread.brent_wti] (parent: R2-0008)"
 }
