@@ -1,10 +1,17 @@
-import { CastleLogo } from './components/CastleLogo'
+import { Route, Routes } from 'react-router-dom'
+import { AppShell } from './components/AppShell'
+import { DatasetsPage } from './pages/DatasetsPage'
+import { MissionPage } from './pages/MissionPage'
+import { NewMissionPage } from './pages/NewMissionPage'
 
 export function App() {
   return (
-    <div className="flex h-dvh items-center justify-center gap-2 text-[15px] font-medium tracking-tight">
-      <CastleLogo />
-      kingdom
-    </div>
+    <Routes>
+      <Route element={<AppShell />}>
+        <Route index element={<NewMissionPage />} />
+        <Route path="missions/:id" element={<MissionPage />} />
+        <Route path="datasets" element={<DatasetsPage />} />
+      </Route>
+    </Routes>
   )
 }

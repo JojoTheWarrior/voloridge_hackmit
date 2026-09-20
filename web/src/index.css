@@ -17,3 +17,14 @@
 body {
   @apply bg-white font-sans text-ink antialiased;
 }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes slide-in {
+  from { transform: translateX(-100%); }
+}
+
+.fade-in { animation: fade-in 150ms ease-out; }
+.slide-in { animation: slide-in 150ms ease-out; }
