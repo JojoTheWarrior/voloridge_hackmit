@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:56:19.703768+00:00",
+  "git_commit": "a5026d821bb438ced448037e94c50a4485a0c2fe",
+  "folder": "20260920-067-research-tungsten-crossref-pubs_x_research-graphite-crossref-pubs",
+  "mission_id": "M20260920-594bec",
+  "hypothesis": "Materials Project entries containing tungsten were updated more often in 2025 than entries containing aluminum (control for supply-shock hypotheses).",
+  "status": "ok",
+  "n_obs": 52,
+  "r": 0.21982105447595032,
+  "perm_p": 0.11776447105788423,
+  "validity": 4.0,
+  "interestingness": 1.38,
+  "unexpectedness": 0.84,
+  "indicator_coverage": {
+    "research.tungsten.crossref_pubs": "2025-03..current week",
+    "research.graphite.crossref_pubs": "2025-03..current week"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
