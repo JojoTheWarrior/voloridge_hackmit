@@ -1,0 +1,1 @@
+R2 | [gas-lng] TTF to Henry Hub ratio 20d z-score > 1.25 leads Cheniere returns by 3 days (+) as export arbitrage widens; trade long LNG 5d [finance.ratio.ttf_henryhub -> finance.LNG.log_return]
