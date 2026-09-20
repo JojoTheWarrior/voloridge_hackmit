@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] US GDELT tone 20d z-score < -1 leads dollar index strength by 1-3 days (+) as risk-off bids USD; trade long DX-Y.NYB 3d [gdelt.usa.tone -> finance.DX-Y.NYB.log_return]
 R2 | [risk-macro-em] GDELT cyber GKG share 20d z-score > 2 leads Nasdaq ETF returns lower by 1-2 days (-); trade short QQQ 2d [gdelt.gkg.cyber_share -> finance.QQQ.log_return]
 R2 | [risk-macro-em] GDELT drone GKG share 20d z-score > 1 leads Northrop returns by 3-5 days (+) on air-defense order expectations; trade long NOC 5d [gdelt.gkg.drone_share -> finance.NOC.log_return]
 R2 | [risk-macro-em] Crossref missile_defense weekly counts 8-week z-score > 1 lead defense ETF returns by 5-10 days (+); trade long ITA 10d [research.missile.crossref_pubs -> finance.ITA.log_return]
