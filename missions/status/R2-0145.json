@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:02:29Z",
-  "updated_at": "2026-09-20T13:03:12Z",
+  "updated_at": "2026-09-20T13:03:40Z",
   "finished_at": "2026-09-20T13:03:12Z",
-  "elapsed_s": 43,
+  "elapsed_s": 71,
   "message": "Supported: fertilizer attention z>1 vs CF abs return r=0.22 n=390 best lag -6d r=0.29; trade rule 45 trades hit 1.0 avg 2.2% (abs-return target inflates hit rate; caveat)",
   "run_folder": "missions/runs/20260920-244-gdelt-gkg-fertilizer-share_x_finance-cf-abs-return",
   "scores": {
