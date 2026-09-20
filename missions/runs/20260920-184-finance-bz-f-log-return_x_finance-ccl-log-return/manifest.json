@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:03:05.382768+00:00",
+  "git_commit": "82e8bced4d2184a790c97920f85039857c0924ef",
+  "folder": "20260920-184-finance-bz-f-log-return_x_finance-ccl-log-return",
   "mission_id": "R2-0075",
-  "title": "Brent +3% spike reverses into CCL",
   "hypothesis": "R2 | [fuel-airspace-losers] Brent daily log return above +3 pct is over-extrapolated into cruise names and partially reverses (+); trade long CCL 4d at 3d lag [finance.BZ=F.log_return -> finance.CCL.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/788e0399c5e34eb894ba9aed1bdb2360",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:02:48Z",
-  "updated_at": "2026-09-20T04:03:07Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-184-finance-bz-f-log-return_x_finance-ccl-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 0,
-    "unexpectedness": 0,
-    "actionability": 0.3
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.2976823935060568,
+  "perm_p": 0.017964071856287425,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.3,
   "trade_idea": {
     "instrument": "CCL",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.3,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window",
+    "finance.CCL.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

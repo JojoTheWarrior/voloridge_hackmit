@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Brent daily log return above +3 pct is over-extrapolated into cruise names and partially reverses (+); trade long CCL 4d at 3d lag [finance.BZ=F.log_return -> finance.CCL.log_return]
