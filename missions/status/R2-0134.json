@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:55:22Z",
-  "updated_at": "2026-09-20T12:56:27Z",
+  "updated_at": "2026-09-20T12:58:18Z",
   "finished_at": "2026-09-20T12:56:27Z",
-  "elapsed_s": 65,
-  "message": "Not supported: NG=F log-return z>1 vs XLU 3d, r=0.038 n=390, best lag 1d r=-0.089; long XLU rule sharpe -0.62, hit 51%, 41 trades; validity 0",
+  "elapsed_s": 176,
+  "message": "heartbeat",
   "run_folder": "missions/runs/20260920-235-finance-ng-f-log-return_x_finance-xlu-log-return",
   "scores": {
     "validity": 0,
