@@ -14,6 +14,8 @@ def main():
     fetch.add_argument("--rebuild-cache", action="store_true")
     sub.add_parser("selftest")
     ui = sub.add_parser("ui"); ui.add_argument("--port", type=int, default=8000)
+    graph = sub.add_parser("graph"); graph.add_argument("--port", type=int, default=8010)
+    graph.add_argument("--charts-port", type=int, default=8011)
     viz = sub.add_parser("viz"); viz.add_argument("mission_id"); viz.add_argument("--headless", action="store_true")
     viz.add_argument("--codegen", action="store_true"); viz.add_argument("--allow-exec", action="store_true")
     args = parser.parse_args()
@@ -69,6 +71,18 @@ def main():
     elif args.command == "ui":
         from warsignal.ui.app import create_app
         create_app().run(host="0.0.0.0", port=args.port)
+    elif args.command == "graph":
+        import subprocess
+        import sys
+        from warsignal.config import ROOT
+        from warsignal.graph.app import create_app
+        from warsignal.graph.service import GraphService
+        charts = subprocess.Popen([sys.executable, "charts.py", "--port", str(args.charts_port)], cwd=ROOT)
+        try:
+            service = GraphService(charts_url=f"http://127.0.0.1:{args.charts_port}")
+            create_app(service).run(host="127.0.0.1", port=args.port)
+        finally:
+            charts.terminate()
     else:
         print("not yet implemented")
 

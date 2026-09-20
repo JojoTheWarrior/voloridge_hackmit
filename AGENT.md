@@ -155,3 +155,29 @@ parquet selectors, validate date columns instead of trusting filenames, keep
 heuristic scores on their documented scale, preserve requested city identity,
 and make every boundary crossing JSON-safe. Long-running scans and queues are
 shared state: check processes first and never restart or reset them casually.
+
+## Graph reels
+
+`python main.py graph` runs two processes: a Flask UI on `--port` (default
+8010) and `charts.py`, a stdlib ThreadingHTTPServer on `--charts-port` (default
+8011) that owns the single interactive pygame window (`POST /run`, `GET /status`;
+folders must resolve inside `graphs/`).
+
+Code lives in `warsignal/graph/`: `naming.py` (folder slugs + a global NNN
+counter), `cache.py` (normalised-text similarity, `find_match` with a
+`chat_json` confirm for borderline prompts), `validator.py` (AST import/name
+allowlist; generated scripts may not open files — data is read via
+pandas/pathlib only), `chart_template.py` (the self-contained reference
+`chart.py`), `agent.py` (`plan_request` via gpt-5.1 + catalogue, heuristic
+fallback, `fetch_external` for yfinance/FRED, `collect_data`, `generate_chart`
+via gpt-5.1), `store.py` (folders, headless thumbnails via
+`CHART_HEADLESS`/`SDL_VIDEODRIVER=dummy`, `INDEX.md`, best-effort
+`git commit`/`push`, disabled by `WARSIGNAL_GRAPH_NO_GIT=1`), `service.py`
+(orchestrator thread + in-memory history), `app.py` (Flask UI).
+
+Folder contract: `plan.json` (`chart_type`, `series: [{file,label,indicator}]`,
+`x_series`/`y_series` for scatter, `source_notes`), `prompt.txt`, `chart.py`,
+`data/*.csv` (`date,value` columns), `iran_timeline.csv`, `thumbnail.png`.
+`chart.py` reads only its own folder and honours `CHART_HEADLESS=<png path>`
+for one-frame renders. Tests: `tests/test_graph.py` (no network; render tests
+use the SDL dummy driver).

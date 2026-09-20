@@ -35,6 +35,7 @@ commit `.env`, downloaded data, reports, or mission result CSVs.
 | `python main.py queue --requeue-failed` | Put failed hypotheses back in the queue |
 | `python main.py viz M... [--headless]` | Render a mission visualization |
 | `python main.py ui [--port 8000]` | Start the Flask hypothesis interface |
+| `python main.py graph [--port 8010] [--charts-port 8011]` | NL prompt → pygame chart web UI + launcher |
 | `python main.py selftest` | Check keys, judge availability, and indicator loading |
 
 ## Architecture
@@ -76,3 +77,25 @@ mission engine
 WarSignal reports associations, not causal effects. Always inspect sample size,
 coverage, the common war shock, seasonal structure, multiple lag tests, and
 plausible common causes before treating a result as evidence.
+
+## Graph reels
+
+`python main.py graph [--port 8010] [--charts-port 8011]` starts a small web UI
+for natural-language charts and a `charts.py` pygame launcher window manager.
+
+- Type a prompt ("the instagram reels of the price of brent"); the planner maps
+  it to registered indicators (or external yfinance/FRED symbols when nothing
+  fits), writes a `graphs/YYYYMMDD-NNN-<type>_<slugs>/` folder, generates a
+  `chart.py`, renders `thumbnail.png`, commits the folder + `graphs/INDEX.md`,
+  and pushes — each graph folder is a shareable, committed artifact.
+- Chart types: `reel` (animated day-by-day playback), `line`, `spread`, and
+  `scatter` (with OLS fit and `r=` readout).
+- Reel controls: Space play/pause, ←/→ scrub (hold to repeat), ↑/↓ speed,
+  Home/End, R restart, S screenshot, Q/Esc quit. Static charts support hover
+  readouts, S, and Q.
+- Repeat prompts reuse cached folders (fuzzy match ≥0.92 auto-hits; borderline
+  matches are confirmed by gpt-5-mini). Cached charts with stale CSVs are
+  refreshed before launch.
+- Safety: generated `chart.py` is AST-validated — only pygame/pandas/numpy and
+  stdlib modules are importable, no network/file-writing calls; renders happen
+  in a subprocess via `charts.py`.
