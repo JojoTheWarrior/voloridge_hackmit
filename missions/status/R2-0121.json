@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0121",
+  "title": "[gas-lng] Null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) l",
+  "hypothesis": "R2 | [gas-lng] Null control: Qatar GDELT tone 20d z-score > 1 (improving Gulf news) leads TTF=F log returns by 2 days (-); trade short TTF=F 2d, expect no edge if R2-0024 rule was noise [gdelt.qat.tone -> finance.TTF=F.log_return] (parent: R2-0024)",
+  "parent_mission_id": "R2-0024",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T12:47:41Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
