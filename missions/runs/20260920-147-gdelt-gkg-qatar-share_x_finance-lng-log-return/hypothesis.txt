@@ -1,0 +1,1 @@
+R2 | [gas-lng] GDELT qatar GKG share day-over-day pct change > 50 pct leads Cheniere returns by 2 days (+); trade long LNG 5d [gdelt.gkg.qatar_share -> finance.LNG.log_return]

@@ -1,0 +1,110 @@
+{
+  "n_obs": 390,
+  "coverage_start": "2025-03-03",
+  "coverage_end": "2026-09-18",
+  "correlation": {
+    "n": 390,
+    "pearson_r": 0.12491499394398034,
+    "pearson_p": 0.01356308482615016,
+    "spearman_r": 0.08094868417228211,
+    "spearman_p": 0.11046705684427571
+  },
+  "lagged": {
+    "lags": [
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "r": [
+      0.065563400177943,
+      0.08133179539680259,
+      0.08179018550403216,
+      0.13288178609869733,
+      0.1039752613432154,
+      0.12491499394398028,
+      0.028313683192975336,
+      0.04714294726526704,
+      0.03205090302604981,
+      0.029264120930039005,
+      0.0033236224791530025
+    ],
+    "best_lag": -2,
+    "best_r": 0.13288178609869733
+  },
+  "perm_p": 0.11177644710578842,
+  "n_lags_tested": 11,
+  "bonferroni_p": 1.0,
+  "pre_post": null,
+  "event_study": null,
+  "event_study_b": null,
+  "window": "full",
+  "lag_unit": "days",
+  "max_lag_steps": 5,
+  "sign_matches_expectation": true,
+  "trade": {
+    "rule": {
+      "signal_transform": "rolling_zscore_20d",
+      "threshold": 1.0,
+      "direction": "long",
+      "holding_days": 1,
+      "target_kind": "log_return"
+    },
+    "all": {
+      "n_trades": 37,
+      "hit_rate": 0.5405405405405406,
+      "avg_return": 0.0016831132092643675,
+      "baseline_avg_return": 0.0007636369593699658,
+      "excess_return": 0.0009194762498944017,
+      "sharpe_like": 0.8830085339030344,
+      "max_drawdown": -0.048262215493984684,
+      "total_return": 0.0615655232979222
+    },
+    "fit_pre_war": {
+      "n_trades": 30,
+      "hit_rate": 0.5666666666666667,
+      "avg_return": 0.0024571072715303937,
+      "baseline_avg_return": 0.0007711584549580786,
+      "excess_return": 0.001685948816572315,
+      "sharpe_like": 1.275556105766274,
+      "max_drawdown": -0.048262215493984684,
+      "total_return": 0.07461391298176223
+    },
+    "test_war": {
+      "n_trades": 7,
+      "hit_rate": 0.42857142857142855,
+      "avg_return": -0.001634004200447173,
+      "baseline_avg_return": 0.0007503796470024289,
+      "excess_return": -0.002384383847449602,
+      "sharpe_like": -0.29152816149096944,
+      "max_drawdown": -0.04377991047758378,
+      "total_return": -0.012142397866071186
+    },
+    "n_signal_days": 385,
+    "trade_idea": {
+      "instrument": "LNG",
+      "direction": "long",
+      "entry_rule": "gdelt.gkg.qatar_share rolling_zscore_20d > 1 at close -> long LNG next session",
+      "exit_rule": "close after 1 trading days (no overlapping entries)",
+      "holding_days": 1,
+      "hit_rate": 0.5405405405405406,
+      "avg_return": 0.0016831132092643675,
+      "excess_return": 0.0009194762498944017,
+      "n_trades": 37,
+      "sharpe_like": 0.8830085339030344,
+      "max_drawdown": -0.048262215493984684,
+      "oos_n_trades": 7,
+      "oos_avg_return": -0.001634004200447173,
+      "oos_hit_rate": 0.42857142857142855,
+      "actionability": 4.34,
+      "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+    }
+  }
+}
