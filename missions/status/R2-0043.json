@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/173ad2ff21fa4ee08d5cce4f57aa3122",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:44:51Z",
-  "updated_at": "2026-09-20T03:45:05Z",
+  "updated_at": "2026-09-20T03:45:24Z",
   "finished_at": null,
-  "elapsed_s": 14,
+  "elapsed_s": 33,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-162-gdelt-qat-conflict-events_x_finance-ntr-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 8.76,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Null control: Qatar GDELT conflict-event count 20d z-score > 1 leads CF Industries log returns by 3 days (+) if the NTR backtest reflects a real Qatari urea/ammonia supply shock rather than war-regime beta; trade long CF 3d [gdelt.qat.conflict_events -> finance.CF.log_return] (parent: R2-0043)"
 }
