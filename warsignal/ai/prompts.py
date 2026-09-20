@@ -120,12 +120,25 @@ Return ONLY the JSON."""
 
 VIZ_SYSTEM = PROJECT_BRIEF + """
 
-You design an interactive Pygame visualization for a finished mission. Return ONLY a JSON VizSpec:
-  title: string
+You design the standardized WarSignal mission visualization (rendered by Pygame to viz.png). Every mission
+must look the same: the renderer owns the layout, fonts, colours and verdict banner; you only choose the
+CONTENT. Return ONLY a JSON VizSpec:
+  title: string  - one plain-English headline (<= 90 chars) stating the finding, not the hypothesis verbatim
+                   (e.g. "Brent returns lead protest coverage by 1 day, weakly (r=0.25)").
   panels: list of 1-3 panels, each {"kind": "timeseries"|"scatter"|"lagcorr"|"eventstudy",
           "series": [indicator names], "normalize": bool, "note": string}
   events: list of event categories from the timeline to draw as vertical markers (e.g. ["war","hormuz"])
   highlight_dates: list of ISO dates that matter most for this result (max 6)
-  color_theme: "dark"|"light"
-Choose panels that make the specific finding visible (e.g. a lagcorr panel when best lag != 0;
-an eventstudy panel when event_category is set; scatter when correlation is the headline)."""
+  color_theme: "dark"
+
+Standard layout contract (fixed for all missions):
+  - Top banner: NOISE -> WEAK -> MODERATE -> SIGNAL -> STRONG verdict box (computed by the renderer from the
+    judge scores and permutation p) plus your title. Do not put the verdict in the title.
+  - Panel 1 is ALWAYS a "timeseries" of indicator_a and indicator_b (normalize=true for pair missions so both
+    fit one axis; false for single-indicator missions). The war window and events are shaded/marked.
+  - Panel 2/3 explain the headline number: "lagcorr" whenever lagged stats exist (bars are auto-scaled to the
+    observed peak |r|), "scatter" when the Pearson/Spearman correlation is the headline, "eventstudy" when
+    event_category is set. Never repeat a panel kind.
+  - note: <= 60 chars, italic caption under the panel header, one concrete fact about the panel
+    (e.g. "peak r=0.24 at +1d; p=0.12" or "142 aligned war-window days"). Never leave it empty.
+Graphs are the highlight: keep titles/notes short so the charts stay dominant."""

@@ -22,16 +22,40 @@ def _as_dict(result):
     return data
 
 
+def _coverage_note(result):
+    stats = result.get("stats") or {}
+    n = stats.get("n_obs") or result.get("n_obs")
+    window = (result.get("plan") or {}).get("window") or "full"
+    return f"{n} aligned days · {window} window" if n else f"{window} window"
+
+
+def _lag_note(result):
+    lagged = (result.get("stats") or {}).get("lagged") or {}
+    best, r = lagged.get("best_lag"), lagged.get("best_r")
+    if r is None and best is not None and lagged.get("lags") and best in lagged["lags"]:
+        r = lagged["r"][lagged["lags"].index(best)]
+    if best is None or r is None:
+        return "cross-correlation by lag"
+    perm = (result.get("stats") or {}).get("perm_p")
+    tail = f"; perm p={float(perm):.2f}" if isinstance(perm, (int, float)) else ""
+    return f"peak r={float(r):+.2f} at {int(best):+d}d{tail}"
+
+
 def default_spec(mission_result):
     result = _as_dict(mission_result)
     plan = result.get("plan") or {}
     a, b = plan.get("indicator_a"), plan.get("indicator_b")
     names = [a] if plan.get("mode") == "single" else [a, b]
-    panels = [{"kind": "timeseries", "series": names, "normalize": True, "note": "Mission indicator"}]
-    if (result.get("stats", {}).get("lagged") or {}).get("best_lag", 0) != 0:
-        panels.append({"kind": "lagcorr", "series": [a, b], "normalize": False, "note": "Lag correlation"})
+    pair = plan.get("mode") != "single"
+    panels = [{"kind": "timeseries", "series": names, "normalize": pair, "note": _coverage_note(result)}]
+    lagged = result.get("stats", {}).get("lagged") or {}
+    if pair and lagged.get("lags"):
+        panels.append({"kind": "lagcorr", "series": [a, b], "normalize": False, "note": _lag_note(result)})
     if plan.get("event_category"):
-        panels.append({"kind": "eventstudy", "series": [a], "normalize": False, "note": "Event study"})
+        panels.append({"kind": "eventstudy", "series": [a], "normalize": False,
+                       "note": f"pre vs post {plan['event_category']} events"})
+    elif pair and len(panels) < 3:
+        panels.append({"kind": "scatter", "series": [a, b], "normalize": False, "note": "aligned daily pairs"})
     return {
         "title": result.get("hypothesis", "WarSignal mission"),
         "panels": panels[:3],
