@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Oklahoma City 20d cumulative precipitation z-score < -1 leads CF log returns by 5 days (-) as drought cuts US nitrogen side-dress demand; short CF 5d [weather.oklahoma_city.precip -> finance.CF.log_return]

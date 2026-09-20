@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:48:20.207143+00:00",
+  "git_commit": "1000c323d9b0f36c8b8cfd54fd1d0432db6d9b59",
+  "folder": "20260920-167-weather-oklahoma-city-precip_x_finance-cf-log-return",
   "mission_id": "R2-0050",
-  "title": "OKC drought leads CF short 5d",
   "hypothesis": "R2 | [fertilizer-ag] Oklahoma City 20d cumulative precipitation z-score < -1 leads CF log returns by 5 days (-) as drought cuts US nitrogen side-dress demand; short CF 5d [weather.oklahoma_city.precip -> finance.CF.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/db0373a8299a4c5b81248d4d4536b82a",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:48:12Z",
-  "updated_at": "2026-09-20T03:48:21Z",
-  "finished_at": null,
-  "elapsed_s": 9,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-167-weather-oklahoma-city-precip_x_finance-cf-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.99
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": -0.012301493783556413,
+  "perm_p": 0.846307385229541,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.99,
   "trade_idea": {
     "instrument": "CF",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 1.99,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.oklahoma_city.precip": "configured analysis window",
+    "finance.CF.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
