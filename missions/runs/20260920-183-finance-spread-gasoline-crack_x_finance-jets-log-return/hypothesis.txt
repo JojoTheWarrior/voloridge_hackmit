@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Gasoline crack spread 5d pct change < -10 pct after a fuel spike produces a fade rally in airlines (+); trade long JETS 5d at 1d lag [finance.spread.gasoline_crack -> finance.JETS.log_return]
