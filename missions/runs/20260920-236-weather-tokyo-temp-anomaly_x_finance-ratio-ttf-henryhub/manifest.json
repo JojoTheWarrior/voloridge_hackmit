@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T12:56:35.636267+00:00",
+  "git_commit": "8c2e3b787d56d80c2ce6cef22f8de32bd3a10871",
+  "folder": "20260920-236-weather-tokyo-temp-anomaly_x_finance-ratio-ttf-henryhub",
   "mission_id": "R2-0135",
-  "title": "Tokyo temp anomaly z>1 leads TTF/HH ratio",
   "hypothesis": "R2 | [gas-lng] Tokyo temperature anomaly 20d z-score > 1 (cold/heat demand shock proxy) leads the TTF/Henry Hub ratio (+) at 1-5 days more than raw TTF returns [weather.tokyo.temp_anomaly -> finance.ratio.ttf_henryhub] (parent: R2-0038)",
-  "parent_mission_id": "R2-0038",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/2ba8006a093e4b0280da716f78f52e25",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T12:56:32Z",
-  "updated_at": "2026-09-20T12:56:37Z",
-  "finished_at": null,
-  "elapsed_s": 5,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-236-weather-tokyo-temp-anomaly_x_finance-ratio-ttf-henryhub",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.98
-  },
+  "status": "ok",
+  "n_obs": 387,
+  "r": -0.00718778873194437,
+  "perm_p": 0.3033932135728543,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.98,
   "trade_idea": {
     "instrument": "ratio:ttf_henryhub",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.98,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.tokyo.temp_anomaly": "configured analysis window",
+    "finance.ratio.ttf_henryhub": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

@@ -1,0 +1,1 @@
+R2 | [gas-lng] Tokyo temperature anomaly 20d z-score > 1 (cold/heat demand shock proxy) leads the TTF/Henry Hub ratio (+) at 1-5 days more than raw TTF returns [weather.tokyo.temp_anomaly -> finance.ratio.ttf_henryhub] (parent: R2-0038)
