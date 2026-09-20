@@ -96,3 +96,4 @@ R2 | [gas-lng] Robustness: Qatar GDELT conflict event count 20d z-score > 1 lead
 ||||||| parent of 1eb0fa9 (status R2-0025: running)
 ||||||| parent of 1edce76 (status R2-0025: running)
 R2 | [gas-lng] Rotterdam daily max wind 20d z-score > 1 (North Sea wind surge, more wind power, less gas burn) leads TTF log returns by 2 days (+wind, -price); trade TTF=F 2d [weather.rotterdam.wind_max -> finance.TTF=F.log_return] (parent: R2-0025)
+R2 | [gas-lng] Houston maximum temperature 20d z-score > 1.0 (US cooling demand lifts Henry Hub, the denominator) leads the TTF to Henry Hub ratio by 3 days (-); control for the Doha-heat result, trade short TTF/HH ratio 3d [weather.houston.temp_max -> finance.ratio.ttf_henryhub] (parent: R2-0027)

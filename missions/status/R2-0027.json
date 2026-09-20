@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/255d102f12ec4134a3e75b77dd69d42e",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:34:07Z",
-  "updated_at": "2026-09-20T03:34:31Z",
+  "updated_at": "2026-09-20T03:34:56Z",
   "finished_at": null,
-  "elapsed_s": 24,
+  "elapsed_s": 49,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-150-weather-doha-temp-max_x_finance-ratio-ttf-henryhub",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 5.35,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Houston maximum temperature 20d z-score > 1.0 (US cooling demand lifts Henry Hub, the denominator) leads the TTF to Henry Hub ratio by 3 days (-); control for the Doha-heat result, trade short TTF/HH ratio 3d [weather.houston.temp_max -> finance.ratio.ttf_henryhub] (parent: R2-0027)"
 }
