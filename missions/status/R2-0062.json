@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:54:46Z",
-  "updated_at": "2026-09-20T03:55:53Z",
+  "updated_at": "2026-09-20T03:56:07Z",
   "finished_at": "2026-09-20T03:55:53Z",
-  "elapsed_s": 67,
+  "elapsed_s": 81,
   "message": "Weak: r=-0.09 (n=390), heuristic validity 0; short-AAL rule 62 trades sharpe 0.06 in-sample, OOS 21 trades 71% hit / +0.73% avg; actionability 6.0",
   "run_folder": "missions/runs/20260920-174-gdelt-irn-conflict-events_x_finance-aal-log-return",
   "scores": {
