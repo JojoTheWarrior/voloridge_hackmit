@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:15:28Z",
-  "updated_at": "2026-09-20T13:16:04Z",
+  "updated_at": "2026-09-20T13:16:22Z",
   "finished_at": "2026-09-20T13:16:04Z",
-  "elapsed_s": 36,
+  "elapsed_s": 54,
   "message": "Not supported as correlation (r=-0.01, n=389, validity 0) but trade rule: short IAG.L 1d on dust z>1, 46 trades hit 54%, OOS 16 trades hit 75%, actionability 7.3; likely war-regime common cause",
   "run_folder": "missions/runs/20260920-259-airquality-dubai-cams-dust_x_finance-iag-l-log-return",
   "scores": {
