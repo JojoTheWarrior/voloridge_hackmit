@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:19:51Z",
-  "updated_at": "2026-09-20T04:22:49Z",
+  "updated_at": "2026-09-20T04:25:41Z",
   "finished_at": "2026-09-20T04:20:50Z",
-  "elapsed_s": 178,
+  "elapsed_s": 350,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-204-gdelt-gkg-oil-share_x_finance-spread-brent-wti",
   "scores": {
