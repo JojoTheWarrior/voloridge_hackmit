@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] Iran GDELT Goldstein 10d z-score < -1 (escalation) leads defense ETF returns by 2-5 days (+); trade long ITA 5d [gdelt.irn.goldstein -> finance.ITA.log_return]

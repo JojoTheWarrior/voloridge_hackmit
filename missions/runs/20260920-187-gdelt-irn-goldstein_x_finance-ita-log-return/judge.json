@@ -1,0 +1,15 @@
+{
+  "scores": {
+    "validity": 0,
+    "interestingness": 2.0,
+    "unexpectedness": 2.0,
+    "actionability": 9.2,
+    "supported_prob": 0.0,
+    "judge_model": "heuristic"
+  },
+  "supported_prob": 0.0,
+  "judge": "heuristic",
+  "model": "heuristic",
+  "raw": {},
+  "confidence": {}
+}
