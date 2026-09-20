@@ -98,3 +98,16 @@ Return structured output:
 * Do not run other queue lines; the brain schedules them. The round terminates at
   200 Round 2 missions total.
 * Report only what the data shows; correlation is not causation.
+
+## Brain control protocol (pause / resume)
+
+The MISSIONS BRAIN re-reads `missions/config.json` on every scheduling loop (~60 s):
+
+* `max_agents == 0` → **PAUSE**: nothing new is spawned, in-flight children finish
+  normally (they are never killed by a pause), the brain keeps polling the config and
+  resumes automatically when `max_agents > 0`.
+* A user or parent message saying `pause` pauses the same way; `resume` resumes
+  (the brain also honours `/home/ubuntu/r2_pause` as a local pause flag).
+* The brain never finishes its session while `missions/queue.txt` still has `R2 |`
+  lines or any child is running; it only stops at the 200-mission cap or an empty,
+  settled tree.
