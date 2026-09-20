@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0056",
+  "title": "[fertilizer-ag] MOS 5d cumulative return > 12 pct leads MOS log returns by 2 day",
+  "hypothesis": "R2 | [fertilizer-ag] MOS 5d cumulative return > 12 pct leads MOS log returns by 2 days (-) as post-spike fertilizer equity rallies mean-revert; fade with short MOS 4d [finance.MOS.log_return -> finance.MOS.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T03:50:45Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
