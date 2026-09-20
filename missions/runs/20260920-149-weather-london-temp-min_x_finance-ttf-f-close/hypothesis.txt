@@ -1,0 +1,1 @@
+R2 | [gas-lng] London minimum temperature 15d z-score < -1.25 leads TTF close by 3 days with negative sign; trade long TTF=F 4d on cold [weather.london.temp_min -> finance.TTF=F.close]

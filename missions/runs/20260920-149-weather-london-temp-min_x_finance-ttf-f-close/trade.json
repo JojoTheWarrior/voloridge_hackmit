@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 2,
+    "target_kind": "level"
+  },
+  "all": {
+    "n_trades": 53,
+    "hit_rate": 0.4716981132075472,
+    "avg_return": 0.011573503855114341,
+    "baseline_avg_return": 0.004915934758945799,
+    "excess_return": 0.006657569096168542,
+    "sharpe_like": 1.17349973372121,
+    "max_drawdown": -0.2639914876444619,
+    "total_return": 0.6315881372002647
+  },
+  "fit_pre_war": {
+    "n_trades": 34,
+    "hit_rate": 0.47058823529411764,
+    "avg_return": 0.010258987794848684,
+    "baseline_avg_return": 0.003030526523922494,
+    "excess_return": 0.00722846127092619,
+    "sharpe_like": 0.7792956633668225,
+    "max_drawdown": -0.2639914876444619,
+    "total_return": 0.29777728283703575
+  },
+  "test_war": {
+    "n_trades": 19,
+    "hit_rate": 0.47368421052631576,
+    "avg_return": 0.013925795752431832,
+    "baseline_avg_return": 0.008301412319644578,
+    "excess_return": 0.005624383432787254,
+    "sharpe_like": 0.981172434439175,
+    "max_drawdown": -0.12545430749263053,
+    "total_return": 0.25721736601329126
+  },
+  "n_signal_days": 383,
+  "trade_idea": {
+    "instrument": "TTF=F",
+    "direction": "long",
+    "entry_rule": "weather.london.temp_min rolling_zscore_20d > 1 at close -> long TTF=F next session",
+    "exit_rule": "close after 2 trading days (no overlapping entries)",
+    "holding_days": 2,
+    "hit_rate": 0.4716981132075472,
+    "avg_return": 0.011573503855114341,
+    "excess_return": 0.006657569096168542,
+    "n_trades": 53,
+    "sharpe_like": 1.17349973372121,
+    "max_drawdown": -0.2639914876444619,
+    "oos_n_trades": 19,
+    "oos_avg_return": 0.013925795752431832,
+    "oos_hit_rate": 0.47368421052631576,
+    "actionability": 6.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
