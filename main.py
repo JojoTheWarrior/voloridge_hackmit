@@ -25,6 +25,8 @@ def main():
     graph.add_argument("--charts-port", type=int, default=8011)
     viz = sub.add_parser("viz"); viz.add_argument("mission_id"); viz.add_argument("--headless", action="store_true")
     viz.add_argument("--codegen", action="store_true"); viz.add_argument("--allow-exec", action="store_true")
+    serve = sub.add_parser("serve", help="run the web app's API server"); serve.add_argument("--port", type=int, default=8030)
+    serve.add_argument("--host", default="127.0.0.1"); serve.add_argument("--db", default=".kingdom/kingdom.db")
     sub.add_parser("kingdom", add_help=False)
     args, extra = parser.parse_known_args()
     if args.command == "kingdom":
@@ -163,6 +165,9 @@ def main():
             create_app(service).run(host="127.0.0.1", port=args.port)
         finally:
             charts.terminate()
+    elif args.command == "serve":
+        from server import app as server_app
+        server_app.serve(host=args.host, port=args.port, db=args.db)
     else:
         print("not yet implemented")
 
