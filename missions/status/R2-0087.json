@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0087",
+  "title": "[risk-macro-em] Crossref energy_security weekly counts 8-week z-score > 1 lead I",
+  "hypothesis": "R2 | [risk-macro-em] Crossref energy_security weekly counts 8-week z-score > 1 lead India ETF returns lower by 5-10 days (-) via import-cost fear; trade short INDA 10d [research.oil_price.crossref_pubs -> finance.INDA.log_return]",
+  "parent_mission_id": null,
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T04:07:35Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}

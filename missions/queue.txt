@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] Crossref energy_security weekly counts 8-week z-score > 1 lead India ETF returns lower by 5-10 days (-) via import-cost fear; trade short INDA 10d [research.oil_price.crossref_pubs -> finance.INDA.log_return]
 R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads India ETF returns lower by 2-3 days (-) as crude import bill jumps; trade short INDA 3d [gdelt.gkg.hormuz_share -> finance.INDA.log_return]
 R2 | [risk-macro-em] GDELT tanker GKG share 20d z-score > 1 leads Japan ETF returns lower by 1-2 days (-) on Gulf shipping exposure; trade short EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return]
 R2 | [risk-macro-em] Israel conflict-event count 20d z-score > 1 leads VIX higher by 0-1 days (+); trade long VIX exposure 2d [gdelt.isr.conflict_events -> finance.^VIX.close]
