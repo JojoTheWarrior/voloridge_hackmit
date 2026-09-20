@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/889604fc12d54b9680ce886b813a2643",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T04:16:14Z",
-  "updated_at": "2026-09-20T04:16:24Z",
+  "updated_at": "2026-09-20T04:16:45Z",
   "finished_at": null,
-  "elapsed_s": 10,
+  "elapsed_s": 31,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-199-gdelt-irn-goldstein_x_finance-gld-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 2.62,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [risk-macro-em] GDELT Iran fight_events 20d z-score above 1.5 (kinetic escalation) leads GLD absolute return (volatility) higher by 1-3 days (+), a volatility rather than direction test after Goldstein->GLD direction failed OOS; trade long GLD 3d [gdelt.irn.fight_events -> finance.GLD.abs_return] (parent: R2-0100)"
 }
