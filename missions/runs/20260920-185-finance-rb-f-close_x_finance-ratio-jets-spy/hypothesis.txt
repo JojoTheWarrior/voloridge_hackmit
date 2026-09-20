@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] RB=F gasoline futures 10d z-score > 1.5 keeps airlines lagging SPY for over a week (-); trade short JETS vs SPY 8d at 0d lag [finance.RB=F.close -> finance.ratio.jets_spy]
