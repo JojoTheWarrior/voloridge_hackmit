@@ -1,0 +1,13 @@
+{
+  "indicator_a": "weather.houston.temp_mean",
+  "indicator_b": "utility.ERCO.demand_mwh",
+  "transform_a": "anomaly",
+  "transform_b": "anomaly",
+  "max_lag_days": 2,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Houston mean temperature (same-week 2025 anomaly) as driver vs ERCOT demand anomaly (no ERCO anomaly series exists, so anomaly transform of utility.ERCO.demand_mwh is used); the national comparison should be run as a parallel pair against utility.us.demand_anomaly, and the positive sign reflects Texas's cooling-dominated load with seasonality/winter U-shape as a confounder.",
+  "mode": "pair"
+}
