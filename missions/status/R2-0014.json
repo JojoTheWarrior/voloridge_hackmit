@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/764d1e0412c243a2a7da81139cb810c8",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:24:52Z",
-  "updated_at": "2026-09-20T03:25:11Z",
-  "finished_at": null,
-  "elapsed_s": 19,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:26:06Z",
+  "finished_at": "2026-09-20T03:26:06Z",
+  "elapsed_s": 74,
+  "message": "Not supported: Kuwait SO2 z>1 vs gasoline crack r=-0.001 (n=389), best lag -4d r=-0.17; trade hit rate 47%, sharpe -0.16, validity 0",
   "run_folder": "missions/runs/20260920-139-airquality-kuwait-cams-so2_x_finance-spread-gasoline-crack",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 5.19,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Kuwait CAMS NO2 10d z-score > 1 (refinery combustion ramp) leads gasoline crack narrower by 4 days (-); trade short RB=F 4d [airquality.kuwait.cams_no2 -> finance.spread.gasoline_crack] (parent: R2-0014)"
 }
