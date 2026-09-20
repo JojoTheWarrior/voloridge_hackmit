@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Null control: Dubai CAMS NO2 20d z-score > 1 (activity rebound) precedes Lufthansa strength (+); trade long LHA.DE 3d at 1d lag [airquality.dubai.cams_no2 -> finance.LHA.DE.log_return] (parent: R2-0060)
