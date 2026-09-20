@@ -1,0 +1,1 @@
+R2 | [gas-lng] REVERSAL: TTF log return 20d z-score > 2.5 (panic spike) is faded over the next 3 days (-); trade short TTF=F 3d after the spike day [finance.TTF=F.log_return -> finance.TTF=F.log_return]
