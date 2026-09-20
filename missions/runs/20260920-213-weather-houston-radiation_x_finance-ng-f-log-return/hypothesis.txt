@@ -1,0 +1,1 @@
+SHERLOCK | [#4 clouds] Houston shortwave radiation 20d z-score > 1 (Texas cloud/solar-output proxy; sunny = less gas burn) leads Henry Hub gas returns by 3 days (-); trade short NG=F 3d [weather.houston.radiation -> finance.NG=F.log_return]

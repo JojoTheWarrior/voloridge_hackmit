@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-09-20T05:29:32.175544+00:00",
+  "git_commit": "2d53f9809fab3c32d6968e5c2ee86ff36e5fa5a8",
+  "folder": "20260920-213-weather-houston-radiation_x_finance-ng-f-log-return",
+  "mission_id": "S-0009",
+  "hypothesis": "SHERLOCK | [#4 clouds] Houston shortwave radiation 20d z-score > 1 (Texas cloud/solar-output proxy; sunny = less gas burn) leads Henry Hub gas returns by 3 days (-); trade short NG=F 3d [weather.houston.radiation -> finance.NG=F.log_return]",
+  "status": "ok",
+  "n_obs": 388,
+  "r": -0.0858512928724267,
+  "perm_p": 0.5149700598802395,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.75,
+  "trade_idea": {
+    "instrument": "NG=F",
+    "direction": "short",
+    "entry_rule": "weather.houston.radiation rolling_zscore_20d > 1 at close -> short NG=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.4166666666666667,
+    "avg_return": 0.002510585189576432,
+    "excess_return": 0.0028459952307269337,
+    "n_trades": 36,
+    "sharpe_like": 0.3791859240341085,
+    "max_drawdown": -0.22759915368632677,
+    "oos_n_trades": 13,
+    "oos_avg_return": -0.004992282705638613,
+    "oos_hit_rate": 0.23076923076923078,
+    "actionability": 1.75,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  },
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.houston.radiation": "configured analysis window",
+    "finance.NG=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
