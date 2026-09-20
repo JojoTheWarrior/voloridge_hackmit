@@ -300,6 +300,7 @@ def render(spec, mission_result_json_path, screenshot_path=None, interactive=Tru
     result = _read_result(mission_result_json_path)
     if not interactive:
         os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
+    os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
     import pygame
 
     pygame.init()

@@ -1,7 +1,13 @@
-data/raw/
-data/cache/
+data/*
+!data/reference/
+!data/reference/**
 .env
 __pycache__/
 *.pyc
-missions/reports/*.png
+missions/reports/
+missions/results*.csv
+missions/in_progress.txt
+missions/failed.txt
+missions/summary.md
+missions/viz_generated/
 .pytest_cache

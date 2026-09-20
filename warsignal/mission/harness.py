@@ -36,7 +36,7 @@ def run_queue(n=None, use_ai=True, stop_on_error=False, viz=False):
             if stop_on_error:
                 break
         results.append(result)
-        print(f"{result.mission_id} | validity {result.scores.get('validity', 0):.1f} | interest {result.scores.get('interestingness', 0):.1f} | unexpected {result.scores.get('unexpectedness', 0):.1f} | {result.status}")
+        print(f"{result.mission_id} | validity {result.scores.get('validity', 0):.1f} | interest {result.scores.get('interestingness', 0):.1f} | unexpected {result.scores.get('unexpectedness', 0):.1f} | {result.status}", flush=True)
     rows = sorted(results, key=lambda r: (r.scores.get("interestingness", 0) + r.scores.get("unexpectedness", 0)), reverse=True)
     summary = ROOT / "missions" / "summary.md"
     with summary.open("w", encoding="utf-8") as handle:

@@ -11,6 +11,7 @@ from warsignal.ai.openai_client import chat_text
 from warsignal.analysis.stats import run_all
 from warsignal.config import DATA_RAW, START, END
 from warsignal.indicators import get_series
+from warsignal.util import to_jsonable
 from .model import MissionResult
 from .planner import heuristic_plan, plan_mission
 
@@ -18,11 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def _json_default(value):
-    if hasattr(value, "item"):
-        return value.item()
-    if hasattr(value, "isoformat"):
-        return value.isoformat()
-    return str(value)
+    return to_jsonable(value)
 
 
 def _narrative(hypothesis, plan, stats, use_ai):

@@ -1,0 +1,56 @@
+Voloridge HackMIT 2026 Challenge
+Signal in the Noise
+At Voloridge, data is at the heart of everything we do. Every day we work with enormous, noisy, and often messy datasets, searching for signals that are informative, reliable, and ultimately useful. The hardest part is rarely obtaining data—it's figuring out what matters.
+Great engineers build systems that can process data at scale. Great researchers discover patterns hidden inside it. This challenge is about both.
+The Challenge
+Build something interesting using one or more real-world public datasets.
+We'll provide a curated selection of large, publicly available datasets spanning topics such as earth observation, healthcare, transportation, climate, genomics, economics, and more. Your goal is to extract insight, build a useful tool, discover an unexpected pattern, or create an application that demonstrates thoughtful use of data.
+Your project might:
+•	Discover interesting trends or hidden relationships.
+•	Clean, organize, or enrich a difficult dataset.
+•	Build interactive visualizations.
+•	Create novel search or exploration tools.
+•	Train machine learning models.
+•	Combine multiple datasets to generate new insights.
+•	Build systems capable of processing very large datasets efficiently.
+•	Create something we haven't even thought of.
+Datasets
+We've selected a curated collection of public datasets. Teams are welcome to use one dataset or combine several.
+
+What We'll Be Looking For
+Projects will be evaluated on several dimensions:
+•	Originality — Did you do something unexpected or particularly clever?
+•	Technical Excellence — Did you build something robust, scalable, or technically impressive?
+•	Insight — Did your project uncover meaningful information or produce useful analysis?
+•	Execution — Is the project polished, usable, and well demonstrated?
+Good luck, and happy hacking!
+
+
+Compute Resources:
+If your project requires additional compute resources. We have a number of AWS instances we can give you access to for your project. Please stop by our booth to discuss your project and how you plan to use the compute and we can get you set up with access. 
+
+Selected Datasets:
+Note: We’ve selected several open-source datasets we believe offer an opportunity for varied and original projects, however if you have another dataset you’d like to work with, please stop by our booth and talk it over with the team.
+
+Datasets:
+•	NOAA Integrated Surface Database (ISD)
+    o	https://registry.opendata.aws/noaa-isd/ 
+    o	The Integrated Surface Database (ISD) consists of global hourly and synoptic observations compiled from numerous sources into a gzipped fixed width format. ISD was developed as a joint activity within Asheville's Federal Climate Complex. The database includes over 35,000 stations worldwide, with some having data as far back as 1901, though the data show a substantial increase in volume in the 1940s and again in the early 1970s. Currently, there are over 14,000 "active" stations updated daily in the database. The total uncompressed data volume is around 600 gigabytes; however, it continues to grow as more data are added. ISD includes numerous parameters such as wind speed and direction, wind gust, temperature, dew point, cloud data, sea level pressure, altimeter setting, station pressure, present weather, visibility, precipitation amounts for various time periods, snow depth, and various other elements as observed by each station.
+•	OpenAlex dataset
+    o	https://registry.opendata.aws/openalex/ 
+    o	An open, comprehensive index of scholarly papers, citations, authors, institutions, and journals.
+•	Global Database of Events, Language and Tone (GDELT)
+    o	https://registry.opendata.aws/gdelt/ 
+    o	This project monitors the world's broadcast, print, and web news from nearly every corner of every country in over 100 languages and identifies the people, locations, organizations, counts, themes, sources, emotions, quotes, images and events driving our global society every second of every day.
+•	New York City Taxi and Limousine Commission (TLC) Trip Record Data
+    o	https://registry.opendata.aws/nyc-tlc-trip-records-pds/ 
+    o	Data of trips taken by taxis and for-hire vehicles in New York City. Note: access to this dataset is free, however direct S3 access does require an AWS account. Anonymous downloads are accessible from the dataset's documentation webpage listed below.
+•	OpenAQ
+    o	https://registry.opendata.aws/opencell/
+    o	Global, aggregated physical air quality data from public data sources provided by government, research-grade and other sources. These awesome groups do the hard work of measuring these data and publicly sharing them, and our community makes them more universally-accessible to both humans and machines.
+•	Public Utility Data Liberation Project
+    o	https://registry.opendata.aws/catalyst-cooperative-pudl/
+    o	The Public Utility Data Liberation Project (PUDL) provides analysis-ready U.S. energy system data in bulk for programmatic use. Sources include the U.S. Energy Information Administration (EIA), the Environmental Protection Agency (EPA), the Federal Energy Regulatory Commission (FERC), the Pipeline and Hazardous Materials Safety Administration (PHMSA), the Securities and Exchange Commission (SEC). The primary focus is on the electricity sector, with additional data on the natural gas system and energy company financial reporting.
+•	Materials Project Data
+    o	https://registry.opendata.aws/materials-project/ 
+    o	Materials Project is an open database of computed materials properties aiming to accelerate materials science research. The resources in this OpenData dataset contain the raw, parsed, and build data products.
