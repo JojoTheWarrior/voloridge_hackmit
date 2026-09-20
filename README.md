@@ -83,6 +83,15 @@ it live — its thinking as prose, its steps, and visual artifacts (charts, imag
 samples, join diagrams, tables, stats) as they are produced. Reply to steer it
 like a chat, and mark the mission done when you are satisfied.
 
+Missions pursue an insight that changes a user's understanding or decision.
+The initial brief asks Devin to identify that decision, challenge a candidate
+insight, and explain how each result changes it. Conclusions and report openings
+lead with the supported insight and its consequence, with evidence, limits and a
+concrete action or decisive next validation. Follow-up questions are optional.
+Null results and insufficient evidence should change the recommendation rather
+than force a positive finding. These are prompt requirements; live adherence has
+not been evaluated for this revision. Existing reports are not rewritten.
+
 The mission header has **Thread**, **Report**, and **Explorer** views. Generate
 a report after findings arrive, follow an "Ask next" link to prepare a reply,
 or export the report through the browser's print dialog. Explorers are versioned
