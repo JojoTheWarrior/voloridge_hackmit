@@ -40,3 +40,4 @@
 | `20260920-036-FAILED-delivered-coal-cost-to-us` | Delivered coal cost to US power plants rose after March 2026 even though coal is not shipped through Hormuz. | failed | 0 | None | None | None | None | None |
 | `20260920-037-FAILED-petroleum-fired-generation-in-the` | Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices. | failed | 0 | None | None | None | None | None |
 | `20260920-038-FAILED-petroleum-fired-generation-in-the` | Petroleum-fired generation in the US (EIA-923) increased in March-April 2026 despite record oil prices. | failed | 0 | None | None | None | None | None |
+| `20260920-039-finance-ng-f-log-return_x_finance-xlu-log-return` | US utility ETF (XLU) returns are more correlated with natural gas prices during the war than before. | ok | 390 | 0.038089175053728115 | 0.5389221556886228 | 0.1 | 1.58 | 5.4 |
