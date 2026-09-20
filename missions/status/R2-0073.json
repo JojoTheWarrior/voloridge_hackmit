@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:01:21Z",
-  "updated_at": "2026-09-20T04:02:17Z",
+  "updated_at": "2026-09-20T04:02:34Z",
   "finished_at": "2026-09-20T04:02:17Z",
-  "elapsed_s": 56,
-  "message": "Not supported: gasoline crack z>1 vs UAL next-day return r=0.04 (n=389, perm p n.s.); short rule 48 trades, hit 46%, sharpe-like -1.2, actionability 0.08",
+  "elapsed_s": 73,
+  "message": "Not supported: gasoline crack z>1 vs UAL next-day return r=0.04 (n=389); short rule 48 trades, hit 46%, sharpe-like -1.2, actionability 0.08",
   "run_folder": "missions/runs/20260920-183-finance-spread-gasoline-crack_x_finance-ual-log-return",
   "scores": {
     "validity": 0,
