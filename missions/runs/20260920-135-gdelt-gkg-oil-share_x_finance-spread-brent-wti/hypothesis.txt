@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT oil GKG share 10d z-score > 1 leads Brent-WTI spread widening by 3 days (+); trade long BZ=F short CL=F 5d [gdelt.gkg.oil_share -> finance.spread.brent_wti]

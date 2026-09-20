@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:17:06.851115+00:00",
+  "git_commit": "21f301857a3c0ef2ab87bb7de548fcb5c43cc676",
+  "folder": "20260920-135-gdelt-gkg-oil-share_x_finance-spread-brent-wti",
   "mission_id": "R2-0003",
-  "title": "Oil GKG share z>1 leads Brent-WTI spread",
   "hypothesis": "R2 | [oil-shipping] GDELT oil GKG share 10d z-score > 1 leads Brent-WTI spread widening by 3 days (+); trade long BZ=F short CL=F 5d [gdelt.gkg.oil_share -> finance.spread.brent_wti]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/e5f6e5eeb1754ebf90dec4fe627796e9",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 1.0,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:16:50Z",
-  "updated_at": "2026-09-20T03:17:08Z",
-  "finished_at": "2026-09-20T03:16:01Z",
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-135-gdelt-gkg-oil-share_x_finance-spread-brent-wti",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.0
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.003272040950603387,
+  "perm_p": 0.3992015968063872,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.0,
   "trade_idea": {
     "instrument": "spread:brent_wti",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.oil_share": "configured analysis window",
+    "finance.spread.brent_wti": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }

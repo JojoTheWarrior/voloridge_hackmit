@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "diff"
+  },
+  "all": {
+    "n_trades": 57,
+    "hit_rate": 0.42105263157894735,
+    "avg_return": -0.11315770734820449,
+    "baseline_avg_return": 0.0008311680385044642,
+    "excess_return": -0.11398887538670896,
+    "sharpe_like": -1.360768560158462,
+    "max_drawdown": -1.0132032911585305,
+    "total_return": -0.9999382668913025
+  },
+  "fit_pre_war": {
+    "n_trades": 41,
+    "hit_rate": 0.4634146341463415,
+    "avg_return": -0.04219520382764863,
+    "baseline_avg_return": 0.01325201019038999,
+    "excess_return": -0.05544721401803862,
+    "sharpe_like": -1.0367833662515606,
+    "max_drawdown": -1.0132032911585305,
+    "total_return": -1.0009886750707935
+  },
+  "test_war": {
+    "n_trades": 16,
+    "hit_rate": 0.3125,
+    "avg_return": -0.2949991226196289,
+    "baseline_avg_return": -0.021151041813033948,
+    "excess_return": -0.27384808080659495,
+    "sharpe_like": -1.084341298673328,
+    "max_drawdown": -7.2872531256312225,
+    "total_return": -1.0624402399950907
+  },
+  "n_signal_days": 386,
+  "trade_idea": {
+    "instrument": "spread:brent_wti",
+    "direction": "long",
+    "entry_rule": "gdelt.gkg.oil_share rolling_zscore_20d > 1 at close -> long spread:brent_wti next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.42105263157894735,
+    "avg_return": -0.11315770734820449,
+    "excess_return": -0.11398887538670896,
+    "n_trades": 57,
+    "sharpe_like": -1.360768560158462,
+    "max_drawdown": -1.0132032911585305,
+    "oos_n_trades": 16,
+    "oos_avg_return": -0.2949991226196289,
+    "oos_hit_rate": 0.3125,
+    "actionability": 0.0,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}
