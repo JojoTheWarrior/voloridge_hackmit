@@ -33,3 +33,4 @@
 | `20260920-029-utility-us-demand-anomaly_x_finance-fred-dhhngsp` | US hourly electricity demand (EIA-930) anomalies correlate with natural gas price moves during the war. | ok | 127 | 0.0077213705945525105 | 0.5968063872255489 | 0.02 | 2.86 | 0.82 |
 | `20260920-030-finance-fred-dcoilbrenteu_x_utility-us-demand-mwh` | US electricity demand growth in 2026 accelerated relative to 2025 during the oil shock months. | ok | 382 | 0.012372654858887912 | 0.5848303393213573 | 0.12 | 4.96 | 6.36 |
 | `20260920-031-FAILED-the-coal-share-of-us` | The coal share of US monthly generation rose when natural gas prices spiked after March 2026. | failed | 0 | None | None | None | None | None |
+| `20260920-032-FAILED-the-coal-share-of-us` | The coal share of US monthly generation rose when natural gas prices spiked after March 2026. | failed | 0 | None | None | None | None | None |

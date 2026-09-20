@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:51:57.227255+00:00",
+  "git_commit": "e1d40c8684927d09432c5d951ba1f51efd4d2960",
+  "folder": "20260920-032-FAILED-the-coal-share-of-us",
+  "mission_id": "M20260920-dd9581",
+  "hypothesis": "The coal share of US monthly generation rose when natural gas prices spiked after March 2026.",
+  "status": "failed",
+  "n_obs": 0,
+  "r": null,
+  "perm_p": null,
+  "validity": null,
+  "interestingness": null,
+  "unexpectedness": null,
+  "indicator_coverage": {
+    "utility.generation.coal_share": "configured analysis window",
+    "finance.NG=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
