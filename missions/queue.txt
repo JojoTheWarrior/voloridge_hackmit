@@ -1,4 +1,3 @@
-R2 | [fertilizer-ag] Oklahoma City 20d cumulative precipitation z-score < -1 leads CF log returns by 5 days (-) as drought cuts US nitrogen side-dress demand; short CF 5d [weather.oklahoma_city.precip -> finance.CF.log_return]
 R2 | [fertilizer-ag] Houston daily max wind 10d z-score > 1.5 leads CF log returns by 1 day (+) via Gulf Coast ammonia plant outage risk; trade long CF 3d [weather.houston.wind_max -> finance.CF.log_return]
 R2 | [fertilizer-ag] Rotterdam CAMS SO2 20d z-score < -1 leads YAR.OL returns by 2 days (+) as weak SO2 flags curtailed European ammonia runs; trade long YAR.OL 5d [airquality.rotterdam.cams_so2 -> finance.YAR.OL.log_return]
 R2 | [fertilizer-ag] Doha CAMS NO2 20d z-score < -1.5 leads NTR log returns by 4 days (+) since falling Qatari industrial activity proxies urea export loss; long NTR 6d [airquality.doha.cams_no2 -> finance.NTR.log_return]
