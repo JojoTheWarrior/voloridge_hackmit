@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:49:35Z",
-  "updated_at": "2026-09-20T12:58:15Z",
+  "updated_at": "2026-09-20T13:01:08Z",
   "finished_at": "2026-09-20T12:50:20Z",
-  "elapsed_s": 520,
+  "elapsed_s": 693,
   "message": "heartbeat",
   "run_folder": "missions/runs/20260920-228-gdelt-qat-conflict-events_x_finance-lng-log-return",
   "scores": {
