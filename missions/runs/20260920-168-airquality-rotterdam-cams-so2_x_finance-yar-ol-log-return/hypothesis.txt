@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] Rotterdam CAMS SO2 20d z-score < -1 leads YAR.OL returns by 2 days (+) as weak SO2 flags curtailed European ammonia runs; trade long YAR.OL 5d [airquality.rotterdam.cams_so2 -> finance.YAR.OL.log_return]
