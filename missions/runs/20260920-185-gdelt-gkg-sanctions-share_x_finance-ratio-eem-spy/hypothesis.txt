@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT sanctions GKG share 20d z-score > 1.5 leads EEM/SPY ratio lower by 2-4 days (-); trade short EEM 4d [gdelt.gkg.sanctions_share -> finance.ratio.eem_spy]

@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:04:11.620821+00:00",
+  "git_commit": "980d47eec486160c5ac550c825250990cf435043",
+  "folder": "20260920-185-gdelt-gkg-sanctions-share_x_finance-ratio-eem-spy",
   "mission_id": "R2-0078",
-  "title": "Sanctions news share leads EEM/SPY lower",
   "hypothesis": "R2 | [risk-macro-em] GDELT sanctions GKG share 20d z-score > 1.5 leads EEM/SPY ratio lower by 2-4 days (-); trade short EEM 4d [gdelt.gkg.sanctions_share -> finance.ratio.eem_spy]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/5027da254b7f4fce95741838604e3e8f",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:03:57Z",
-  "updated_at": "2026-09-20T04:04:13Z",
-  "finished_at": null,
-  "elapsed_s": 16,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-185-gdelt-gkg-sanctions-share_x_finance-ratio-eem-spy",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.21
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": 0.0025622726746149095,
+  "perm_p": 0.7425149700598802,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.21,
   "trade_idea": {
     "instrument": "ratio:eem_spy",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 1.21,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.sanctions_share": "configured analysis window",
+    "finance.ratio.eem_spy": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
