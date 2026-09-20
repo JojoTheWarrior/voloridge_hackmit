@@ -8,13 +8,13 @@
   "agent_session_url": "https://app.devin.ai/sessions/e3d5954aac214750a69941a28672c560",
   "brain_sessions": [],
   "state": "running",
-  "stage": "publishing",
+  "stage": "followup",
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T12:47:24Z",
-  "updated_at": "2026-09-20T12:47:42Z",
+  "updated_at": "2026-09-20T12:48:18Z",
   "finished_at": null,
-  "elapsed_s": 18,
+  "elapsed_s": 54,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-225-weather-tokyo-precip_x_finance-fro-log-return",
   "scores": {
@@ -41,5 +41,5 @@
     "actionability": 5.6,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [oil-shipping] Second null control: Tokyo max wind 20d z-score > 1 has no relation to FRO log returns at 0-5 day lags (0); a spurious in-sample edge like the precip run would show the backtester rewards noise; no trade [weather.tokyo.wind_max -> finance.FRO.log_return] (parent: R2-0118)"
 }
