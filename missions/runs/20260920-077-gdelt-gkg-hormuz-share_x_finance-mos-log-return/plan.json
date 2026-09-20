@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.gkg.hormuz_share",
+  "indicator_b": "finance.MOS.log_return",
+  "transform_a": "zscore",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "war",
+  "event_category": "hormuz",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use global GDELT GKG Hormuz news-share z-scores as a proxy for Hormuz-related news volume during the active war period, and test whether spikes lead positive daily log returns in a representative fertilizer stock (MOS) over a short 0\u20135 day horizon."
+}
