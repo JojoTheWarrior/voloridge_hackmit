@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.goldstein",
+  "indicator_b": "finance.^VIX.close",
+  "transform_a": "level",
+  "transform_b": "pct_change",
+  "max_lag_days": 2,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Iran\u2019s daily mean Goldstein score (higher = more cooperative, lower = more conflictual) as the geopolitical news-flow driver and VIX daily percent changes as the financial volatility response, allowing up to a 2\u2011day lag during the full sample to test whether more negative Iran-involved event scores are associated with spikes in equity volatility."
+}
