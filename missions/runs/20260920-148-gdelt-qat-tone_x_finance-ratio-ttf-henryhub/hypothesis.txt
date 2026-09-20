@@ -1,0 +1,1 @@
+R2 | [gas-lng] Qatar GDELT tone 20d z-score < -1 (worsening Gulf news) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 5d [gdelt.qat.tone -> finance.ratio.ttf_henryhub]

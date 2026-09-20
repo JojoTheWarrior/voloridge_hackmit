@@ -1,0 +1,13 @@
+{
+  "indicator_a": "gdelt.qat.tone",
+  "indicator_b": "finance.ratio.ttf_henryhub",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 10,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}
