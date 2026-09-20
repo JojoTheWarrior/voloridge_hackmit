@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Iran conflict event 20d z-score > 1 leads DHT log returns by 1 day (+), null control: same rule on XLE should show weaker edge; trade long DHT 6d [gdelt.irn.conflict_events -> finance.DHT.log_return] (parent: R2-0004)

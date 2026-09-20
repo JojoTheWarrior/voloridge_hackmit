@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T04:18:47.788651+00:00",
+  "git_commit": "b3332460de32ce6efbaeb4d1549709fe163a8408",
+  "folder": "20260920-202-gdelt-irn-conflict-events_x_finance-dht-log-return",
   "mission_id": "R2-0104",
-  "title": "Iran conflict z>1 leads DHT 1d, XLE null",
   "hypothesis": "R2 | [oil-shipping] Iran conflict event 20d z-score > 1 leads DHT log returns by 1 day (+), null control: same rule on XLE should show weaker edge; trade long DHT 6d [gdelt.irn.conflict_events -> finance.DHT.log_return] (parent: R2-0004)",
-  "parent_mission_id": "R2-0004",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/75074c2453bb47efa1f34dc003310245",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T04:18:31Z",
-  "updated_at": "2026-09-20T04:18:49Z",
-  "finished_at": null,
-  "elapsed_s": 18,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-202-gdelt-irn-conflict-events_x_finance-dht-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 8.69
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": -0.03323384399985936,
+  "perm_p": 0.4590818363273453,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 8.69,
   "trade_idea": {
     "instrument": "DHT",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 8.69,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.irn.conflict_events": "configured analysis window",
+    "finance.DHT.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
