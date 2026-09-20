@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T02:00:45.855102+00:00",
+  "git_commit": "fd12e0034fd91b85dac173d9de3af523690fc3f4",
+  "folder": "20260920-097-gdelt-gkg-qatar-share_x_gdelt-gkg-helium-share",
+  "mission_id": "M20260920-4f45d7",
+  "hypothesis": "GDELT mentions of \"helium\" or \"semiconductor\" rose after the Ras Laffan strike.",
+  "status": "ok",
+  "n_obs": 204,
+  "r": -0.007831038747885327,
+  "perm_p": 0.19560878243512975,
+  "validity": 3.28,
+  "interestingness": 2.48,
+  "unexpectedness": 3.3,
+  "indicator_coverage": {
+    "gdelt.gkg.qatar_share": "configured analysis window",
+    "gdelt.gkg.helium_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
