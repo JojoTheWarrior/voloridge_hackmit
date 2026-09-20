@@ -16,6 +16,8 @@ from dataclasses import dataclass
 DECIMALS = 5
 _FLOAT = re.compile(r"(?<![\w.])-?\d+\.\d{%d,}(?![\w.])" % (DECIMALS + 1))
 _BOLD_PREFIX = re.compile(r"^\*\*([^*]+?)\*\*\s*(.*)$")
+_LIST_ITEM = re.compile(r"^(?:[-*+]|\d+[.)])\s+(.*)$")
+_LABELLED = re.compile(r"^([A-Za-z][^:]{0,40}):\s+(.*)$")
 
 
 @dataclass(frozen=True)
@@ -94,6 +96,18 @@ def prose_lines(paragraph: str) -> list[NoteLine]:
     return [NoteLine(_clean(paragraph))]
 
 
+def list_item_lines(item: str) -> list[NoteLine]:
+    """``- Entry: rule`` -> bold ``Entry:`` + text; ``- **X**, rest`` -> bold ``X`` + text."""
+    item = round_numbers(item)
+    m = _BOLD_PREFIX.match(item)
+    if m:
+        return [NoteLine(_clean(m.group(2)), bold=_clean(m.group(1)))]
+    m = _LABELLED.match(item)
+    if m:
+        return [NoteLine(_clean(m.group(2)), bold=_clean(m.group(1)) + ":")]
+    return [NoteLine(_clean(item))]
+
+
 def format_note(text: str, title: str = "", subtitle: str = "") -> list[NoteLine]:
     """Parse ``note.md`` into logical lines; ``title``/``subtitle`` head the output."""
     blocks: list[list[NoteLine]] = []
@@ -129,6 +143,11 @@ def format_note(text: str, title: str = "", subtitle: str = "") -> list[NoteLine
             heading = _clean(line.lstrip("#"))
             if heading and heading != subtitle.strip():
                 blocks.append([NoteLine(bold=heading)])
+            continue
+        item = _LIST_ITEM.match(line)
+        if item:
+            flush()
+            blocks.append(list_item_lines(item.group(1)))
             continue
         paragraph.append(line)
     flush()
