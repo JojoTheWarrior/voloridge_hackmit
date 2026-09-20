@@ -1,0 +1,12 @@
+{
+  "indicator_a": "research.graphite.crossref_pubs",
+  "indicator_b": "research.lithium.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": true,
+  "expected_sign": 1,
+  "rationale": "We cannot observe time-varying Materials Project thermo-stability updates, so as a null-style proxy for clustering between related materials-science activities we test whether weekly Crossref publication counts for two closely related battery/materials topics (graphite and lithium) move together over the whole sample."
+}
