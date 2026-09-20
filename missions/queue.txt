@@ -1,4 +1,3 @@
-R2 | [risk-macro-em] GDELT military_buildup daily event count 20d z-score > 1 leads defense ETF returns by 3-5 days (+); trade long ITA 5d [events.military_buildup.count -> finance.ITA.log_return] (parent: R2-0085)
 R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads US crude ETF returns higher by 1-3 days (+) as shipping-risk headlines reprice oil before EM equities; trade long USO 3d [gdelt.gkg.hormuz_share -> finance.USO.log_return] (parent: R2-0088)
 R2 | [risk-macro-em] Reversal control: GDELT tanker GKG share 20d z-score > 1 is followed by EWJ rebounding higher within 3 days (+) as shipping-headline fear fades; trade long EWJ 3d [gdelt.gkg.tanker_share -> finance.EWJ.log_return] (parent: R2-0089)
 R2 | [risk-macro-em] GDELT GKG sanctions-share 20d z-score > 1 leads Turkey ETF returns lower by 5-7 days (-) via secondary-sanctions risk; trade short TUR 7d [gdelt.gkg.sanctions_share -> finance.TUR.log_return] (parent: R2-0086)
