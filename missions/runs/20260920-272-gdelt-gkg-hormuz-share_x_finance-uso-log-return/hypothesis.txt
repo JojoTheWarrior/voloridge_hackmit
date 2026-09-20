@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT Hormuz GKG share 20d z-score > 1.5 leads US crude ETF returns higher by 1-3 days (+) as shipping-risk headlines reprice oil before EM equities; trade long USO 3d [gdelt.gkg.hormuz_share -> finance.USO.log_return] (parent: R2-0088)
