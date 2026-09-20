@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:02:39Z",
-  "updated_at": "2026-09-20T04:03:54Z",
+  "updated_at": "2026-09-20T04:04:14Z",
   "finished_at": "2026-09-20T04:03:54Z",
-  "elapsed_s": 75,
+  "elapsed_s": 95,
   "message": "Supported contemporaneously (r=-0.48, n=389, lag 0) but the 1d-lag short-FDX rule is weak: 51 trades, hit 49%, sharpe -0.25 overall; war-period OOS hit 70%, avg +0.20%/trade. Actionability 5.4.",
   "run_folder": "missions/runs/20260920-184-finance-vix-close_x_finance-fdx-log-return",
   "scores": {
