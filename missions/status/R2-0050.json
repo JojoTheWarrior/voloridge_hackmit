@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/db0373a8299a4c5b81248d4d4536b82a",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:48:12Z",
-  "updated_at": "2026-09-20T03:48:21Z",
-  "finished_at": null,
-  "elapsed_s": 9,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T03:48:51Z",
+  "finished_at": "2026-09-20T03:48:51Z",
+  "elapsed_s": 39,
+  "message": "Noise: OKC precip z>1 -> short CF 2d gives 29 trades, hit 48%, excess +0.3%, sharpe -0.05, OOS 14 trades hit 43%; perm p=0.85, Bonferroni 1.0; actionability 1.99",
   "run_folder": "missions/runs/20260920-167-weather-oklahoma-city-precip_x_finance-cf-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 1.99,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] Oklahoma City precipitation 20d z-score > 1 (wet spell, mirror of the drought rule) leads CF log returns by 5 days (+) as rain restores side-dress nitrogen demand; long CF 5d [weather.oklahoma_city.precip -> finance.CF.log_return] (parent: R2-0050)"
 }
