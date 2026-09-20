@@ -1,0 +1,1 @@
+R2 | [gas-lng] Qatar GDELT conflict event count 20d z-score > 1 leads Venture Global returns by 1 day (+); trade long VG 4d [gdelt.qat.conflict_events -> finance.VG.log_return]

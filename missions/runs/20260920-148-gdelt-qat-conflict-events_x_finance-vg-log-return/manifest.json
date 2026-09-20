@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:31:53.420762+00:00",
+  "git_commit": "b6704438e54b5dfa992f797426fd827019b63162",
+  "folder": "20260920-148-gdelt-qat-conflict-events_x_finance-vg-log-return",
   "mission_id": "R2-0023",
-  "title": "Qatar conflict events -> VG returns",
   "hypothesis": "R2 | [gas-lng] Qatar GDELT conflict event count 20d z-score > 1 leads Venture Global returns by 1 day (+); trade long VG 4d [gdelt.qat.conflict_events -> finance.VG.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/5e18111e4ced422eb933f24bbf407976",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:31:32Z",
-  "updated_at": "2026-09-20T03:31:54Z",
-  "finished_at": null,
-  "elapsed_s": 22,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-148-gdelt-qat-conflict-events_x_finance-vg-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 7.46
-  },
+  "status": "ok",
+  "n_obs": 390,
+  "r": 0.10082490829465217,
+  "perm_p": 0.2435129740518962,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 7.46,
   "trade_idea": {
     "instrument": "VG",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 7.46,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.qat.conflict_events": "configured analysis window",
+    "finance.VG.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
