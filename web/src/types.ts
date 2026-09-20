@@ -1,49 +1,113 @@
-export type MissionStatus = 'running' | 'done' | 'failed'
-export type StepKey = 'plan' | 'pull' | 'test' | 'chart' | 'writeup'
-export type StepState = 'pending' | 'active' | 'done'
+export type MissionStatus = 'working' | 'waiting' | 'done' | 'failed'
+export type StepState = 'active' | 'done'
+export type DatasetKind = 'events' | 'markets' | 'weather' | 'air' | 'other'
 
-export interface MissionStep {
-  key: StepKey
+export interface Stat {
   label: string
-  state: StepState
+  value: string
 }
 
-export interface SeriesPoint {
-  date: string
-  a: number
-  b: number
+interface ArtifactBase {
+  id: string
+  title: string
+  caption?: string
 }
 
-export interface MissionResult {
-  seriesA: string
-  seriesB: string
-  points: SeriesPoint[]
-  correlation: number
-  bestLagDays: number
-  pValue: number
-  n: number
-  note: string
-  verdict: string
+export interface ChartSeries {
+  name: string
+  /** x is a number, or a string for dates and categories. */
+  points: [number | string, number][]
 }
 
-export interface Mission {
+export interface ChartArtifact extends ArtifactBase {
+  type: 'chart'
+  kind: 'line' | 'scatter' | 'bar'
+  xLabel?: string
+  yLabel?: string
+  series: ChartSeries[]
+  /** Short stat shown beside the title, e.g. "r = 0.58". */
+  headline?: string
+}
+
+export interface ImagesArtifact extends ArtifactBase {
+  type: 'images'
+  items: { src: string; caption?: string }[]
+}
+
+export interface RelationArtifact extends ArtifactBase {
+  type: 'relation'
+  nodes: { id: string; label: string }[]
+  edges: { from: string; to: string; label?: string }[]
+}
+
+export interface TableArtifact extends ArtifactBase {
+  type: 'table'
+  columns: string[]
+  rows: string[][]
+}
+
+export interface StatsArtifact extends ArtifactBase {
+  type: 'stats'
+  items: Stat[]
+}
+
+export interface ImageArtifact extends ArtifactBase {
+  type: 'image'
+  src: string
+}
+
+export type Artifact =
+  | ChartArtifact
+  | ImagesArtifact
+  | RelationArtifact
+  | TableArtifact
+  | StatsArtifact
+  | ImageArtifact
+
+interface EventBase {
+  id: string
+  at: string
+}
+
+export type MissionEvent = EventBase &
+  (
+    | { kind: 'user_message'; text: string }
+    | { kind: 'thought'; text: string }
+    | { kind: 'step'; stepId: string; label: string; state: StepState }
+    | { kind: 'artifact'; artifact: Artifact }
+    | { kind: 'conclusion'; verdict: string; summary: string; stats: Stat[] }
+    | { kind: 'error'; text: string }
+  )
+
+export interface MissionSummary {
   id: string
   title: string
   hypothesis: string
   status: MissionStatus
-  datasetIds: string[]
   createdAt: string
-  elapsedSeconds: number
-  steps: MissionStep[]
-  result?: MissionResult
-  error?: string
+  updatedAt: string
+}
+
+export interface Mission extends MissionSummary {
+  datasetIds: string[]
+  /** Link to the live Devin session; absent in demo mode or if creation failed. */
+  sessionUrl?: string
+  /** Set while Devin is waiting on a decision from the user. */
+  needsUser?: string
+  events: MissionEvent[]
 }
 
 export interface Dataset {
   id: string
   name: string
   url: string
+  kind: DatasetKind
   seriesCount: number
   dateRange: string
   syncedAt: string
+}
+
+export interface Meta {
+  /** True when the server is running its scripted fake instead of real Devin. */
+  demo: boolean
 }
