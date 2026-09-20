@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "long",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 54,
+    "hit_rate": 0.5,
+    "avg_return": 0.003622999323379674,
+    "baseline_avg_return": 0.0004851031812821898,
+    "excess_return": 0.003137896142097484,
+    "sharpe_like": 1.676499736716327,
+    "max_drawdown": -0.07687976861259505,
+    "total_return": 0.20754041032567527
+  },
+  "fit_pre_war": {
+    "n_trades": 32,
+    "hit_rate": 0.46875,
+    "avg_return": 0.0032990455145878762,
+    "baseline_avg_return": -0.0001586863530135911,
+    "excess_return": 0.003457731867601467,
+    "sharpe_like": 1.119514645088348,
+    "max_drawdown": -0.033078213687381064,
+    "total_return": 0.10631976919715713
+  },
+  "test_war": {
+    "n_trades": 22,
+    "hit_rate": 0.5454545454545454,
+    "avg_return": 0.004094204863440471,
+    "baseline_avg_return": 0.0016364056331250095,
+    "excess_return": 0.0024577992303154612,
+    "sharpe_like": 1.311401428300988,
+    "max_drawdown": -0.050847619510992814,
+    "total_return": 0.09149311432984053
+  },
+  "n_signal_days": 382,
+  "trade_idea": {
+    "instrument": "ZC=F",
+    "direction": "long",
+    "entry_rule": "weather.oklahoma_city.temp_anomaly rolling_zscore_20d > 1 at close -> long ZC=F next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5,
+    "avg_return": 0.003622999323379674,
+    "excess_return": 0.003137896142097484,
+    "n_trades": 54,
+    "sharpe_like": 1.676499736716327,
+    "max_drawdown": -0.07687976861259505,
+    "oos_n_trades": 22,
+    "oos_avg_return": 0.004094204863440471,
+    "oos_hit_rate": 0.5454545454545454,
+    "actionability": 7.62,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

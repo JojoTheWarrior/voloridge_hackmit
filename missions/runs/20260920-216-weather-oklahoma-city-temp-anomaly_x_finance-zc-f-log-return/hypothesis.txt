@@ -1,0 +1,1 @@
+SHERLOCK | [#2 rivers/crops] Oklahoma City temperature anomaly 20d z-score > 1 (Plains heat stress proxy) leads corn futures returns by 3 days (+); trade long ZC=F 3d [weather.oklahoma_city.temp_anomaly -> finance.ZC=F.log_return]
