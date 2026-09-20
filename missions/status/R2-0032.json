@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/7e5e4897b5e342c5ad60216d9aacb858",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
+  "state": "done",
+  "stage": "done",
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T03:37:15Z",
-  "updated_at": "2026-09-20T03:38:52Z",
+  "updated_at": "2026-09-20T03:39:57Z",
   "finished_at": "2026-09-20T03:37:38Z",
-  "elapsed_s": 97,
-  "message": "committing run folder",
+  "elapsed_s": 162,
+  "message": "NOISE: PUDL peak-demand data unavailable; swapped to Henry Hub close z>1 -> short XLU: r=0.04, perm_p=0.82, validity 0, hit rate 43% (42 trades), OOS negative. No tradeable edge.",
   "run_folder": "missions/runs/20260920-155-finance-ng-f-close_x_finance-xlu-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 3.1,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [gas-lng] Henry Hub natural gas log return 20d z-score > 1 leads utility ETF returns by 3 days (+) as gas price spikes pass through to regulated power revenue rather than squeezing margins; trade long XLU 3d [finance.NG=F.log_return -> finance.XLU.log_return] (parent: R2-0032)"
 }
