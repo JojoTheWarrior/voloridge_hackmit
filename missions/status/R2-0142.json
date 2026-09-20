@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mission_id": "R2-0142",
+  "title": "[fertilizer-ag] Null control: Qatar GDELT conflict-event count 20d z-score > 1 l",
+  "hypothesis": "R2 | [fertilizer-ag] Null control: Qatar GDELT conflict-event count 20d z-score > 1 leads CF Industries log returns by 3 days (+) if the NTR backtest reflects a real Qatari urea/ammonia supply shock rather than war-regime beta; trade long CF 3d [gdelt.qat.conflict_events -> finance.CF.log_return] (parent: R2-0043)",
+  "parent_mission_id": "R2-0043",
+  "round": "iran-round-2",
+  "agent_session_url": null,
+  "brain_sessions": [],
+  "state": "queued",
+  "stage": "queued",
+  "progress": 0.0,
+  "signal": null,
+  "started_at": null,
+  "updated_at": "2026-09-20T13:00:05Z",
+  "finished_at": null,
+  "elapsed_s": 0,
+  "message": "queued",
+  "run_folder": null,
+  "scores": {
+    "validity": null,
+    "interestingness": null,
+    "unexpectedness": null,
+    "actionability": null
+  },
+  "trade_idea": null,
+  "followup_hypothesis": null
+}
