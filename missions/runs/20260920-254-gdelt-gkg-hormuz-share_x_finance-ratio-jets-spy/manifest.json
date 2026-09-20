@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T13:10:49.003974+00:00",
+  "git_commit": "dea0c24acfa87faff49153f22eedec1f1865e48a",
+  "folder": "20260920-254-gdelt-gkg-hormuz-share_x_finance-ratio-jets-spy",
   "mission_id": "R2-0158",
-  "title": "Hormuz GKG share -> JETS/SPY ratio 3d",
   "hypothesis": "R2 | [fuel-airspace-losers] GDELT Hormuz GKG share 20d z-score > 1 leads the JETS/SPY relative ratio lower by 3 days (-), stripping market beta from the airline move; trade short JETS vs long SPY 3d [gdelt.gkg.hormuz_share -> finance.ratio.jets_spy] (parent: R2-0058)",
-  "parent_mission_id": "R2-0058",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/1727925e86084fed9d6a8099a161081c",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T13:10:46Z",
-  "updated_at": "2026-09-20T13:10:50Z",
-  "finished_at": null,
-  "elapsed_s": 4,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-254-gdelt-gkg-hormuz-share_x_finance-ratio-jets-spy",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 1.2
-  },
+  "status": "ok",
+  "n_obs": 389,
+  "r": -0.04953099511963074,
+  "perm_p": 0.6207584830339321,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 1.2,
   "trade_idea": {
     "instrument": "ratio:jets_spy",
     "direction": "short",
@@ -41,5 +30,14 @@
     "actionability": 1.2,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "gdelt.gkg.hormuz_share": "configured analysis window",
+    "finance.ratio.jets_spy": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
