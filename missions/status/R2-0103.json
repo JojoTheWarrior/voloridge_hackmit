@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T04:18:36Z",
-  "updated_at": "2026-09-20T04:19:19Z",
+  "updated_at": "2026-09-20T04:19:36Z",
   "finished_at": "2026-09-20T04:19:09Z",
-  "elapsed_s": 43,
+  "elapsed_s": 60,
   "message": "Not supported: r=-0.06 (n=390), best lag -5d r=-0.15, validity 0; trade long XLE 1d hit 56%, OOS avg 0.03%, actionability 5.1",
   "run_folder": "missions/runs/20260920-203-gdelt-irn-goldstein_x_finance-xle-log-return",
   "scores": {
