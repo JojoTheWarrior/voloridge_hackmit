@@ -131,7 +131,8 @@ cd web && npm install && npm run dev # UI on http://localhost:5173 (proxies /api
 **Demo mode (no key needed).** With no `DEVIN_API_KEY`, or with
 `KINGDOM_FAKE_DEVIN=1`, the server runs a scripted fake Devin that plays a full
 research run with one artifact of every type, so everything works out of the
-box and nothing is spent. The sidebar shows "Demo mode".
+box and nothing is spent. `/api/meta` reports the active mode; the sidebar
+does not show a mode label. The light/dark toggle is in the top-right header.
 
 **Live mode.** Put a Devin **v3 service-user key** (`cog_…`) in `.env` as
 `DEVIN_API_KEY` (the file is gitignored; never commit it). Each mission creates

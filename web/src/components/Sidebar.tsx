@@ -1,11 +1,10 @@
 import { Database, Plus } from 'lucide-react'
 import { useId } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { useMeta, useMissions } from '../hooks/useApiData'
+import { useMissions } from '../hooks/useApiData'
 import type { MissionSummary } from '../types'
 import { CastleLogo } from './CastleLogo'
 import { StatusDot } from './StatusDot'
-import { ThemeToggle } from './ThemeToggle'
 
 const rowClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] transition-colors duration-150 ${
@@ -37,7 +36,6 @@ function MissionGroup({ label, missions, onNavigate }: { label: string; missions
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const missions = useMissions() ?? []
-  const meta = useMeta()
 
   return (
     <nav aria-label="Main" className="flex h-full w-60 flex-col border-r border-line-soft bg-side p-3">
@@ -70,10 +68,6 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           <Database size={14} strokeWidth={1.75} aria-hidden="true" />
           Datasets
         </NavLink>
-        <div className="flex min-h-7 items-center justify-between pt-1.5 pl-2.5">
-          <p className="text-xs text-muted">{meta?.demo ? 'Demo mode' : ''}</p>
-          <ThemeToggle />
-        </div>
       </div>
     </nav>
   )

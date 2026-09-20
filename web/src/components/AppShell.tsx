@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { CastleLogo } from './CastleLogo'
 import { Sidebar } from './Sidebar'
+import { ThemeToggle } from './ThemeToggle'
 
 export function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -37,14 +38,15 @@ export function AppShell() {
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line-soft px-4 md:hidden print:hidden">
-          <button type="button" aria-label="Open menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} className="-ml-1 p-1">
+        <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line-soft px-4 md:px-6 print:hidden">
+          <button type="button" aria-label="Open menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)} className="-ml-1 p-1 md:hidden">
             <Menu size={18} strokeWidth={1.75} aria-hidden="true" />
           </button>
-          <Link to="/" aria-label="kingdom" className="flex items-center gap-2 text-[15px] font-medium tracking-tight">
+          <Link to="/" aria-label="kingdom" className="flex items-center gap-2 text-[15px] font-medium tracking-tight md:hidden">
             <CastleLogo />
             <span aria-hidden="true">kingdom</span>
           </Link>
+          <div className="ml-auto"><ThemeToggle /></div>
         </header>
         <main className="min-h-0 flex-1 overflow-y-auto print:overflow-visible">
           <Outlet />

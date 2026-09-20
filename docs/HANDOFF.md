@@ -69,6 +69,9 @@ step-change fixture. No live Devin credits spent during this pass.
 
 Done and working:
 
+- **App controls.** Theme switch is in the top-right header on desktop and mobile.
+  The sidebar mode label is removed; this does not change the configured backend.
+
 - **Report.** Report tab → "Generate report" → Devin fills a structured report
   → typeset page with key figures re-rendered from the thread, "Ask next"
   questions that prefill a reply, Copy link, Regenerate, Export PDF (print

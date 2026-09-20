@@ -100,20 +100,6 @@ describe('Sidebar', () => {
     expect(screen.queryByRole('group', { name: 'Done' })).not.toBeInTheDocument()
   })
 
-  it('notes demo mode in the footer', async () => {
-    renderWithApp(<Sidebar />, { api: createMockApi({ demo: true, seed: { missions: [], datasets: [] } }) })
-    expect(await screen.findByText('Demo mode')).toBeInTheDocument()
-  })
-
-  it('says nothing about demo mode against real Devin', async () => {
-    const api = apiWith()
-    const getMeta = vi.spyOn(api, 'getMeta')
-    renderWithApp(<Sidebar />, { api })
-    await screen.findByRole('link', { name: 'New mission' })
-    await act(async () => void (await getMeta.mock.results[0].value))
-    expect(screen.queryByText('Demo mode')).not.toBeInTheDocument()
-  })
-
   it('calls onNavigate when a link is followed', async () => {
     const onNavigate = vi.fn()
     renderWithApp(<Sidebar onNavigate={onNavigate} />, { api: apiWith() })
