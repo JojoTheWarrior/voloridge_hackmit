@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:27:52Z",
-  "updated_at": "2026-09-20T13:28:20Z",
+  "updated_at": "2026-09-20T13:28:39Z",
   "finished_at": "2026-09-20T13:28:20Z",
-  "elapsed_s": 28,
+  "elapsed_s": 47,
   "message": "Not supported: sanctions-share z>1 vs TUR r=0.03 (n=390), best lag -4d r=0.11; short TUR 1d rule loses (hit 43%, avg -0.21%/trade, 42 trades, OOS -0.19%). Null.",
   "run_folder": "missions/runs/20260920-274-gdelt-gkg-sanctions-share_x_finance-tur-log-return",
   "scores": {
