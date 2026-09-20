@@ -1,0 +1,1 @@
+R2 | [oil-shipping] GDELT oil GKG share 10d z-score > 1 leads Brent-WTI spread NARROWING by 1 day (-); reversal control of R2-0003, trade short BZ=F long CL=F 1d [gdelt.gkg.oil_share -> finance.spread.brent_wti] (parent: R2-0003)
