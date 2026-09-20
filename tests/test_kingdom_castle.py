@@ -12,8 +12,12 @@ import pygame  # noqa: E402
 import pytest  # noqa: E402
 
 from kingdom.app import App, Scene  # noqa: E402
-from kingdom.castle import COMPLETED, CURRENT, DETAIL, MAIN, QUEUE, CastleScene  # noqa: E402
-from kingdom.ui import ScrollList, clean_markdown, clip_lines, fmt_elapsed, signal_color  # noqa: E402
+from kingdom.castle import (  # noqa: E402
+    CHART, COMPLETED, COPY_BUTTON, CURRENT, DETAIL, MAIN, NOTE, QUEUE, ZOOM, CastleScene,
+)
+from kingdom.ui import (  # noqa: E402
+    ScrollList, ThumbnailCache, clean_markdown, clip_lines, fmt_elapsed, scaled_region, signal_color,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -79,6 +83,73 @@ def test_detail_view_renders_and_cleans_markdown(app):
     run_frames(app, scene, 8)
     scene.handle_event(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_ESCAPE, mod=0))
     assert scene.menu == MAIN
+
+
+def key(k):
+    return pygame.event.Event(pygame.KEYDOWN, key=k, mod=0)
+
+
+def open_first_detail(app, scene):
+    run_frames(app, scene, 2)
+    scene.handle_event(key(pygame.K_RETURN))
+    run_frames(app, scene, 8)
+    assert scene.menu == DETAIL
+
+
+def test_detail_copy_button_copies_vscode_command(app, monkeypatch):
+    copied = []
+    monkeypatch.setattr("kingdom.castle.copy_to_clipboard", lambda text: copied.append(text) or True)
+    scene = CastleScene(app, menu="completed")
+    app.push(scene, fade=False)
+    open_first_detail(app, scene)
+    scene.handle_event(pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1, lpos=COPY_BUTTON.center,
+                                          pos=COPY_BUTTON.center))
+    assert copied == ['code "missions/runs/20260920-001-alpha_x_beta/note.md"']
+    assert scene.copied_until > scene.t
+    run_frames(app, scene, 2)  # renders the "copied!" state
+    scene.handle_event(key(pygame.K_c))
+    assert len(copied) == 2
+
+
+def test_detail_zoom_and_note_submenus(app):
+    scene = CastleScene(app, menu="completed")
+    app.push(scene, fade=False)
+    open_first_detail(app, scene)
+    scene.handle_event(pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1, lpos=CHART.center, pos=CHART.center))
+    run_frames(app, scene, 8)
+    assert scene.menu == ZOOM and scene.zoom == 1.0
+    scene.handle_event(pygame.event.Event(pygame.MOUSEWHEEL, y=1, x=0))
+    assert scene.zoom == pytest.approx(1.25)
+    scene.handle_event(pygame.event.Event(pygame.MOUSEBUTTONDOWN, button=1, lpos=(200, 100), pos=(200, 100)))
+    scene.handle_event(pygame.event.Event(pygame.MOUSEMOTION, lpos=(150, 100), pos=(150, 100), rel=(-50, 0)))
+    scene.handle_event(pygame.event.Event(pygame.MOUSEBUTTONUP, button=1, lpos=(150, 100), pos=(150, 100)))
+    assert scene.zoom_center[0] > 0.5
+    run_frames(app, scene, 2)
+    scene.handle_event(key(pygame.K_0))
+    assert scene.zoom == 1.0 and scene.zoom_center == (0.5, 0.5)
+    scene.handle_event(key(pygame.K_ESCAPE))
+    run_frames(app, scene, 8)
+    assert scene.menu == DETAIL
+    scene.handle_event(key(pygame.K_n))
+    run_frames(app, scene, 8)
+    assert scene.menu == NOTE
+    assert "n_obs: 42" in "\n".join(scene.note_panel.lines)
+    scene.handle_event(key(pygame.K_ESCAPE))
+    run_frames(app, scene, 8)
+    assert scene.menu == DETAIL
+
+
+def test_chart_source_is_full_resolution_and_zoomable(app):
+    viz = app.root / "missions" / "runs" / "20260920-001-alpha_x_beta" / "viz.png"
+    cache = ThumbnailCache()
+    src = cache.source(viz)
+    assert src.get_size() == (320, 180)
+    assert cache.source(viz) is src
+    fit = scaled_region(src, (232, 130), 1.0, (0.5, 0.5))
+    assert fit.get_size() == (232, 130)
+    zoomed = scaled_region(src, (232, 130), 3.0, (0.1, 0.9))
+    assert zoomed.get_size() == (232, 130)
+    assert cache.source(viz.with_name("missing.png")) is None
 
 
 def test_elapsed_helper_and_active_card(app):

@@ -8,6 +8,8 @@ placeholder art.
 from __future__ import annotations
 
 import math
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Optional
 
@@ -353,23 +355,100 @@ class ThumbnailCache:
     """Loads and scales viz PNGs once per (path, size)."""
 
     def __init__(self):
-        self._cache: dict[tuple[str, tuple[int, int]], Optional[pygame.Surface]] = {}
+        self._cache: dict[tuple[str, tuple[int, int], bool], Optional[pygame.Surface]] = {}
+        self._sources: dict[str, Optional[pygame.Surface]] = {}
 
-    def get(self, path: Optional[Path], size: tuple[int, int]) -> Optional[pygame.Surface]:
+    def source(self, path: Optional[Path]) -> Optional[pygame.Surface]:
+        """The full-resolution image (24-bit), loaded once."""
         if path is None:
             return None
-        key = (str(path), size)
+        key = str(path)
+        if key not in self._sources:
+            try:
+                img = pygame.image.load(key)
+                self._sources[key] = img.convert(24) if img.get_bitsize() != 24 else img
+            except (OSError, pygame.error, ValueError):
+                self._sources[key] = None
+        return self._sources[key]
+
+    def get(self, path: Optional[Path], size: tuple[int, int], pixelate: bool = True) -> Optional[pygame.Surface]:
+        if path is None:
+            return None
+        key = (str(path), size, pixelate)
         if key in self._cache:
             return self._cache[key]
+        img = self.source(path)
         surf: Optional[pygame.Surface] = None
-        try:
-            img = pygame.image.load(str(path))
-            surf = pygame.transform.smoothscale(img, size) if img.get_bitsize() >= 24 else pygame.transform.scale(img, size)
-            surf = quantize(surf)
-        except (OSError, pygame.error, ValueError):
-            surf = None
+        if img is not None:
+            try:
+                surf = pygame.transform.smoothscale(img, size)
+                if pixelate:
+                    surf = quantize(surf)
+            except (pygame.error, ValueError):
+                surf = None
         self._cache[key] = surf
         return surf
+
+
+def scaled_region(img: pygame.Surface, view: tuple[int, int], zoom: float, center: tuple[float, float]) -> pygame.Surface:
+    """Smoothscale the part of ``img`` seen at ``zoom`` (1 = fit) around ``center`` (0..1 fractions).
+
+    The result has the size of ``view``; the image keeps its aspect ratio (letterboxed at zoom 1).
+    """
+    vw, vh = view
+    iw, ih = img.get_size()
+    fit = min(vw / iw, vh / ih)
+    scale = fit * zoom
+    dw, dh = max(1, int(iw * scale)), max(1, int(ih * scale))
+    out = pygame.Surface(view)
+    out.fill(SHADOW)
+    if dw <= vw and dh <= vh:
+        out.blit(pygame.transform.smoothscale(img, (dw, dh)), ((vw - dw) // 2, (vh - dh) // 2))
+        return out
+    # visible source rectangle around centre
+    src_w = min(iw, vw / scale)
+    src_h = min(ih, vh / scale)
+    cx = min(max(center[0] * iw, src_w / 2), iw - src_w / 2)
+    cy = min(max(center[1] * ih, src_h / 2), ih - src_h / 2)
+    src = pygame.Rect(int(cx - src_w / 2), int(cy - src_h / 2), int(src_w), int(src_h))
+    src = src.clip(img.get_rect())
+    part = img.subsurface(src)
+    tw, th = max(1, int(src.w * scale)), max(1, int(src.h * scale))
+    out.blit(pygame.transform.smoothscale(part, (tw, th)), ((vw - tw) // 2, (vh - th) // 2))
+    return out
+
+
+def copy_to_clipboard(text: str) -> bool:
+    """Best-effort clipboard copy: pygame.scrap, then common CLI tools."""
+    try:
+        if not pygame.scrap.get_init():
+            pygame.scrap.init()
+        pygame.scrap.put(pygame.SCRAP_TEXT, text.encode("utf-8"))
+        return True
+    except (pygame.error, NotImplementedError, AttributeError):
+        pass
+    for cmd in (("pbcopy",), ("wl-copy",), ("xclip", "-selection", "clipboard"), ("xsel", "--clipboard", "--input"),
+                ("clip",)):
+        if shutil.which(cmd[0]):
+            try:
+                subprocess.run(cmd, input=text.encode("utf-8"), check=True, timeout=2,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return True
+            except (OSError, subprocess.SubprocessError):
+                continue
+    return False
+
+
+def draw_clipboard_icon(target: pygame.Surface, x: int, y: int, done: bool = False):
+    """8x10 clipboard glyph; a green tick when ``done``."""
+    pygame.draw.rect(target, OUTLINE, (x, y + 1, 8, 9))
+    pygame.draw.rect(target, PARCHMENT, (x + 1, y + 2, 6, 7))
+    pygame.draw.rect(target, OUTLINE, (x + 2, y, 4, 2))
+    if done:
+        pygame.draw.lines(target, GREEN, False, [(x + 2, y + 5), (x + 3, y + 7), (x + 6, y + 3)])
+    else:
+        pygame.draw.rect(target, PARCHMENT_DARK, (x + 2, y + 4, 4, 1))
+        pygame.draw.rect(target, PARCHMENT_DARK, (x + 2, y + 6, 4, 1))
 
 
 def quantize(surface: pygame.Surface, levels: int = 6) -> pygame.Surface:
