@@ -1,0 +1,1 @@
+R2 | [oil-shipping] Crossref weekly oil_price counts 12-week z-score > 2 precede XOP underperformance by 5 days (-) as the shock is already priced; trade short XOP 7d [research.oil_price.crossref_pubs -> finance.XOP.log_return]
