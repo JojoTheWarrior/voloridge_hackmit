@@ -1,0 +1,1 @@
+R2 | [fertilizer-ag] GDELT Qatar GKG share day-over-day pct change > 30 pct leads NTR log returns by 3 days (+) via Gulf urea export disruption; trade long NTR 5d [gdelt.gkg.qatar_share -> finance.NTR.log_return]
