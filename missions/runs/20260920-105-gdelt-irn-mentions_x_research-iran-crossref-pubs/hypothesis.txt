@@ -1,0 +1,1 @@
+OpenAlex Iran-related publication counts correlate with GDELT Iran news volume with a one-month lag.

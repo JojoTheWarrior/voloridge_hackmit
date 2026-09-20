@@ -1,0 +1,12 @@
+{
+  "indicator_a": "gdelt.irn.mentions",
+  "indicator_b": "research.iran.crossref_pubs",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 30,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use GDELT Iran mentions as a proxy for Iran-related news volume and Crossref Iran weekly publication counts as the closest available OpenAlex-style Iran research series, testing whether higher news volume precedes more Iran-related publications with about a one-month lag over the full 2025\u201303..2026\u201309 window."
+}
