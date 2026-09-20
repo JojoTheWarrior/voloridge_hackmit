@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "signal_transform": "rolling_zscore_20d",
+    "threshold": 1.0,
+    "direction": "short",
+    "holding_days": 1,
+    "target_kind": "log_return"
+  },
+  "all": {
+    "n_trades": 37,
+    "hit_rate": 0.5135135135135135,
+    "avg_return": 0.0019267024062354801,
+    "baseline_avg_return": -0.00018568376279599487,
+    "excess_return": 0.002112386169031475,
+    "sharpe_like": 0.48764526759691723,
+    "max_drawdown": -0.10328459648854316,
+    "total_return": 0.0625081571428443
+  },
+  "fit_pre_war": {
+    "n_trades": 30,
+    "hit_rate": 0.5333333333333333,
+    "avg_return": 0.002068651054299564,
+    "baseline_avg_return": -0.0005816836046720229,
+    "excess_return": 0.0026503346589715868,
+    "sharpe_like": 0.4775331644644339,
+    "max_drawdown": -0.10328459648854316,
+    "total_return": 0.05510168741464638
+  },
+  "test_war": {
+    "n_trades": 7,
+    "hit_rate": 0.42857142857142855,
+    "avg_return": 0.001318351057389406,
+    "baseline_avg_return": 0.0005179994094585298,
+    "excess_return": 0.0008003516479308763,
+    "sharpe_like": 0.13789853427872215,
+    "max_drawdown": -0.07167240947211062,
+    "total_return": 0.00701967385375557
+  },
+  "n_signal_days": 388,
+  "trade_idea": {
+    "instrument": "LHA",
+    "direction": "short",
+    "entry_rule": "gdelt.gkg.qatar_share rolling_zscore_20d > 1 at close -> short LHA next session",
+    "exit_rule": "close after 1 trading days (no overlapping entries)",
+    "holding_days": 1,
+    "hit_rate": 0.5135135135135135,
+    "avg_return": 0.0019267024062354801,
+    "excess_return": 0.002112386169031475,
+    "n_trades": 37,
+    "sharpe_like": 0.48764526759691723,
+    "max_drawdown": -0.10328459648854316,
+    "oos_n_trades": 7,
+    "oos_avg_return": 0.001318351057389406,
+    "oos_hit_rate": 0.42857142857142855,
+    "actionability": 6.81,
+    "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
+  }
+}

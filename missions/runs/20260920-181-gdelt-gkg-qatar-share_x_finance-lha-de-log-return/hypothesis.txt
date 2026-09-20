@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] GDELT qatar GKG share 20d z-score > 1 flags Gulf hub disruption that penalizes Lufthansa Gulf routes (-); trade short LHA.DE 3d at 2d lag [gdelt.gkg.qatar_share -> finance.LHA.DE.log_return]
