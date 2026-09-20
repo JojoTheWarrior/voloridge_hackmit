@@ -12,10 +12,10 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:44:03Z",
-  "updated_at": "2026-09-20T12:44:45Z",
+  "updated_at": "2026-09-20T12:45:10Z",
   "finished_at": "2026-09-20T12:44:45Z",
-  "elapsed_s": 42,
-  "message": "Not supported: short-STNG-on-high-wind rule loses (23 trades, hit 35%, sharpe -2.25, war-test excess -2.7%); best lag 8d r=-0.08, perm not significant; actionability 0.",
+  "elapsed_s": 67,
+  "message": "Not supported: short-STNG-on-high-wind rule loses (23 trades, hit 35%, sharpe -2.25, war-test excess -2.7%); best lag 8d r=-0.08; actionability 0.",
   "run_folder": "missions/runs/20260920-221-weather-bandar-abbas-wind-max_x_finance-stng-log-return",
   "scores": {
     "validity": 0,
