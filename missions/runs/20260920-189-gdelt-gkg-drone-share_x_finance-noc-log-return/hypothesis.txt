@@ -1,0 +1,1 @@
+R2 | [risk-macro-em] GDELT drone GKG share 20d z-score > 1 leads Northrop returns by 3-5 days (+) on air-defense order expectations; trade long NOC 5d [gdelt.gkg.drone_share -> finance.NOC.log_return]
