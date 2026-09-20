@@ -1,4 +1,3 @@
-R2 | [gas-lng] Qatar GDELT conflict event count 20d z-score > 1 leads Venture Global returns by 1 day (+); trade long VG 4d [gdelt.qat.conflict_events -> finance.VG.log_return]
 R2 | [gas-lng] Qatar GDELT tone 20d z-score < -1 (worsening Gulf news) leads the TTF to Henry Hub ratio by 2 days (+); trade long TTF=F 5d [gdelt.qat.tone -> finance.ratio.ttf_henryhub]
 R2 | [gas-lng] Rotterdam temperature anomaly 10d z-score < -1 (European cold snap) leads TTF log returns by 1 day (-anomaly, +price); trade long TTF=F 5d [weather.rotterdam.temp_anomaly -> finance.TTF=F.log_return]
 R2 | [gas-lng] London minimum temperature 15d z-score < -1.25 leads TTF close by 3 days with negative sign; trade long TTF=F 4d on cold [weather.london.temp_min -> finance.TTF=F.close]
