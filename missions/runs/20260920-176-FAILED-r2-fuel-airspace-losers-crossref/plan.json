@@ -1,0 +1,13 @@
+{
+  "indicator_a": "research.drone.crossref_pubs",
+  "indicator_b": "finance.ratio.jets_spy",
+  "transform_a": "level",
+  "transform_b": "log_return",
+  "max_lag_days": 10,
+  "window": "full",
+  "event_category": null,
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Explicit Round 2 indicator pair from hypothesis tag.",
+  "mode": "pair"
+}
