@@ -7,15 +7,15 @@
   "round": "iran-round-2",
   "agent_session_url": "https://app.devin.ai/sessions/fd078a4f142448c3830d4c0193380c14",
   "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
+  "state": "done",
+  "stage": "done",
+  "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T12:58:43Z",
-  "updated_at": "2026-09-20T12:59:00Z",
-  "finished_at": null,
-  "elapsed_s": 17,
-  "message": "committing run folder",
+  "updated_at": "2026-09-20T12:59:49Z",
+  "finished_at": "2026-09-20T12:59:49Z",
+  "elapsed_s": 66,
+  "message": "Short-MOS reversal not supported as a trade: r=-0.064 (n=390), best lag 9d r=-0.145, but backtest hit 0.38 avg -1.2% excess -1.0% sharpe -0.80 actionability 0; sign favors long MOS instead",
   "run_folder": "missions/runs/20260920-239-gdelt-gkg-qatar-share_x_finance-mos-log-return",
   "scores": {
     "validity": 0,
@@ -41,5 +41,5 @@
     "actionability": 0.0,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "followup_hypothesis": "R2 | [fertilizer-ag] GDELT Qatar GKG share 20d z-score > 1 leads MOS log returns by 9 days (+): the R2-0140 short-MOS reversal backtest lost (hit 0.38, avg -1.2%, 21 trades), so flip direction - Qatar attention spikes precede fertilizer-equity gains; trade long MOS 9d [gdelt.gkg.qatar_share -> finance.MOS.log_return] (parent: R2-0140)"
 }
