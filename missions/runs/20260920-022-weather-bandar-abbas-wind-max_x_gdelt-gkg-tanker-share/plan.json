@@ -1,0 +1,12 @@
+{
+  "indicator_a": "weather.bandar_abbas.wind_max",
+  "indicator_b": "gdelt.gkg.tanker_share",
+  "transform_a": "level",
+  "transform_b": "zscore",
+  "max_lag_days": 7,
+  "window": "war",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": -1,
+  "rationale": "Use Bandar Abbas daily maximum wind speed as a proxy for sea state and GKG global tanker-related news share as a proxy for tanker attack news volume during the active war window, expecting calmer days (lower wind_max) to coincide with higher tanker attack coverage, so wind in levels and standardized tanker news share capture the relationship without confounding by long-run trends."
+}

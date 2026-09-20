@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-09-20T01:50:31.864575+00:00",
+  "git_commit": "5d8569cfd0765f78ec15fe57e289fd308440ffe9",
+  "folder": "20260920-022-weather-bandar-abbas-wind-max_x_gdelt-gkg-tanker-share",
+  "mission_id": "M20260920-28701c",
+  "hypothesis": "Wind speed at Bandar Abbas (Hormuz coast) correlates with tanker attack news volume, since calm seas favour small-boat operations.",
+  "status": "ok",
+  "n_obs": 200,
+  "r": 0.09219354162819388,
+  "perm_p": 0.5389221556886228,
+  "validity": 0.12,
+  "interestingness": 3.7,
+  "unexpectedness": 5.04,
+  "indicator_coverage": {
+    "weather.bandar_abbas.wind_max": "configured analysis window",
+    "gdelt.gkg.tanker_share": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
