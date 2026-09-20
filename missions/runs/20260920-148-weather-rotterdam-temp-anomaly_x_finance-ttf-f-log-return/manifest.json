@@ -1,28 +1,17 @@
 {
-  "schema_version": 1,
+  "created_at": "2026-09-20T03:31:52.476576+00:00",
+  "git_commit": "901b45bece1720a1f89d0f072f8bcdee13045f52",
+  "folder": "20260920-148-weather-rotterdam-temp-anomaly_x_finance-ttf-f-log-return",
   "mission_id": "R2-0025",
-  "title": "Rotterdam cold snap -> TTF returns",
   "hypothesis": "R2 | [gas-lng] Rotterdam temperature anomaly 10d z-score < -1 (European cold snap) leads TTF log returns by 1 day (-anomaly, +price); trade long TTF=F 5d [weather.rotterdam.temp_anomaly -> finance.TTF=F.log_return]",
-  "parent_mission_id": "devin-01f0724401894160a101b8f13eeba08b",
-  "round": "iran-round-2",
-  "agent_session_url": "https://app.devin.ai/sessions/c8418972eac14e819cdca617f64bbbb9",
-  "brain_sessions": [],
-  "state": "running",
-  "stage": "publishing",
-  "progress": 0.9,
-  "signal": 0.0,
-  "started_at": "2026-09-20T03:31:43Z",
-  "updated_at": "2026-09-20T03:31:53Z",
-  "finished_at": null,
-  "elapsed_s": 10,
-  "message": "committing run folder",
-  "run_folder": "missions/runs/20260920-148-weather-rotterdam-temp-anomaly_x_finance-ttf-f-log-return",
-  "scores": {
-    "validity": 0,
-    "interestingness": 2.0,
-    "unexpectedness": 2.0,
-    "actionability": 0.79
-  },
+  "status": "ok",
+  "n_obs": 388,
+  "r": 0.02597475187252149,
+  "perm_p": 0.013972055888223553,
+  "validity": 0,
+  "interestingness": 2.0,
+  "unexpectedness": 2.0,
+  "actionability": 0.79,
   "trade_idea": {
     "instrument": "TTF=F",
     "direction": "long",
@@ -41,5 +30,14 @@
     "actionability": 0.79,
     "caveats": "Backtest on daily closes, no costs/slippage; few independent regimes; signal and target may share the war as common cause."
   },
-  "followup_hypothesis": null
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "weather.rotterdam.temp_anomaly": "configured analysis window",
+    "finance.TTF=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
 }
