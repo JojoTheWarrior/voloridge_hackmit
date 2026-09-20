@@ -12,9 +12,9 @@
   "progress": 1.0,
   "signal": 0.0,
   "started_at": "2026-09-20T13:02:18Z",
-  "updated_at": "2026-09-20T13:03:33Z",
+  "updated_at": "2026-09-20T13:03:53Z",
   "finished_at": "2026-09-20T13:02:49Z",
-  "elapsed_s": 75,
+  "elapsed_s": 95,
   "message": "Not supported: r=0.056 n=390, best lag -5d; short-ZC=F rule 28 trades hit 61% in-sample but OOS 11 trades hit 45% avg +0.10% - reversal edge does not survive the war window",
   "run_folder": "missions/runs/20260920-243-gdelt-gkg-tanker-share_x_finance-zc-f-log-return",
   "scores": {
