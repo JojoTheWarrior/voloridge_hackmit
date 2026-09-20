@@ -12,9 +12,9 @@
   "progress": 0.9,
   "signal": 0.0,
   "started_at": "2026-09-20T03:31:32Z",
-  "updated_at": "2026-09-20T03:33:23Z",
+  "updated_at": "2026-09-20T03:33:28Z",
   "finished_at": null,
-  "elapsed_s": 111,
+  "elapsed_s": 116,
   "message": "committing run folder",
   "run_folder": "missions/runs/20260920-148-gdelt-qat-conflict-events_x_finance-vg-log-return",
   "scores": {
