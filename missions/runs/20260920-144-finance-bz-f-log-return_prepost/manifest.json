@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-09-20T03:28:17.779535+00:00",
+  "git_commit": "fd1391c87b43425948206db927f30e19cfc3c09d",
+  "folder": "20260920-144-finance-bz-f-log-return_prepost",
+  "mission_id": "R2-0018",
+  "hypothesis": "R2 | [oil-shipping] Brent 3d cumulative log return > 8 pct is over-extended and fades: Brent reverses over the next 4 days (-); trade short BZ=F 4d [finance.BZ=F.log_return -> finance.BZ=F.log_return]",
+  "status": "ok",
+  "n_obs": 391,
+  "r": null,
+  "perm_p": 0.2754491017964072,
+  "validity": 0,
+  "interestingness": 0,
+  "unexpectedness": 0,
+  "actionability": 0.0,
+  "trade_idea": null,
+  "brain_sessions": [],
+  "indicator_coverage": {
+    "finance.BZ=F.log_return": "configured analysis window"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  }
+}
