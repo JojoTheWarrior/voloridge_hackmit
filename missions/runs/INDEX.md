@@ -86,3 +86,4 @@
 | `20260920-082-gdelt-gkg-ceasefire-share_x_finance-eis-log-return` | Turkey ETF (TUR) and Israel ETF (EIS) returns diverged around ceasefire announcements. | ok | 140 | 0.10919060950592346 | 0.16167664670658682 | 3.7 | 3.86 | 2.66 |
 | `20260920-083-gdelt-gkg-tanker-share_x_finance-ksa-log-return` | Saudi ETF (KSA) and UAE ETF returns correlate negatively with GDELT Gulf-attack event counts. | ok | 29 | 0.20614195794543194 | 0.06187624750499002 | 4.04 | 4.02 | 4.0 |
 | `20260920-084-finance-mos-log-return_x_finance-zc-f-log-return` | Wheat and corn futures moved with fertilizer stocks after March 20 2026. | ok | 140 | 0.046183208636114914 | 0.8542914171656687 | 0.18 | 1.26 | 1.92 |
+| `20260920-085-finance-ttf-f-log-return_x_finance-ng-f-log-return` | TTF gas and Henry Hub correlation increased after Qatar LNG shutdown. | ok | 391 | 0.12440302398959983 | 0.12574850299401197 | 4.08 | 4.64 | 2.02 |

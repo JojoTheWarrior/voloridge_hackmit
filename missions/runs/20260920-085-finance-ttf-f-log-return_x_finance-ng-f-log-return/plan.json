@@ -1,0 +1,12 @@
+{
+  "indicator_a": "finance.TTF=F.log_return",
+  "indicator_b": "finance.NG=F.log_return",
+  "transform_a": "level",
+  "transform_b": "level",
+  "max_lag_days": 5,
+  "window": "compare_pre_post",
+  "event_category": "war",
+  "is_null_control": false,
+  "expected_sign": 1,
+  "rationale": "Use daily log returns of Dutch TTF and US Henry Hub gas futures to test whether their return correlation (both positive and higher) increased after the Qatar LNG shutdown, comparing pre- and post-event windows around the early\u20112026 war period."
+}
