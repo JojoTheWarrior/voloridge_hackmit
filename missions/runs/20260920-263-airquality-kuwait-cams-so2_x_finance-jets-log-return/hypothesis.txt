@@ -1,0 +1,1 @@
+R2 | [fuel-airspace-losers] Null control: Kuwait CAMS SO2 20d z-score > 1 (refinery activity, not outage) should NOT predict airline ETF moves (-); trade short JETS 2d at 1d lag [airquality.kuwait.cams_so2 -> finance.JETS.log_return] (parent: R2-0071)
